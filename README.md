@@ -40,7 +40,7 @@ in **TikZ figures**; equations stay sparse.
 
 | Book | Level | Status |
 |------|-------|--------|
-| Primary & Middle School | Grades 1–9 | 🚧 structure (placeholders) |
+| **Primary & Middle School** | **Grades 1–9** | ✅ 71 chapters, exercises + solutions, photo + TikZ figures (~240 pp) |
 | **High School** | **Grades 10–12** | ✅ 22 chapters, exercises + weekend problems + solutions (~180 pp) |
 | University Year 1–3 | Bachelor | 🚧 structure (placeholders) |
 

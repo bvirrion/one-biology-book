@@ -42,6 +42,9 @@ BASE_PROTECT = [
     # quoti\"{e}nt that this does not match would be re-wrapped on every run
     r'\\(?:label|index|cref|Cref|ref|eqref|input|ominput|ominputsol|hyperref'
     r'|href|hypertarget|hyperlink|omterm|texorpdfstring)\{[^{}]*\}(?:\{' + GROUP + r'*\})?',
+    # Raster includes: never link inside a filename (\omimg first arg, graphicx).
+    r'\\omimg\{[^{}]*\}',
+    r'\\includegraphics(?:\[[^\]]*\])?\{[^{}]*\}',
     # a heading may nest \texorpdfstring{}{} or \ref{}; without the nesting the
     # heading is not masked and the link ends up in the contents and the
     # running head, where it has no business being
