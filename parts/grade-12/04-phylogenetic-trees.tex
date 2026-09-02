@@ -1,6 +1,501 @@
 \chapter{Reading Kinship: Phylogenetic Trees}\label{ch:g12:phylogenetic-trees}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1837, on a page of a private notebook, Darwin sketched a branching
+line with a few twigs and wrote above it two words: "I think". The
+sketch proposed that species are related as the twigs of a tree are ---
+by descent from common branches --- and that their kinship could be
+reconstructed. Today the sketch is a standard tool: a \omterm{def:g12:phylogenetic-trees:tree}{phylogenetic
+tree}, built from shared characters and from \omterm{def:g10:universal-dna:information}{DNA}, read according to
+rules. This chapter teaches those rules: how to build a tree from a
+table of characters, how to read one without misreading it, and how
+molecules turn it into a clock.
 
-\emph{This chapter has not been written yet.}
+\section{What a tree says}
+
+\begin{definition}[Phylogenetic tree]\label{def:g12:phylogenetic-trees:tree}
+A \emph{phylogenetic tree}\index{phylogenetic tree} is a diagram of the
+kinship of a set of species (or other groups). Its tips are the species
+compared; each \emph{node} where two branches meet represents their
+most recent common ancestor --- a hypothetical \omterm{def:g12:selection-drift-speciation:population}{population}, not a known
+fossil; the \emph{root} is the common ancestor of all. Two species are
+closer kin than a third when their common ancestor (their node) is more
+recent than the node they share with the third. Kinship is read from
+the nodes, never from the left-to-right position of the tips.
+\end{definition}
+
+\begin{proposition}[Rules of reading]\label{prop:g12:phylogenetic-trees:rules}
+\begin{itemize}
+  \item A tree can be rotated at any node without changing its
+        meaning: the order of the tips is arbitrary.
+  \item A node has no name and is not one of the tips: a species is
+        never the ancestor of another species on the tree; two tips
+        are \emph{sister groups}, descended from a shared ancestor.
+  \item A group made of an ancestor and \emph{all} its descendants ---
+        everything beyond one node --- is a \emph{clade}\index{clade},
+        the only kind of group a phylogenetic classification names.
+  \item Branch lengths carry information only if the tree says so
+        (time, or number of changes); otherwise only the branching
+        order counts.
+\end{itemize}
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % tree 1
+  \begin{scope}
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (4.5,1.2);
+    \draw[thick] (1,0) -- (1,-1.2) -- (2.2,-1.2);
+    \draw[thick] (2.2,-1.2) -- (2.2,-0.5) -- (4.5,-0.5);
+    \draw[thick] (2.2,-1.2) -- (2.2,-1.9) -- (3.4,-1.9);
+    \draw[thick] (3.4,-1.9) -- (3.4,-1.5) -- (4.5,-1.5);
+    \draw[thick] (3.4,-1.9) -- (3.4,-2.3) -- (4.5,-2.3);
+    \node[anchor=west] at (4.6,1.2) {frog}; \node[anchor=west] at (4.6,-0.5) {lizard};
+    \node[anchor=west] at (4.6,-1.5) {mouse}; \node[anchor=west] at (4.6,-2.3) {human};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,-1.2) circle (2pt); \fill[omThm] (3.4,-1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {tree A};
+  \end{scope}
+  % tree 2: same topology, rotated
+  \begin{scope}[xshift=8cm]
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (2.2,1.2);
+    \draw[thick] (2.2,1.2) -- (2.2,1.9) -- (3.4,1.9);
+    \draw[thick] (3.4,1.9) -- (3.4,2.3) -- (4.5,2.3);
+    \draw[thick] (3.4,1.9) -- (3.4,1.5) -- (4.5,1.5);
+    \draw[thick] (2.2,1.2) -- (2.2,0.5) -- (4.5,0.5);
+    \draw[thick] (1,0) -- (1,-1.2) -- (4.5,-1.2);
+    \node[anchor=west] at (4.6,2.3) {human}; \node[anchor=west] at (4.6,1.5) {mouse};
+    \node[anchor=west] at (4.6,0.5) {lizard}; \node[anchor=west] at (4.6,-1.2) {frog};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,1.2) circle (2pt); \fill[omThm] (3.4,1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {tree B: the same tree};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Two drawings of one tree. Rotating the branches at each node
+changes the order of the tips but not a single kinship: in both,
+mouse and human are sisters, the lizard is their closest relative, and
+the frog is the most distant. Reading "the lizard is between the frog
+and the mouse" from tree A would be a mistake.}
+\end{omfigure}
+
+\begin{example}[Misreadings to avoid]\label{ex:g12:phylogenetic-trees:misreadings}
+"Humans descend from chimpanzees": no --- on the tree, humans and
+chimpanzees are sister tips, descended from a common ancestor that was
+neither. "The frog is more primitive": no --- every tip is a present
+species with the same length of history since the root; the frog
+lineage has evolved for as long as ours. "The lizard is closer to the
+frog than to the mouse" (from tree A): no --- lizard and mouse share
+a more recent node.
+\end{example}
+
+\section{Building a tree from characters}
+
+\begin{definition}[Ancestral and derived states]\label{def:g12:phylogenetic-trees:states}
+A \emph{character} is a feature that varies among the species compared
+(the presence of a vertebral column, of four limbs, of an amniotic egg,
+of hair). Each character has an \emph{ancestral} state --- the one the
+common ancestor of the group had --- and one or more \emph{derived}
+states that appeared later in some lineage. Only \emph{shared derived
+states} indicate kinship: two species sharing a derived state inherited
+it from the ancestor in which it arose. A shared ancestral state says
+nothing, since everyone's ancestor had it.
+\end{definition}
+
+\begin{method}[From a character matrix to a tree]\label{met:g12:phylogenetic-trees:build}
+\begin{enumerate}
+  \item Make a table: species in rows, characters in columns, 1 for the
+        derived state and 0 for the ancestral one. Decide which state is
+        ancestral by comparing with an \emph{outgroup}, a species known
+        to be outside the group studied.
+  \item Find the derived state shared by the most species: it defines
+        the first, largest \omterm{prop:g12:phylogenetic-trees:rules}{clade}. Within it, find the next most widely
+        shared derived state, and so on.
+  \item Draw the nested \omterm{prop:g12:phylogenetic-trees:rules}{clades} as a tree: each shared derived state
+        marks one node, and the character is written on the branch
+        where it appeared.
+  \item Check for conflicts: a character shared by species that other
+        characters place apart either arose twice (convergence) or was
+        lost once. Choose the tree that requires the fewest changes in
+        all --- the most \emph{parsimonious} tree.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % matrix
+  \node[anchor=east] at (-0.2,2.4) {};
+  \matrix (m) [matrix of nodes, nodes={font=\small, minimum width=1.1cm, minimum height=0.5cm, anchor=center},
+               column 1/.style={nodes={anchor=east, minimum width=1.6cm}}] at (1.6,0.5) {
+    \phantom{o} & jaws & limbs & amnion & hair \\
+    lamprey & 0 & 0 & 0 & 0 \\
+    trout & 1 & 0 & 0 & 0 \\
+    frog & 1 & 1 & 0 & 0 \\
+    lizard & 1 & 1 & 1 & 0 \\
+    mouse & 1 & 1 & 1 & 1 \\
+  };
+  \draw (m-1-1.south west) -- (m-1-5.south east);
+  \draw (m-1-2.north west) -- (m-6-2.south west);
+  % tree
+  \begin{scope}[xshift=7.2cm, yshift=-1.4cm]
+    \draw[thick] (0,0) -- (0.8,0);
+    \draw[thick] (0.8,0) -- (0.8,3.2) -- (5,3.2);
+    \draw[thick] (0.8,0) -- (0.8,-0.6) -- (1.8,-0.6);
+    \draw[thick] (1.8,-0.6) -- (1.8,2.4) -- (5,2.4);
+    \draw[thick] (1.8,-0.6) -- (1.8,-1.0) -- (2.8,-1.0);
+    \draw[thick] (2.8,-1.0) -- (2.8,1.6) -- (5,1.6);
+    \draw[thick] (2.8,-1.0) -- (2.8,-1.3) -- (3.8,-1.3);
+    \draw[thick] (3.8,-1.3) -- (3.8,0.8) -- (5,0.8);
+    \draw[thick] (3.8,-1.3) -- (3.8,-1.5) -- (5,-1.5);
+    \node[anchor=west] at (5.1,3.2) {lamprey}; \node[anchor=west] at (5.1,2.4) {trout};
+    \node[anchor=west] at (5.1,1.6) {frog}; \node[anchor=west] at (5.1,0.8) {lizard};
+    \node[anchor=west] at (5.1,-1.5) {mouse};
+    \foreach \x/\y/\t in {1.3/-0.6/jaws, 2.3/-1.0/limbs, 3.3/-1.3/amnion, 4.4/-1.5/hair}
+      { \draw[very thick, omThm] (\x,\y+0.15) -- (\x,\y-0.15); \node[font=\scriptsize, omThm, anchor=north] at (\x,\y-0.2) {\t}; }
+    \node[anchor=east, font=\scriptsize] at (-0.1,0) {outgroup: lamprey};
+  \end{scope}
+\end{tikzpicture}
+
+{\small From matrix to tree. Each derived state (1) shared by a set of
+species marks the node of their common ancestor; the red bars show
+where each character appeared. The lamprey, lacking every derived
+state, is the outgroup that fixes the ancestral states.}
+\end{omfigure}
+
+\begin{example}[A conflict resolved by parsimony]\label{ex:g12:phylogenetic-trees:parsimony}
+Add "wings" to a matrix with bat, pigeon and mouse. Wings would group
+bat with pigeon; hair and milk group bat with mouse. A tree with bat
+and mouse together needs wings to have arisen twice (two changes); a
+tree with bat and pigeon together needs hair, milk, the mammalian jaw
+and a dozen other characters to have arisen twice each. The first tree
+is far more parsimonious: wings are a convergence, the mammalian
+characters a common inheritance. Parsimony does not prove the tree; it
+chooses the least improbable one.
+\end{example}
+
+\section{Trees from molecules}
+
+\begin{proposition}[Molecular phylogeny]\label{prop:g12:phylogenetic-trees:molecular}
+A \omterm{def:g10:universal-dna:gene}{gene} or \omterm{def:g11:gene-expression:protein}{protein} shared by all the species compared is a character
+matrix in itself: each position of the sequence is a character, and
+each \omterm{def:g10:universal-dna:nucleotide}{nucleotide} or \omterm{def:g10:chemistry-of-life:families}{amino acid} a state. Aligning the sequences and
+counting the differences between every pair gives a distance matrix,
+from which a tree is built by joining the closest pairs first. The
+molecular tree, computed from sequences that owe nothing to anatomy,
+matches the anatomical tree in the great majority of cases --- the
+strongest test of both.
+\end{proposition}
+\begin{proof}[Evidence]
+\cref{ch:g10:common-ancestry} gave the cytochrome c distances of the
+\omterm{def:g10:common-ancestry:bodyplan}{vertebrates}, which reproduce the boxes drawn from their skeletons.
+Among the primates, sequences of dozens of \omterm{def:g10:universal-dna:gene}{genes} agree: human and
+chimpanzee differ by about 1.2\% of their \omterm{def:g10:universal-dna:information}{DNA}, either from the gorilla
+by 1.6\%, the three from the orangutan by 3\%, and the great apes from
+the macaque by 7\%. A tree built from any one of these \omterm{def:g10:universal-dna:gene}{genes} has the
+same shape; the few exceptions concern the most recent nodes, where
+the differences are smallest.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  \draw[thick] (0,0) -- (1,0);
+  \draw[thick] (1,0) -- (1,2.4) -- (8,2.4);
+  \draw[thick] (1,0) -- (1,-0.8) -- (3,-0.8);
+  \draw[thick] (3,-0.8) -- (3,1.2) -- (8,1.2);
+  \draw[thick] (3,-0.8) -- (3,-1.4) -- (5.2,-1.4);
+  \draw[thick] (5.2,-1.4) -- (5.2,0) -- (8,0);
+  \draw[thick] (5.2,-1.4) -- (5.2,-2.0) -- (6.4,-2.0);
+  \draw[thick] (6.4,-2.0) -- (6.4,-1.2) -- (8,-1.2);
+  \draw[thick] (6.4,-2.0) -- (6.4,-2.8) -- (8,-2.8);
+  \node[anchor=west] at (8.1,2.4) {macaque}; \node[anchor=west] at (8.1,1.2) {orangutan};
+  \node[anchor=west] at (8.1,0) {gorilla}; \node[anchor=west] at (8.1,-1.2) {chimpanzee};
+  \node[anchor=west] at (8.1,-2.8) {human};
+  \foreach \x/\t in {1/{25}, 3/{14}, 5.2/{9}, 6.4/{6}}
+    { \fill[omThm] (\x,-3.4) circle (0); \node[font=\scriptsize, omThm, anchor=north] at (\x,-3.4) {\t}; \draw[gray, dashed] (\x,-3.3) -- (\x,-3.0); }
+  \draw[->, gray] (0.5,-3.5) -- (8,-3.5) node[midway, below=7pt, font=\scriptsize] {million years ago (nodes dated by the molecular clock and fossils)};
+  \node[font=\scriptsize, anchor=south] at (7.2,-1.05) {1.2\% of DNA};
+  \node[font=\scriptsize, anchor=south] at (6.6,0.15) {1.6\%};
+  \node[font=\scriptsize, anchor=south] at (5.5,1.35) {3\%};
+  \node[font=\scriptsize, anchor=south] at (4.5,2.55) {7\% of DNA differs};
+\end{tikzpicture}
+
+{\small The tree of five primates from \omterm{def:g10:universal-dna:information}{DNA} comparison. Human and
+chimpanzee are sister groups; the gorilla joins them next, then the
+orangutan, then the macaque. The percentage on each branch is the \omterm{def:g10:universal-dna:information}{DNA}
+difference between the species it joins; the dates below come from the
+molecular clock calibrated by fossils.}
+\end{omfigure}
+
+\begin{proposition}[The molecular clock]\label{prop:g12:phylogenetic-trees:clock}
+For a given \omterm{def:g10:universal-dna:gene}{gene}, differences between two lineages accumulate at a
+roughly constant rate over long periods, since most substitutions are
+neutral and fix by drift at the rate at which they arise. The number
+of differences between two species is therefore proportional to the
+time since their common ancestor. Calibrated on one node dated by
+fossils, the clock dates the others --- with the caution that rates
+differ between \omterm{def:g10:universal-dna:gene}{genes} and between lineages, and that the calibration
+carries its own uncertainty.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.84\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=30, ymin=0, ymax=8,
+  xlabel={time since the common ancestor (million years, from fossils)},
+  ylabel={DNA difference (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20,25,30}, ytick={0,2,4,6,8},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=2pt, omThm] coordinates {(6,1.2) (9,1.6) (14,3.0) (25,7.0)};
+\addplot[thick, omDef, domain=0:28] {0.27*x};
+\node[font=\scriptsize, anchor=west] at (axis cs:6.4,1.0) {human--chimpanzee};
+\node[font=\scriptsize, anchor=west] at (axis cs:9.4,1.5) {--gorilla};
+\node[font=\scriptsize, anchor=west] at (axis cs:14.4,2.9) {--orangutan};
+\node[font=\scriptsize, anchor=east] at (axis cs:24.6,7.1) {--macaque};
+\end{axis}
+\end{tikzpicture}
+
+{\small The molecular clock among primates: \omterm{def:g10:universal-dna:information}{DNA} difference against the
+age of the common ancestor. The points fall close to a straight line
+of about 0.27\% per million years; the line lets a node without
+fossils be dated from its \omterm{def:g10:universal-dna:information}{DNA} difference.}
+\end{omfigure}
+
+\begin{example}[Dating a node]\label{ex:g12:phylogenetic-trees:dating}
+Two species differ by 4.5\% of their \omterm{def:g10:universal-dna:information}{DNA}; at 0.27\% per million years,
+their common ancestor lived some 17 million years ago. The estimate
+assumes the primate rate applies; for a \omterm{def:g10:universal-dna:gene}{gene} evolving twice as fast,
+or in a lineage with shorter generations, the same 4.5\% would mean
+half the time. A clock is only as good as its calibration.
+\end{example}
+
+\section{Classification, from trees}
+
+\begin{proposition}[Classifying by descent]\label{prop:g12:phylogenetic-trees:classification}
+A phylogenetic classification names only \omterm{prop:g12:phylogenetic-trees:rules}{clades}: groups defined by a
+node and containing all its descendants. Familiar groups that fail
+this test are not used: "fish" excludes the tetrapods that descend
+from the same node; "reptiles" excludes the birds that descend from
+within them; "invertebrates" is everything except a \omterm{prop:g12:phylogenetic-trees:rules}{clade}. The
+consequences are worth stating plainly: birds are dinosaurs, the
+lungfish is closer to us than to the trout, and humans are one branch
+of the apes, which are one branch of the primates, the mammals, the
+amniotes, the tetrapods, the \omterm{def:g10:common-ancestry:bodyplan}{vertebrates}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book1/darwin.jpg}
+
+{\small Charles Darwin, who first drew the kinship of species as a
+tree and proposed the mechanism, \omterm{def:g12:selection-drift-speciation:selection}{natural selection}, that grows it.
+Photo Henry Maull and John Fox, c.~1854, public domain.}
+\end{omfigure}
+
+\begin{remark}[What a tree is not]\label{rem:g12:phylogenetic-trees:not}
+A tree is a hypothesis about history, built from present species and
+tested by every new character and every new sequence; it is redrawn
+when they disagree, and the redrawing is the work of the field. It
+has no top and no direction of progress: humans sit at one tip among
+millions, no higher and no more finished than the lamprey at another.
+And it has no ancestor at any tip: the ancestors are the nodes,
+\omterm{def:g12:selection-drift-speciation:population}{populations} gone, whose existence the tree infers and whose fossils,
+when they are found, sit beside the branches rather than on them.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:1}
+What do the tips, the nodes and the root of a \omterm{def:g12:phylogenetic-trees:tree}{phylogenetic tree}
+represent?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:2}
+In tree A of the first figure, which species is the closest relative
+of the lizard? Of the frog?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:3}
+Define a shared derived state and explain why a shared ancestral
+state does not indicate kinship.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:4}
+What is a \omterm{prop:g12:phylogenetic-trees:rules}{clade}? Is "birds" a \omterm{prop:g12:phylogenetic-trees:rules}{clade}? Is "reptiles" (in the everyday
+sense)?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:5}
+From the primate tree, which is the human's closest relative, and
+which node is the oldest?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:6}
+Redraw tree A of the first figure with the human at the top and the
+frog at the bottom, and check that every kinship is unchanged.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:7}
+Add the pigeon (jaws 1, limbs 1, amnion 1, hair 0, feathers 1) to the
+matrix of the second figure and place it on the tree. What does the
+character "feathers" add?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:8}
+A dolphin has a streamlined body and fins like a shark, and hair, milk
+and a mammalian jaw. Which tree is most parsimonious, and what are the
+fins?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:9}
+Using the clock figure, date the common ancestor of two species whose
+\omterm{def:g10:universal-dna:information}{DNA} differs by 2.2\%.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:10}
+Explain why the sentence "the chimpanzee is our ancestor" misreads the
+tree, and write the correct sentence.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:11}
+Why is the lamprey used as the outgroup in the second figure, and what
+would go wrong if the mouse were used instead?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:12}
+Two \omterm{def:g10:universal-dna:gene}{genes} give different trees for three closely related species that
+separated within a million years of each other. Explain how this can
+happen without either tree being "wrong", using the shuffle of
+\omterm{def:g10:universal-dna:gene}{alleles} in the ancestral \omterm{def:g12:selection-drift-speciation:population}{population}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:13}
+The molecular clock of a fast-evolving virus runs at 1\% per year;
+that of a mammalian \omterm{def:g10:universal-dna:gene}{gene} at 0.3\% per million years. Explain why the
+first is used to trace an epidemic and the second to date the origin
+of the mammals, and why neither can do the other's job.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:14}
+A fossil bird with teeth and a long bony tail is found in rocks 150
+million years old. Explain why it is placed beside a branch of the
+tree rather than at a node, and what it tells about the node.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:15}
+"The tree of life has humans at its top." Discuss in a paragraph with
+the rules of reading, the equal age of the tips, and the number of
+tips.
+\end{exercise}
+
+\section{Problem: Six Species and a Clock}
+
+\begin{problem}[{Weekend problem --- a tree built twice, from a
+character table and from DNA distances, the two compared, and the
+nodes dated}]
+\label{pb:g12:phylogenetic-trees:1}
+Six species: shark, salmon, salamander, crocodile, pigeon, cat. The
+outgroup is the lamprey. Character table (1 = derived):
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+ & bony skeleton & four limbs & amniotic egg & feathers & hair & skull opening \\ \hline
+shark & 0 & 0 & 0 & 0 & 0 & 0 \\
+salmon & 1 & 0 & 0 & 0 & 0 & 0 \\
+salamander & 1 & 1 & 0 & 0 & 0 & 0 \\
+crocodile & 1 & 1 & 1 & 0 & 0 & 0 \\
+pigeon & 1 & 1 & 1 & 1 & 0 & 0 \\
+cat & 1 & 1 & 1 & 0 & 1 & 1 \\
+\end{tabular}
+\end{center}
+
+\omterm{def:g10:universal-dna:information}{DNA} differences (\%) for one \omterm{def:g10:universal-dna:gene}{gene}:
+
+\begin{center}
+\begin{tabular}{lccccc}
+ & salmon & salamander & crocodile & pigeon & cat \\ \hline
+shark & 30 & 31 & 30 & 31 & 30 \\
+salmon & & 24 & 25 & 25 & 24 \\
+salamander & & & 19 & 20 & 19 \\
+crocodile & & & & 8 & 15 \\
+pigeon & & & & & 15 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Part I --- From the characters.}
+\begin{enumerate}
+  \item Which derived state is shared by the most species? Name the
+        \omterm{prop:g12:phylogenetic-trees:rules}{clade} it defines and the species left outside. (The last
+        character is the single opening in the side of the skull
+        that mammals have.)
+  \item Continue with the next most widely shared states and list the
+        nested \omterm{prop:g12:phylogenetic-trees:rules}{clades}.
+  \item Feathers, hair and the skull opening each occur in one species.
+        Do they help to build this tree? What would make them useful?
+  \item Draw the tree, writing each character on the branch where it
+        appeared.
+  \item Which species is the crocodile's closest relative according to
+        this table? Which pair cannot be resolved by the table alone?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- From the \omterm{def:g10:universal-dna:information}{DNA}.}
+\begin{enumerate}[resume]
+  \item Which pair of species has the smallest distance? Join them
+        first.
+  \item Which species joins that pair next? Continue until the tree is
+        complete.
+  \item Compare the \omterm{def:g10:universal-dna:information}{DNA} tree with the character tree: where do they
+        agree, and what does the \omterm{def:g10:universal-dna:information}{DNA} settle that the characters could
+        not?
+  \item The shark's distances to all others are nearly equal. Explain
+        why, from the shape of the tree.
+  \item The crocodile--pigeon distance (8) is smaller than the
+        crocodile--cat distance (15). What does this say about the
+        everyday group "reptiles"?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The clock.}
+Fossils date the separation of the salamander lineage from the
+amniotes at 340 million years.
+\begin{enumerate}[resume]
+  \item Using the salamander--amniote distances (about 19\%), compute
+        the rate of the clock in per cent per million years. (Both
+        lineages have been changing: the distance counts the changes
+        on both branches.)
+  \item Date the crocodile--pigeon node and the amniote node
+        (crocodile/pigeon versus cat).
+  \item Date the salmon node and the shark node.
+  \item Fossils give about 250 million years for the crocodile--bird
+        split and 310 for the amniote split. Compare with your dates
+        and comment on the accuracy of a \omterm{def:g10:universal-dna:gene}{single-gene} clock.
+  \item The shark distances (30--31\%) hardly exceed the salmon's
+        (24--25\%) although the shark node is much older. Propose an
+        explanation, and say what it implies for dating very old
+        nodes with this \omterm{def:g10:universal-dna:gene}{gene}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Reading and naming.}
+\begin{enumerate}[resume]
+  \item List the \omterm{prop:g12:phylogenetic-trees:rules}{clades} of your tree that contain the cat, from the
+        smallest to the largest.
+  \item Is "fish" (shark and salmon) a \omterm{prop:g12:phylogenetic-trees:rules}{clade}? Is "amniotes"? Justify.
+  \item A student says the salamander is "an intermediate between fish
+        and reptiles". Correct the statement in the tree's terms.
+  \item A fossil with a bony skeleton, four limbs and no amniotic egg,
+        dated 360 million years, is found. Where does it sit relative
+        to the tree, and what does its date confirm?
+  \item State the result: the tree of the six species (as nested
+        parentheses), the one kinship the \omterm{def:g10:universal-dna:information}{DNA} settled, and the
+        estimated date of the crocodile--pigeon split.
+\end{enumerate}
+\end{problem}

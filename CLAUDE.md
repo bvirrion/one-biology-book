@@ -18,8 +18,9 @@ collège SVT biology parts, Book 2 the lycée S SVT biology parts, Books
 of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
-**Current state: Book 1 written in English (2026-08-28); Books 2–5 are
-titled placeholders** (chapter architecture in place, no chapter written).
+**Current state: Books 1 and 2 written in English (2026-08-28 and
+2026-09-02); Books 3–5 are titled placeholders** (chapter architecture in
+place, no chapter written).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -35,6 +36,25 @@ titled placeholders** (chapter architecture in place, no chapter written).
   editing definitions or prose). Math level guard: whole numbers only
   in grades 1–3, fractions from grade 4, percentages from grades 6–7,
   powers grade 8, chance only as "one in two/four" in grade 9.
+
+- **Book 2** (High School, grades 10–12): 36 chapters + 36 solutions
+  files, ~378 pp. Physics high-school calibration: every chapter carries
+  exactly 15 exercises ramped 5×★, 6×★★, 4×★★★ in order, plus one
+  ~20-question weekend `problem` (Parts I–IV with `[resume]`) ending on a
+  named quantified result; every exercise and problem has a keyed
+  solution. Adult, experiment-driven register: classic experiments are
+  given as `\begin{proof}[Evidence]`, the rest `\admitted`. 184
+  figures: TikZ/pgfplots schematics, 47 AI illustrations
+  (`images/book2/ai/`, prompts in `PROMPTS.md`, overlay-label bases named
+  `fig-*`) and 5 free-license photographs (`images/book2/`, records in
+  `CREDITS.md`) plus 3 reused from `images/book1/`, all credited in
+  `frontmatter/image-credits-book2.tex`. ~5,300 generated `\omterm`
+  links; `tools/term_config/book2_en.py` is curated (STOP/DROP for the
+  few ordinary-English collisions, EXTRA plurals, a protect pattern for
+  "homologous chromosomes"). Math level guard: percentages, ratios,
+  Punnett squares and $p^2+2pq+q^2$; no derivatives or logarithms. The
+  entry file redefines `\indexspace` with more shrink — without it the
+  multicol index reports two overfull columns on its last page.
 
 `CONTRIBUTING.md` holds the authoritative style/structure conventions;
 `THEME.md` documents the One Course cover brand. Read both before writing

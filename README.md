@@ -26,9 +26,9 @@ several volumes:
 
 The course is **pure biology** (life sciences only: cell, genetics,
 evolution, physiology, ecology, immunity, and so on — no geology or Earth
-science). All volumes currently exist as titled chapter placeholders:
-the full five-book architecture is in place, and chapters are being
-written.
+science). The first two volumes are fully written; the university
+volumes exist as titled chapter placeholders, with the full five-book
+architecture in place.
 
 The style is concise and rigorous: courses built from **definitions,
 examples, propositions, methods and diagrams**, with careful reasoning
@@ -41,8 +41,8 @@ in **TikZ figures**; equations stay sparse.
 
 | Book | Level | Status |
 |------|-------|--------|
-| Primary & Middle School | Grades 1–9 | 🚧 structure (71 chapter placeholders) |
-| High School | Grades 10–12 | 🚧 structure (36 chapter placeholders) |
+| Primary & Middle School | Grades 1–9 | ✅ written in English (71 chapters, exercises, solutions, figures) |
+| High School | Grades 10–12 | ✅ written in English (36 chapters, exercises, weekend problems, solutions, figures) |
 | University Year 1–3 | Bachelor | 🚧 structure (29 + 27 + 27 chapter placeholders) |
 
 ## Building the books

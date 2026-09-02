@@ -1,6 +1,477 @@
 \chapter{Heart and Lungs During Effort}\label{ch:g10:heart-lungs-effort}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Run up four flights of stairs and stop at the top. Your chest is heaving
+--- forty breaths a minute instead of twelve, each one three times
+deeper --- and your heart is hammering at a hundred and seventy. Nothing
+about the stairs required you to decide this; the body arranged it, in
+seconds, because the muscles of \cref{ch:g10:exercise-and-energy} were
+demanding ten times more oxygen than a minute earlier. This chapter is
+about the delivery system --- lungs, heart, blood vessels --- and about
+how its output is multiplied when effort begins.
 
-\emph{This chapter has not been written yet.}
+\section{Ventilation}
+
+\begin{definition}[Ventilation]\label{def:g10:heart-lungs-effort:ventilation}
+\emph{Pulmonary ventilation}\index{ventilation} is the volume of air
+moved into and out of the lungs per minute: the volume of one breath
+(the \emph{tidal volume}) multiplied by the number of breaths per
+minute (the \emph{respiratory rate}). At rest, about \qty{0.5}{L}
+twelve to fifteen times a minute: \qtyrange{6}{8}{L/min}. In the
+lungs the air reaches some 300 million \emph{alveoli}\index{alveolus},
+thin-walled sacs wrapped in capillaries, where oxygen passes into the
+blood and carbon dioxide out of it.
+\end{definition}
+
+\begin{proposition}[Ventilation during exercise]\label{prop:g10:heart-lungs-effort:vent-exercise}
+During exercise both the tidal volume and the rate rise: a fit adult
+can breathe \qty{2.5}{L} forty times a minute, \qty{100}{L/min} or
+more, fifteen times the resting value. The rise begins within the
+first seconds of effort, before any change in the blood, and settles
+at a level proportional to the oxygen being consumed.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=40, ymin=0, ymax=6.5,
+  xlabel={time (s)}, ylabel={lung volume (L)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,10,20,30,40}, ytick={0,1,2,3,4,5,6},
+  clip=false,
+]
+\addplot[thick, omDef, smooth, samples=200, domain=0:16]
+  {2.7 + 0.25*sin(deg(2*pi*x/4))};
+\addplot[thick, omDef] coordinates {(16,2.7) (18,2.95) (21,5.7) (25,5.7) (30,1.2) (33,1.2) (35,2.7)};
+\addplot[thick, omDef, smooth, samples=100, domain=35:40]
+  {2.7 + 0.25*sin(deg(2*pi*(x-35)/4))};
+\draw[dashed, gray] (axis cs:0,1.2) -- (axis cs:40,1.2);
+\draw[dashed, gray] (axis cs:0,5.7) -- (axis cs:40,5.7);
+\draw[dashed, gray] (axis cs:0,2.45) -- (axis cs:18,2.45);
+\draw[dashed, gray] (axis cs:0,2.95) -- (axis cs:18,2.95);
+\draw[<->, omThm] (axis cs:38,1.2) -- (axis cs:38,5.7);
+\node[font=\small, anchor=west, omThm] at (axis cs:38.4,3.5) {vital};
+\node[font=\small, anchor=west, omThm] at (axis cs:38.4,3.1) {capacity};
+\draw[<->] (axis cs:8,2.45) -- (axis cs:8,2.95);
+\node[font=\small, anchor=south] at (axis cs:8,3.0) {tidal volume, \qty{0.5}{L}};
+\node[font=\small, anchor=north] at (axis cs:20,1.1) {residual volume};
+\node[font=\small, anchor=south, align=center] at (axis cs:23,5.75) {maximal\\ inspiration};
+\node[font=\small, anchor=north, align=center] at (axis cs:31.5,1.1) {};
+\end{axis}
+\end{tikzpicture}
+
+{\small A spirogram: the volume of air in the lungs against time. Quiet
+breathing moves \qty{0.5}{L} per breath around a mid-level; a maximal
+inspiration followed by a maximal expiration sweeps the vital capacity,
+about \qty{4.5}{L}; the \qty{1.2}{L} that can never be expelled is the
+residual volume.}
+\end{omfigure}
+
+\begin{example}[Reading a spirogram]\label{ex:g10:heart-lungs-effort:spirogram}
+In the figure, four breaths take \qty{16}{s}: 15 breaths per minute of
+\qty{0.5}{L}, hence \qty{7.5}{L/min}. The maximal sweep runs from
+\qty{5.7}{L} down to \qty{1.2}{L}: a vital capacity of \qty{4.5}{L}. A
+tidal volume of \qty{2.5}{L} during exercise uses more than half of
+that capacity, which is why breathing hard feels like it.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.58\linewidth]{images/book2/ai/g10-lungs-spirometer.png}
+
+{\small Measuring lung volumes: the subject breathes through a
+mouthpiece into a spirometer, nose clipped, and the instrument records
+the volume of every breath.}
+\end{omfigure}
+
+\section{The heart and the two circulations}
+
+\begin{definition}[Cardiac output]\label{def:g10:heart-lungs-effort:output}
+The heart is a double pump of four chambers. The right side receives
+the blood returning from the organs and sends it to the lungs
+(\emph{pulmonary circulation}); the left side receives it back from
+the lungs and sends it to the organs (\emph{systemic circulation}).
+Valves between the chambers and at the exits make the flow one-way.
+The \emph{cardiac output}\index{cardiac output} $Q$ is the volume of
+blood each side pumps per minute: the volume ejected per beat, the
+\emph{stroke volume} $V_s$, multiplied by the \emph{heart rate} $f$,
+\[
+Q = f \times V_s .
+\]
+At rest, $70$ beats per minute of \qty{70}{mL}: about \qty{5}{L/min}
+--- the whole blood volume once a minute.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[>=Stealth, font=\small,
+  ch/.style={draw, thick, rounded corners, minimum width=1.9cm, minimum height=1.0cm, align=center},
+  org/.style={draw, thick, rounded corners, minimum width=2.6cm, minimum height=1.0cm, align=center}]
+  \node[org, fill=omDef!15] (lungs) at (3.5,3.6) {lungs};
+  \node[ch, fill=omDef!25] (ra) at (0.7,1.2) {right\\ atrium};
+  \node[ch, fill=omDef!25] (rv) at (0.7,0) {right\\ ventricle};
+  \node[ch, fill=omThm!20] (la) at (6.3,1.2) {left\\ atrium};
+  \node[ch, fill=omThm!20] (lv) at (6.3,0) {left\\ ventricle};
+  \node[org, fill=omThm!12] (org) at (3.5,-2.8) {muscles and\\ other organs};
+  \draw[->, thick, omDef] (ra) -- (rv);
+  \draw[->, thick, omDef, rounded corners=6pt] (rv.west) -- (-1.55,0) -- (-1.55,3.6) -- (lungs.west);
+  \node[anchor=east, align=right, omDef] at (-1.7,2.4) {pulmonary\\ artery};
+  \draw[->, thick, omThm, rounded corners=6pt] (lungs.east) -- (8.6,3.6) -- (8.6,1.2) -- (la.east);
+  \node[anchor=west, align=left, omThm] at (8.75,2.4) {pulmonary\\ veins};
+  \draw[->, thick, omThm] (la) -- (lv);
+  \draw[->, thick, omThm, rounded corners=6pt] (lv.east) -- (8.6,0) -- (8.6,-2.8) -- (org.east);
+  \node[anchor=west, omThm] at (8.75,-1.4) {aorta};
+  \draw[->, thick, omDef, rounded corners=6pt] (org.west) -- (-2.3,-2.8) -- (-2.3,1.2) -- (ra.west);
+  \node[anchor=east, omDef] at (-2.45,-1.4) {veins};
+  \node[font=\small, anchor=north, text width=3.2cm, align=center] at (3.5,-3.6) {oxygen out, $\mathrm{CO_2}$ in};
+  \node[font=\small, anchor=south, text width=3.2cm, align=center] at (3.5,4.2) {oxygen in, $\mathrm{CO_2}$ out};
+  \draw[thick, dashed, gray] (3.5,2.5) -- (3.5,-1.9);
+\end{tikzpicture}
+
+{\small The double circulation. Blue: blood poor in oxygen, pumped by
+the right heart to the lungs. Red: blood rich in oxygen, pumped by the
+left heart to the organs. The two sides beat together and pump the
+same volume per minute.}
+\end{omfigure}
+
+\begin{proposition}[Cardiac output during exercise]\label{prop:g10:heart-lungs-effort:output-exercise}
+During exercise the heart rate rises with the power delivered, up to a
+maximum of roughly $220$ minus the age in years, and the stroke volume
+rises too, by about half in an untrained person and more in a trained
+one. The \omterm{def:g10:heart-lungs-effort:output}{cardiac output} of a young adult goes from \qty{5}{L/min} at
+rest to \qtyrange{20}{25}{L/min} at maximal effort, and to
+\qty{35}{L/min} or more in an endurance champion, whose stroke volume
+can exceed \qty{180}{mL}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=320, ymin=0, ymax=210,
+  xlabel={mechanical power (W)}, ylabel={heart rate (per min), stroke volume (mL)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small},
+  xtick={0,50,100,150,200,250,300}, ytick={0,50,100,150,200},
+  legend style={at={(0.5,-0.3)}, anchor=north, legend columns=3, font=\small, draw=none},
+  clip=false,
+]
+\addplot[thick, omThm, mark=*, mark size=1.5pt] coordinates
+  {(0,70) (50,95) (100,120) (150,145) (200,170) (250,190) (300,198)};
+\addplot[thick, omDef, mark=square*, mark size=1.5pt] coordinates
+  {(0,70) (50,90) (100,105) (150,112) (200,115) (250,115) (300,115)};
+\addplot[thick, omMeth, dashed, mark=triangle*, mark size=1.8pt] coordinates
+  {(0,4.9) (50,8.6) (100,12.6) (150,16.2) (200,19.6) (250,21.9) (300,22.8)};
+\legend{heart rate, stroke volume, output (L/min)}
+\end{axis}
+\end{tikzpicture}
+
+{\small Heart rate, stroke volume and \omterm{def:g10:heart-lungs-effort:output}{cardiac output} of a
+twenty-year-old at increasing power. The stroke volume levels off at
+moderate effort; above that the output rises through the rate alone,
+and the rate itself levels off near $220 - 20 = 200$.}
+\end{omfigure}
+
+\begin{example}[Output at \qty{200}{W}]\label{ex:g10:heart-lungs-effort:output200}
+From the figure: $f = 170$ per minute, $V_s = \qty{115}{mL}$, so
+$Q = 170 \times 0.115 \approx \qty{19.6}{L/min}$: four times the
+resting output. The heart is moving the body's entire blood volume
+four times a minute.
+\end{example}
+
+\section{Getting the blood where it is needed}
+
+\begin{proposition}[Redistribution of the blood flow]\label{prop:g10:heart-lungs-effort:redistribution}
+At rest the muscles receive about a fifth of the \omterm{def:g10:heart-lungs-effort:output}{cardiac output}; the
+gut, liver and kidneys take half. During heavy exercise the small
+arteries of the working muscles widen and those of the gut and kidneys
+narrow: the muscles then receive more than four fifths of an output
+that has itself quadrupled --- some \qty{20}{L/min} instead of
+\qty{1}{L/min}, twenty times more. The brain's share is kept constant
+in absolute terms, and the skin's rises to carry the heat away.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  xbar stacked, bar width=15pt,
+  width=0.86\linewidth, height=3.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=25, xlabel={blood flow (L/min)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.3)}, anchor=north},
+  symbolic y coords={rest, maximal exercise},
+  ytick=data, tick label style={font=\small},
+  enlarge y limits=0.5,
+  legend style={at={(0.5,-0.65)}, anchor=north, legend columns=5, font=\small, draw=none},
+]
+\addplot[fill=omThm!50, draw=omThm] coordinates {(1.0,rest) (20.5,maximal exercise)};
+\addplot[fill=omProp!50, draw=omProp] coordinates {(2.5,rest) (0.9,maximal exercise)};
+\addplot[fill=omDef!50, draw=omDef] coordinates {(0.75,rest) (0.75,maximal exercise)};
+\addplot[fill=gray!40, draw=gray] coordinates {(0.5,rest) (1.2,maximal exercise)};
+\addplot[fill=omMeth!50, draw=omMeth] coordinates {(0.25,rest) (0.65,maximal exercise)};
+\legend{muscles, gut and kidneys, brain, skin, other}
+\end{axis}
+\end{tikzpicture}
+
+{\small Where the \omterm{def:g10:heart-lungs-effort:output}{cardiac output} goes, at rest (\qty{5}{L/min}) and at
+maximal exercise (\qty{24}{L/min}). The muscles' share goes from a
+fifth to more than four fifths; the brain keeps its \qty{0.75}{L/min}
+throughout.}
+\end{omfigure}
+
+\begin{proposition}[Oxygen delivery and extraction]\label{prop:g10:heart-lungs-effort:extraction}
+Each litre of arterial blood carries about \qty{200}{mL} of oxygen,
+almost all of it bound to the haemoglobin of the red blood \omterm{def:g10:cells-common-unit:cell}{cells}. At
+rest the organs remove about \qty{50}{mL} from each litre; during
+exercise the working muscles remove up to \qty{150}{mL}, three times
+more. The oxygen consumed per minute is the \omterm{def:g10:heart-lungs-effort:output}{cardiac output} multiplied
+by the amount removed per litre --- so the fivefold rise in output and
+the threefold rise in extraction together give the fifteenfold rise in
+oxygen consumption of \cref{ch:g10:exercise-and-energy}.
+\end{proposition}
+\admitted
+
+\begin{example}[The oxygen budget checked]\label{ex:g10:heart-lungs-effort:fick}
+Rest: \qty{5}{L/min} $\times$ \qty{50}{mL/L} $= \qty{250}{mL/min}$, the
+resting consumption. Maximal effort of a trained student:
+\qty{23}{L/min} $\times$ \qty{150}{mL/L} $= \qty{3.45}{L/min}$ --- a
+$\dot V\!\mathrm{O_2}$max of \qty{50}{mL/min} per kilogram for
+\qty{69}{kg}, exactly the figure of the previous chapter.
+\end{example}
+
+\section{How the response is controlled}
+
+\begin{proposition}[Nervous and hormonal control]\label{prop:g10:heart-lungs-effort:control}
+Heart and breathing muscles are driven by nerve centres in the base of
+the brain. Two sets of nerves reach the heart: one slows it, active at
+rest; one accelerates it and strengthens each beat. At the start of
+exercise the brain's command to the muscles is copied to these centres
+--- the heart speeds up within one or two beats --- and sensors in the
+muscles and joints report the movement. Then, as the exercise
+continues, sensors in the arteries measure the carbon dioxide and
+acidity of the blood and adjust \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} and heart rate to keep
+them near their resting values. The adrenal glands add the hormone
+\emph{adrenaline}\index{adrenaline}, which reinforces the acceleration
+and widens the muscles' arteries.
+\end{proposition}
+\begin{proof}[Evidence]
+Cutting the slowing nerve of an animal raises its resting heart rate
+from 70 to about 100; stimulating it stops the heart. Stimulating the
+accelerating nerve doubles the rate. A person told to expect an effort
+shows a rising heart rate before moving; a subject breathing air
+enriched in carbon dioxide increases \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} within a minute, and
+one whose blood carbon dioxide is kept constant artificially during
+exercise still increases it at the start of movement --- the two
+mechanisms, anticipation and correction, are both real.
+\end{proof}
+
+\begin{method}[Computing the delivery of oxygen]\label{met:g10:heart-lungs-effort:compute}
+\begin{enumerate}
+  \item \omterm{def:g10:heart-lungs-effort:ventilation}{Ventilation}: tidal volume $\times$ rate. Only about 70\% of
+        each breath reaches the \omterm{def:g10:heart-lungs-effort:ventilation}{alveoli}; the rest fills the airways.
+  \item \omterm{def:g10:heart-lungs-effort:output}{Cardiac output}: $Q = f \times V_s$, in litres per minute if
+        $V_s$ is in litres.
+  \item Oxygen consumed per minute: $Q \times$ (oxygen removed per
+        litre of blood).
+  \item Flow to an organ: its share of $Q$. Compare absolute flows,
+        not shares --- a smaller share of a larger output can be more
+        blood.
+  \item Check: consumption cannot exceed the $\dot V\!\mathrm{O_2}$max,
+        and $f$ cannot exceed about $220 - $ age.
+\end{enumerate}
+\end{method}
+
+\begin{remark}[Where the limit lies]\label{rem:g10:heart-lungs-effort:limit}
+\omterm{def:g10:heart-lungs-effort:ventilation}{Ventilation} can exceed \qty{150}{L/min} and the blood leaving the lungs
+is still nearly saturated at maximal effort: the lungs are not the
+bottleneck. The stroke volume is: it sets how much blood, hence how
+much oxygen, each beat delivers. Endurance training enlarges the heart
+and its stroke volume --- which is why a trained resting heart beats
+at 45 instead of 70 for the same \qty{5}{L/min}, and why
+$\dot V\!\mathrm{O_2}$max rises with training.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:1}
+Compute the \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} of a person breathing \qty{0.6}{L} fourteen
+times a minute; then of the same person breathing \qty{2.2}{L}
+thirty-five times a minute.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:2}
+Define \omterm{def:g10:heart-lungs-effort:output}{cardiac output} and give its formula. Compute it for a heart
+rate of 65 per minute and a stroke volume of \qty{75}{mL}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:3}
+Trace the path of a red blood \omterm{def:g10:cells-common-unit:cell}{cell} from the right atrium back to the
+right atrium, naming the chambers and the two circulations.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:4}
+From the spirogram figure, give the tidal volume, the vital capacity
+and the residual volume.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:5}
+What is the maximal heart rate of a 16-year-old? Of a 60-year-old?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:6}
+From the heart-rate figure, compute the \omterm{def:g10:heart-lungs-effort:output}{cardiac output} at \qty{100}{W}
+and at \qty{300}{W}, and the factor between them.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:7}
+At rest the gut and kidneys receive 50\% of \qty{5}{L/min}; at maximal
+exercise, 4\% of \qty{24}{L/min}. Compute both flows. Which changes
+more, the share or the absolute flow?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:8}
+A subject has a \omterm{def:g10:heart-lungs-effort:output}{cardiac output} of \qty{18}{L/min} and her muscles
+remove \qty{140}{mL} of oxygen per litre. Compute her oxygen
+consumption. Is she near the ceiling of a trained student?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:9}
+Why does the brain's blood flow stay at \qty{0.75}{L/min} while the
+gut's is cut by two thirds during exercise? Think of what each organ
+can tolerate.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:10}
+A trained cyclist has a resting heart rate of 42 and a resting output
+of \qty{5}{L/min}. Compute her stroke volume and compare with an
+untrained person's.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:11}
+Explain why the heart rate starts rising before the first step of a
+race, and what would happen to a runner whose control worked only by
+sensing blood carbon dioxide.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:12}
+Two subjects reach the same maximal heart rate of 195. One has a
+maximal stroke volume of \qty{110}{mL}, the other \qty{160}{mL}. With
+the same oxygen extraction of \qty{150}{mL/L}, compute their \omterm{def:g10:exercise-and-energy:vo2max}{maximal
+oxygen consumptions}, and say what \cref{rem:g10:heart-lungs-effort:limit}
+predicts about their training histories.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:13}
+Air is 21\% oxygen. A subject ventilates \qty{100}{L/min} at maximal
+effort and consumes \qty{3.5}{L/min} of oxygen. What fraction of the
+oxygen she breathes in does she actually use? What does the rest do?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:14}
+A drug blocks the accelerating nerves and \omterm{prop:g10:heart-lungs-effort:control}{adrenaline}'s effect on the
+heart, limiting the heart rate to 110. Predict its effect on the
+\omterm{def:g10:heart-lungs-effort:output}{cardiac output} at maximal effort, on the $\dot V\!\mathrm{O_2}$max,
+and on what the patient can do.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:15}
+A person at high altitude has arterial blood carrying \qty{150}{mL} of
+oxygen per litre instead of \num{200}. With the same maximal \omterm{def:g10:heart-lungs-effort:output}{cardiac
+output} and the same extraction of 75\% of the oxygen delivered,
+compute the loss of $\dot V\!\mathrm{O_2}$max in per cent. Propose one
+adaptation the body makes in the following weeks.
+\end{exercise}
+
+\section{Problem: The Stress Test}
+
+\begin{problem}[{Weekend problem --- a cardiologist's exercise test:
+heart rate, stroke volume, ventilation and oxygen extraction measured
+at rising power, and the multiplication they achieve together}]
+\label{pb:g10:heart-lungs-effort:1}
+Tom, 17, mass \qty{68}{kg}, pedals on a laboratory bicycle while his
+heart rate, \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} and expired air are recorded. Results:
+
+\begin{center}
+\begin{tabular}{lccccc}
+power (W) & 0 & 75 & 150 & 225 & 300 \\ \hline
+heart rate (per min) & 62 & 105 & 140 & 175 & 198 \\
+stroke volume (mL) & 72 & 100 & 116 & 120 & 120 \\
+tidal volume (L) & 0.5 & 1.2 & 1.8 & 2.3 & 2.6 \\
+breaths per min & 13 & 18 & 24 & 32 & 44 \\
+$\mathrm{O_2}$ removed per litre of blood (mL) & 52 & 90 & 120 & 145 & 155 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Part I --- The heart.}
+\begin{enumerate}
+  \item Compute Tom's \omterm{def:g10:heart-lungs-effort:output}{cardiac output} at each power.
+  \item By what factor has the output risen at \qty{300}{W}? What
+        part of that factor comes from the rate and what part from the
+        stroke volume?
+  \item Above what power does the stroke volume stop rising? What
+        alone increases the output beyond that?
+  \item Compare Tom's maximal heart rate with the rule of thumb.
+  \item His resting output is about \qty{4.5}{L/min}. If his blood
+        volume is \qty{5}{L}, how long does one full circuit take at
+        rest, and at \qty{300}{W}?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The lungs.}
+\begin{enumerate}[resume]
+  \item Compute the \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} at each power.
+  \item By what factor has it risen at \qty{300}{W}? Which of the two
+        factors, volume or rate, contributes more?
+  \item Tom's vital capacity is \qty{5.0}{L}. What fraction of it does
+        each breath use at \qty{300}{W}?
+  \item \omterm{def:g10:heart-lungs-effort:ventilation}{Ventilation} rose by a larger factor than \omterm{def:g10:heart-lungs-effort:output}{cardiac output}. Does
+        this mean the lungs limit performance? Use
+        \cref{rem:g10:heart-lungs-effort:limit}.
+  \item Only 70\% of each breath reaches the \omterm{def:g10:heart-lungs-effort:ventilation}{alveoli}. Compute the
+        alveolar \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} at rest and at \qty{300}{W}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The oxygen.}
+\begin{enumerate}[resume]
+  \item Compute Tom's oxygen consumption at each power, from the
+        \omterm{def:g10:heart-lungs-effort:output}{cardiac output} and the oxygen removed per litre.
+  \item Express the value at \qty{300}{W} in millilitres per minute
+        per kilogram. Is it a $\dot V\!\mathrm{O_2}$max, and of what
+        kind of subject?
+  \item By what factor has consumption risen from rest to
+        \qty{300}{W}? Split it into the factor from the heart and the
+        factor from extraction.
+  \item Using \qty{20}{kJ} per litre of oxygen, compute the metabolic
+        power at \qty{300}{W} and the efficiency of the muscles
+        (mechanical power divided by the metabolic power above rest).
+  \item Plot, or describe, oxygen consumption against mechanical
+        power. Is it linear? Where is the ceiling?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The control and the verdict.}
+\begin{enumerate}[resume]
+  \item Tom's heart rate reached 75 while he sat waiting for the test
+        to start. Explain.
+  \item At \qty{300}{W} his arterial blood is still 95\% saturated
+        with oxygen. What does this tell you about the \omterm{def:g10:heart-lungs-effort:ventilation}{alveoli}'s
+        exchange, and about where the limit to his
+        $\dot V\!\mathrm{O_2}$max lies?
+  \item The cardiologist notes that the muscles now receive about
+        \qty{20}{L/min} of blood. What fraction of the output is that,
+        and where did the rest of the resting distribution go?
+  \item After six months of training, Tom's maximal stroke volume is
+        \qty{140}{mL} at the same maximal rate and extraction. Compute
+        his new $\dot V\!\mathrm{O_2}$max.
+  \item State the result: the three numbers (heart, extraction,
+        \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation}) by which Tom's body multiplied its resting oxygen
+        supply, and the one of them that training changed.
+\end{enumerate}
+\end{problem}

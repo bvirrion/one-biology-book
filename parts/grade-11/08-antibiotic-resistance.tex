@@ -1,6 +1,425 @@
 \chapter{Bacteria and Antibiotic Resistance}\label{ch:g11:antibiotic-resistance}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1941 a policeman dying of blood poisoning from a scratch was given
+the first doses of penicillin ever used on a patient. He recovered
+within days --- and relapsed and died when the supply, painstakingly
+extracted from mould, ran out. Within a decade penicillin was
+manufactured by the tonne and infections that had killed for
+millennia became curable in a week. Within two decades, bacteria that
+penicillin no longer touched were common in every hospital. This
+chapter is about why: how bacteria vary, how an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} sorts them,
+and how the arithmetic of a population of billions turns a rare
+\omterm{def:g11:mutations:mutation}{mutation} into a ward-wide problem.
 
-\emph{This chapter has not been written yet.}
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book2/fleming.jpg}
+
+{\small Alexander Fleming at his bench in 1943, with the culture plates on which, fifteen years earlier, he had noticed a mould clearing the bacteria around it. Photograph, Imperial War Museums, public domain.}
+\end{omfigure}
+
+\section{How bacteria vary}
+
+\begin{proposition}[Bacterial reproduction and variation]\label{prop:g11:antibiotic-resistance:variation}
+A bacterium reproduces by dividing in two after copying its single
+\omterm{def:g11:cell-cycle-mitosis:chromosome}{chromosome}: the daughters are, apart from copying errors, genetically
+identical to the mother --- a \emph{clone}. In a rich medium a
+division every 20 minutes turns one \omterm{def:g10:cells-common-unit:cell}{cell} into a billion in ten hours.
+Genetic variation in the clone comes from two sources:
+\begin{itemize}
+  \item \emph{\omterm{def:g11:mutations:mutation}{mutations}} (\cref{ch:g11:mutations}), rare per division
+        but frequent in a population of billions;
+  \item \emph{horizontal gene transfer}\index{horizontal gene transfer}:
+        \omterm{def:g10:universal-dna:information}{DNA} received from another bacterium, of the same species or
+        another, most often as a \emph{plasmid} --- a small circle of
+        \omterm{def:g10:universal-dna:information}{DNA}, separate from the \omterm{def:g11:cell-cycle-mitosis:chromosome}{chromosome}, carrying a few \omterm{def:g10:universal-dna:gene}{genes} and
+        able to pass from \omterm{def:g10:cells-common-unit:cell}{cell} to \omterm{def:g10:cells-common-unit:cell}{cell} through a bridge of membrane.
+\end{itemize}
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, >=Stealth]
+  % donor
+  \draw[thick, fill=omDef!10, rounded corners=12pt] (0,0) rectangle (3,1.5);
+  \draw[thick, omDef] (0.4,0.75) .. controls (0.6,1.3) and (2.4,1.3) .. (2.6,0.75) .. controls (2.4,0.2) and (0.6,0.2) .. (0.4,0.75);
+  \draw[thick, omThm, fill=omThm!20] (2.2,1.15) circle (0.22);
+  \node[anchor=north] at (1.5,-0.1) {donor: has the plasmid};
+  % recipient
+  \draw[thick, fill=omDef!10, rounded corners=12pt] (5,0) rectangle (8,1.5);
+  \draw[thick, omDef] (5.4,0.75) .. controls (5.6,1.3) and (7.4,1.3) .. (7.6,0.75) .. controls (7.4,0.2) and (5.6,0.2) .. (5.4,0.75);
+  \node[anchor=north] at (6.5,-0.1) {recipient};
+  % bridge
+  \draw[thick, fill=omProp!30] (3,0.55) rectangle (5,0.95);
+  \draw[->, thick, omThm] (3.1,0.75) -- (4.9,0.75);
+  \node[anchor=north, font=\scriptsize] at (4,-0.6) {a copy of the plasmid crosses the bridge};
+  % result
+  \draw[->, thick] (8.4,0.75) -- (9.2,0.75);
+  \draw[thick, fill=omDef!10, rounded corners=12pt] (9.5,0) rectangle (12.5,1.5);
+  \draw[thick, omDef] (9.9,0.75) .. controls (10.1,1.3) and (11.9,1.3) .. (12.1,0.75) .. controls (11.9,0.2) and (10.1,0.2) .. (9.9,0.75);
+  \draw[thick, omThm, fill=omThm!20] (11.7,1.15) circle (0.22);
+  \node[anchor=north, align=center] at (11,-0.1) {recipient now carries\\ the plasmid's genes};
+  \node[anchor=west, font=\scriptsize, omDef] at (0.2,1.75) {chromosome};
+  \node[anchor=west, font=\scriptsize, omThm] at (2.5,1.75) {plasmid};
+\end{tikzpicture}
+
+{\small Horizontal transfer. A plasmid --- a small circle of \omterm{def:g10:universal-dna:information}{DNA} that
+may carry a resistance \omterm{def:g10:universal-dna:gene}{gene} --- is copied across a bridge from one
+bacterium to another, which need not be of the same species. The
+recipient, and all its descendants, gain the \omterm{def:g10:universal-dna:gene}{gene} in one step.}
+\end{omfigure}
+
+\begin{example}[The arithmetic of a population]\label{ex:g11:antibiotic-resistance:arithmetic}
+A resistance \omterm{def:g11:mutations:mutation}{mutation} arises about once in $10^8$ divisions. A flask
+of $10^9$ bacteria has therefore had, in the divisions that produced
+it, some ten such \omterm{def:g11:mutations:mutation}{mutations}; an infected wound or a gut, with $10^{12}$
+bacteria, some ten thousand. Every large population of bacteria
+contains, before any \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} is used, \omterm{def:g10:cells-common-unit:cell}{cells} resistant to it ---
+the replica plates of \cref{ch:g11:mutations} proved it.
+\end{example}
+
+\section{Antibiotics}
+
+\begin{definition}[Antibiotic]\label{def:g11:antibiotic-resistance:antibiotic}
+An \emph{antibiotic}\index{antibiotic} is a molecule that kills
+bacteria or stops their growth, at concentrations harmless to the
+patient's \omterm{def:g10:cells-common-unit:cell}{cells}, by acting on a structure or a process that bacteria
+have and human \omterm{def:g10:cells-common-unit:cell}{cells} lack: penicillin and its relatives block the
+building of the bacterial wall; streptomycin and tetracycline jam the
+bacterial \omterm{def:g10:cells-common-unit:organelle}{ribosome}, which differs from ours; others block the
+bacterial \omterm{def:g11:enzymes-and-phenotype:enzyme}{enzymes} of \omterm{def:g11:dna-replication:replication}{DNA replication}. Most were first found in
+moulds and soil bacteria, which make them against their competitors.
+Antibiotics have no effect on viruses, which have none of these
+targets.
+\end{definition}
+
+\begin{proposition}[Mechanisms of resistance]\label{prop:g11:antibiotic-resistance:mechanisms}
+A bacterium is \emph{resistant}\index{antibiotic resistance} to an
+\omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} when it grows at concentrations that stop its sensitive
+relatives. Resistance has a genetic basis of one of a few kinds: a
+\omterm{def:g10:universal-dna:gene}{gene} for an \omterm{def:g11:enzymes-and-phenotype:enzyme}{enzyme} that destroys the \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} (penicillinases cut
+penicillin in two); a \omterm{def:g11:mutations:mutation}{mutation} altering the \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}'s target so
+that the drug no longer binds (a changed ribosomal \omterm{def:g11:gene-expression:protein}{protein}); a pump
+that expels the drug; a wall that does not let it in. Each is an
+\omterm{def:g10:universal-dna:gene}{allele} or a \omterm{def:g10:universal-dna:gene}{gene}, and each is inherited --- vertically by the clone
+and, when on a plasmid, horizontally by neighbours.
+\end{proposition}
+\admitted
+
+\begin{method}[Reading an antibiogram]\label{met:g11:antibiotic-resistance:antibiogram}
+An \emph{antibiogram} tests a patient's bacteria against several
+\omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotics} at once.
+\begin{enumerate}
+  \item Spread the bacteria evenly on a plate; lay paper discs each
+        soaked with one \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}; incubate overnight.
+  \item The \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} diffuses out of the disc, its concentration
+        falling with distance; the bacteria grow into a lawn except
+        where the concentration stops them: a clear \emph{zone of
+        inhibition} around each disc.
+  \item Measure each zone's diameter and compare with the threshold
+        established for that \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}: a diameter above the
+        threshold means sensitive, below it resistant.
+  \item The largest zones among the sensitive results guide the
+        prescription; a disc with no zone at all is an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}
+        the strain ignores.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small]
+  \draw[thick, fill=omProp!12] (0,0) circle (3.7);
+  \foreach \a/\r/\l in {90/1.3/A, 162/0.9/B, 234/0.0/C, 306/1.6/D, 18/0.55/E} {
+    \begin{scope}[shift={(\a:2.0)}]
+      \ifdim \r pt > 0pt \draw[fill=white] (0,0) circle (\r); \fi
+      \draw[fill=gray!30] (0,0) circle (0.28);
+      \node[font=\scriptsize] at (0,0) {\l};
+    \end{scope}
+  }
+  \node[anchor=west, align=left] at (3.8,1.6) {A: zone \qty{26}{mm}, threshold 17: sensitive};
+  \node[anchor=west, align=left] at (3.8,0.9) {B: zone \qty{18}{mm}, threshold 20: resistant};
+  \node[anchor=west, align=left] at (3.8,0.2) {C: no zone: resistant};
+  \node[anchor=west, align=left] at (3.8,-0.5) {D: zone \qty{32}{mm}, threshold 22: sensitive};
+  \node[anchor=west, align=left] at (3.8,-1.2) {E: zone \qty{11}{mm}, threshold 15: resistant};
+  \node[anchor=north, align=center] at (0,-3.9) {lawn of the patient's bacteria;\\ white discs of clear agar around the antibiotic discs};
+\end{tikzpicture}
+
+{\small An antibiogram read. Each disc holds one \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}; the clear
+zone is where the bacteria could not grow. Compared with each drug's
+threshold, the diameters classify the strain as sensitive to A and D,
+resistant to B, C and E.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.44\linewidth]{images/book2/ai/g11-antibiogram-plate.png}
+
+{\small An antibiogram plate after a night's incubation: a lawn of
+bacteria, and around each \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} disc a clear zone whose size
+measures the strain's sensitivity. One disc has no zone.}
+\end{omfigure}
+
+\section{How resistance spreads}
+
+\begin{proposition}[Selection by the antibiotic]\label{prop:g11:antibiotic-resistance:selection}
+An \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} does not create resistant bacteria; it \emph{selects}
+them. In a population where a few \omterm{def:g10:cells-common-unit:cell}{cells} carry a resistance \omterm{def:g10:universal-dna:gene}{allele},
+the drug kills or stops the sensitive majority and leaves the
+resistant few to multiply without competition: within days the
+population is resistant. The more an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} is used --- in
+patients, in animals, in the environment --- the more often this
+sorting happens, and the more resistant the bacteria of a hospital, a
+farm or a country become. An incomplete course, which kills the most
+sensitive \omterm{def:g10:cells-common-unit:cell}{cells} and spares the least, selects most efficiently of all.
+\end{proposition}
+\begin{proof}[Evidence]
+Lederberg's replica plates showed the resistant \omterm{def:g10:cells-common-unit:cell}{cells} present before
+exposure. Cultures grown for a week in rising concentrations of an
+\omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} end up resistant to a hundred times the initial dose, and
+their resistance is inherited and mapped to specific \omterm{def:g11:mutations:mutation}{mutations}.
+Countries that use the most \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotics} per person have the highest
+proportions of resistant strains; hospital wards that reduce their
+use see resistance fall over months. A strain of the skin bacterium
+\emph{Staphylococcus aureus} resistant to penicillin appeared within
+four years of the drug's introduction and now accounts for most
+hospital strains; the strain resistant to the replacement drug
+followed the replacement by two years.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=6, ymin=0, ymax=110,
+  xlabel={days of treatment}, ylabel={bacteria (\% of initial)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2,3,4,5,6}, ytick={0,25,50,75,100},
+  legend style={at={(0.5,-0.3)}, anchor=north, legend columns=3, font=\small, draw=none},
+  clip=false,
+]
+\addplot[thick, omDef] coordinates {(0,100) (0.5,45) (1,15) (1.5,5) (2,1.5) (3,0.2) (4,0.05) (5,0.01) (6,0)};
+\addplot[thick, omThm] coordinates {(0,0.001) (1,0.01) (2,0.1) (3,1) (4,8) (5,40) (6,100)};
+\addplot[thick, omMeth, dashed] coordinates {(0,100) (0.5,45) (1,15) (1.5,5) (2,1.5) (3,1.2) (4,9) (5,48) (6,100)};
+\legend{sensitive cells, resistant cells (from one in $10^5$), total if treatment stops at day 3}
+\end{axis}
+\end{tikzpicture}
+
+{\small Selection during a course of \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}. The sensitive \omterm{def:g10:cells-common-unit:cell}{cells}
+(blue) are killed within days; the resistant few (red) multiply
+unopposed and, by the end of the week, make up the whole population.
+If the patient stops at day 3, the survivors regrow --- now almost all
+resistant.}
+\end{omfigure}
+
+\begin{example}[From one cell to a ward]\label{ex:g11:antibiotic-resistance:ward}
+A patient treated with penicillin carries, among $10^{10}$ bacteria,
+a hundred resistant ones. In three days the sensitive ones are gone
+and the resistant clone has taken the place: $10^{10}$ resistant
+\omterm{def:g10:cells-common-unit:cell}{cells}. On a nurse's hands, on a bed rail, in the next patient, the
+clone continues --- and if its resistance \omterm{def:g10:universal-dna:gene}{gene} is on a plasmid, it
+hands it to other species along the way. Nothing in this sequence
+required the \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} to act on the \omterm{def:g10:universal-dna:information}{DNA}; it only removed the
+competition.
+\end{example}
+
+\section{Keeping antibiotics working}
+
+\begin{proposition}[Consequences and responses]\label{prop:g11:antibiotic-resistance:consequences}
+Resistant infections are longer, costlier and more often fatal;
+some strains now resist every available drug. Since resistance is
+driven by use, the response is to use \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotics} less and better:
+only for bacterial infections (never for viral colds and flu),
+chosen after an antibiogram where possible, at the full dose for the
+full course, with the narrowest drug that works; to limit their use
+in farming; to prevent infection (hygiene, vaccination) so that fewer
+courses are needed; and to isolate carriers of resistant strains in
+hospitals. New \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotics} buy time; the arithmetic of selection
+guarantees that resistance to each will appear.
+\end{proposition}
+\admitted
+
+\begin{remark}[Evolution in a week]\label{rem:g11:antibiotic-resistance:evolution}
+\omterm{def:g11:mutations:mutation}{Mutation} supplying variation at random, the environment sorting it,
+the descendants of the survivors inheriting the difference: the
+bacteria of this chapter run through, in a week, the process that the
+final year will describe over millions of years for whales and oaks.
+\omterm{prop:g11:antibiotic-resistance:mechanisms}{Antibiotic resistance} is evolution by natural selection observed in
+real time, with humans as the selecting agent --- and the clearest
+demonstration that the process is not a theory about the past but a
+fact about any population that varies and reproduces.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:g11:antibiotic-resistance:1}
+Name the two sources of genetic variation in a bacterial population.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g11:antibiotic-resistance:2}
+What is an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}, and why does it harm bacteria but not the
+patient's \omterm{def:g10:cells-common-unit:cell}{cells}? Why is it useless against a cold?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g11:antibiotic-resistance:3}
+Give three mechanisms by which a bacterium can resist an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g11:antibiotic-resistance:4}
+In the antibiogram figure, a new disc F gives a zone of
+\qty{20}{mm} with a threshold of \qty{18}{mm}. Sensitive or
+resistant? Which \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} would you prescribe among A to F?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g11:antibiotic-resistance:5}
+Does an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} cause resistance \omterm{def:g11:mutations:mutation}{mutations}? Justify with the
+experiment of \cref{ch:g11:mutations}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:6}
+Starting from one bacterium dividing every 20 minutes, how many are
+there after 10 hours? If resistance arises once per $10^8$ divisions,
+how many resistant \omterm{def:g10:cells-common-unit:cell}{cells} does the culture probably contain?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:7}
+From the selection figure, at which day do resistant \omterm{def:g10:cells-common-unit:cell}{cells} become the
+majority of the total? What is the total population at day 6 in the
+dashed case, and what is it made of?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:8}
+Explain why a resistance \omterm{def:g10:universal-dna:gene}{gene} on a plasmid spreads faster than one on
+the \omterm{def:g11:cell-cycle-mitosis:chromosome}{chromosome}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:9}
+A patient feels better after three days of a seven-day course and
+stops. Explain, with the figure, what happens in the following days
+and why the relapse is harder to treat.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:10}
+Why is the proportion of resistant strains higher in hospitals than
+in the general population?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g11:antibiotic-resistance:11}
+Explain why a \omterm{def:g11:mutations:mutation}{mutation} altering a ribosomal \omterm{def:g11:gene-expression:protein}{protein} can make a
+bacterium resistant to streptomycin, and why such a bacterium often
+grows a little more slowly than its sensitive relatives.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g11:antibiotic-resistance:12}
+Two \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotics} with different targets are given together. Estimate
+the probability that a \omterm{def:g10:cells-common-unit:cell}{cell} is resistant to both by independent
+\omterm{def:g11:mutations:mutation}{mutations} (one in $10^8$ each), and explain why combined therapy is
+used against slow, long infections such as tuberculosis.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g11:antibiotic-resistance:13}
+A farm adds low doses of an \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} to animal feed to speed
+growth. Predict the consequences for the animals' bacteria, for the
+farm workers, and for human medicine, using selection and horizontal
+transfer.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g11:antibiotic-resistance:14}
+A ward halves its \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} prescriptions; within a year the
+proportion of resistant strains falls. Explain why resistance can
+recede, using the cost of resistance to the bacterium and
+competition.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g11:antibiotic-resistance:15}
+"Bacteria become resistant because they get used to the \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}."
+Rewrite this sentence correctly, in a short paragraph, using
+\omterm{def:g11:mutations:mutation}{mutation}, selection and inheritance.
+\end{exercise}
+
+\section{Problem: The Ward}
+
+\begin{problem}[{Weekend problem --- an outbreak on a hospital ward
+followed from a single mutant cell: the arithmetic of a colony, an
+antibiogram read, a course interrupted, and the policy that stops the
+spread}]
+\label{pb:g11:antibiotic-resistance:1}
+A patient's wound is infected with $10^{10}$ bacteria of one species.
+The bacteria divide every 30 minutes; a \omterm{def:g11:mutations:mutation}{mutation} giving resistance to
+the \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} amoxicillin occurs once per $10^8$ divisions. The
+\omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} kills 90\% of sensitive \omterm{def:g10:cells-common-unit:cell}{cells} every 6 hours and does not
+affect resistant \omterm{def:g10:cells-common-unit:cell}{cells}, which keep dividing.
+
+\medskip
+\noindent\textbf{Part I --- Before treatment.}
+\begin{enumerate}
+  \item How many divisions produced the $10^{10}$ bacteria from the
+        first \omterm{def:g10:cells-common-unit:cell}{cell}? (Count the number of \omterm{def:g10:cells-common-unit:cell}{cells}.)
+  \item Estimate the number of resistant \omterm{def:g10:cells-common-unit:cell}{cells} present before any
+        \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic} is given.
+  \item Explain why the patient's infection is nevertheless described
+        as "sensitive" on the antibiogram.
+  \item The antibiogram shows zones of \qty{24}{mm} for amoxicillin
+        (threshold 17), \qty{12}{mm} for erythromycin (threshold 20)
+        and none for penicillin. Interpret the three results.
+  \item The doctor prescribes amoxicillin for 7 days. Why not
+        penicillin, and why not the drug with the largest zone if
+        one had been larger?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- During treatment.}
+\begin{enumerate}[resume]
+  \item How many sensitive \omterm{def:g10:cells-common-unit:cell}{cells} remain after 1 day? After 3 days?
+  \item Starting from your answer to question 2, how many resistant
+        \omterm{def:g10:cells-common-unit:cell}{cells} are there after 1 day if they double every 30 minutes
+        without limit? (Use $2^{48} \approx \num{2.8e14}$.) Why is
+        this figure unrealistic, and what limits it?
+  \item Suppose the resistant clone is limited to the space the
+        sensitive \omterm{def:g10:cells-common-unit:cell}{cells} vacate, so that it cannot exceed $10^{10}$.
+        Roughly when does it fill that space?
+  \item Sketch, or describe, the curves of sensitive, resistant and
+        total \omterm{def:g10:cells-common-unit:cell}{cells} over the 7 days.
+  \item In fact the patient's immune system clears the last few
+        million \omterm{def:g10:cells-common-unit:cell}{cells} of any kind within days. Explain why the
+        outcome depends on whether the resistant clone grows faster
+        than the immune system clears it.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The course interrupted.}
+\begin{enumerate}[resume]
+  \item The patient stops after 2 days, feeling well. How many
+        sensitive \omterm{def:g10:cells-common-unit:cell}{cells} remain, and what fraction of the surviving
+        population is resistant?
+  \item The bacteria regrow to $10^{10}$ over the following days.
+        What proportion is now resistant, if resistant and sensitive
+        \omterm{def:g10:cells-common-unit:cell}{cells} grow at the same rate?
+  \item The patient relapses and is given amoxicillin again. Predict
+        the result.
+  \item An antibiogram of the relapse shows no zone for amoxicillin.
+        Explain the change from the first antibiogram.
+  \item The resistance \omterm{def:g10:universal-dna:gene}{gene} is on a plasmid. What further risk does
+        that add for the ward?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The ward's policy.}
+The ward treats 400 patients a year with amoxicillin; 30\% of
+infections isolated on the ward are now resistant, against 5\% in the
+town.
+\begin{enumerate}[resume]
+  \item Explain the difference between the ward and the town in terms
+        of selection pressure.
+  \item The ward decides: antibiograms before every prescription,
+        full courses, hand hygiene, and isolation of carriers of
+        resistant strains. Say which mechanism of this chapter each
+        measure acts on.
+  \item After two years resistance on the ward is 12\%. Explain why
+        it fell, and why it did not return to 5\%.
+  \item Why would a new \omterm{def:g11:antibiotic-resistance:antibiotic}{antibiotic}, introduced on the ward, not solve
+        the problem for more than a few years?
+  \item State the result: the number of resistant \omterm{def:g10:cells-common-unit:cell}{cells} the wound
+        held before any drug, the day on which they inherited it, and
+        the single habit of the patient that turned a curable
+        infection into an outbreak.
+\end{enumerate}
+\end{problem}

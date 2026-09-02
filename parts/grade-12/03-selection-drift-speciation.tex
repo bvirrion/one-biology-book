@@ -1,6 +1,487 @@
 \chapter{Selection, Drift and Speciation}\label{ch:g12:selection-drift-speciation}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1848 a black form of the peppered moth was caught near an industrial
+city where every tree trunk was coated with soot; by 1895 nearly every
+moth in the region was black. A century later, with the soot gone and
+the trunks pale again, the black form had almost vanished. Nobody bred
+the moths; the birds that eat them did the sorting. The last two
+chapters described how variation arises; this one is about what happens
+to it in a \omterm{def:g12:selection-drift-speciation:population}{population} --- how some \omterm{def:g10:universal-dna:gene}{alleles} become common and others
+rare, by selection and by chance --- and how, in the end, one \omterm{def:g12:selection-drift-speciation:population}{population}
+becomes two species.
 
-\emph{This chapter has not been written yet.}
+\section{Populations and their alleles}
+
+\begin{definition}[Population, allele frequency]\label{def:g12:selection-drift-speciation:population}
+A \emph{population}\index{population} is the set of individuals of one
+species living in the same place and breeding among themselves. Its
+genetic makeup is described by the \emph{frequencies}\index{allele
+frequency} of the \omterm{def:g10:universal-dna:gene}{alleles} of each \omterm{def:g10:universal-dna:gene}{gene}: for a \omterm{def:g10:universal-dna:gene}{gene} with two \omterm{def:g10:universal-dna:gene}{alleles}
+$A$ and $a$, the fraction $p$ of all copies that are $A$ and the
+fraction $q = 1 - p$ that are $a$. Evolution, at this scale, is a
+change of \omterm{def:g10:universal-dna:gene}{allele} frequencies from one generation to the next.
+\end{definition}
+
+\begin{proposition}[Frequencies without any force]\label{prop:g12:selection-drift-speciation:hw}
+In a large \omterm{def:g12:selection-drift-speciation:population}{population} where mating is at random, where no \omterm{def:g10:universal-dna:gene}{allele}
+gives an advantage, and where no \omterm{def:g11:mutations:mutation}{mutation} or migration occurs, the
+\omterm{def:g10:universal-dna:gene}{allele} \omterm{def:g12:selection-drift-speciation:population}{frequencies} stay the same from generation to generation, and
+the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotypes} appear in the proportions
+\[
+AA : Aa : aa = p^2 : 2pq : q^2 .
+\]
+This is the reference state: any departure from it, observed over
+the generations, is the sign that one of the conditions has failed
+--- that selection, chance, migration or \omterm{def:g11:mutations:mutation}{mutation} is at work.
+\end{proposition}
+\begin{proof}
+Each gamete carries $A$ with probability $p$ and $a$ with probability
+$q$; two gametes drawn at random give $AA$ with probability $p^2$,
+$aa$ with $q^2$, and $Aa$ with $pq + qp = 2pq$. Counting the \omterm{def:g10:universal-dna:gene}{alleles}
+of the new generation: $A$ copies make up $p^2 + \tfrac12 (2pq) =
+p(p + q) = p$ of the total. The frequency is unchanged.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small]
+  \draw[thick] (0,0) rectangle (5,5);
+  \fill[omDef!25] (0,1.5) rectangle (3.5,5);
+  \fill[omProp!25] (3.5,1.5) rectangle (5,5);
+  \fill[omProp!25] (0,0) rectangle (3.5,1.5);
+  \fill[omThm!30] (3.5,0) rectangle (5,1.5);
+  \draw (3.5,0) -- (3.5,5); \draw (0,1.5) -- (5,1.5);
+  \node at (1.75,3.25) {$AA$: $p^2$}; \node at (4.25,3.25) {$Aa$: $pq$};
+  \node at (1.75,0.75) {$Aa$: $pq$}; \node at (4.25,0.75) {$aa$: $q^2$};
+  \node[anchor=south] at (1.75,5.1) {$A$, frequency $p$}; \node[anchor=south] at (4.25,5.1) {$a$, $q$};
+  \node[anchor=east] at (-0.1,3.25) {$A$, $p$}; \node[anchor=east] at (-0.1,0.75) {$a$, $q$};
+  \node[anchor=south, font=\small\itshape] at (2.5,5.6) {father's gamete};
+  \node[font=\small\itshape, rotate=90, anchor=south] at (-1.1,2.5) {mother's gamete};
+  \node[anchor=west, align=left, text width=6cm] at (6,2.5) {With $p = 0.7$ and $q = 0.3$: $AA$ 49\%, $Aa$ 42\%, $aa$ 9\%. A recessive trait shown by 9\% of a population is carried, silently, by another 42\%.};
+\end{tikzpicture}
+
+{\small The \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} proportions of random mating, as areas. The
+square's sides are the gamete \omterm{def:g12:selection-drift-speciation:population}{frequencies}; the four rectangles are the
+\omterm{def:g11:enzymes-and-phenotype:phenotype}{genotypes}. The heterozygotes hold most of the rare \omterm{def:g10:universal-dna:gene}{allele}'s copies.}
+\end{omfigure}
+
+\begin{example}[Counting alleles]\label{ex:g12:selection-drift-speciation:count}
+Among 1000 people, 490 are $AA$, 420 $Aa$ and 90 $aa$. Copies of $a$:
+$420 + 2 \times 90 = 600$ out of 2000, so $q = 0.3$ and $p = 0.7$ ---
+and the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} counts are exactly $p^2$, $2pq$, $q^2$ of 1000: the
+\omterm{def:g12:selection-drift-speciation:population}{population} is at the reference state for this \omterm{def:g10:universal-dna:gene}{gene}. A \omterm{def:g11:genes-and-disease:genetic}{recessive} disease
+affecting one newborn in 2500 ($q^2 = 1/2500$) implies $q = 1/50$ and
+carriers $2pq \approx 1/25$: the figures of
+\cref{ch:g11:genes-and-disease}, derived.
+\end{example}
+
+\section{Selection}
+
+\begin{definition}[Natural selection]\label{def:g12:selection-drift-speciation:selection}
+\emph{Natural selection}\index{natural selection} is the difference in
+reproduction between individuals that carry different \omterm{def:g10:universal-dna:gene}{alleles}, in a
+given environment: the carriers of one \omterm{def:g10:universal-dna:gene}{allele} leave, on average, more
+descendants than the carriers of another, and the \omterm{def:g10:universal-dna:gene}{allele}'s frequency
+rises from generation to generation. What is selected is the whole
+individual --- its survival, its mating, its fertility --- and the
+\omterm{def:g10:universal-dna:gene}{alleles} ride along.
+\end{definition}
+
+\begin{proposition}[Selection changes frequencies in a direction]\label{prop:g12:selection-drift-speciation:direction}
+An \omterm{def:g10:universal-dna:gene}{allele} whose carriers have even a slightly higher reproductive
+success spreads; one whose carriers have less becomes rare. The
+direction is set by the environment, and reverses if the environment
+does; the speed depends on the size of the advantage and on whether
+the \omterm{def:g10:universal-dna:gene}{allele} is expressed in one copy (\omterm{def:g11:genes-and-disease:genetic}{dominant}, fast) or only in two
+(\omterm{def:g11:genes-and-disease:genetic}{recessive}, slow at first, and never quite eliminated, since its rare
+copies hide in heterozygotes).
+\end{proposition}
+\begin{proof}[Evidence]
+The peppered moth: birds take the moths they see; on sooty trunks the
+pale form is seen, on clean ones the dark form; the frequency of the
+dark \omterm{def:g10:universal-dna:gene}{allele} rose from near zero to 98\% in fifty years of pollution and
+fell back below 10\% in forty years of clean air, tracking the trunks.
+\omterm{prop:g11:antibiotic-resistance:mechanisms}{Antibiotic resistance} (\cref{ch:g11:antibiotic-resistance}): the
+resistant \omterm{def:g10:universal-dna:gene}{allele}'s carriers alone reproduce in the presence of the
+drug. Lactase persistence (\cref{ch:g11:enzymes-and-phenotype}): the
+\omterm{def:g10:universal-dna:gene}{allele} is common exactly where milk has been a food for adults for
+millennia. In each case the \omterm{def:g10:universal-dna:gene}{allele}'s fortune follows the environment.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=1840, xmax=2000, ymin=0, ymax=110,
+  xlabel={year}, ylabel={dark moths (\% of catches)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1850,1875,1900,1925,1950,1975,2000}, ytick={0,25,50,75,100},
+  clip=false,
+]
+\addplot[thick, omThm, mark=*, mark size=1.3pt] coordinates
+  {(1848,1) (1860,10) (1870,40) (1880,75) (1895,98) (1920,97) (1950,95) (1960,90) (1970,60) (1980,30) (1990,10) (1998,4)};
+\draw[dashed, gray] (axis cs:1956,0) -- (axis cs:1956,105);
+\node[font=\scriptsize, anchor=south] at (axis cs:1956,105) {clean-air laws};
+\end{axis}
+\end{tikzpicture}
+
+{\small Frequency of the dark form of the peppered moth near an
+industrial city (rounded from museum collections and catches). The
+rise tracks the blackening of the trunks; the fall, their cleaning.
+Selection reversed when the environment did.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book2/ai/g12-selection-peppered-moths.png}
+
+{\small The two forms of the peppered moth on a soot-darkened trunk.
+Birds hunt by sight: on this bark the pale form is taken and the dark
+one survives; on a clean, lichen-covered trunk the reverse.}
+\end{omfigure}
+
+\begin{example}[Selection by the other sex]\label{ex:g12:selection-drift-speciation:sexual}
+A peacock's train makes it slower and more visible to predators, yet it
+is kept because peahens choose the males with the largest and most
+regular trains: an \omterm{def:g10:universal-dna:gene}{allele} that improves the train is passed on more
+often, whatever it costs in survival. \emph{Sexual selection} --- the
+choice of mates --- produces the ornaments, songs and contests of
+animals, and can push a trait in a direction that survival alone would
+never favour.
+\end{example}
+
+\section{Chance: genetic drift}
+
+\begin{proposition}[Genetic drift]\label{prop:g12:selection-drift-speciation:drift}
+In any \omterm{def:g12:selection-drift-speciation:population}{population} of finite size, the \omterm{def:g10:universal-dna:gene}{alleles} of one generation are a
+random sample of the previous one: which individuals happen to
+reproduce, and which \omterm{def:g10:universal-dna:gene}{alleles} their gametes happen to carry, fluctuate
+by chance. \omterm{def:g10:universal-dna:gene}{Allele} \omterm{def:g12:selection-drift-speciation:population}{frequencies} therefore wander from generation to
+generation without any advantage being involved --- \emph{genetic
+drift}\index{genetic drift}. The smaller the \omterm{def:g12:selection-drift-speciation:population}{population}, the larger
+the wandering; in a small \omterm{def:g12:selection-drift-speciation:population}{population} an \omterm{def:g10:universal-dna:gene}{allele} can be lost, or reach
+100\%, by chance alone within a few generations, whatever its value.
+\end{proposition}
+\begin{proof}[Evidence]
+\omterm{def:g12:selection-drift-speciation:population}{Populations} founded by a few individuals --- an island colonised by a
+handful of birds, a human community descended from a few dozen
+settlers --- carry a distorted sample of the source \omterm{def:g12:selection-drift-speciation:population}{population}'s
+\omterm{def:g10:universal-dna:gene}{alleles}: a rare disease \omterm{def:g10:universal-dna:gene}{allele} can be common in them, and much of the
+source's diversity missing. Species that passed through a
+\emph{bottleneck} of very few survivors (the cheetah of
+\cref{ch:g10:biodiversity-scales}, the northern elephant seal reduced
+to twenty animals in 1890) show almost no \omterm{def:g10:biodiversity-scales:biodiversity}{genetic diversity} today,
+even after recovering to thousands. And in the laboratory, many small
+replicate \omterm{def:g12:selection-drift-speciation:population}{populations} started at the same frequency scatter in every
+direction within a few generations, while large ones stay put.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=20, ymin=0, ymax=1.05,
+  xlabel={generation}, ylabel={frequency of allele $A$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20}, ytick={0,0.25,0.5,0.75,1},
+  legend style={at={(0.5,-0.3)}, anchor=north, legend columns=2, font=\small, draw=none},
+]
+\addplot[thick, omThm] coordinates {(0,0.5) (1,0.55) (2,0.6) (3,0.5) (4,0.65) (5,0.7) (6,0.6) (7,0.75) (8,0.85) (9,0.8) (10,0.9) (11,0.95) (12,1) (13,1) (14,1) (15,1) (16,1) (17,1) (18,1) (19,1) (20,1)};
+\addplot[thick, omThm!60] coordinates {(0,0.5) (1,0.4) (2,0.45) (3,0.3) (4,0.35) (5,0.25) (6,0.3) (7,0.2) (8,0.1) (9,0.15) (10,0.05) (11,0.1) (12,0) (13,0) (14,0) (15,0) (16,0) (17,0) (18,0) (19,0) (20,0)};
+\addplot[thick, omThm!35] coordinates {(0,0.5) (1,0.45) (2,0.55) (3,0.6) (4,0.5) (5,0.4) (6,0.45) (7,0.55) (8,0.6) (9,0.7) (10,0.65) (11,0.55) (12,0.5) (13,0.6) (14,0.65) (15,0.75) (16,0.7) (17,0.8) (18,0.75) (19,0.85) (20,0.8)};
+\addplot[thick, omDef] coordinates {(0,0.5) (1,0.51) (2,0.49) (3,0.5) (4,0.52) (5,0.51) (6,0.5) (7,0.49) (8,0.48) (9,0.49) (10,0.5) (11,0.51) (12,0.52) (13,0.51) (14,0.5) (15,0.5) (16,0.49) (17,0.5) (18,0.51) (19,0.5) (20,0.5)};
+\legend{three populations of 20, one population of 5000}
+\end{axis}
+\end{tikzpicture}
+
+{\small Simulated drift of a neutral \omterm{def:g10:universal-dna:gene}{allele} starting at 50\%. In
+\omterm{def:g12:selection-drift-speciation:population}{populations} of 20 individuals it is fixed or lost within a dozen
+generations, in a different direction each time; in a \omterm{def:g12:selection-drift-speciation:population}{population} of
+5000 it barely moves.}
+\end{omfigure}
+
+\begin{example}[A founder effect]\label{ex:g12:selection-drift-speciation:founder}
+An island community was founded by a few dozen settlers, one of whom
+carried an \omterm{def:g10:universal-dna:gene}{allele} for a rare disorder of the eye. Ten generations
+later the \omterm{def:g10:universal-dna:gene}{allele}'s frequency in the community is one in ten --- a
+hundred times the mainland value --- because one carrier among thirty
+founders is already 1.7\% of the copies, and drift in a small,
+isolated \omterm{def:g12:selection-drift-speciation:population}{population} moved it further. The \omterm{def:g10:universal-dna:gene}{allele} confers no advantage;
+its abundance is an accident of who boarded the boat.
+\end{example}
+
+\begin{method}[Selection or drift?]\label{met:g12:selection-drift-speciation:which}
+Faced with a change of \omterm{def:g12:selection-drift-speciation:population}{allele frequency}:
+\begin{enumerate}
+  \item Estimate the \omterm{def:g12:selection-drift-speciation:population}{population}'s size: drift is strong below a few
+        hundred, negligible in millions.
+  \item Look for a direction that tracks the environment (selection),
+        or for a random walk (drift). Replicate \omterm{def:g12:selection-drift-speciation:population}{populations} moving the
+        same way indicate selection; moving in different directions,
+        drift.
+  \item Look for a mechanism linking the \omterm{def:g10:universal-dna:gene}{allele} to survival or
+        reproduction; without one, suspect drift.
+  \item Remember that both act at once: selection sets a tendency,
+        drift adds noise, and in small \omterm{def:g12:selection-drift-speciation:population}{populations} the noise can drown
+        the tendency.
+\end{enumerate}
+\end{method}
+
+\section{From population to species}
+
+\begin{proposition}[Speciation]\label{prop:g12:selection-drift-speciation:speciation}
+Two \omterm{def:g12:selection-drift-speciation:population}{populations} of one species that stop exchanging \omterm{def:g10:universal-dna:gene}{genes} --- separated
+by a barrier of geography, of behaviour or of timing --- evolve apart:
+each accumulates its own \omterm{def:g11:mutations:mutation}{mutations}, is selected by its own environment
+and drifts its own way. When the divergence has gone far enough that
+individuals of the two \omterm{def:g12:selection-drift-speciation:population}{populations} no longer interbreed, or give sterile
+offspring, even when they meet again, two species exist where there was
+one. \emph{Speciation}\index{speciation} is this process; it usually
+takes thousands to millions of generations, though polyploidy
+(\cref{ch:g12:diversification-of-life}) achieves it in one.
+\end{proposition}
+\begin{proof}[Evidence]
+Islands: each of the Galápagos islands carries its own finches,
+descended from a mainland species and closest to those of the
+neighbouring islands. Lakes: a single ancestral cichlid fish has given
+hundreds of species in one African lake within a few hundred thousand
+years, separated by habitat and by the females' choice of male colour.
+Ring species: \omterm{def:g12:selection-drift-speciation:population}{populations} of a gull spread around the Arctic,
+interbreeding with their neighbours all the way round, until the two
+ends meet in Europe as forms that do not interbreed --- a species
+boundary caught in the act of forming. And species separated recently,
+such as polar and brown bears, still produce fertile hybrids
+occasionally: the boundary is a matter of degree.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, >=Stealth]
+  % one population
+  \draw[thick, fill=omDef!12] (0,0) ellipse (1.4 and 0.8);
+  \node at (0,0) {one population};
+  \draw[->, thick] (1.6,0) -- (2.6,0) node[midway, above, font=\scriptsize, align=center] {barrier\\ appears};
+  % two separated
+  \draw[thick, fill=omDef!12] (4.0,0.9) ellipse (1.2 and 0.6); \node at (4.0,0.9) {population 1};
+  \draw[thick, fill=omDef!12] (4.0,-0.9) ellipse (1.2 and 0.6); \node at (4.0,-0.9) {population 2};
+  \draw[very thick, gray] (2.7,0) -- (5.3,0);
+  \draw[->, thick] (5.5,0) -- (6.5,0) node[midway, above, font=\scriptsize, align=center] {separate\\ evolution};
+  % diverged
+  \draw[thick, fill=omMeth!15] (7.9,0.9) ellipse (1.2 and 0.6); \node at (7.9,0.9) {mutations 1};
+  \draw[thick, fill=omThm!15] (7.9,-0.9) ellipse (1.2 and 0.6); \node at (7.9,-0.9) {mutations 2};
+  \node[font=\scriptsize, align=center] at (7.9,0.0) {own selection,\\ own drift};
+  \draw[->, thick] (9.3,0) -- (10.3,0) node[midway, above, font=\scriptsize, align=center] {barrier\\ gone};
+  % two species
+  \draw[thick, fill=omMeth!15] (11.6,0.7) ellipse (1.1 and 0.55); \node at (11.6,0.7) {species 1};
+  \draw[thick, fill=omThm!15] (11.6,-0.7) ellipse (1.1 and 0.55); \node at (11.6,-0.7) {species 2};
+  \node[font=\scriptsize, align=center] at (11.6,0.0) {no interbreeding};
+\end{tikzpicture}
+
+{\small \omterm{prop:g12:selection-drift-speciation:speciation}{Speciation} by separation. A barrier splits a \omterm{def:g12:selection-drift-speciation:population}{population}; each
+half evolves on its own; when they meet again, they no longer
+interbreed. The barrier may be a strait, a mountain, a change of
+habitat, or a preference in mating.}
+\end{omfigure}
+
+\begin{proposition}[The species, reconsidered]\label{prop:g12:selection-drift-speciation:concept}
+A species is a \omterm{def:g12:selection-drift-speciation:population}{population}, or a set of \omterm{def:g12:selection-drift-speciation:population}{populations}, whose members
+interbreed among themselves and are genetically isolated from other
+such sets --- a definition that works for most animals and plants at a
+given moment, but has edges: \omterm{def:g12:selection-drift-speciation:population}{populations} in the process of separating,
+species that still hybridise, organisms that reproduce without sex.
+A species is not a fixed type but a lineage in time: it begins when a
+\omterm{def:g12:selection-drift-speciation:population}{population} becomes isolated, exists while its members keep
+interbreeding, and ends by extinction or by splitting into new
+species. The species alive today are the tips of a tree whose branches
+are the subject of \cref{ch:g12:phylogenetic-trees}.
+\end{proposition}
+\admitted
+
+\begin{remark}[Evolution, assembled]\label{rem:g12:selection-drift-speciation:assembled}
+\omterm{def:g11:mutations:mutation}{Mutation} and the shuffle supply variation; duplication, transfer,
+polyploidy, regulation and \omterm{def:g12:diversification-of-life:symbiosis}{symbiosis} supply more; selection sorts it
+by the environment, drift by chance; isolation lets \omterm{def:g12:selection-drift-speciation:population}{populations}
+diverge until they are species; extinction removes them. None of
+these steps has a goal, and none looks ahead; together, over the
+four billion years of the fossil record, they have produced the
+diversity of \cref{ch:g10:biodiversity-scales}. The theory that names
+these steps and their interplay is the theory of evolution, and every
+chapter of this year has been a piece of its evidence.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:1}
+Define \omterm{def:g12:selection-drift-speciation:population}{allele frequency}, and give the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} proportions of a
+\omterm{def:g12:selection-drift-speciation:population}{population} at the reference state with $p = 0.8$.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:2}
+Define \omterm{def:g12:selection-drift-speciation:selection}{natural selection} and \omterm{prop:g12:selection-drift-speciation:drift}{genetic drift}, and state the essential
+difference between them.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:3}
+From the moth figure, read the frequency of the dark form in 1880 and
+in 1980, and name the environmental change behind each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:4}
+Why does drift matter more in a small \omterm{def:g12:selection-drift-speciation:population}{population}?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:5}
+What is needed for one \omterm{def:g12:selection-drift-speciation:population}{population} to become two species?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:6}
+In a \omterm{def:g12:selection-drift-speciation:population}{population} of 500, 320 are $AA$, 160 $Aa$ and 20 $aa$. Compute
+$p$ and $q$, then the expected \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} numbers at the reference
+state, and compare.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:7}
+A \omterm{def:g11:genes-and-disease:genetic}{recessive} \omterm{def:g10:universal-dna:gene}{allele} has frequency 0.01. What fraction of the \omterm{def:g12:selection-drift-speciation:population}{population}
+shows the \omterm{def:g11:genes-and-disease:genetic}{recessive} trait, and what fraction carries the \omterm{def:g10:universal-dna:gene}{allele}
+unseen? Why is the \omterm{def:g10:universal-dna:gene}{allele} so hard to eliminate by selection against
+the trait?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:8}
+From the drift figure, in how many generations was the \omterm{def:g10:universal-dna:gene}{allele} fixed
+or lost in the two small \omterm{def:g12:selection-drift-speciation:population}{populations} that reached the ends? Why did
+the third not?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:9}
+Explain why the peppered moth's dark \omterm{def:g10:universal-dna:gene}{allele} did not reach 100\% during
+the sooty decades, using the moths that live and breed in the
+countryside.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:10}
+Twenty seals survived a bottleneck; the species now numbers 100\,000
+but shows almost no \omterm{def:g10:biodiversity-scales:biodiversity}{genetic diversity}. Explain with drift.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:11}
+Apply \cref{met:g12:selection-drift-speciation:which} to two cases: an
+\omterm{def:g10:universal-dna:gene}{allele} rising in ten separate lake \omterm{def:g12:selection-drift-speciation:population}{populations} at once after a new
+predator arrives; and an \omterm{def:g10:universal-dna:gene}{allele} reaching 80\% in one island \omterm{def:g12:selection-drift-speciation:population}{population}
+of thirty birds.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:12}
+In a region with malaria, the sickle \omterm{def:g10:universal-dna:gene}{allele} has frequency 0.15
+although $aa$ children rarely survive. Using the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype}
+proportions, compute the fractions of $AA$, $Aa$ and $aa$ newborns,
+and explain how the advantage of $Aa$ against malaria keeps the
+\omterm{def:g10:universal-dna:gene}{allele} common despite the loss of the $aa$.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:13}
+Two cichlid species in one lake differ mainly in the males' colour,
+and females of each choose their own colour. In turbid water, where
+colours cannot be seen, the two hybridise freely. What isolates the
+species, and what does the turbid case say about how recent the
+separation is?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:14}
+Explain why the ring species of gulls is an argument that speciation
+is gradual, and why the two ends meeting in Europe are nonetheless
+called two species.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:15}
+"Selection makes organisms better." Discuss in a paragraph: better at
+what, where, and compared with whom; and what drift, reversals and
+sexual selection add.
+\end{exercise}
+
+\section{Problem: The Mice of the Island}
+
+\begin{problem}[{Weekend problem --- a population of mice on an island:
+its allele frequencies computed, a new predator's selection followed,
+the drift of a tiny colony simulated, and the birth of a species
+foreseen}]
+\label{pb:g12:selection-drift-speciation:1}
+On a rocky island, mice carry a coat-colour \omterm{def:g10:universal-dna:gene}{gene} with two \omterm{def:g10:universal-dna:gene}{alleles}: $D$
+(dark, \omterm{def:g11:genes-and-disease:genetic}{dominant}) and $d$ (pale). A census of 2000 mice finds 720 dark
+mice of \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} $DD$, 960 dark $Dd$, and 320 pale $dd$.
+
+\medskip
+\noindent\textbf{Part I --- The \omterm{def:g12:selection-drift-speciation:population}{population} now.}
+\begin{enumerate}
+  \item Compute the \omterm{def:g12:selection-drift-speciation:population}{frequencies} $p$ of $D$ and $q$ of $d$ by counting
+        copies.
+  \item Compute the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} numbers expected at the reference state
+        and compare with the census. Is the \omterm{def:g12:selection-drift-speciation:population}{population} at the reference
+        state?
+  \item What fraction of the dark mice are carriers of $d$?
+  \item Explain, from the previous answer, why removing all the pale
+        mice from the island for one generation would lower $q$ only a
+        little. Compute the new $q$ after such a removal, if the
+        remaining mice breed at random.
+  \item Which of the four conditions of the reference state is most
+        likely to fail on a small island, and with what effect?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- A predator arrives.}
+Owls colonise the island. On the pale rock, dark mice are seen and
+eaten twice as often: each generation, half the dark mice die before
+breeding while all the pale mice survive.
+\begin{enumerate}[resume]
+  \item Starting from the census numbers, compute the number of mice of
+        each \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype} that survive to breed in the first generation.
+  \item Compute $p$ and $q$ among the survivors.
+  \item If the survivors mate at random, compute the \omterm{def:g11:enzymes-and-phenotype:phenotype}{genotype}
+        proportions of the next generation, then apply the owls again
+        and compute $q$ among its survivors.
+  \item Repeat once more (two significant figures). Describe the trend
+        of $q$ over the three generations.
+  \item Explain why $q$ rises steadily, and why $D$, unlike a
+        \omterm{def:g11:genes-and-disease:genetic}{recessive} \omterm{def:g10:universal-dna:gene}{allele} under the same selection, can be eliminated
+        completely.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- A colony of six.}
+A storm carries six mice to a neighbouring islet: 2 $DD$, 3 $Dd$, 1 $dd$.
+\begin{enumerate}[resume]
+  \item Compute $q$ in the colony and compare with the island.
+  \item In the first litter, by chance, only the two $DD$ and one $Dd$
+        breed. What are the possible values of $q$ in the next
+        generation? What has happened to the \omterm{def:g12:selection-drift-speciation:population}{population}'s variation?
+  \item Explain why, on the islet, an \omterm{def:g10:universal-dna:gene}{allele} can vanish in a few
+        generations without owls or any advantage.
+  \item The islet has no owls. Predict the fate of $d$ there, and say
+        why two neighbouring islands can end with different coat
+        colours for no reason of adaptation.
+  \item Give the name of the process, and the feature of the colony
+        that makes it \omterm{def:g11:genes-and-disease:genetic}{dominant} there.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Ten thousand years later.}
+The islet's mice, isolated, have diverged: smaller, paler, breeding in a
+different season. Brought together with island mice in the laboratory,
+they rarely mate, and the few hybrids are sterile.
+\begin{enumerate}[resume]
+  \item Are the islet's mice a new species? Justify with the
+        definition.
+  \item Name the barrier that started the process and the two
+        mechanisms that drove the divergence.
+  \item The season of breeding differs between the two. Explain how
+        such a difference, once present, reinforces the isolation.
+  \item If the islet joined the island again tomorrow, would the two
+        merge back into one \omterm{def:g12:selection-drift-speciation:population}{population}? Distinguish the case of
+        question 17 from an earlier stage, say after 100 years.
+  \item State the result: the frequency of $d$ on the island before and
+        after three generations of owls, the fate of $d$ on the islet
+        and the process responsible, and the number of species at the
+        end.
+\end{enumerate}
+\end{problem}
