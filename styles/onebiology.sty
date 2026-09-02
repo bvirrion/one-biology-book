@@ -78,8 +78,12 @@
 \sisetup{per-mode=symbol, output-decimal-marker={.}, range-units=single}
 % Unbreakable in-text figure block: keeps a picture and its caption line
 % on the same page. Use in place of "center" around tikzpicture figures.
+% The [b] alignment matters: with the default [c] the minipage's huge box
+% *depth* is invisible to the page breaker beyond \maxdepth, so a figure at
+% the bottom of a page silently overprints the footer (page number over the
+% caption). Bottom alignment keeps the whole box above the baseline.
 \newenvironment{omfigure}
-  {\par\medskip\noindent\begin{minipage}{\linewidth}\centering}
+  {\par\medskip\noindent\begin{minipage}[b]{\linewidth}\centering}
   {\end{minipage}\par\medskip}
 
 % Raster illustrations live under assets/ (and assets/book1/ for primary
@@ -570,6 +574,17 @@
 \AtEndEnvironment{exercise}{\ifomsollinks\omsollink@emit\fi}
 \AtBeginEnvironment{problem}{\ifomsollinks\omsollink@arm\fi}
 \AtEndEnvironment{problem}{\ifomsollinks\omsollink@emit\fi}
+
+% A list opening as the very first thing in a statement environment used to
+% typeset its first item on the run-in heading's line ("Method 25.6  1. …"):
+% amsthm holds the heading as a pending trivlist label, and the first \item
+% attaches itself to it. While that label is pending @inlabel is true, so
+% \leavevmode there commits the heading to its own paragraph and the list
+% starts on a fresh line; lists that follow normal text are untouched.
+\newcommand{\om@listafterhead}{\if@inlabel\leavevmode\fi}
+\AtBeginEnvironment{enumerate}{\om@listafterhead}
+\AtBeginEnvironment{itemize}{\om@listafterhead}
+\AtBeginEnvironment{description}{\om@listafterhead}
 
 % ----------------------------------------------------------------------------
 % Math macros
