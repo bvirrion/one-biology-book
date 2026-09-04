@@ -1,6 +1,597 @@
 \chapter{Cellular Respiration and Fermentation}\label{ch:b1:respiration-fermentation}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A flask of yeast in sugar solution with the air excluded bubbles
+carbon dioxide and turns the sugar into alcohol; let air in and the
+bubbling slows, the alcohol stops, and the yeast grows ten times faster
+on the same sugar. Pasteur saw this in 1861 and could not explain it;
+the explanation took a century and runs through the whole of this
+chapter. Oxygen lets a \omterm{def:b1:cell-unit-of-life:cell}{cell} extract from glucose fifteen times the
+energy it can get without it, and it does so by passing the electrons
+of the sugar down a chain of carriers to oxygen, pumping protons across
+a membrane as they fall, and letting the protons back through a
+turbine that makes \omterm{def:b1:water-small-molecules:atp}{ATP}. This chapter describes \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}, the \omterm{def:b1:respiration-fermentation:krebs}{Krebs
+cycle}, the \omterm{def:b1:respiration-fermentation:chain}{respiratory chain} and its chemiosmotic coupling, the
+\omterm{def:b1:respiration-fermentation:fermentation}{fermentations} that do without oxygen, and the burning of \omterm{def:b1:lipids:triglyceride}{fats} and
+\omterm{def:b1:proteins:peptide}{proteins} by the same machinery.
 
-\emph{This chapter has not been written yet.}
+\section{The oxidation of glucose}
+
+\begin{proposition}[The overall reaction and its stages]\label{prop:b1:respiration-fermentation:overview}
+\index{cellular respiration}
+The complete oxidation of glucose,
+\[
+\mathrm{C_6H_{12}O_6} + 6\,\mathrm{O_2} \to 6\,\mathrm{CO_2} + 6\,\mathrm{H_2O},
+\qquad \Delta G^{\circ\prime} = \qty{-2870}{kJ/mol},
+\]
+is carried out in three stages that never let the electrons meet the
+oxygen directly. \emph{\omterm{def:b1:respiration-fermentation:glycolysis}{Glycolysis}}, in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}, splits glucose
+into two pyruvate and yields 2 \omterm{def:b1:water-small-molecules:atp}{ATP} and 2 NADH. \emph{Pyruvate
+oxidation and the \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}}, in the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrial matrix}, oxidise
+the pyruvate to $\mathrm{CO_2}$, loading the electrons onto 8 NADH and
+2 $\mathrm{FADH_2}$ and making 2 GTP. \emph{Oxidative
+phosphorylation}, in the inner mitochondrial membrane, passes those
+electrons to oxygen through a chain of carriers that pumps protons,
+and the proton gradient drives the synthesis of about 26 \omterm{def:b1:water-small-molecules:atp}{ATP}. In all,
+some 30 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose: about half the \omterm{prop:b1:water-small-molecules:gibbs}{free energy} of combustion
+captured, the rest released as heat.
+\end{proposition}
+
+\begin{definition}[Electron carriers]\label{def:b1:respiration-fermentation:carriers}
+\index{NAD}\index{FAD}
+\emph{$\mathrm{NAD^+}$} (nicotinamide adenine dinucleotide) accepts two
+electrons and one proton from a substrate to become NADH; \emph{FAD}
+accepts two electrons and two protons to become $\mathrm{FADH_2}$.
+Both are \omterm{def:b1:enzymes:enzyme}{coenzymes} of dehydrogenases, and both are recycled: reduced by
+catabolism, re-oxidised by the \omterm{def:b1:respiration-fermentation:chain}{respiratory chain}. A \omterm{def:b1:cell-unit-of-life:cell}{cell} holds only
+micromoles of them, turning over thousands of times an hour. Their
+redox potentials, $E'_0 = \qty{-0.32}{V}$ for $\mathrm{NAD^+}/\mathrm{NADH}$,
+place them far below oxygen ($\qty{+0.82}{V}$): each pair of electrons
+NADH hands to oxygen releases $\Delta G^{\circ\prime} = -2F\Delta E =
+\qty{-220}{kJ/mol}$, enough for more than four \omterm{def:b1:water-small-molecules:atp}{ATP}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  st/.style={draw, thick, rounded corners=4pt, minimum height=9mm, text width=30mm, align=center, fill=white}]
+  \node[st, fill=omDef!12] (gly) at (0,0) {\textbf{glycolysis}\\ cytosol\\ glucose $\to$ 2 pyruvate};
+  \node[st, fill=omProp!12] (krebs) at (5.4,0) {\textbf{pyruvate oxidation}\\ \textbf{+ Krebs cycle}\\ matrix; 2 pyruvate $\to$ 6 $\mathrm{CO_2}$};
+  \node[st, fill=omThm!12] (ox) at (10.8,0) {\textbf{oxidative}\\ \textbf{phosphorylation}\\ inner membrane; $\mathrm{O_2} \to \mathrm{H_2O}$};
+  \draw[->, very thick] (gly) -- (krebs) node[midway, above, font=\scriptsize] {2 pyruvate};
+  \draw[->, very thick] (krebs) -- (ox) node[midway, above, align=center, font=\scriptsize] {8 NADH\\ 2 $\mathrm{FADH_2}$};
+  \draw[->, very thick] (gly.north) .. controls (0,1.8) and (10.8,1.8) .. (ox.north) node[pos=0.5, above] {2 NADH};
+  \node[anchor=north, omExo!70!black] at (gly.south) {2 ATP};
+  \node[anchor=north, omExo!70!black] at (krebs.south) {2 GTP};
+  \node[anchor=north, omExo!70!black] at (ox.south) {$\approx$ 26 ATP};
+  \node[anchor=north, align=center, gray] at (5.4,-1.75) {total $\approx$ 30 ATP per glucose, about half of the \qty{2870}{kJ/mol}};
+\end{tikzpicture}
+
+{\small The three stages of respiration. \omterm{def:b1:respiration-fermentation:glycolysis}{Glycolysis} and the \omterm{def:b1:respiration-fermentation:krebs}{Krebs
+cycle} strip the electrons of glucose onto NADH and $\mathrm{FADH_2}$;
+oxidative phosphorylation cashes them in.}
+\end{omfigure}
+
+\section{Glycolysis}
+
+\begin{definition}[Glycolysis]\label{def:b1:respiration-fermentation:glycolysis}
+\index{glycolysis}
+\emph{Glycolysis} is a sequence of ten \omterm{def:b1:enzymes:enzyme}{enzyme} reactions in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}
+that converts one glucose (C6) into two \emph{pyruvate} (C3). In the
+\emph{investment phase} two \omterm{def:b1:water-small-molecules:atp}{ATP} are spent to phosphorylate the sugar
+(hexokinase, then \emph{phosphofructokinase}, PFK) and the six-carbon
+diphosphate is split into two three-carbon phosphates. In the
+\emph{payoff phase} each triose is oxidised by $\mathrm{NAD^+}$ (the
+only oxidation of glycolysis) and its phosphates are transferred to ADP
+by \emph{substrate-level phosphorylation}\index{substrate-level
+phosphorylation} --- a phosphate handed directly from a high-energy
+intermediate to ADP, with no membrane or oxygen involved. The balance:
+\[
+\text{glucose} + 2\,\mathrm{NAD^+} + 2\,\mathrm{ADP} + 2\,\mathrm{P_i}
+\to 2\,\text{pyruvate} + 2\,\mathrm{NADH} + 2\,\mathrm{H^+} + 2\,\mathrm{ATP} + 2\,\mathrm{H_2O} .
+\]
+It needs no oxygen; it is the oldest and most universal pathway of
+metabolism.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  m/.style={draw, thick, rounded corners=3pt, minimum height=7mm, align=center, fill=omDef!10, inner sep=3pt},
+  lab/.style={font=\scriptsize}]
+  \node[m] (glc) at (0,0) {glucose};
+  \node[m] (g6p) at (3.4,0) {glucose-6-P};
+  \node[m] (f6p) at (7.0,0) {fructose-6-P};
+  \node[m] (fbp) at (10.8,0) {fructose-1,6-bisP};
+  \node[m, fill=omProp!12] (g3p) at (10.8,-2.2) {2 glyceraldehyde-3-P};
+  \node[m, fill=omProp!12] (bpg) at (5.6,-2.2) {2 1,3-bisphosphoglycerate};
+  \node[m, fill=omProp!12] (pep) at (5.6,-4.2) {2 phosphoenolpyruvate};
+  \node[m, fill=omProp!12] (pyr) at (1.0,-4.2) {2 pyruvate};
+  \draw[->, thick] (glc) -- (g6p) node[midway, above=3pt, omThm, font=\scriptsize] {ATP} node[midway, below=3pt, lab] {hexokinase};
+  \draw[->, thick] (g6p) -- (f6p);
+  \draw[->, thick] (f6p) -- (fbp) node[midway, above=3pt, omThm, font=\scriptsize] {ATP};
+  \node[lab, anchor=north] at (8.9,-0.42) {PFK (regulated)};
+  \draw[->, thick] (fbp) -- (g3p) node[midway, right, lab] {split into two trioses};
+  \draw[->, thick] (g3p) -- (bpg);
+  \node[lab, anchor=south, omExo!70!black] at (8.6,-1.78) {2 $\mathrm{NAD^+} \to$ 2 NADH};
+  \node[lab, anchor=north] at (8.6,-2.62) {oxidation};
+  \draw[->, thick] (bpg) -- (pep) node[midway, right, omExo!70!black] {2 ATP};
+  \draw[->, thick] (pep) -- (pyr) node[midway, above, omExo!70!black] {2 ATP};
+  \node[anchor=north west, align=left, gray] at (-0.6,-5.0) {investment: $-2$ ATP (blue boxes) \quad payoff: $+4$ ATP, $+2$ NADH (orange boxes) \quad net: $+2$ ATP, $+2$ NADH};
+\end{tikzpicture}
+
+{\small \omterm{def:b1:respiration-fermentation:glycolysis}{Glycolysis} in outline. Two \omterm{def:b1:water-small-molecules:atp}{ATP} are spent to build a
+six-carbon diphosphate, which splits into two trioses; their oxidation
+and two \omterm{def:b1:respiration-fermentation:glycolysis}{substrate-level phosphorylations} each return four \omterm{def:b1:water-small-molecules:atp}{ATP} and two
+NADH. Phosphofructokinase is the pathway's control valve.}
+\end{omfigure}
+
+\begin{proposition}[Control at phosphofructokinase]\label{prop:b1:respiration-fermentation:pfk}
+PFK, the first irreversible step committed to \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}, is an
+\omterm{def:b1:enzymes:allosteric}{allosteric enzyme} (\cref{ch:b1:enzymes}) inhibited by \omterm{def:b1:water-small-molecules:atp}{ATP} and by
+citrate --- the signals that energy and Krebs-cycle fuel are plentiful
+--- and activated by AMP and ADP, the signals that they are not. When
+\omterm{def:b1:water-small-molecules:atp}{ATP} is high the flux through \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} falls within seconds; when the
+\omterm{def:b1:cell-unit-of-life:cell}{cell} spends \omterm{def:b1:water-small-molecules:atp}{ATP}, AMP rises steeply (through adenylate kinase,
+$2\,\mathrm{ADP} \rightleftharpoons \mathrm{ATP} + \mathrm{AMP}$), and
+PFK opens. The \omterm{def:b1:cell-unit-of-life:cell}{cell}'s \emph{energy charge} regulates the pathway that
+fills it.
+\end{proposition}
+
+\section{Pyruvate oxidation and the Krebs cycle}
+
+\begin{definition}[Pyruvate dehydrogenase, acetyl-CoA]\label{def:b1:respiration-fermentation:pdh}
+Pyruvate enters the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} and is oxidised by the \emph{pyruvate
+dehydrogenase} complex to \emph{acetyl-CoA}\index{acetyl-CoA} ---
+a two-carbon acetyl group carried by \omterm{def:b1:enzymes:enzyme}{coenzyme} A (\cref{ch:b1:nucleic-acids})
+on a high-energy thioester bond --- releasing one $\mathrm{CO_2}$ and
+one NADH. Acetyl-CoA is the common entry of all fuels into the cycle:
+\omterm{def:b1:carbohydrates:monosaccharide}{carbohydrate} through pyruvate, \omterm{def:b1:lipids:triglyceride}{fats} through $\beta$-oxidation, many
+\omterm{def:b1:proteins:aminoacid}{amino acids} directly.
+\end{definition}
+
+\begin{definition}[The Krebs cycle]\label{def:b1:respiration-fermentation:krebs}
+\index{Krebs cycle}\index{citric acid cycle}
+The \emph{Krebs cycle} (citric acid cycle) in the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrial matrix}
+condenses \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} (C2) with oxaloacetate (C4) into citrate (C6) and,
+in eight steps, oxidises the two carbons to $\mathrm{CO_2}$ while
+regenerating oxaloacetate. Per acetyl group: 3 NADH, 1 $\mathrm{FADH_2}$,
+1 GTP (by \omterm{def:b1:respiration-fermentation:glycolysis}{substrate-level phosphorylation}) and 2 $\mathrm{CO_2}$. Per
+glucose (two acetyls): 6 NADH, 2 $\mathrm{FADH_2}$, 2 GTP, 4 $\mathrm{CO_2}$
+--- which with the 2 $\mathrm{CO_2}$ of pyruvate dehydrogenase makes the
+six of the overall equation. No oxygen is consumed in the cycle
+itself; it runs only as long as the \omterm{def:b1:respiration-fermentation:chain}{respiratory chain} re-oxidises its
+NADH. It is also \emph{amphibolic}: its intermediates are drawn off for
+biosynthesis (\cref{ch:b1:biosyntheses-integration}) and replenished
+from \omterm{def:b1:proteins:aminoacid}{amino acids} and pyruvate.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  \def\R{2.6}
+  \foreach \a/\n/\c in {90/citrate (C6)/omDef, 45/isocitrate (C6)/omDef, 0/$\alpha$-ketoglutarate (C5)/omDef, -45/succinyl-CoA (C4)/omDef, -90/succinate (C4)/omDef, -135/fumarate (C4)/omDef, 180/malate (C4)/omDef, 135/oxaloacetate (C4)/omProp} {
+    \node[draw, thick, rounded corners=3pt, fill=\c!12, inner sep=2.5pt, font=\scriptsize] (n\a) at (\a:\R) {\n};
+  }
+  \foreach \a/\b in {90/45, 45/0, 0/-45, -45/-90, -90/-135, -135/180, 180/135, 135/90} {
+    \draw[->, thick] (n\a) to[bend right=25] (n\b);
+  }
+  % outputs
+  \node[omExo!70!black, anchor=west, align=left] at (3.5,1.9) {NADH, $\mathrm{CO_2}$};
+  \node[omExo!70!black, anchor=west, align=left] at (3.5,-1.6) {NADH, $\mathrm{CO_2}$};
+  \node[omExo!70!black, anchor=north, align=center] at (0,-3.3) {GTP};
+  \node[omExo!70!black, anchor=east, align=right] at (-3.4,-1.7) {$\mathrm{FADH_2}$};
+  \node[omExo!70!black, anchor=east, align=right] at (-3.4,1.7) {NADH};
+  % input
+  \node[draw, thick, rounded corners=3pt, fill=omThm!15, inner sep=2.5pt, font=\scriptsize] (ac) at (0,4.3) {acetyl-CoA (C2)};
+  \draw[->, thick, omThm] (ac) -- (n90);
+  \node[anchor=west, align=left, gray] at (3.3,4.0) {per turn: 3 NADH, 1 $\mathrm{FADH_2}$,\\ 1 GTP, 2 $\mathrm{CO_2}$};
+\end{tikzpicture}
+
+{\small The \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}. An acetyl group enters by condensing with
+oxaloacetate; two carbons leave as $\mathrm{CO_2}$ at the two
+decarboxylations; the four oxidations load three NADH and one
+$\mathrm{FADH_2}$; oxaloacetate is regenerated for the next turn.}
+\end{omfigure}
+
+\begin{example}[Following the carbons]\label{ex:b1:respiration-fermentation:carbons}
+Feed a \omterm{def:b1:cell-unit-of-life:cell}{cell} glucose labelled with $\mathrm{^{14}C}$ on carbon 1: the
+label appears in the methyl carbon of pyruvate, then of \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA},
+enters citrate, and \omterm{def:b1:flowering-plant-organization:organs}{leaves} as $\mathrm{CO_2}$ only on the second or
+third turn of the cycle --- the two carbons released in a given turn
+belong to the oxaloacetate of the previous one. Krebs (1937) deduced
+the cycle from the observation that catalytic amounts of any of its
+acids stimulated the oxidation of far more pyruvate than they could
+account for themselves: they were being regenerated.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.26\linewidth]{images/book3/krebs.jpg}
+
+{\small Hans Krebs (1900--1981), who worked out the cycle in 1937 from
+the rates at which minced pigeon muscle oxidised its acids. Photograph:
+Nobel Foundation, public domain.}
+\end{omfigure}
+
+\section{Oxidative phosphorylation}
+
+\begin{definition}[The respiratory chain]\label{def:b1:respiration-fermentation:chain}
+\index{respiratory chain}\index{electron transport chain}
+The \emph{respiratory chain} is four \omterm{def:b1:proteins:peptide}{protein} complexes of the inner
+mitochondrial membrane and two mobile carriers. NADH gives its
+electrons to \emph{complex I}, $\mathrm{FADH_2}$ (via succinate
+dehydrogenase, \emph{complex II}) gives its own; both reduce
+\emph{ubiquinone} (Q), a lipid-soluble quinone diffusing in the
+membrane; Q passes them to \emph{complex III}, which hands them to
+\emph{cytochrome $c$}, a small \omterm{def:b1:proteins:peptide}{protein} on the outer face; and
+\emph{complex IV} (cytochrome oxidase) delivers them, four at a time,
+to $\mathrm{O_2}$, making water. At each of complexes I, III and IV the
+electrons drop in potential and the energy pumps protons from the
+matrix into the intermembrane space: about 4, 4 and 2 per pair of
+electrons, ten per NADH, six per $\mathrm{FADH_2}$ (which enters below
+complex I).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % membrane band
+  \fill[omDef!15] (0,0) rectangle (13.0,1.4);
+  \draw[omDef!60!black] (0,0) -- (13.0,0) (0,1.4) -- (13.0,1.4);
+  \node[anchor=east, gray, align=right] at (-0.15,1.25) {intermembrane space\\ (high $\mathrm{H^+}$, pH 7)};
+  \node[anchor=east, gray, align=right] at (-0.15,0.15) {matrix\\ (low $\mathrm{H^+}$, pH 8)};
+  % complexes
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c1) at (1.5,0.7) {I};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=12mm, minimum width=10mm, align=center] (c2) at (3.6,0.5) {II};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c3) at (6.2,0.7) {III};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c4) at (8.9,0.7) {IV};
+  \node[draw, thick, fill=omExo!25, rounded corners=6pt, minimum height=16mm, minimum width=12mm, align=center] (atp) at (11.6,0.5) {ATP\\ synthase};
+  \node[circle, draw, thick, fill=omProp!30, inner sep=1.5pt, font=\scriptsize] (q) at (4.9,0.55) {Q};
+  \node[circle, draw, thick, fill=omProp!30, inner sep=1.5pt, font=\scriptsize] (cyt) at (7.55,1.25) {cyt $c$};
+  % electron flow
+  \draw[->, thick, omProp] (c1) -- (q); \draw[->, thick, omProp] (c2) -- (q); \draw[->, thick, omProp] (q) -- (c3); \draw[->, thick, omProp] (c3) -- (cyt); \draw[->, thick, omProp] (cyt) -- (c4);
+  % inputs
+  \node[anchor=north, align=center] at (1.5,-0.5) {NADH $\to$ $\mathrm{NAD^+}$};
+  \node[anchor=north, align=center] at (3.6,-0.5) {$\mathrm{FADH_2}$\\ (succinate)};
+  \node[anchor=north, align=center, font=\scriptsize] at (8.6,-0.5) {$\tfrac12\,\mathrm{O_2} + 2\,\mathrm{H^+} \to \mathrm{H_2O}$};
+  % proton pumping arrows
+  \foreach \x/\n in {1.5/4 $\mathrm{H^+}$, 6.2/4 $\mathrm{H^+}$, 8.9/2 $\mathrm{H^+}$} {
+    \draw[->, very thick, omExo!80!black] (\x+0.5,-0.05) -- (\x+0.5,1.9) node[above, font=\scriptsize] {\n};
+  }
+  \draw[->, very thick, omExo!80!black] (11.6,2.1) -- (11.6,1.35);
+  \draw[->, very thick, omExo!80!black] (11.6,-0.35) -- (11.6,-0.75);
+  \node[anchor=south, font=\scriptsize] at (11.6,2.15) {$\approx 4\,\mathrm{H^+}$ per ATP};
+  \node[anchor=north, align=center, font=\scriptsize] at (11.6,-0.8) {ADP $+ \mathrm{P_i} \to$ ATP};
+\end{tikzpicture}
+
+{\small The inner mitochondrial membrane. Electrons (orange) fall from
+NADH or $\mathrm{FADH_2}$ through the complexes to oxygen; complexes
+I, III and IV pump protons outward (green); the \omterm{thm:b1:photosynthesis:chemiosmosis}{ATP synthase} lets them
+back in and makes \omterm{def:b1:water-small-molecules:atp}{ATP}.}
+\end{omfigure}
+
+\begin{theorem}[Chemiosmotic coupling]\label{thm:b1:respiration-fermentation:chemiosmosis}
+\index{chemiosmotic theory}\index{proton-motive force}
+The proton gradient built by the chain --- about \qty{0.16}{V} of
+\omterm{def:b1:membranes-transport:potential}{membrane potential} (matrix negative) plus one pH unit, a
+\emph{\omterm{thm:b1:respiration-fermentation:chemiosmosis}{proton-motive force}} of about \qty{0.22}{V}, or \qty{21}{kJ} per
+mole of protons --- is the sole link between electron transport and
+\omterm{def:b1:water-small-molecules:atp}{ATP} synthesis. The \omterm{thm:b1:photosynthesis:chemiosmosis}{ATP synthase}, a rotary motor of the inner membrane,
+lets about \qty{3}{H^+} through per \omterm{def:b1:water-small-molecules:atp}{ATP} made, and one more is spent
+importing the phosphate and exporting the \omterm{def:b1:water-small-molecules:atp}{ATP}: 4 per \omterm{def:b1:water-small-molecules:atp}{ATP}. Hence the
+\emph{P/O ratio}\index{P/O ratio}: $10/4 = 2.5$ \omterm{def:b1:water-small-molecules:atp}{ATP} per NADH and
+$6/4 = 1.5$ per $\mathrm{FADH_2}$.
+\end{theorem}
+\begin{proof}[Evidence]
+\omterm{def:b1:eukaryotic-cell:mitochondrion}{Mitochondria} make \omterm{def:b1:water-small-molecules:atp}{ATP} only when their inner membrane is intact and
+closed; fragments that transport electrons but cannot hold a gradient
+make none. Uncouplers such as dinitrophenol, which shuttle protons
+across the membrane, abolish \omterm{def:b1:water-small-molecules:atp}{ATP} synthesis while oxygen consumption
+continues and even accelerates, the energy leaving as heat --- brown \omterm{def:b1:lipids:triglyceride}{fat}
+does this deliberately with its own uncoupling \omterm{def:b1:proteins:peptide}{protein}
+(\cref{ch:b1:mammal-organization}), and dinitrophenol was once sold as
+a slimming drug that killed by hyperthermia. \omterm{def:b1:enzymes:inhibitors}{Inhibitors} of the chain
+(cyanide on complex IV) stop both; \omterm{def:b1:enzymes:inhibitors}{inhibitors} of the synthase
+(oligomycin) stop \omterm{def:b1:water-small-molecules:atp}{ATP} synthesis and, with the gradient unable to
+discharge, stop respiration too, which an uncoupler then restores. An
+artificial pH gradient imposed on \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondria} in the dark drives \omterm{def:b1:water-small-molecules:atp}{ATP}
+synthesis, as in \omterm{def:b1:eukaryotic-cell:plastid}{chloroplasts} (\cref{ch:b1:photosynthesis}).
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+  \node[anchor=south west, inner sep=0] (img) at (0,0)
+    {\includegraphics[width=0.54\linewidth]{images/book3/ai/fig-mitochondrion-cutaway.png}};
+  \begin{scope}[x={(img.south east)}, y={(img.north west)},
+      every node/.style={font=\small}]
+    \draw[omDef, thick] (0.10,0.55) -- (-0.03,0.70) node[left] {outer membrane};
+    \draw[omDef, thick] (0.45,0.72) -- (0.45,1.08) node[above, align=center] {inner membrane folded into cristae:\\ the respiratory chain and ATP synthase};
+    \draw[omDef, thick] (0.55,0.35) -- (1.03,0.24) node[right, align=left] {matrix: Krebs cycle,\\ DNA, ribosomes};
+    \draw[omDef, thick] (0.16,0.40) -- (-0.03,0.26) node[left] {intermembrane space};
+  \end{scope}
+\end{tikzpicture}
+
+{\small A \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} cut open. The inner membrane's folds multiply
+the area available for the chain and the synthase; the matrix within
+holds the \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}.}
+\end{omfigure}
+
+\begin{method}[The ATP balance sheet of a glucose]\label{met:b1:respiration-fermentation:balance}
+\begin{enumerate}
+  \item \omterm{def:b1:respiration-fermentation:glycolysis}{Glycolysis}: $+2$ \omterm{def:b1:water-small-molecules:atp}{ATP} (net), $+2$ NADH in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}.
+  \item Pyruvate dehydrogenase: $+2$ NADH. \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}: $+6$ NADH, $+2$
+        $\mathrm{FADH_2}$, $+2$ GTP ($=$ \omterm{def:b1:water-small-molecules:atp}{ATP}).
+  \item Oxidative phosphorylation: $2.5$ \omterm{def:b1:water-small-molecules:atp}{ATP} per mitochondrial NADH
+        (8: 20 \omterm{def:b1:water-small-molecules:atp}{ATP}), $1.5$ per $\mathrm{FADH_2}$ (2: 3 \omterm{def:b1:water-small-molecules:atp}{ATP}).
+  \item Cytosolic NADH cannot cross the inner membrane; its electrons
+        enter by a shuttle that delivers them to $\mathrm{FAD}$
+        (1.5 each, in muscle and brain) or to $\mathrm{NAD^+}$ (2.5
+        each, in liver and heart): 3 or 5 \omterm{def:b1:water-small-molecules:atp}{ATP}.
+  \item Total: $2 + 2 + 20 + 3 + 3 = 30$, or $32$ with the better
+        shuttle. Efficiency: $30\times 50/2870 \approx \qty{52}{\%}$
+        under cellular conditions.
+\end{enumerate}
+\end{method}
+
+\section{Fermentation}
+
+\begin{definition}[Fermentation]\label{def:b1:respiration-fermentation:fermentation}
+\index{fermentation}
+Without oxygen the \omterm{def:b1:respiration-fermentation:chain}{respiratory chain} stops, NADH cannot be re-oxidised,
+and \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} would halt within seconds for lack of $\mathrm{NAD^+}$.
+\emph{Fermentation} regenerates it by using pyruvate itself as the
+electron acceptor: in \emph{lactic fermentation} (muscle, red \omterm{def:b1:cell-unit-of-life:cell}{cells},
+lactic bacteria) pyruvate is reduced to lactate; in \emph{alcoholic
+fermentation} (yeast, some plants) it is decarboxylated to acetaldehyde,
+which is reduced to ethanol, releasing $\mathrm{CO_2}$. The yield is
+\omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}' own: 2 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose, a fifteenth of respiration's; the
+carbon is barely oxidised and the products still hold nearly all the
+fuel's energy. \emph{Anaerobic respiration} --- an electron-transport
+chain ending on nitrate, sulfate or carbonate instead of oxygen, in
+many bacteria --- is a different thing, treated in the Year 2 volume.
+\end{definition}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.44\linewidth}\centering
+\includegraphics[width=0.9\linewidth]{images/book3/ai/b3-15-yeast-budding.png}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.52\linewidth}\centering
+\includegraphics[width=0.96\linewidth]{images/book3/ai/b3-15-bread-dough-risen.png}
+\end{minipage}
+
+{\small Left: baker's yeast, budding. Right: what its \omterm{def:b1:respiration-fermentation:fermentation}{fermentation}
+does to dough: the $\mathrm{CO_2}$ of two \omterm{def:b1:water-small-molecules:atp}{ATP}'s worth of \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}
+per glucose, trapped in gluten. The ethanol bakes off.}
+\end{omfigure}
+
+\begin{proposition}[The Pasteur effect]\label{prop:b1:respiration-fermentation:pasteur}
+\index{Pasteur effect}
+A \omterm{def:b1:cell-unit-of-life:cell}{cell} that can respire consumes glucose far faster when deprived of
+oxygen than when supplied with it, and grows far less on it.
+\end{proposition}
+\begin{proof}[Evidence]
+Pasteur (1861) found yeast in an aerated vat consuming sugar slowly
+and multiplying, while in a sealed vat it consumed sugar ten times
+faster, multiplied little and made alcohol. The explanation is the \omterm{def:b1:water-small-molecules:atp}{ATP}
+yield: to obtain the same \omterm{def:b1:water-small-molecules:atp}{ATP} from 2 per glucose as from 30, the \omterm{def:b1:cell-unit-of-life:cell}{cell}
+must run \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} fifteen times faster, and PFK, released from the
+inhibition by \omterm{def:b1:water-small-molecules:atp}{ATP} and citrate that respiration maintains, lets it. A
+sprinting muscle shows the same effect over seconds: its \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}
+falls twenty times faster than at rest, and lactate rises.
+\end{proof}
+
+\begin{definition}[Respiratory quotient]\label{def:b1:respiration-fermentation:rq}
+\index{respiratory quotient}
+The \emph{respiratory quotient} RQ is the ratio of $\mathrm{CO_2}$
+produced to $\mathrm{O_2}$ consumed, in moles. \omterm{def:b1:carbohydrates:monosaccharide}{Carbohydrate} gives 1.0
+(six of each per glucose); \omterm{def:b1:lipids:triglyceride}{fat} about 0.7 (palmitate:
+$\mathrm{C_{16}H_{32}O_2} + 23\,\mathrm{O_2} \to 16\,\mathrm{CO_2} +
+16\,\mathrm{H_2O}$, $16/23 = 0.70$), because its carbons are more
+reduced and need more oxygen per $\mathrm{CO_2}$; \omterm{def:b1:proteins:peptide}{protein} about 0.8. A
+fermenting culture releases $\mathrm{CO_2}$ without taking oxygen: its
+RQ is infinite, and a mixed culture's RQ above 1 measures the share of
+\omterm{def:b1:respiration-fermentation:fermentation}{fermentation}. Measured on a whole animal by gas analysis, the RQ tells
+which fuel it is burning.
+\end{definition}
+
+\begin{example}[Reading an RQ]\label{ex:b1:respiration-fermentation:readrq}
+A resting human after a \omterm{def:b1:carbohydrates:monosaccharide}{carbohydrate} meal: RQ 0.95, glucose burning.
+The same person after a night's fast: 0.75, \omterm{def:b1:lipids:triglyceride}{fat}. A marathon runner at
+the thirtieth kilometre, \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} gone: 0.72. A flask of yeast on
+glucose with a little air: RQ 4 --- three quarters of its glucose is
+being fermented.
+\end{example}
+
+\section{Other fuels and the regulation of the whole}
+
+\begin{proposition}[Fats and proteins enter the same machinery]\label{prop:b1:respiration-fermentation:otherfuels}
+\index{beta-oxidation@$\beta$-oxidation}
+\omterm{def:b1:lipids:fattyacid}{Fatty acids} are activated to acyl-CoA and, in the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrial
+matrix}, shortened two carbons at a time by \emph{$\beta$-oxidation},
+each round yielding one \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, one NADH and one $\mathrm{FADH_2}$:
+palmitate (C16) gives 8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 NADH and 7 $\mathrm{FADH_2}$ ---
+about 106 \omterm{def:b1:water-small-molecules:atp}{ATP}, or \qty{6.6}{\omterm{def:b1:water-small-molecules:atp}{ATP}} per carbon against glucose's 5.
+\omterm{def:b1:proteins:aminoacid}{Amino acids} lose their nitrogen as ammonia (converted to urea in the
+liver) and their carbon skeletons enter as pyruvate, \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} or
+Krebs-cycle intermediates. Every fuel converges on \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} and the
+chain; the \omterm{def:b1:cell-unit-of-life:cell}{cell} chooses among them by hormones and by the state of its
+\omterm{def:b1:water-small-molecules:atp}{ATP}, as \cref{ch:b1:biosyntheses-integration} describes.
+\end{proposition}
+
+\begin{example}[A gram of each]\label{ex:b1:respiration-fermentation:gramofeach}
+One gram of glucose (\qty{5.6}{mmol}) yields about \qty{170}{mmol} of
+\omterm{def:b1:water-small-molecules:atp}{ATP}; one gram of palmitate (\qty{3.9}{mmol}) about \qty{410}{mmol} ---
+the \qty{38}{kJ/g} against \qty{17}{kJ/g} of \cref{ch:b1:lipids},
+turned into currency. The \omterm{def:b1:lipids:triglyceride}{fat} costs more oxygen per \omterm{def:b1:water-small-molecules:atp}{ATP}, which is why
+a sprinter's muscle, oxygen-limited, burns \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}, and a migrating
+bird, oxygen-rich and mass-limited, burns \omterm{def:b1:lipids:triglyceride}{fat}.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:1}
+Name the three stages of respiration, their location, and what each
+produces.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:2}
+Write the balance of \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} and explain "\omterm{def:b1:respiration-fermentation:glycolysis}{substrate-level
+phosphorylation}".
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:3}
+From the \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle} figure, list in order the products released in
+one turn, and say where the two $\mathrm{CO_2}$ come from.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:4}
+What does \omterm{def:b1:respiration-fermentation:fermentation}{fermentation} achieve for a \omterm{def:b1:cell-unit-of-life:cell}{cell} without oxygen, and what
+does it not achieve?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:5}
+Compute $\Delta G^{\circ\prime}$ for the transfer of two electrons from
+NADH ($E'_0 = \qty{-0.32}{V}$) to oxygen (\qty{+0.82}{V}), and to
+ubiquinone (\qty{+0.05}{V}). How many \omterm{def:b1:water-small-molecules:atp}{ATP} could each step pay for in
+principle?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:6}
+Draw up the \omterm{def:b1:water-small-molecules:atp}{ATP} balance of one glucose in a muscle \omterm{def:b1:cell-unit-of-life:cell}{cell} (glycerol
+phosphate shuttle) and in a liver \omterm{def:b1:cell-unit-of-life:cell}{cell} (malate shuttle), using \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O
+ratios} of 2.5 and 1.5.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:7}
+A culture consumes \qty{1.0}{mmol} of $\mathrm{O_2}$ and releases
+\qty{2.2}{mmol} of $\mathrm{CO_2}$ per hour on glucose. Compute the
+RQ, and the fractions of the glucose respired and fermented.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:8}
+Explain what happens to oxygen consumption, \omterm{def:b1:water-small-molecules:atp}{ATP} synthesis and heat
+production when dinitrophenol is added to respiring \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondria}, and
+why the drug was lethal.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:9}
+Cyanide blocks complex IV. Predict its effect on the \omterm{def:b1:respiration-fermentation:chain}{respiratory
+chain}, on the \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle} and on \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} in a \omterm{def:b1:cell-unit-of-life:cell}{cell}, and explain why
+lactate accumulates in the blood of the poisoned.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:10}
+Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} yield of palmitate (8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 NADH, 7
+$\mathrm{FADH_2}$, minus 2 \omterm{def:b1:water-small-molecules:atp}{ATP} for activation) and its yield per carbon;
+compute the oxygen consumed per \omterm{def:b1:water-small-molecules:atp}{ATP} for palmitate and for glucose.
+Which fuel should a diving seal prefer, and which a hummingbird?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:11}
+A muscle fibre holds \qty{5}{mmol/L} of \omterm{def:b1:water-small-molecules:atp}{ATP} and uses
+\qty{3}{mmol/L} per second in a sprint. How long would its \omterm{def:b1:water-small-molecules:atp}{ATP} last
+alone? Its phosphocreatine (\qty{25}{mmol/L}) regenerates \omterm{def:b1:water-small-molecules:atp}{ATP} one for
+one; its \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} through \omterm{def:b1:respiration-fermentation:fermentation}{fermentation} gives 3 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose unit at
+up to \qty{2}{mmol/L} of glucose units per second. Compute the time
+each store can sustain the sprint, and explain why a 100 m race is run
+almost entirely without oxygen.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:12}
+"The \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} is a battery charged by electrons and discharged
+through a turbine." Discuss in a paragraph: what the gradient stores,
+what the synthase does, where the analogy is exact and where it is
+loose.
+\end{exercise}
+
+\section{Problem: Yeast With and Without Air}
+
+\begin{problem}[{Weekend problem --- Pasteur's vats revisited: ATP
+counted, glucose consumed, biomass grown and gases measured, ending on
+the ratio of ATP yields and the P/O ratio}]
+\label{pb:b1:respiration-fermentation:1}
+Yeast is grown on glucose in two identical flasks, one aerated and one
+sealed. Use \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O ratios} of 2.5 (NADH) and 1.5 ($\mathrm{FADH_2}$), the
+$\mathrm{FADH_2}$ shuttle for cytosolic NADH, a growth yield of
+\qty{10.5}{g} of dry biomass per mole of \omterm{def:b1:water-small-molecules:atp}{ATP}, and glucose at
+\qty{180}{g/mol}.
+
+\medskip
+\noindent\textbf{Part I --- \omterm{def:b1:water-small-molecules:atp}{ATP} counted.}
+\begin{enumerate}
+  \item List the \omterm{def:b1:water-small-molecules:atp}{ATP}, GTP, NADH and $\mathrm{FADH_2}$ produced from one
+        glucose by \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}, pyruvate dehydrogenase and the \omterm{def:b1:respiration-fermentation:krebs}{Krebs
+        cycle}.
+  \item Compute the protons pumped by the chain per glucose (10 per
+        mitochondrial NADH, 6 per $\mathrm{FADH_2}$; cytosolic NADH
+        enters as $\mathrm{FADH_2}$).
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} made by the synthase at \qty{4}{H^+} per \omterm{def:b1:water-small-molecules:atp}{ATP},
+        and the total \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose with air.
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose without air.
+  \item Compute the ratio of the two yields.
+  \item Compute the \omterm{prop:b1:water-small-molecules:gibbs}{free energy} captured with air ($\Delta G_{\text{ATP}}
+        = \qty{-50}{kJ/mol}$) as a fraction of \qty{2870}{kJ}, and
+        without air as a fraction of the \qty{2870}{kJ} and of the
+        energy actually released by \omterm{def:b1:respiration-fermentation:fermentation}{fermentation} (glucose to two
+        ethanol and two $\mathrm{CO_2}$: \qty{-235}{kJ/mol}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Glucose consumed, biomass grown.}
+The sealed flask must make \omterm{def:b1:water-small-molecules:atp}{ATP} at the same rate as the aerated one to
+maintain its \omterm{def:b1:cell-unit-of-life:cell}{cells}: \qty{30}{mmol} of \omterm{def:b1:water-small-molecules:atp}{ATP} per hour.
+\begin{enumerate}[resume]
+  \item Compute the glucose consumed per hour in each flask.
+  \item Compute the ethanol and $\mathrm{CO_2}$ produced per hour in
+        the sealed flask, and the $\mathrm{CO_2}$ and $\mathrm{O_2}$
+        exchanged in the aerated one.
+  \item Compute the biomass the sealed flask can build per mole of
+        glucose, and per gram of glucose.
+  \item The aerated flask builds \qty{0.5}{g} of biomass per gram of
+        glucose. Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} this would represent at
+        \qty{10.5}{g/mol}, and compare with the 30 \omterm{def:b1:water-small-molecules:atp}{ATP} available. What
+        limits the aerobic yield?
+  \item Explain the \omterm{prop:b1:respiration-fermentation:pasteur}{Pasteur effect} from questions 7 and 9, and name
+        the \omterm{def:b1:enzymes:enzyme}{enzyme} whose regulation implements it.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Gases measured.}
+A third flask, poorly aerated, releases \qty{44}{mg} of $\mathrm{CO_2}$
+and consumes \qty{20}{mg} of $\mathrm{O_2}$ per hour.
+\begin{enumerate}[resume]
+  \item Convert both to millimoles and compute the RQ.
+  \item Let $x$ be the glucose respired and $y$ the glucose fermented
+        per hour. Write the $\mathrm{O_2}$ and $\mathrm{CO_2}$ balances
+        and solve for $x$ and $y$.
+  \item What fraction of the glucose is fermented? What fraction of the
+        \omterm{def:b1:water-small-molecules:atp}{ATP} comes from \omterm{def:b1:respiration-fermentation:fermentation}{fermentation}?
+  \item The same flask on palmitate instead of glucose (aerobic):
+        compute the RQ.
+  \item A student measures an RQ of 0.7 in a resting animal after a
+        night's fast and 1.0 after a meal. Interpret.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The turbine.}
+\begin{enumerate}[resume]
+  \item Compute the \omterm{prop:b1:water-small-molecules:gibbs}{free energy} of one mole of protons crossing a
+        \omterm{thm:b1:respiration-fermentation:chemiosmosis}{proton-motive force} of \qty{0.22}{V}.
+  \item Compute the energy of \qty{4}{H^+} and the efficiency of the
+        synthase at \qty{50}{kJ} per \omterm{def:b1:water-small-molecules:atp}{ATP}.
+  \item Compute the \omterm{prop:b1:water-small-molecules:gibbs}{free energy} released by two electrons falling from
+        NADH to $\mathrm{O_2}$ (\qty{1.14}{V}), the energy stored in
+        the ten protons pumped, and the efficiency of the chain.
+  \item Combine the two efficiencies and compare with 2.5 \omterm{def:b1:water-small-molecules:atp}{ATP} $\times$
+        \qty{50}{kJ} over \qty{220}{kJ}.
+  \item An uncoupler is added to the aerated flask. Predict the changes
+        in oxygen consumption, \omterm{def:b1:water-small-molecules:atp}{ATP} yield, glucose consumption, heat
+        output and growth.
+  \item Oligomycin, which blocks the synthase, is added instead.
+        Predict the changes, and what happens if an uncoupler is then
+        added on top.
+  \item A mutant yeast lacks complex I; its NADH enters the chain
+        through an alternative \omterm{def:b1:enzymes:enzyme}{enzyme} that pumps no protons. Compute
+        its \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O ratio} for NADH and its \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose.
+  \item Explain why the \omterm{def:b1:cell-unit-of-life:cell}{cell} keeps the mitochondrial NADH pool almost
+        fully reduced when oxygen is absent, and what this does to the
+        \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}.
+  \item State the result: the \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose with and without air,
+        their ratio, and the \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O ratios} of NADH and $\mathrm{FADH_2}$.
+\end{enumerate}
+\end{problem}

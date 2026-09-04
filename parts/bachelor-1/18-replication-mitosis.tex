@@ -1,6 +1,518 @@
 \chapter{DNA Replication and Mitosis}\label{ch:b1:replication-mitosis}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Every eight hours or so, a \omterm{def:b1:cell-unit-of-life:cell}{cell} of the intestinal lining copies six
+billion \omterm{thm:b1:nucleic-acids:helix}{base pairs} with about one error in a billion, then sorts the
+two copies into two daughters so that each gets exactly forty-six
+\omterm{def:b1:genomes:genome}{chromosomes} --- not forty-five, not forty-seven. The copying is done
+by a machine that reads one strand and builds its complement at fifty
+letters a second from tens of thousands of starting points at once;
+the sorting is done by a \omterm{def:b1:replication-mitosis:mitosis}{spindle} of \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules} that pulls the two
+copies of every \omterm{def:b1:genomes:genome}{chromosome} apart with an accuracy of one mistake in
+a hundred thousand divisions. This chapter describes the \omterm{def:b1:replication-mitosis:fork}{replication
+fork} and its \omterm{def:b1:enzymes:enzyme}{enzymes}, the problem of the ends, the \omterm{def:b1:replication-mitosis:cycle}{cell cycle} that
+times replication and division, and \omterm{def:b1:replication-mitosis:mitosis}{mitosis}, the division itself.
 
-\emph{This chapter has not been written yet.}
+\section{Semi-conservative replication}
+
+\begin{proposition}[Each strand is a template]\label{prop:b1:replication-mitosis:semiconservative}
+\index{semi-conservative replication}
+\omterm{def:b1:nucleic-acids:chain}{DNA} is replicated \emph{semi-conservatively}: the two strands of the
+helix separate, and each serves as a template on which a new
+complementary strand is built, so that every daughter molecule is one
+old strand paired with one new one.
+\end{proposition}
+\begin{proof}[Evidence]
+Meselson and Stahl (1958; recalled from the High School volume) grew
+\emph{E. coli} on heavy nitrogen, transferred it to light nitrogen,
+and separated the \omterm{def:b1:nucleic-acids:chain}{DNA} by density: after one generation all the \omterm{def:b1:nucleic-acids:chain}{DNA}
+was of intermediate density, after two, half intermediate and half
+light --- exactly the prediction of one old and one new strand per
+molecule, and of no other scheme. Cairns (1963) labelled replicating
+bacterial \omterm{def:b1:genomes:genome}{chromosomes} with tritium and photographed them by
+autoradiography: circles with a replicating "bubble" whose two forks
+moved in opposite directions from one origin. Kornberg (1956) purified
+an \omterm{def:b1:enzymes:enzyme}{enzyme} that synthesised \omterm{def:b1:nucleic-acids:chain}{DNA} in the test tube from the four
+nucleoside triphosphates and a template, in the template's sequence.
+\end{proof}
+
+\begin{definition}[The replication fork and its enzymes]\label{def:b1:replication-mitosis:fork}
+\index{replication fork}\index{DNA polymerase}\index{Okazaki fragment}
+Replication begins at an \emph{origin} --- one on the bacterial
+\omterm{def:b1:genomes:genome}{chromosome}, tens of thousands on a eukaryotic \omterm{def:b1:genomes:genome}{genome} --- where the
+helix is opened and two \emph{replication forks} move away in
+opposite directions. At each fork: a \emph{helicase} unwinds the helix
+(one \omterm{def:b1:water-small-molecules:atp}{ATP} per \omterm{thm:b1:nucleic-acids:helix}{base pair}), \emph{single-strand binding \omterm{def:b1:proteins:peptide}{proteins}} keep the
+separated strands apart, and a \emph{topoisomerase} ahead of the fork
+relieves the twist that unwinding builds up. \emph{\omterm{def:b1:nucleic-acids:chain}{DNA} polymerase}
+adds \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} only to the $3'$ hydroxyl of an existing chain, so
+that every new strand grows $5' \to 3'$ and none can start from
+nothing: a \emph{primase} first lays down a short \omterm{def:b1:nucleic-acids:chain}{RNA} \emph{primer}
+that the polymerase extends. On the template read $3' \to 5'$ the new
+strand grows continuously toward the fork: the \emph{leading strand}.
+On the other template the new strand must grow away from the fork, in
+pieces of \qtyrange{1000}{2000}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} in bacteria and
+\qtyrange{100}{200}{} in eukaryotes, the \emph{Okazaki fragments},
+each with its own primer: the \emph{lagging strand}. A second
+polymerase replaces the primers with \omterm{def:b1:nucleic-acids:chain}{DNA} and a \emph{ligase} seals the
+fragments into one strand.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % parental duplex on the right, opening leftward
+  \draw[very thick, omDef] (12.4,1.0) -- (7.6,1.0);
+  \draw[very thick, omDef!50] (12.4,-1.0) -- (7.6,-1.0);
+  \foreach \x in {8.0,8.6,...,12.2} { \draw[thick, gray!60] (\x,1.0) -- (\x,-1.0); }
+  \node[anchor=south] at (10.0,1.15) {parental duplex};
+  % helicase at the fork
+  \node[circle, draw, thick, fill=omProp!40, minimum size=9mm, font=\scriptsize] (hel) at (7.3,0) {helicase};
+  \draw[->, very thick, omProp!80!black] (6.4,-1.9) -- (5.2,-1.9) node[left, font=\scriptsize] {fork moves};
+  % separated template strands going left
+  \draw[very thick, omDef] (7.0,0.55) .. controls (5.5,1.5) .. (0.4,2.2);
+  \draw[very thick, omDef!50] (7.0,-0.55) .. controls (5.5,-1.5) .. (0.4,-2.2);
+  \node[anchor=east, omDef] at (0.3,2.2) {$3'$};
+  \node[anchor=east, omDef!70!black] at (0.3,-2.2) {$5'$};
+  % leading strand: continuous new strand along upper template
+  \draw[very thick, omThm] (1.0,1.85) .. controls (4.5,1.35) .. (6.2,0.75);
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt, font=\scriptsize] at (6.0,0.95) {pol};
+  \node[anchor=south west, omThm, align=left] at (1.0,2.35) {leading strand: continuous, $5' \to 3'$ toward the fork};
+  \node[anchor=east, omThm] at (0.95,1.85) {$5'$};
+  % lagging strand: Okazaki fragments along lower template, each with a primer
+  \foreach \x/\y in {1.2/-1.95, 3.3/-1.55, 5.3/-1.05} {
+    \fill[omExo!80!black] (\x,\y) circle (0.08);
+    \draw[very thick, omThm] (\x,\y) .. controls (\x+0.8,\y+0.15) .. (\x+1.5,\y+0.25);
+  }
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt, font=\scriptsize] at (6.7,-1.0) {pol};
+  \node[anchor=north west, align=left] at (1.0,-2.5) {lagging strand: Okazaki fragments, each started by an RNA primer (\textcolor{omExo!80!black}{dot}),\\ growing $5' \to 3'$ away from the fork; primers replaced, fragments joined by ligase};
+  \node[font=\scriptsize, anchor=south] at (3.3,-1.35) {$5'$};
+\end{tikzpicture}
+
+{\small A \omterm{def:b1:replication-mitosis:fork}{replication fork}. The helicase opens the parental duplex;
+the leading strand is copied continuously toward the fork, the
+lagging strand backward in \omterm{def:b1:replication-mitosis:fork}{Okazaki fragments}, because polymerases
+build only in the $5' \to 3'$ direction.}
+\end{omfigure}
+
+\begin{proposition}[Fidelity]\label{prop:b1:replication-mitosis:fidelity}
+\index{proofreading}
+Base pairing alone would give about one error in $10^5$; the
+polymerase \emph{proofreads} --- a $3' \to 5'$ exonuclease activity
+removes a mispaired \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} before the next is added --- bringing
+the error to one in $10^7$; and after the fork has passed, a
+\emph{mismatch repair} system finds the remaining mispairs, identifies
+the new strand, and corrects it: one error in $10^9$ to $10^{10}$ \omterm{thm:b1:nucleic-acids:helix}{base
+pairs} per replication. A human \omterm{def:b1:cell-unit-of-life:cell}{cell} copying $\num{6.4e9}$ pairs makes
+a handful of mutations each time it divides; a bacterium, one in a
+thousand divisions.
+\end{proposition}
+
+\begin{example}[Speed and starting points]\label{ex:b1:replication-mitosis:speed}
+A bacterial fork moves at \qty{1000}{} \omterm{thm:b1:nucleic-acids:helix}{base pairs} a second: two forks
+copy the \qty{4.6}{Mb} of \emph{E. coli} in \qty{40}{min}, and in rich
+medium, where the \omterm{def:b1:cell-unit-of-life:cell}{cell} divides every twenty, a new round starts before
+the last has finished. A eukaryotic fork, slowed by chromatin, moves
+at \qty{50}{} a second: copying a human \omterm{def:b1:genomes:genome}{chromosome} of \qty{250}{Mb}
+from one origin would take a month, so the \omterm{def:b1:genomes:genome}{genome} is copied from some
+\num{40000} origins in eight hours, in an order fixed for each \omterm{def:b1:cell-unit-of-life:cell}{cell}
+type.
+\end{example}
+
+\section{The ends}
+
+\begin{proposition}[The end-replication problem and telomerase]\label{prop:b1:replication-mitosis:telomerase}
+\index{telomerase}
+On a linear \omterm{def:b1:genomes:genome}{chromosome} the lagging strand cannot be completed to the
+very end: when the last primer is removed there is no $3'$ hydroxyl
+upstream from which to fill the gap, and each replication would
+shorten the \omterm{def:b1:genomes:genome}{chromosome} by \qtyrange{50}{100}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}. Eukaryotes
+end their \omterm{def:b1:genomes:genome}{chromosomes} with \emph{\omterm{def:b1:genomes:karyotype}{telomeres}}, thousands of copies of a
+short repeat (TTAGGG in vertebrates) that carry no \omterm{def:b1:genomes:gene}{genes}, and germ
+\omterm{def:b1:cell-unit-of-life:cell}{cells} and stem \omterm{def:b1:cell-unit-of-life:cell}{cells} carry \emph{telomerase}, an \omterm{def:b1:enzymes:enzyme}{enzyme} with its own
+\omterm{def:b1:nucleic-acids:chain}{RNA} template that adds repeats to the $3'$ end, restoring what
+replication loses. Most somatic \omterm{def:b1:cell-unit-of-life:cell}{cells} lack it: their \omterm{def:b1:genomes:karyotype}{telomeres} shorten
+at every division, and after some fifty divisions in culture they stop
+dividing. Bacteria, with circular \omterm{def:b1:genomes:genome}{chromosomes}, have no ends.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % top: the problem
+  \draw[very thick, omDef] (0,1.2) -- (8,1.2) node[right] {$3'$ (template)};
+  \draw[very thick, omThm] (0,0.8) -- (6.3,0.8);
+  \fill[omExo!80!black] (6.3,0.8) circle (0.08); \draw[very thick, omExo!80!black] (6.3,0.8) -- (7.0,0.8);
+  \node[anchor=east, omThm] at (-0.1,0.8) {new lagging strand $5'$};
+  \node[anchor=north, font=\scriptsize, omExo!80!black] at (6.65,0.72) {last primer};
+  \draw[thick, gray] (7.0,0.55) -- (8.0,0.55);
+  \node[anchor=north, font=\scriptsize, align=center, gray] at (7.5,0.45) {gap: nothing to extend from\\ once the primer is removed};
+  % bottom: telomerase
+  \draw[very thick, omDef] (0,-1.6) -- (8,-1.6);
+  \draw[very thick, omDef, dashed] (8,-1.6) -- (10.2,-1.6) node[right] {$3'$ extended};
+  \node[draw, thick, fill=omProp!30, rounded corners=4pt, inner sep=3pt, align=center, font=\scriptsize] at (9.1,-0.95) {telomerase\\ (RNA template inside)};
+  \draw[very thick, omThm] (0,-2.0) -- (6.3,-2.0);
+  \draw[very thick, omThm, dashed] (6.3,-2.0) -- (8.6,-2.0);
+  \node[anchor=east, align=right, font=\scriptsize] at (-0.1,-1.8) {telomere repeats\\ TTAGGG\ldots};
+  \node[anchor=north, align=center, gray] at (5,-2.3) {telomerase lengthens the template's $3'$ end with repeats; a new primer on the\\ extension lets the lagging strand be completed to the original length};
+\end{tikzpicture}
+
+{\small The end-replication problem (top) and its solution (bottom).
+The lagging strand is left short at the \omterm{def:b1:genomes:genome}{chromosome}'s end; telomerase
+adds repeats to the template's $3'$ end so that the loss falls on
+sequence that carries no \omterm{def:b1:genomes:gene}{genes}.}
+\end{omfigure}
+
+\section{The cell cycle}
+
+\begin{definition}[The cell cycle]\label{def:b1:replication-mitosis:cycle}
+\index{cell cycle}\index{interphase}
+The \emph{\omterm{def:b1:cell-unit-of-life:cell}{cell} cycle} of a \omterm{def:b1:cell-unit-of-life:prokeuk}{eukaryotic cell} has four phases.
+\emph{G$_1$} (gap 1): the \omterm{def:b1:cell-unit-of-life:cell}{cell} grows and makes the \omterm{def:b1:enzymes:enzyme}{enzymes} of
+replication; \emph{S} (synthesis): it replicates its \omterm{def:b1:nucleic-acids:chain}{DNA}, so that each
+\omterm{def:b1:genomes:genome}{chromosome} becomes two identical \emph{sister \omterm{def:b1:replication-mitosis:mitosis}{chromatids}} joined at
+the \omterm{def:b1:genomes:karyotype}{centromere}; \emph{G$_2$}: it grows further and checks the copies;
+\emph{M}: \emph{\omterm{def:b1:replication-mitosis:mitosis}{mitosis}}, the division of the nucleus, followed by
+\emph{cytokinesis}, the division of the \omterm{def:b1:cell-unit-of-life:cell}{cytoplasm}. G$_1$, S and G$_2$
+together are \emph{interphase}, in which the \omterm{def:b1:genomes:genome}{chromosomes} are extended
+and active; a \omterm{def:b1:cell-unit-of-life:cell}{cell} that stops dividing \omterm{def:b1:flowering-plant-organization:organs}{leaves} the cycle from G$_1$
+into a resting state, G$_0$. A dividing human \omterm{def:b1:cell-unit-of-life:cell}{cell} takes about
+\qty{24}{h}: G$_1$ \qty{10}{h}, S \qty{8}{h}, G$_2$ \qty{4}{h}, M
+\qty{1}{h}; a yeast, \qty{90}{min}; an early frog embryo, thirty
+minutes with no gaps at all.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=26, ymin=0, ymax=2.6,
+  xlabel={time (h)}, ylabel={DNA per nucleus},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,10,18,22,23,24}, xticklabels={0,10,18,22,23,24},
+  ytick={1,2}, yticklabels={$q$,$2q$},
+  clip=false,
+]
+\addplot[very thick, omDef] coordinates {(0,1) (10,1) (18,2) (23,2) (23.6,2) (23.6,1) (24,1) (26,1)};
+\fill[omDef!12] (axis cs:0,2.25) rectangle (axis cs:10,2.55); \node[font=\scriptsize] at (axis cs:5,2.4) {G$_1$: growth};
+\fill[omThm!15] (axis cs:10,2.25) rectangle (axis cs:18,2.55); \node[font=\scriptsize] at (axis cs:14,2.4) {S: replication};
+\fill[omDef!12] (axis cs:18,2.25) rectangle (axis cs:22,2.55); \node[font=\scriptsize] at (axis cs:20,2.4) {G$_2$};
+\fill[omExo!25] (axis cs:22,2.25) rectangle (axis cs:24,2.55); \node[font=\scriptsize] at (axis cs:23,2.4) {M};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:24.1,1.5) {two cells,\\ $q$ each};
+\end{axis}
+\end{tikzpicture}
+
+{\small The \omterm{def:b1:nucleic-acids:chain}{DNA} content of a nucleus through one \omterm{def:b1:replication-mitosis:cycle}{cell cycle} of
+\qty{24}{h}. It doubles during S phase, from $q$ (2n \omterm{def:b1:genomes:genome}{chromosomes} of
+one \omterm{def:b1:replication-mitosis:mitosis}{chromatid}) to $2q$ (2n \omterm{def:b1:genomes:genome}{chromosomes} of two \omterm{def:b1:replication-mitosis:mitosis}{chromatids}), and returns
+to $q$ in each daughter at the end of \omterm{def:b1:replication-mitosis:mitosis}{mitosis}; the number of
+\omterm{def:b1:genomes:genome}{chromosomes} never changes.}
+\end{omfigure}
+
+\begin{proposition}[Checkpoints]\label{prop:b1:replication-mitosis:checkpoints}
+\index{checkpoint}
+The cycle is driven forward by a family of \omterm{def:b1:proteins:peptide}{protein} kinases, activated
+in turn by \omterm{def:b1:proteins:peptide}{proteins} called \emph{cyclins} whose levels rise and fall
+through the cycle, and it is held at \emph{checkpoints} until
+conditions are met: at the end of G$_1$, the \omterm{def:b1:cell-unit-of-life:cell}{cell} commits to
+replicate only if it is large enough, nourished and signalled to
+divide, and if its \omterm{def:b1:nucleic-acids:chain}{DNA} is undamaged; at the end of G$_2$, it enters
+\omterm{def:b1:replication-mitosis:mitosis}{mitosis} only when replication is complete; in \omterm{def:b1:replication-mitosis:mitosis}{mitosis}, the \omterm{def:b1:replication-mitosis:mitosis}{chromatids}
+separate only when every \omterm{def:b1:genomes:genome}{chromosome} is attached to the \omterm{def:b1:replication-mitosis:mitosis}{spindle} from
+both sides. Damage arrests the cycle and, if it cannot be repaired,
+triggers the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s death. The molecular machinery of this control
+belongs to the Year 3 volume; its failure is cancer.
+\end{proposition}
+
+\section{Mitosis}
+
+\begin{definition}[Mitosis]\label{def:b1:replication-mitosis:mitosis}
+\index{mitosis}\index{spindle}\index{chromatid}
+\emph{Mitosis} distributes the replicated \omterm{def:b1:genomes:genome}{chromosomes} so that each
+daughter nucleus receives one chromatid of every \omterm{def:b1:genomes:genome}{chromosome} --- the
+same number and the same \omterm{def:b1:genomes:gene}{genes} as the parent. Its stages:
+\begin{itemize}
+  \item \emph{prophase}: the \omterm{def:b1:genomes:genome}{chromosomes} condense into visible rods,
+        each of two sister chromatids held together along their length
+        by cohesin \omterm{def:b1:proteins:peptide}{proteins}; the two \emph{\omterm{def:b1:eukaryotic-cell:cytoskeleton}{centrosomes}} move apart and
+        the \emph{mitotic spindle} of \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules} grows between them;
+  \item \emph{prometaphase}: the \omterm{def:b1:eukaryotic-cell:nucleus}{nuclear envelope} breaks down;
+        spindle \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules} attach to each chromatid's
+        \emph{kinetochore}, a \omterm{def:b1:proteins:peptide}{protein} structure at the \omterm{def:b1:genomes:karyotype}{centromere}, from
+        opposite poles;
+  \item \emph{metaphase}: the \omterm{def:b1:genomes:genome}{chromosomes} are aligned at the equator
+        of the spindle, each under tension from both poles;
+  \item \emph{anaphase}: the cohesin is cut, the sister chromatids
+        separate and are pulled to opposite poles as the \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules}
+        shorten (anaphase A) and the poles move apart (anaphase B);
+  \item \emph{telophase}: the \omterm{def:b1:genomes:genome}{chromosomes} decondense, and a \omterm{def:b1:eukaryotic-cell:nucleus}{nuclear
+        envelope} re-forms around each set.
+\end{itemize}
+\emph{Cytokinesis} then divides the \omterm{def:b1:cell-unit-of-life:cell}{cytoplasm}: in animal \omterm{def:b1:cell-unit-of-life:cell}{cells} a
+\emph{contractile ring} of actin and myosin pinches the \omterm{def:b1:cell-unit-of-life:cell}{cell} in two;
+in plant \omterm{def:b1:cell-unit-of-life:cell}{cells} vesicles from the Golgi fuse at the equator into a
+\emph{\omterm{def:b1:cell-unit-of-life:cell}{cell} plate} that grows outward into a new wall.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.9\linewidth]{images/book3/ai/b3-18-mitosis-grid.png}
+
+{\small Onion root-tip \omterm{def:b1:cell-unit-of-life:cell}{cells} in \omterm{def:b1:replication-mitosis:cycle}{interphase}, prophase, metaphase,
+anaphase, telophase, and after cytokinesis with the new wall across
+the middle. The \omterm{def:b1:genomes:genome}{chromosomes} are visible only while condensed, from
+prophase to telophase.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  \foreach \i/\name in {0/prophase, 1/metaphase, 2/anaphase, 3/telophase} {
+    \begin{scope}[xshift=\i*3.3cm]
+      \draw[thick, omDef!70!black, fill=omDef!5] (0,0) ellipse (1.4 and 1.1);
+      \node[anchor=north] at (0,-1.2) {\name};
+    \end{scope}
+  }
+  % prophase: two centrosomes, condensed chromosomes (X shapes) scattered, envelope
+  \begin{scope}
+    \draw[thick, gray, dashed] (0,0) circle (0.8);
+    \foreach \p/\a in {(-0.3,0.25)/30, (0.35,-0.1)/-40, (0.05,-0.45)/80} { \draw[very thick, omThm] \p ++(\a:0.22) -- ++(\a+180:0.44); \draw[very thick, omThm] \p ++(\a+60:0.22) -- ++(\a+240:0.44); }
+    \fill[omProp!80!black] (-1.1,0.6) circle (0.07); \fill[omProp!80!black] (1.1,-0.6) circle (0.07);
+    \foreach \a in {-30,0,30} { \draw[omProp!60!black] (-1.1,0.6) -- ++(\a-20:0.45); \draw[omProp!60!black] (1.1,-0.6) -- ++(\a+160:0.45); }
+  \end{scope}
+  % metaphase: spindle pole to pole, chromosomes on the plate
+  \begin{scope}[xshift=3.3cm]
+    \fill[omProp!80!black] (-1.25,0) circle (0.07); \fill[omProp!80!black] (1.25,0) circle (0.07);
+    \foreach \y in {-0.5,-0.25,0,0.25,0.5} { \draw[omProp!60!black] (-1.25,0) -- (0,\y); \draw[omProp!60!black] (1.25,0) -- (0,\y); }
+    \foreach \y in {-0.5,-0.17,0.17,0.5} { \draw[very thick, omThm] (-0.12,\y-0.14) -- (0.12,\y+0.14); \draw[very thick, omThm] (-0.12,\y+0.14) -- (0.12,\y-0.14); }
+  \end{scope}
+  % anaphase: chromatids moving to poles (V shapes)
+  \begin{scope}[xshift=6.6cm]
+    \fill[omProp!80!black] (-1.25,0) circle (0.07); \fill[omProp!80!black] (1.25,0) circle (0.07);
+    \foreach \y in {-0.45,-0.15,0.15,0.45} { \draw[omProp!60!black] (-1.25,0) -- (-0.55,\y); \draw[omProp!60!black] (1.25,0) -- (0.55,\y); \draw[very thick, omThm] (-0.55,\y) -- (-0.35,\y+0.12) (-0.55,\y) -- (-0.35,\y-0.12); \draw[very thick, omThm] (0.55,\y) -- (0.35,\y+0.12) (0.55,\y) -- (0.35,\y-0.12); }
+  \end{scope}
+  % telophase: two nuclei reforming, cleavage furrow
+  \begin{scope}[xshift=9.9cm]
+    \draw[thick, gray, dashed] (-0.7,0) circle (0.45); \draw[thick, gray, dashed] (0.7,0) circle (0.45);
+    \foreach \x in {-0.8,-0.6,0.6,0.8} { \draw[thick, omThm] (\x,-0.2) -- (\x,0.2); }
+    \draw[very thick, omExo!70!black] (0,1.1) -- (0,0.55); \draw[very thick, omExo!70!black] (0,-1.1) -- (0,-0.55);
+    \node[font=\scriptsize, omExo!70!black, anchor=south] at (0,1.15) {furrow};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Four stages of \omterm{def:b1:replication-mitosis:mitosis}{mitosis} in an animal \omterm{def:b1:cell-unit-of-life:cell}{cell}. Prophase: the
+\omterm{def:b1:genomes:genome}{chromosomes} condense as the \omterm{def:b1:replication-mitosis:mitosis}{spindle} forms from the two \omterm{def:b1:eukaryotic-cell:cytoskeleton}{centrosomes}.
+Metaphase: each \omterm{def:b1:genomes:genome}{chromosome} sits at the equator, attached from both
+poles. Anaphase: the sister \omterm{def:b1:replication-mitosis:mitosis}{chromatids} are pulled apart. Telophase:
+two nuclei re-form and the furrow divides the \omterm{def:b1:cell-unit-of-life:cell}{cell}.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book3/ai/b3-18-mitotic-spindle-fluorescence.png}
+
+{\small A cultured \omterm{def:b1:cell-unit-of-life:cell}{cell} at metaphase, its \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules} labelled green
+and its \omterm{def:b1:genomes:genome}{chromosomes} blue: the \omterm{def:b1:replication-mitosis:mitosis}{spindle} spans the \omterm{def:b1:cell-unit-of-life:cell}{cell} from pole to
+pole and the \omterm{def:b1:genomes:genome}{chromosomes} form a plate across its equator.}
+\end{omfigure}
+
+\begin{proposition}[What mitosis conserves]\label{prop:b1:replication-mitosis:conserves}
+\omterm{def:b1:replication-mitosis:mitosis}{Mitosis} is a division that conserves the \omterm{def:b1:genomes:genome}{chromosome} number: a \omterm{def:b1:cell-unit-of-life:cell}{cell}
+with 2n \omterm{def:b1:genomes:genome}{chromosomes} (46 in a human) gives two \omterm{def:b1:cell-unit-of-life:cell}{cells} with 2n. The \omterm{def:b1:nucleic-acids:chain}{DNA}
+content goes from $2q$ (after replication) to $q$ in each daughter;
+the number of \omterm{def:b1:genomes:genome}{chromosomes} never changes, because a \omterm{def:b1:genomes:genome}{chromosome} is
+counted by its \omterm{def:b1:genomes:karyotype}{centromere}, and each \omterm{def:b1:replication-mitosis:mitosis}{chromatid}, once separated, is a
+\omterm{def:b1:genomes:genome}{chromosome}. Every \omterm{def:b1:cell-unit-of-life:cell}{cell} of a body is thus genetically identical to the
+egg it descends from, apart from the mutations that copying has
+introduced. The division that halves the \omterm{def:b1:genomes:genome}{chromosome} number, meiosis,
+belongs to the Year 2 volume.
+\end{proposition}
+
+\begin{method}[Reading a cell-cycle experiment]\label{met:b1:replication-mitosis:reading}
+\begin{enumerate}
+  \item Measure the \omterm{def:b1:nucleic-acids:chain}{DNA} per \omterm{def:b1:cell-unit-of-life:cell}{cell} (a dye whose fluorescence is
+        proportional to \omterm{def:b1:nucleic-acids:chain}{DNA}, \omterm{def:b1:cell-unit-of-life:cell}{cell} by \omterm{def:b1:cell-unit-of-life:cell}{cell}): \omterm{def:b1:cell-unit-of-life:cell}{cells} at $q$ are in G$_1$,
+        at $2q$ in G$_2$ or M, in between in S. The fractions give the
+        durations: a phase's share of the cycle is its share of the
+        \omterm{def:b1:cell-unit-of-life:cell}{cells}.
+  \item Give a pulse of labelled \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} (bromodeoxyuridine): only
+        \omterm{def:b1:cell-unit-of-life:cell}{cells} in S phase take it up; the labelled fraction is the S
+        fraction, and following the label into \omterm{def:b1:replication-mitosis:mitosis}{mitosis} gives the length
+        of G$_2$.
+  \item Count mitotic figures in a stained section: the \emph{mitotic
+        index}, the fraction of \omterm{def:b1:cell-unit-of-life:cell}{cells} in M, is the fraction of the
+        cycle that M occupies --- \qty{4}{\%} for a \qty{24}{h} cycle with
+        a one-hour \omterm{def:b1:replication-mitosis:mitosis}{mitosis}.
+  \item Block a step (a drug that depolymerises \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules} arrests
+        \omterm{def:b1:cell-unit-of-life:cell}{cells} in metaphase; one that blocks \omterm{def:b1:nucleic-acids:chain}{DNA} synthesis arrests them
+        in S) and count what accumulates.
+\end{enumerate}
+\end{method}
+
+\begin{example}[Turnover]\label{ex:b1:replication-mitosis:turnover}
+The \omterm{def:b1:body-plans-tissues:epithelium}{epithelium} of the small intestine is renewed every four days,
+the skin every month, the red \omterm{def:b1:cell-unit-of-life:cell}{cells} every four months from the marrow,
+which produces two million a second; a liver \omterm{def:b1:cell-unit-of-life:cell}{cell} divides once a year
+or so and a \omterm{def:b1:body-plans-tissues:nervous}{neuron} never. A tumour's \omterm{def:b1:cell-unit-of-life:cell}{cells} have lost the checkpoints:
+they divide when they should not, tolerate mis-segregated \omterm{def:b1:genomes:genome}{chromosomes},
+and accumulate the mutations that let them divide faster still.
+Chemotherapy exploits the difference: drugs that poison the \omterm{def:b1:replication-mitosis:mitosis}{spindle} or
+the polymerase kill the \omterm{def:b1:cell-unit-of-life:cell}{cells} that divide most.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:replication-mitosis:1}
+Explain why one strand at a fork is copied continuously and the other
+in fragments.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:replication-mitosis:2}
+List the \omterm{def:b1:enzymes:enzyme}{enzymes} and \omterm{def:b1:proteins:peptide}{proteins} at a \omterm{def:b1:replication-mitosis:fork}{replication fork} and the job of
+each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:replication-mitosis:3}
+From the DNA-content figure, read the \omterm{def:b1:nucleic-acids:chain}{DNA} content in G$_1$, G$_2$ and
+after \omterm{def:b1:replication-mitosis:mitosis}{mitosis}, and the number of \omterm{def:b1:genomes:genome}{chromosomes} in each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:replication-mitosis:4}
+Order the stages of \omterm{def:b1:replication-mitosis:mitosis}{mitosis} and give the defining event of each.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:replication-mitosis:5}
+Compute the number of \omterm{def:b1:replication-mitosis:fork}{Okazaki fragments} made in copying the human
+\omterm{def:b1:genomes:genome}{genome} (\num{6.4e9} pairs, fragments of \qty{150}{}), and the number of
+primers, primer removals and ligations this implies.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:replication-mitosis:6}
+Compute the error rate per human \omterm{def:b1:genomes:genome}{genome} per replication for a
+polymerase alone ($10^{-5}$), with proofreading ($10^{-7}$) and with
+mismatch repair ($10^{-9}$). How many mutations does each give per
+division?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:replication-mitosis:7}
+A somatic \omterm{def:b1:cell-unit-of-life:cell}{cell} loses \qty{80}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} of \omterm{def:b1:genomes:karyotype}{telomere} per division
+and starts with \qty{10}{kb}; it stops dividing at \qty{5}{kb}. How
+many divisions can it make? Why does a cancer \omterm{def:b1:cell-unit-of-life:cell}{cell} need telomerase?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:replication-mitosis:8}
+A \omterm{def:b1:body-plans-tissues:tissue}{tissue} has \qty{5}{\%} of its \omterm{def:b1:cell-unit-of-life:cell}{cells} in \omterm{def:b1:replication-mitosis:mitosis}{mitosis} and \qty{30}{\%} in
+S phase; \omterm{def:b1:replication-mitosis:mitosis}{mitosis} lasts one hour. Compute the cycle length and the
+length of S phase.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:replication-mitosis:9}
+A \omterm{def:b1:cell-unit-of-life:cell}{cell} has 2n $= 8$. Give the number of \omterm{def:b1:genomes:genome}{chromosomes}, of \omterm{def:b1:replication-mitosis:mitosis}{chromatids} and
+the \omterm{def:b1:nucleic-acids:chain}{DNA} content (in $q$) in G$_1$, G$_2$, metaphase, and each daughter
+after telophase.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:replication-mitosis:10}
+\emph{E. coli} needs \qty{40}{min} to replicate its \omterm{def:b1:genomes:genome}{chromosome} but
+divides every \qty{20}{min} in rich medium. Explain how, and compute
+how many origins and forks a \omterm{def:b1:cell-unit-of-life:cell}{cell} contains at the moment of division.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:replication-mitosis:11}
+Colchicine depolymerises \omterm{def:b1:eukaryotic-cell:cytoskeleton}{microtubules}. Predict what happens to a
+dividing \omterm{def:b1:cell-unit-of-life:cell}{cell} treated with it, to its \omterm{def:b1:genomes:genome}{chromosome} number if it then
+re-enters \omterm{def:b1:replication-mitosis:cycle}{interphase}, and why the drug is used to make \omterm{def:b1:genomes:karyotype}{karyotypes}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:replication-mitosis:12}
+"\omterm{def:b1:replication-mitosis:mitosis}{Mitosis} is a copying of the \omterm{def:b1:genomes:genome}{genome} followed by a counting." Discuss
+in a paragraph: what replication guarantees, what the \omterm{def:b1:replication-mitosis:mitosis}{spindle}
+guarantees, the checkpoints between them, and what fails in a \omterm{def:b1:cell-unit-of-life:cell}{cell}
+that mis-segregates a \omterm{def:b1:genomes:genome}{chromosome}.
+\end{exercise}
+
+\section{Problem: Copying a Human Genome}
+
+\begin{problem}[{Weekend problem --- an S phase of eight hours: forks
+timed, origins counted, fragments and primers tallied, errors reckoned,
+and a bacterium compared, ending on the minimum number of origins}]
+\label{pb:b1:replication-mitosis:1}
+A human \omterm{def:b1:cell-unit-of-life:cell}{cell} replicates $\num{6.4e9}$ \omterm{thm:b1:nucleic-acids:helix}{base pairs} in an S phase of
+\qty{8}{h}. A eukaryotic fork moves at \qty{50}{bp/s}; a bacterial
+fork at \qty{1000}{bp/s}. \omterm{def:b1:replication-mitosis:fork}{Okazaki fragments} are \qty{150}{}
+\omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} in eukaryotes and \qty{1500}{} in bacteria. Each
+\omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} added costs two \omterm{def:b1:water-small-molecules:atp}{ATP} equivalents (the triphosphate
+precursor). Error rates per base: $10^{-5}$ for the polymerase alone,
+$10^{-7}$ with proofreading, $10^{-9}$ with mismatch repair.
+
+\medskip
+\noindent\textbf{Part I --- Forks and origins.}
+\begin{enumerate}
+  \item How many \omterm{thm:b1:nucleic-acids:helix}{base pairs} does one fork copy in \qty{8}{h}?
+  \item An origin sends out two forks. How many \omterm{thm:b1:nucleic-acids:helix}{base pairs} does one
+        origin copy in \qty{8}{h}?
+  \item Compute the minimum number of origins needed to copy the
+        \omterm{def:b1:genomes:genome}{genome} in \qty{8}{h} if all fire at the start.
+  \item Compute the mean spacing of these origins along the \omterm{def:b1:nucleic-acids:chain}{DNA}, in
+        kilobases and in micrometres.
+  \item In reality origins fire throughout S phase and about
+        \num{40000} are used. Compute the mean spacing and the mean
+        distance one fork actually travels.
+  \item How long would the largest \omterm{def:b1:genomes:genome}{chromosome} (\qty{250}{Mb}) take to
+        copy from a single origin at its centre?
+  \item Explain why the number of origins, not the fork speed, is what
+        evolution adjusted to make S phase short.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Fragments and primers.}
+\begin{enumerate}[resume]
+  \item Compute the number of \omterm{def:b1:replication-mitosis:fork}{Okazaki fragments} made in one S phase.
+  \item Compute the number of \omterm{def:b1:nucleic-acids:chain}{RNA} primers laid down, including one
+        per leading strand per origin.
+  \item Compute the number of ligations needed.
+  \item Compute the total \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} polymerised (both strands of
+        the whole \omterm{def:b1:genomes:genome}{genome}).
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} equivalents spent on polymerisation, and the
+        mean rate in \omterm{def:b1:water-small-molecules:atp}{ATP} per second over S phase.
+  \item Compare with a resting \omterm{def:b1:cell-unit-of-life:cell}{cell}'s \omterm{def:b1:water-small-molecules:atp}{ATP} turnover of about $10^9$ per
+        second: what fraction of the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s energy goes to
+        polymerisation?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Errors.}
+\begin{enumerate}[resume]
+  \item Compute the number of errors per S phase at each of the three
+        error rates.
+  \item A \omterm{def:b1:genomes:gene}{gene}'s coding sequence is \qty{1.5}{kb}. With the full
+        machinery, what is the probability that a given \omterm{def:b1:genomes:gene}{gene} acquires
+        a mutation in one division?
+  \item A person's \omterm{def:b1:cell-unit-of-life:cell}{cells} undergo some $10^{16}$ divisions in a
+        lifetime. How many mutations in total, at $10^{-9}$? Why does
+        the body tolerate this?
+  \item A mutation disables mismatch repair. By what factor does the
+        mutation rate rise, and what does this do to the risk of
+        cancer over a lifetime?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The bacterium.}
+\emph{E. coli}: \qty{4.6}{Mb}, one origin, two forks.
+\begin{enumerate}[resume]
+  \item Compute the time to replicate the \omterm{def:b1:genomes:genome}{chromosome}.
+  \item In rich medium the \omterm{def:b1:cell-unit-of-life:cell}{cell} divides every \qty{20}{min}. How many
+        rounds of replication are under way at once, and how many
+        origins does a newborn \omterm{def:b1:cell-unit-of-life:cell}{cell} carry?
+  \item Compute the number of \omterm{def:b1:replication-mitosis:fork}{Okazaki fragments} per round and per
+        second.
+  \item Compute the errors per round at $10^{-9}$ and the fraction of
+        daughter \omterm{def:b1:cell-unit-of-life:cell}{cells} carrying a new mutation.
+  \item A culture of $10^9$ \omterm{def:b1:cell-unit-of-life:cell}{cells} per millilitre divides once. How
+        many new mutations appear in a millilitre, and how many hit a
+        given \omterm{def:b1:genomes:gene}{gene} of \qty{1}{kb}?
+  \item Explain why antibiotic resistance can be found in almost any
+        large culture of a sensitive strain.
+  \item Compare the two \omterm{def:b1:organism-environment:organism}{organisms}: \omterm{thm:b1:nucleic-acids:helix}{base pairs}, origins, fork speed,
+        S-phase duration, and the design that lets the larger \omterm{def:b1:genomes:genome}{genome}
+        be copied in a comparable time.
+  \item State the result: the minimum number of origins for a human
+        S phase of \qty{8}{h}, and the real number and spacing.
+\end{enumerate}
+\end{problem}

@@ -1,6 +1,607 @@
 \chapter{Amino Acids and Proteins}\label{ch:b1:proteins}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Boil an egg and the clear white turns opaque and firm; nothing has been
+added or removed, but every \omterm{def:b1:proteins:peptide}{protein} molecule in it has unfolded and
+tangled with its neighbours. Cool it and it stays cooked. Yet a small
+enzyme unfolded gently in a test tube, then left in plain \omterm{def:b1:water-small-molecules:buffer}{buffer}, folds
+back within minutes into its exact working shape, with no help from
+anything: the shape was written in the chain. \omterm{def:b1:proteins:peptide}{Proteins} are the working
+molecules of the \omterm{def:b1:cell-unit-of-life:cell}{cell} --- its enzymes, pumps, motors, scaffolds,
+antibodies, hormones --- and every one of them is a chain of \omterm{def:b1:proteins:aminoacid}{amino
+acids} folded into a shape that its sequence dictates. This chapter
+describes the twenty \omterm{def:b1:proteins:aminoacid}{amino acids}, the bond that joins them, the four
+levels of \omterm{def:b1:proteins:peptide}{protein} structure, the folding that turns a chain into a
+machine, the \omterm{def:b1:proteins:allostery}{cooperative} behaviour of \omterm{def:b1:proteins:peptide}{proteins} with several subunits,
+and the methods by which \omterm{def:b1:proteins:peptide}{proteins} are separated and seen.
 
-\emph{This chapter has not been written yet.}
+\section{Amino acids}
+
+\begin{definition}[Amino acid]\label{def:b1:proteins:aminoacid}
+An \emph{amino acid}\index{amino acid} has a central \emph{$\alpha$
+carbon} bearing an amino group ($-\mathrm{NH_2}$), a carboxyl group
+($-\mathrm{COOH}$), a hydrogen and a \emph{side chain}\index{side chain}
+$R$ that distinguishes the twenty standard amino acids of \omterm{def:b1:proteins:peptide}{proteins}. At
+the pH of the \omterm{def:b1:cell-unit-of-life:cell}{cell} the amino group is protonated and the carboxyl
+ionised: the molecule is a \emph{zwitterion}\index{zwitterion},
+$\mathrm{^+H_3N{-}CHR{-}COO^-}$, with no net charge. The $\alpha$ carbon
+is chiral in all but glycine, and living things use the L enantiomer
+only. Side chains group by their chemistry:
+\begin{center}
+\footnotesize
+\begin{tabular}{lll}
+\hline
+class & amino acids (three- and one-letter codes) & side chain \\
+\hline
+non-polar, aliphatic & Gly G, Ala A, Val V, Leu L, Ile I, Met M, Pro P & hydrocarbon; Pro a ring \\
+aromatic & Phe F, Tyr Y, Trp W & rings; Tyr and Trp absorb UV \\
+polar, uncharged & Ser S, Thr T, Cys C, Asn N, Gln Q & $-$OH, $-$SH, amide \\
+positively charged & Lys K, Arg R, His H & bases; His p$K_a$ 6.0 \\
+negatively charged & Asp D, Glu E & carboxylates, p$K_a$ 4 \\
+\hline
+\end{tabular}
+\end{center}
+Nine of them (His, Ile, Leu, Lys, Met, Phe, Thr, Trp, Val) are
+\emph{essential} for humans: we cannot make them and must eat them.
+\end{definition}
+
+\begin{proposition}[Ionisation]\label{prop:b1:proteins:ionisation}
+Each ionisable group of an \omterm{def:b1:proteins:aminoacid}{amino acid} has its own p$K_a$: about 2 for
+the $\alpha$-carboxyl, 9.5 for the $\alpha$-amino, and for the \omterm{def:b1:proteins:aminoacid}{side
+chains} 3.9 (Asp), 4.1 (Glu), 6.0 (His), 8.3 (Cys), 10.1 (Tyr), 10.5
+(Lys), 12.5 (Arg). The \emph{isoelectric point}\index{isoelectric
+point} p$I$ is the pH at which the net charge is zero --- the mean of
+the two p$K_a$ that bracket the neutral form; a \omterm{def:b1:proteins:peptide}{protein}'s p$I$ is set
+by its content of charged \omterm{def:b1:proteins:aminoacid}{side chains}, and at that pH it is least
+soluble and does not move in an electric field. Histidine, with a p$K_a$
+close to 7, is the residue that changes charge within the physiological
+range, and it sits in the active sites of many enzymes.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=2.1, ymin=0, ymax=13,
+  xlabel={equivalents of $\mathrm{OH^-}$ added}, ylabel={pH},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.5,1,1.5,2}, ytick={0,2,4,6,8,10,12},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.02:0.98, samples=80] {2.34 + log10(x/(1-x))};
+\addplot[very thick, omDef, domain=1.02:1.98, samples=80] {9.6 + log10((x-1)/(2-x))};
+\addplot[very thick, omDef, domain=0.98:1.02, samples=10] {5.97 + (x-1)*250};
+\draw[dashed, gray] (axis cs:0,2.34) -- (axis cs:0.5,2.34); \node[font=\scriptsize, anchor=west] at (axis cs:0.02,3.4) {p$K_1 = 2.34$: $\mathrm{COOH}/\mathrm{COO^-}$};
+\draw[dashed, gray] (axis cs:0,9.6) -- (axis cs:1.5,9.6); \node[font=\scriptsize, anchor=north west] at (axis cs:1.52,9.3) {p$K_2 = 9.6$: $\mathrm{NH_3^+}/\mathrm{NH_2}$};
+\draw[dashed, gray] (axis cs:0,5.97) -- (axis cs:1,5.97); \node[font=\scriptsize, anchor=south east] at (axis cs:0.98,6.1) {p$I = 5.97$: zwitterion};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.42,0.9) {$\mathrm{^+H_3N{-}CH_2{-}COOH}$};
+\node[font=\scriptsize, anchor=east] at (axis cs:0.93,8.5) {$\mathrm{^+H_3N{-}CH_2{-}COO^-}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:1.75,12.0) {$\mathrm{H_2N{-}CH_2{-}COO^-}$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Titration of glycine. Two buffering plateaus, at the p$K_a$ of
+the carboxyl and of the amino group; between them, at the \omterm{prop:b1:proteins:ionisation}{isoelectric
+point}, the \omterm{def:b1:proteins:aminoacid}{zwitterion} carries no net charge.}
+\end{omfigure}
+
+\section{The peptide bond}
+
+\begin{definition}[Peptide bond, polypeptide]\label{def:b1:proteins:peptide}
+The \emph{peptide bond}\index{peptide bond} joins the carboxyl of one
+\omterm{def:b1:proteins:aminoacid}{amino acid} to the amino group of the next by condensation (an amide
+bond, $\mathrm{-CO{-}NH-}$). A chain of \omterm{def:b1:proteins:aminoacid}{amino acids} so joined is a
+\emph{polypeptide}\index{polypeptide}: a \emph{backbone} of repeating
+$\mathrm{N{-}C_\alpha{-}C}$ units from which the \omterm{def:b1:proteins:aminoacid}{side chains} project,
+with an \emph{N-terminus} (free amino group) and a \emph{C-terminus}
+(free carboxyl). Sequences are written from N to C, the order of
+synthesis (\cref{ch:b1:gene-expression}). A \emph{protein}\index{protein}
+is one or more polypeptides folded into a definite shape; typical
+chains have \qtyrange{100}{1000}{} residues of mean mass \qty{110}{Da},
+so a protein of \qty{300}{} residues is \qty{33}{kDa}.
+\end{definition}
+
+\begin{proposition}[Geometry of the peptide bond]\label{prop:b1:proteins:geometry}
+The C--N bond of a peptide has partial double-bond character (the
+amide resonance): it is short, cannot rotate, and holds the six atoms
+$\mathrm{C_\alpha{-}C(=O){-}N(H){-}C_\alpha}$ in one plane, almost
+always with the two $\alpha$ carbons \emph{trans}. The backbone is
+therefore a chain of rigid planes hinged at the $\alpha$ carbons, each
+hinge having two rotations, $\phi$ (about N--$\mathrm{C_\alpha}$) and
+$\psi$ (about $\mathrm{C_\alpha}$--C), and steric clashes between \omterm{def:b1:proteins:aminoacid}{side
+chains} and backbone forbid most combinations of $\phi$ and $\psi$. The
+conformation of a \omterm{def:b1:proteins:peptide}{protein} is essentially the list of its $\phi$ and
+$\psi$ angles.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, line cap=round]
+  % two peptide planes
+  \fill[omDef!12, rounded corners=3pt] (0.3,-0.9) rectangle (3.3,0.9);
+  \fill[omDef!12, rounded corners=3pt] (3.9,-0.9) rectangle (6.9,0.9);
+  % atoms
+  \node (ca1) at (0,0) {$\mathrm{C_\alpha}$};
+  \node (c1) at (1.2,0.4) {C};
+  \node (o1) at (1.2,1.3) {O};
+  \node (n1) at (2.4,-0.4) {N};
+  \node (h1) at (2.4,-1.3) {H};
+  \node (ca2) at (3.6,0) {$\mathrm{C_\alpha}$};
+  \node (c2) at (4.8,0.4) {C};
+  \node (o2) at (4.8,1.3) {O};
+  \node (n2) at (6.0,-0.4) {N};
+  \node (h2) at (6.0,-1.3) {H};
+  \node (ca3) at (7.2,0) {$\mathrm{C_\alpha}$};
+  \draw[thick] (ca1) -- (c1); \draw[thick, double] (c1) -- (o1); \draw[very thick, omThm] (c1) -- (n1); \draw[thick] (n1) -- (h1); \draw[thick] (n1) -- (ca2);
+  \draw[thick] (ca2) -- (c2); \draw[thick, double] (c2) -- (o2); \draw[very thick, omThm] (c2) -- (n2); \draw[thick] (n2) -- (h2); \draw[thick] (n2) -- (ca3);
+  % side chains
+  \draw[thick] (ca1) -- ++(-0.5,-0.8) node[below] {$R_1$};
+  \draw[thick] (ca2) -- ++(0,-1.0) node[below] {$R_2$};
+  \draw[thick] (ca3) -- ++(0.5,-0.8) node[below] {$R_3$};
+  % rotation arrows phi/psi at ca2
+  \draw[->, omProp, thick] (2.9,-0.55) arc (200:340:0.35); \node[omProp, font=\scriptsize] at (3.05,-0.95) {$\phi$};
+  \draw[->, omProp, thick] (3.85,0.55) arc (160:20:0.35); \node[omProp, font=\scriptsize] at (4.2,1.0) {$\psi$};
+  \node[anchor=west, align=left] at (7.9,0.6) {\textcolor{omThm}{red}: the peptide bond, planar,\\ no rotation (partial double bond)};
+  \node[anchor=west, align=left] at (7.9,-0.5) {\textcolor{omProp}{orange}: the two free rotations\\ $\phi$ and $\psi$ at each $\alpha$ carbon};
+\end{tikzpicture}
+
+{\small Two \omterm{def:b1:proteins:peptide}{peptide bonds}. Each shaded plane holds six atoms rigidly;
+the chain bends only at the $\alpha$ carbons, through the angles $\phi$
+and $\psi$.}
+\end{omfigure}
+
+\section{Secondary structure}
+
+\begin{definition}[Secondary structure]\label{def:b1:proteins:secondary}
+The \emph{secondary structure}\index{secondary structure} of a \omterm{def:b1:proteins:peptide}{protein}
+is the local, regular folding of its backbone, held by \omterm{def:b1:water-small-molecules:water}{hydrogen bonds}
+between backbone C=O and N--H groups. Two patterns dominate. The
+\emph{$\alpha$ helix}\index{alpha helix@$\alpha$ helix}: a right-handed
+coil of 3.6 residues per turn, rising \qty{0.15}{nm} per residue
+(\qty{0.54}{nm} per turn), each C=O bonded to the N--H four residues
+ahead, with the \omterm{def:b1:proteins:aminoacid}{side chains} pointing outward. The \emph{$\beta$
+sheet}\index{beta sheet@$\beta$ sheet}: chains stretched almost fully
+(\qty{0.35}{nm} per residue) and laid side by side, parallel or
+antiparallel, bonded between neighbouring strands, with \omterm{def:b1:proteins:aminoacid}{side chains}
+alternating above and below the sheet. Between them, \emph{turns} and
+loops reverse the chain's direction. Proline, whose ring locks $\phi$,
+breaks helices; glycine, with no \omterm{def:b1:proteins:aminoacid}{side chain}, allows turns that no other
+residue can make.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.62\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=-180, xmax=180, ymin=-180, ymax=180,
+  xlabel={$\phi$ (degrees)}, ylabel={$\psi$ (degrees)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={-180,-90,0,90,180}, ytick={-180,-90,0,90,180},
+  clip=false,
+]
+\fill[omDef!35] (axis cs:-160,90) rectangle (axis cs:-50,180);
+\fill[omDef!35] (axis cs:-160,-180) rectangle (axis cs:-50,-150);
+\fill[omThm!35] (axis cs:-150,-70) rectangle (axis cs:-45,-10);
+\fill[omExo!35] (axis cs:40,10) rectangle (axis cs:80,70);
+\node[font=\scriptsize] at (axis cs:-105,140) {$\beta$ sheet};
+\node[font=\scriptsize] at (axis cs:-97,-40) {right-handed $\alpha$ helix};
+\node[font=\scriptsize, align=center] at (axis cs:60,100) {left-handed helix\\ (glycine only)};
+\node[font=\scriptsize, gray, align=center] at (axis cs:80,-100) {white: forbidden by\\ steric clashes};
+\draw[gray] (axis cs:-180,0) -- (axis cs:180,0); \draw[gray] (axis cs:0,-180) -- (axis cs:0,180);
+\end{axis}
+\end{tikzpicture}
+
+{\small The Ramachandran plot: the combinations of $\phi$ and $\psi$
+that a residue can adopt. Two large allowed regions correspond to the
+$\beta$ sheet and the right-handed $\alpha$ helix; most of the plane is
+forbidden by collisions between atoms.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.26\linewidth]{images/book3/pauling.jpg}
+
+{\small Linus Pauling (1901--1994), who deduced the $\alpha$ helix and
+the $\beta$ sheet in 1951 from the planarity of the \omterm{def:b1:proteins:peptide}{peptide bond} and
+the geometry of \omterm{def:b1:water-small-molecules:water}{hydrogen bonds}, before either had been seen in a
+\omterm{def:b1:proteins:peptide}{protein}. Photograph: Nobel Foundation, 1962, public domain.}
+\end{omfigure}
+
+\begin{example}[Helix and sheet by the numbers]\label{ex:b1:proteins:numbers}
+A membrane-spanning $\alpha$ helix must cross \qty{3}{nm} of
+hydrophobic core: $3/0.15 = 20$ residues, and indeed the transmembrane
+segments of \cref{ch:b1:membranes-transport} are runs of about twenty
+hydrophobic residues. A $\beta$ strand of the same length spans
+\qty{7}{nm}: silk fibroin is stacked antiparallel sheets of glycine and
+alanine, and a silk thread is stronger than steel of the same weight
+because the covalent backbones lie along the fibre.
+\end{example}
+
+\section{Tertiary and quaternary structure}
+
+\begin{definition}[Tertiary and quaternary structure]\label{def:b1:proteins:tertiary}
+The \emph{tertiary structure}\index{tertiary structure} is the complete
+three-dimensional arrangement of one \omterm{def:b1:proteins:peptide}{polypeptide}: its helices, sheets
+and loops packed together, often in several compact \emph{domains}
+that fold independently. It is held by non-covalent forces ---
+the \emph{\omterm{prop:b1:water-small-molecules:properties}{hydrophobic effect}} burying non-polar \omterm{def:b1:proteins:aminoacid}{side chains} in a core
+away from water, \omterm{def:b1:water-small-molecules:water}{hydrogen bonds}, salt bridges between charged \omterm{def:b1:proteins:aminoacid}{side
+chains}, \omterm{def:b1:water-small-molecules:bonds}{van der Waals} packing --- and sometimes by \emph{disulfide
+bridges}\index{disulfide bridge}, covalent S--S bonds between two
+cysteines, in \omterm{def:b1:proteins:peptide}{proteins} secreted to the oxidising outside. The
+\emph{quaternary structure}\index{quaternary structure} is the
+assembly of several \omterm{def:b1:proteins:peptide}{polypeptides} (subunits) into one \omterm{def:b1:proteins:peptide}{protein}:
+haemoglobin is two $\alpha$ and two $\beta$ chains. \emph{Globular}
+\omterm{def:b1:proteins:peptide}{proteins} are compact and water-soluble (enzymes, carriers);
+\emph{fibrous} \omterm{def:b1:proteins:peptide}{proteins} are extended and insoluble (\omterm{def:b1:body-plans-tissues:connective}{collagen}'s triple
+helix, the coiled coils of keratin and myosin, silk).
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.42\linewidth]{images/book3/ai/fig-hemoglobin-ribbon.png}
+
+{\small Haemoglobin: four subunits, two $\alpha$ (blue) and two $\beta$
+(red), each a bundle of $\alpha$ helices around a haem group (dark)
+whose iron binds one $\mathrm{O_2}$. The four sites do not act
+independently.}
+\end{omfigure}
+
+\begin{theorem}[The sequence determines the fold]\label{thm:b1:proteins:anfinsen}
+\index{protein folding}
+The three-dimensional structure of a \omterm{def:b1:proteins:peptide}{protein} is determined by its
+amino-acid sequence: the native fold is the conformation of lowest \omterm{prop:b1:water-small-molecules:gibbs}{free
+energy} that the chain can reach in its cellular environment, and the
+information needed to reach it is contained in the chain itself.
+\end{theorem}
+\begin{proof}[Evidence]
+Anfinsen (1961) unfolded ribonuclease A, a \qty{124}{}-residue enzyme
+with four \omterm{def:b1:proteins:tertiary}{disulfide bridges}, in concentrated urea with a reducing
+agent that broke the bridges: the chain lost all activity. Removing the
+urea and letting the cysteines re-oxidise slowly in air, he recovered
+the enzyme fully active, with its four bridges re-formed between the
+same eight cysteines out of the \qty{105}{} possible pairings --- the
+chain had found its own fold. Re-oxidised while still in urea, it
+formed random bridges and stayed inactive; a trace of the reducing
+agent then let it shuffle them until the native set, the most stable,
+was reached. Since then thousands of sequences have been folded from
+scratch in the test tube, and the fold of a new sequence can now be
+computed from it.
+\end{proof}
+
+\begin{proposition}[Denaturation]\label{prop:b1:proteins:denaturation}
+\index{denaturation (protein)}
+Heat, extremes of pH, urea, detergents or organic solvents unfold
+\omterm{def:b1:proteins:peptide}{proteins} by overwhelming the weak bonds that hold the fold: the chain
+loses its shape and its function, exposes its hydrophobic core, and
+aggregates with its neighbours. Small \omterm{def:b1:proteins:peptide}{proteins} refold when the
+denaturant is removed; large ones, and \omterm{def:b1:proteins:peptide}{proteins} in a crowded \omterm{def:b1:cell-unit-of-life:cell}{cell},
+often cannot, and the \omterm{def:b1:cell-unit-of-life:cell}{cell} keeps \emph{chaperones}\index{chaperone} ---
+\omterm{def:b1:proteins:peptide}{proteins} that bind unfolded chains, shield their hydrophobic surfaces,
+and give them repeated chances to fold correctly --- and destroys what
+stays misfolded. Fevers of a few degrees, and the \qty{42}{\celsius} at
+which brain \omterm{def:b1:proteins:peptide}{proteins} begin to unfold, mark the narrow margin of
+stability: a typical fold is only \qtyrange{20}{60}{kJ/mol} more stable
+than the unfolded chain, the worth of a few \omterm{def:b1:water-small-molecules:water}{hydrogen bonds}.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-12-egg-white-cooked.png}
+
+{\small Egg white raw and cooked: the same \omterm{def:b1:proteins:peptide}{proteins}, folded and
+soluble on the left, unfolded and aggregated into an opaque solid on
+the right. Nothing was added but heat.}
+\end{omfigure}
+
+\begin{example}[Collagen]\label{ex:b1:proteins:collagen}
+A quarter of a mammal's \omterm{def:b1:proteins:peptide}{protein} is \omterm{def:b1:body-plans-tissues:connective}{collagen}: three chains, each a
+left-handed helix of a thousand residues with glycine at every third
+position (Gly--X--Y, Y often hydroxyproline), wound together into a
+right-handed triple helix \qty{300}{nm} long, then packed side by side
+into fibrils cross-linked by \omterm{def:b1:water-small-molecules:bonds}{covalent bonds}. Glycine's absence of a
+\omterm{def:b1:proteins:aminoacid}{side chain} is what lets the three chains pack at the axis; a single
+substitution of glycine by any other residue kinks the helix and gives
+brittle bones. Vitamin C is needed to hydroxylate the prolines; without
+it the helix is unstable and the fibrils fail: scurvy.
+\end{example}
+
+\section{Allostery: haemoglobin}
+
+\begin{definition}[Allostery, cooperativity]\label{def:b1:proteins:allostery}
+A \omterm{def:b1:proteins:peptide}{protein} is \emph{allosteric}\index{allostery} when the binding of a
+ligand at one site changes the \omterm{def:b1:proteins:peptide}{protein}'s conformation and thereby its
+affinity at another site. When the sites are alike and the change
+raises the affinity of the others, binding is \emph{cooperative}\index{cooperativity}:
+the saturation curve is sigmoid rather than hyperbolic, and the
+\omterm{def:b1:proteins:peptide}{protein} switches from nearly empty to nearly full over a narrow range
+of ligand concentration. The \emph{Hill equation}\index{Hill equation}
+describes it:
+\[
+Y = \frac{P^n}{P_{50}^n + P^n},
+\]
+where $Y$ is the fraction of sites occupied, $P$ the ligand
+concentration (or partial pressure), $P_{50}$ the value at half
+saturation, and $n$ the Hill coefficient --- 1 for independent sites,
+up to the number of sites for perfect cooperativity.
+\end{definition}
+
+\begin{proposition}[Haemoglobin and myoglobin]\label{prop:b1:proteins:hemoglobin}
+Myoglobin, one chain with one haem, binds $\mathrm{O_2}$ with a
+hyperbola ($n = 1$, $P_{50} = \qty{0.37}{kPa}$): it is saturated at any
+pressure the \omterm{def:b1:body-plans-tissues:tissue}{tissues} offer and serves as a store in muscle.
+Haemoglobin, four subunits, binds \omterm{def:b1:proteins:allostery}{cooperatively} ($n \approx 2.8$,
+$P_{50} = \qty{3.5}{kPa}$): the first $\mathrm{O_2}$ bound shifts the
+tetramer from a low-affinity \emph{T state} toward a high-affinity
+\emph{R state}, so that it loads nearly fully at the lung's
+\qty{13}{kPa} and unloads a large fraction at the \omterm{def:b1:body-plans-tissues:tissue}{tissues}'
+\qty{5}{kPa}. Its affinity is further lowered, and unloading favoured,
+by acid and $\mathrm{CO_2}$ (the \emph{Bohr effect}) and by
+2,3-bisphosphoglycerate (BPG), which binds the T state: in a working
+muscle, or at altitude, more oxygen is released for the same pressure.
+The fetus makes a haemoglobin that binds BPG weakly, so its blood draws
+oxygen from the mother's across the placenta.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=14, ymin=0, ymax=1.08,
+  xlabel={partial pressure of $\mathrm{O_2}$ (\unit{kPa})}, ylabel={fraction of sites occupied $Y$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10,12,14}, ytick={0,0.25,0.5,0.75,1},
+  legend style={font=\small, at={(0.97,0.35)}, anchor=north east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.01:14, samples=120] {x/(0.37+x)};
+\addlegendentry{myoglobin, $n=1$, $P_{50} = \qty{0.37}{kPa}$}
+\addplot[very thick, omThm, domain=0.01:14, samples=120] {x^2.8/(3.5^2.8+x^2.8)};
+\addlegendentry{haemoglobin, $n=2.8$, $P_{50} = \qty{3.5}{kPa}$}
+\addplot[very thick, omProp, dashed, domain=0.01:14, samples=120] {x^2.8/(4.5^2.8+x^2.8)};
+\addlegendentry{haemoglobin in acid, $P_{50} = \qty{4.5}{kPa}$ (Bohr)}
+\draw[dashed, gray] (axis cs:13.3,0) -- (axis cs:13.3,1.0); \node[font=\scriptsize, anchor=south] at (axis cs:13.3,1.01) {lungs};
+\draw[dashed, gray] (axis cs:5.3,0) -- (axis cs:5.3,0.76); \node[font=\scriptsize, anchor=west] at (axis cs:5.45,0.07) {tissues};
+\end{axis}
+\end{tikzpicture}
+
+{\small Oxygen binding by myoglobin (hyperbolic) and haemoglobin
+(sigmoid). Between the lungs and the \omterm{def:b1:body-plans-tissues:tissue}{tissues} myoglobin releases almost
+nothing; haemoglobin releases a fifth of its load, and more when the
+\omterm{def:b1:body-plans-tissues:tissue}{tissue} is acid.}
+\end{omfigure}
+
+\begin{method}[Using the Hill equation]\label{met:b1:proteins:hill}
+\begin{enumerate}
+  \item Read $P_{50}$ from the curve at $Y = 0.5$; estimate $n$ from
+        the slope of $\log[Y/(1-Y)]$ against $\log P$ (the Hill plot),
+        which is a straight line of slope $n$ near $P_{50}$.
+  \item Compute $Y$ at the loading pressure (lungs) and at the
+        unloading pressure (\omterm{def:b1:body-plans-tissues:tissue}{tissues}); the difference is the fraction
+        of the carrying capacity delivered.
+  \item Multiply by the capacity: blood holds \qty{150}{g/L} of
+        haemoglobin, each gram binding \qty{1.34}{mL} of $\mathrm{O_2}$,
+        i.e.\ \qty{200}{mL} of $\mathrm{O_2}$ per litre when saturated.
+  \item To include the Bohr effect or BPG, use the shifted $P_{50}$ at
+        the \omterm{def:b1:body-plans-tissues:tissue}{tissues} only, where the acid is.
+\end{enumerate}
+\end{method}
+
+\section{Seeing and separating proteins}
+
+\begin{method}[Separating proteins]\label{met:b1:proteins:methods}
+\begin{enumerate}
+  \item \emph{Electrophoresis in SDS}: the detergent coats every chain
+        with negative charge in proportion to its length, so chains
+        migrate through a polyacrylamide gel by size alone; a ladder of
+        known masses calibrates the gel, and a stained band's position
+        gives the mass to a few percent.
+  \item \emph{Chromatography}: through a column of beads that retard
+        \omterm{def:b1:proteins:peptide}{proteins} by size (gel filtration: large ones elute first), by
+        charge (ion exchange), or by specific binding (affinity: an
+        immobilised ligand holds one \omterm{def:b1:proteins:peptide}{protein} and lets the rest through).
+        A purification is followed by the rise of specific activity
+        (\cref{ch:b1:cell-unit-of-life}).
+  \item \emph{Sequencing}: the gene's sequence, translated; or the
+        \omterm{def:b1:proteins:peptide}{protein} itself, cut into peptides and read by mass spectrometry.
+  \item \emph{Structure}: X-ray diffraction of a crystal, or electron
+        microscopy of frozen single particles, gives the position of
+        every atom; the ribbon drawings of this chapter are their
+        summaries.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book3/ai/b3-12-protein-gel.png}
+
+{\small A stained SDS--polyacrylamide gel. Each lane is a sample; each
+band a \omterm{def:b1:proteins:peptide}{protein} of one size; the left lane a ladder of markers of known
+mass. Small \omterm{def:b1:proteins:peptide}{proteins} run farther.}
+\end{omfigure}
+
+\begin{example}[Reading a gel]\label{ex:b1:proteins:gel}
+A crude extract shows dozens of bands; after affinity chromatography
+one band remains at the position of the \qty{33}{kDa} marker. Run
+without SDS and without reducing agent, the same \omterm{def:b1:proteins:peptide}{protein} migrates as a
+\qty{66}{kDa} species: it is a dimer of two identical chains held by a
+\omterm{def:b1:proteins:tertiary}{disulfide bridge}, which the reducing agent breaks and the detergent
+separates. Two gels, one line of reasoning, and the \omterm{def:b1:proteins:tertiary}{quaternary
+structure} is known.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:1}
+Draw or describe the general structure of an \omterm{def:b1:proteins:aminoacid}{amino acid} at pH 7, and
+classify Leu, Ser, Lys, Glu and Phe by \omterm{def:b1:proteins:aminoacid}{side chain}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:2}
+Define the four levels of \omterm{def:b1:proteins:peptide}{protein} structure and the bonds that hold
+each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:3}
+A \omterm{def:b1:proteins:peptide}{protein} has \qty{450}{} residues. Estimate its mass. If it were a
+single $\alpha$ helix, how long would it be? A single $\beta$ strand?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:4}
+From the oxygen-binding figure, read the saturation of haemoglobin at
+\qty{13.3}{kPa} and at \qty{5.3}{kPa}, and the fraction delivered.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:5}
+Compute the net charge of the peptide Lys--Gly--Asp--Ala at pH 7, at
+pH 2 and at pH 12, using the p$K_a$ values of the chapter, and estimate
+its \omterm{prop:b1:proteins:ionisation}{isoelectric point}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:6}
+Explain why proline is rarely found inside $\alpha$ helices and why
+glycine is found at tight turns, from the geometry of the backbone.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:7}
+In Anfinsen's experiment, what fraction of random re-oxidations would
+give the native set of four disulfides? (Count the ways of pairing
+eight cysteines.) What did the actual recovery of full activity
+prove?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:8}
+Using the \omterm{def:b1:proteins:allostery}{Hill equation} with $n = 2.8$ and $P_{50} = \qty{3.5}{kPa}$,
+compute $Y$ at \qty{2}{kPa}, \qty{3.5}{kPa} and \qty{8}{kPa}. Repeat
+with $n = 1$. Which \omterm{def:b1:proteins:peptide}{protein} delivers more between \qty{8}{} and
+\qty{2}{kPa}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:9}
+A \omterm{def:b1:proteins:peptide}{protein} runs as one band of \qty{50}{kDa} on an SDS gel and elutes
+from a gel-filtration column at \qty{200}{kDa}. Give its \omterm{def:b1:proteins:tertiary}{quaternary
+structure} and say how you would check for \omterm{def:b1:proteins:tertiary}{disulfide bridges} between
+the subunits.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:10}
+\omterm{def:b1:cell-unit-of-life:cell}{Sickle-cell} haemoglobin has valine instead of glutamate at position 6
+of the $\beta$ chain, on the surface. Explain, from the chemistry of
+the two \omterm{def:b1:proteins:aminoacid}{side chains}, why the mutant \omterm{def:b1:proteins:peptide}{protein} polymerises when
+deoxygenated, and why the disease shows in the \omterm{def:b1:body-plans-tissues:tissue}{tissues} rather than the
+lungs.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:11}
+A fold is stable by only \qty{40}{kJ/mol}. Compute the fraction of
+molecules unfolded at equilibrium at \qty{37}{\celsius} ($K = e^{-\Delta G/RT}$),
+and at \qty{45}{\celsius} if $\Delta G$ has fallen to
+\qty{10}{kJ/mol}. Why is such marginal stability useful to a \omterm{def:b1:cell-unit-of-life:cell}{cell}?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:12}
+"A \omterm{def:b1:proteins:peptide}{protein} is a sequence that folds into a shape, and the shape is the
+function." Discuss in a paragraph with Anfinsen, \omterm{prop:b1:proteins:denaturation}{chaperones}, sickle
+\omterm{def:b1:cell-unit-of-life:cell}{cell} and \omterm{def:b1:proteins:allostery}{allostery}: where the sentence holds and where the \omterm{def:b1:cell-unit-of-life:cell}{cell} must
+intervene.
+\end{exercise}
+
+\section{Problem: Haemoglobin at Work}
+
+\begin{problem}[{Weekend problem --- oxygen carried from lung to
+muscle, at rest, in a sprint, on a mountain and before birth, ending on
+the oxygen delivered per litre of blood}]
+\label{pb:b1:proteins:1}
+Blood holds \qty{150}{g/L} of haemoglobin; \qty{1}{g} binds
+\qty{1.34}{mL} of $\mathrm{O_2}$. Haemoglobin obeys the \omterm{def:b1:proteins:allostery}{Hill equation}
+with $n = 2.8$ and $P_{50} = \qty{3.5}{kPa}$ at pH 7.4; myoglobin has
+$n = 1$ and $P_{50} = \qty{0.37}{kPa}$. Partial pressures of
+$\mathrm{O_2}$: \qty{13.3}{kPa} in the lungs at sea level,
+\qty{5.3}{kPa} in resting \omterm{def:b1:body-plans-tissues:tissue}{tissues}. Take $2.8\ln 3.5 = 3.51$,
+$2.8\ln 5.3 = 4.67$, $2.8\ln 13.3 = 7.25$, $2.8\ln 2.7 = 2.78$,
+$2.8\ln 4.5 = 4.21$, $2.8\ln 7 = 5.45$, $2.8\ln 4 = 3.88$,
+$2.8\ln 2.6 = 2.68$.
+
+\medskip
+\noindent\textbf{Part I --- At rest.}
+\begin{enumerate}
+  \item Compute the oxygen capacity of a litre of blood.
+  \item Compute $P^{2.8}$ for $P = 3.5$, $5.3$ and $13.3$ kPa (as
+        $e^{2.8\ln P}$).
+  \item Compute the saturation $Y$ of haemoglobin in the lungs and in
+        the \omterm{def:b1:body-plans-tissues:tissue}{tissues}.
+  \item Compute the fraction of the load delivered and the oxygen
+        delivered per litre of blood, in millilitres.
+  \item A resting human consumes \qty{250}{mL} of $\mathrm{O_2}$ per
+        minute. What cardiac output does this delivery require?
+  \item Compute the saturation of myoglobin at the same two pressures
+        and the oxygen it would deliver per litre if it replaced
+        haemoglobin. Conclude.
+  \item Explain in one sentence what \omterm{def:b1:proteins:allostery}{cooperativity} buys.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- A sprint.}
+In a sprinting muscle the pH falls to 7.2 and the local pressure of
+$\mathrm{O_2}$ to \qty{2.7}{kPa}; the Bohr effect raises $P_{50}$ to
+\qty{4.5}{kPa} there.
+\begin{enumerate}[resume]
+  \item Compute $Y$ at \qty{2.7}{kPa} with $P_{50} = \qty{3.5}{kPa}$
+        (no Bohr effect).
+  \item Compute $Y$ at \qty{2.7}{kPa} with $P_{50} = \qty{4.5}{kPa}$.
+  \item Compute the oxygen delivered per litre in the two cases
+        (loading in the lungs unchanged) and the gain from the Bohr
+        effect.
+  \item The muscle's myoglobin is at $P = \qty{2.7}{kPa}$. What is its
+        saturation, and what happens to it if the pressure falls to
+        \qty{0.5}{kPa} during a contraction?
+  \item Explain why the Bohr effect is a form of \omterm{def:b1:proteins:allostery}{allostery} and where
+        the protons act.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- A mountain.}
+At \qty{4000}{m} the lungs' $\mathrm{O_2}$ pressure is \qty{7}{kPa}.
+Within days the red \omterm{def:b1:cell-unit-of-life:cell}{cells} raise their BPG, shifting $P_{50}$ to
+\qty{4.0}{kPa}; within weeks the marrow raises haemoglobin to
+\qty{180}{g/L}.
+\begin{enumerate}[resume]
+  \item Compute the saturation in the lungs at \qty{7}{kPa} with
+        $P_{50} = \qty{3.5}{kPa}$, and the delivery per litre (\omterm{def:b1:body-plans-tissues:tissue}{tissues}
+        at \qty{5.3}{kPa}). Compare with sea level.
+  \item Compute the lung and \omterm{def:b1:body-plans-tissues:tissue}{tissue} saturations with
+        $P_{50} = \qty{4.0}{kPa}$, and the delivery.
+  \item Explain why lowering the affinity helps although it lowers
+        the loading in the lungs.
+  \item Compute the delivery per litre with $P_{50} = \qty{4.0}{kPa}$
+        and \qty{180}{g/L} of haemoglobin.
+  \item Would a still lower affinity ($P_{50} = \qty{6}{kPa}$) help at
+        \qty{7}{kPa}? Compute the two saturations and decide.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Before birth.}
+Fetal haemoglobin has $P_{50} = \qty{2.6}{kPa}$; in the placenta the
+pressure of $\mathrm{O_2}$ is \qty{4}{kPa} on both sides.
+\begin{enumerate}[resume]
+  \item Compute the saturation of maternal haemoglobin at \qty{4}{kPa}.
+  \item Compute the saturation of fetal haemoglobin at \qty{4}{kPa}.
+  \item Explain how oxygen moves from mother to fetus although the
+        pressure is the same on both sides.
+  \item Fetal haemoglobin has $\gamma$ chains instead of $\beta$, which
+        bind BPG weakly. Explain how this produces the lower $P_{50}$.
+  \item At birth the fetal blood must unload in \omterm{def:b1:body-plans-tissues:tissue}{tissues} at
+        \qty{5.3}{kPa}. Compute the fetal delivery per litre from lungs
+        at \qty{13.3}{kPa}, and say why the switch to adult
+        haemoglobin over the first months is useful.
+  \item A mutation raises the adult $P_{50}$ to \qty{5}{kPa}. Predict
+        the person's arterial saturation at sea level, and the
+        consequence for delivery.
+  \item Explain why a carrier with $P_{50} = \qty{3.5}{kPa}$ and no
+        \omterm{def:b1:proteins:allostery}{cooperativity} ($n = 1$) would be a poor oxygen carrier: compute
+        its delivery.
+  \item State the result: the oxygen delivered per litre of blood at
+        rest and in a sprinting muscle, and the two properties of
+        haemoglobin that make the difference.
+\end{enumerate}
+\end{problem}

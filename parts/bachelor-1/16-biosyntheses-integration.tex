@@ -1,6 +1,507 @@
 \chapter{Biosyntheses and the Integrated Cell}\label{ch:b1:biosyntheses-integration}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+At eight in the morning a liver is turning the sugar of breakfast into
+\omterm{def:b1:carbohydrates:polysaccharide}{glycogen} and \omterm{def:b1:lipids:triglyceride}{fat}; at three the next morning the same liver is making
+sugar out of the \omterm{def:b1:proteins:aminoacid}{amino acids} of muscle and pouring it into the blood
+for a brain that has eaten nothing for nine hours. Nothing in the
+\omterm{def:b1:enzymes:enzyme}{enzymes} has changed; what has changed is which of them are switched on.
+The previous chapters took the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s molecules apart; this one puts
+them together --- the syntheses of sugars, \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}, \omterm{def:b1:lipids:triglyceride}{fats} and \omterm{def:b1:proteins:aminoacid}{amino
+acids} --- and then asks how a \omterm{def:b1:cell-unit-of-life:cell}{cell}, and an \omterm{def:b1:organism-environment:organism}{organism}, decide at each
+moment which pathways run. The answer is a small set of shared
+currencies, a few \omterm{def:b1:enzymes:enzyme}{enzymes} at the crossroads, and hormones that tell
+every \omterm{def:b1:cell-unit-of-life:cell}{cell} the state of the whole.
 
-\emph{This chapter has not been written yet.}
+\section{What a synthesis needs}
+
+\begin{proposition}[The three requirements of anabolism]\label{prop:b1:biosyntheses-integration:needs}
+\index{anabolism}
+Every biosynthesis needs \emph{carbon skeletons}, drawn from a handful
+of intermediates of \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} and the \omterm{def:b1:respiration-fermentation:krebs}{Krebs cycle}; \emph{reducing
+power}, supplied as \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}; and \emph{energy}, supplied as \omterm{def:b1:water-small-molecules:atp}{ATP}.
+Catabolism and anabolism therefore meet at the same crossroads ---
+glucose-6-phosphate, triose phosphate, pyruvate, \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA},
+$\alpha$-ketoglutarate, oxaloacetate --- but run on separate \omterm{def:b1:enzymes:enzyme}{enzymes} at
+the irreversible steps, so that each direction can be switched
+independently, and they use separate \omterm{def:b1:enzymes:enzyme}{coenzymes} for their electrons:
+NADH, kept oxidised, for taking electrons away in catabolism; \omterm{def:b1:biosyntheses-integration:ppp}{NADPH},
+kept reduced, for handing them over in synthesis.
+\end{proposition}
+
+\begin{definition}[The pentose phosphate pathway]\label{def:b1:biosyntheses-integration:ppp}
+\index{pentose phosphate pathway}\index{NADPH}
+The \emph{pentose phosphate pathway} of the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} oxidises
+glucose-6-phosphate to ribulose-5-phosphate and $\mathrm{CO_2}$,
+reducing two $\mathrm{NADP^+}$ to NADPH; its non-oxidative branch then
+interconverts five-, four-, six- and seven-carbon sugar phosphates, so
+that the \omterm{def:b1:cell-unit-of-life:cell}{cell} can make ribose-5-phosphate for \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} when it needs
+pentoses, NADPH when it needs reducing power (\omterm{def:b1:lipids:triglyceride}{fat} synthesis, defence
+against oxidants), or both, and return the rest to \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}. It is
+the main source of NADPH in animal \omterm{def:b1:cell-unit-of-life:cell}{cells}; in plants the chloroplast's
+\omterm{prop:b1:photosynthesis:lightreactions}{light reactions} supply NADPH by day.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  hub/.style={draw, thick, rounded corners=3pt, fill=omDef!12, inner sep=3pt, align=center},
+  prod/.style={draw, thick, rounded corners=3pt, fill=omExo!15, inner sep=3pt, align=center},
+  fuel/.style={draw, thick, rounded corners=3pt, fill=omProp!15, inner sep=3pt, align=center}]
+  \node[hub] (g6p) at (0,4.5) {glucose-6-P};
+  \node[hub] (tp) at (0,2.8) {triose-P};
+  \node[hub] (pyr) at (0,1.1) {pyruvate};
+  \node[hub] (accoa) at (0,-0.6) {acetyl-CoA};
+  \node[hub] (krebs) at (0,-2.4) {Krebs cycle\\ ($\alpha$-KG, OAA)};
+  \draw[<->, thick] (g6p) -- (tp); \draw[<->, thick] (tp) -- (pyr); \draw[->, thick] (pyr) -- (accoa); \draw[->, thick] (accoa) -- (krebs);
+  % left: stores and fuels in
+  \node[fuel] (gly) at (-4.2,4.5) {glycogen, starch}; \draw[<->, thick] (gly) -- (g6p);
+  \node[fuel] (lac) at (-4.2,1.1) {lactate}; \draw[<->, thick] (lac) -- (pyr);
+  \node[fuel] (fa) at (-4.2,-0.6) {fatty acids}; \draw[<->, thick] (fa) -- (accoa) node[pos=0.62, below=2pt, font=\scriptsize] {$\beta$-oxidation / synthesis};
+  \node[fuel] (aa) at (-4.2,-2.4) {amino acids}; \draw[<->, thick] (aa) -- (krebs) node[pos=0.4, below=2pt, font=\scriptsize] {transamination};
+  % right: products
+  \node[prod] (ppp) at (4.3,4.5) {pentose phosphate pathway:\\ NADPH, ribose-5-P $\to$ nucleotides}; \draw[->, thick] (g6p) -- (ppp);
+  \node[prod] (glyc) at (4.3,2.8) {glycerol $\to$ lipids}; \draw[->, thick] (tp) -- (glyc);
+  \node[prod] (ala) at (4.3,1.1) {alanine, serine, glycine}; \draw[<->, thick] (pyr) -- (ala);
+  \node[prod] (chol) at (4.3,-0.6) {cholesterol, steroids;\\ ketone bodies}; \draw[->, thick] (accoa) -- (chol);
+  \node[prod] (glu) at (4.3,-2.4) {glutamate, aspartate\\ and their families; haem}; \draw[<->, thick] (krebs) -- (glu);
+  \draw[->, very thick, omThm] (1.4,-2.0) -- (1.4,0.65) node[pos=0.5, rotate=90, anchor=south, font=\scriptsize, omThm] {gluconeogenesis};
+\end{tikzpicture}
+
+{\small The crossroads of metabolism. Six hubs of the central pathways
+(blue) receive fuels and stores (orange) and supply every biosynthesis
+(green). \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{Gluconeogenesis} (red) runs the middle of the map upward.}
+\end{omfigure}
+
+\section{Making glucose: gluconeogenesis}
+
+\begin{definition}[Gluconeogenesis]\label{def:b1:biosyntheses-integration:gluconeogenesis}
+\index{gluconeogenesis}
+\emph{Gluconeogenesis} makes glucose from \omterm{def:b1:carbohydrates:monosaccharide}{non-carbohydrate} precursors
+--- lactate, pyruvate, glycerol and the carbon skeletons of most \omterm{def:b1:proteins:aminoacid}{amino
+acids} --- in the liver (and a little in the kidney). It runs \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}
+backward through its seven reversible steps and bypasses the three
+irreversible ones with different \omterm{def:b1:enzymes:enzyme}{enzymes}: pyruvate is carboxylated to
+oxaloacetate (in the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion}, one \omterm{def:b1:water-small-molecules:atp}{ATP}) and decarboxylated to
+phosphoenolpyruvate (one GTP); fructose-1,6-bisphosphate is
+hydrolysed to fructose-6-phosphate; glucose-6-phosphate is
+hydrolysed to free glucose, which \omterm{def:b1:flowering-plant-organization:organs}{leaves} the \omterm{def:b1:cell-unit-of-life:cell}{cell}. Per glucose: 6 \omterm{def:b1:water-small-molecules:atp}{ATP}
+equivalents and 2 NADH, against the 2 \omterm{def:b1:water-small-molecules:atp}{ATP} \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} yields --- the
+price of running a downhill path uphill.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  m/.style={draw, thick, rounded corners=3pt, inner sep=3pt, fill=omDef!10, align=center}]
+  \node[m] (glc) at (0,5.2) {glucose};
+  \node[m] (g6p) at (0,3.9) {glucose-6-P};
+  \node[m] (f6p) at (0,2.6) {fructose-6-P};
+  \node[m] (fbp) at (0,1.3) {fructose-1,6-bisP};
+  \node[m] (pep) at (0,-0.5) {phosphoenolpyruvate};
+  \node[m] (pyr) at (0,-1.9) {pyruvate};
+  \node[m] (oaa) at (5.2,-1.9) {oxaloacetate};
+  % glycolysis (down, left side)
+  \draw[->, thick, omDef!70!black] (glc.west) ++(-0.2,0) -- ++(-1.0,0) |- (g6p.west) node[pos=0.25, left, font=\scriptsize, align=right] {hexokinase\\ ATP};
+  \draw[->, thick, omDef!70!black] (f6p.west) ++(-0.2,0) -- ++(-1.0,0) |- (fbp.west) node[pos=0.25, left, font=\scriptsize, align=right] {PFK\\ ATP};
+  \draw[->, thick, omDef!70!black] (pep.west) ++(-0.2,0) -- ++(-1.0,0) |- (pyr.west) node[pos=0.25, left, font=\scriptsize, align=right] {pyruvate kinase\\ ATP made};
+  \draw[<->, thick] (g6p) -- (f6p); \draw[<->, thick] (fbp) -- (pep) node[midway, right, font=\scriptsize] {reversible steps (shared)};
+  % gluconeogenesis (up, right side)
+  \draw[->, thick, omThm] (g6p.east) ++(0.2,0) -- ++(1.0,0) |- (glc.east) node[pos=0.25, right, font=\scriptsize, align=left] {glucose-6-phosphatase\\ (liver only)};
+  \draw[->, thick, omThm] (fbp.east) ++(0.2,0) -- ++(1.0,0) |- (f6p.east) node[pos=0.25, right, font=\scriptsize, align=left] {fructose-1,6-\\ bisphosphatase};
+  \draw[->, thick, omThm] (pyr) -- (oaa) node[midway, below=3pt, font=\scriptsize] {pyruvate carboxylase, ATP};
+  \draw[->, thick, omThm] (oaa) |- (pep.east);
+  \node[anchor=south, font=\scriptsize, omThm] at (3.6,-0.4) {PEP carboxykinase, GTP};
+  \node[anchor=north, align=center, gray] at (1.0,-2.7) {blue: glycolysis (down); red: the three bypasses of gluconeogenesis (up)\\ cost of one glucose from two pyruvate: 4 ATP $+$ 2 GTP $+$ 2 NADH};
+\end{tikzpicture}
+
+{\small \omterm{def:b1:respiration-fermentation:glycolysis}{Glycolysis} and \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis} share seven reversible
+reactions and differ at three irreversible ones, each bypassed by a
+separate \omterm{def:b1:enzymes:enzyme}{enzyme}. Separate \omterm{def:b1:enzymes:enzyme}{enzymes} mean separate control: the liver can
+switch one direction on and the other off.}
+\end{omfigure}
+
+\begin{proposition}[What can and cannot become glucose]\label{prop:b1:biosyntheses-integration:cannot}
+Lactate, glycerol, and the \omterm{def:b1:proteins:aminoacid}{amino acids} that yield pyruvate or
+Krebs-cycle intermediates (all but leucine and lysine) can be turned
+into glucose. \omterm{def:b1:lipids:fattyacid}{Fatty acids} cannot, in animals: their $\beta$-oxidation
+gives \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, whose two carbons enter the cycle and leave as two
+$\mathrm{CO_2}$ before any oxaloacetate is gained, so there is no net
+route from \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} to sugar. Plants, fungi and bacteria possess the
+\emph{glyoxylate cycle}, a shortcut that skips the two decarboxylations
+and lets a germinating \omterm{def:b1:lipids:triglyceride}{oil} seed turn its \omterm{def:b1:lipids:triglyceride}{fat} into the sugar its
+seedling needs. A starving mammal, by contrast, must make its glucose
+from \omterm{def:b1:proteins:peptide}{protein}.
+\end{proposition}
+
+\begin{example}[The Cori cycle]\label{ex:b1:biosyntheses-integration:cori}
+A sprinting muscle ferments \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} to lactate, which enters the
+blood; the liver takes the lactate up, oxidises it to pyruvate, makes
+glucose from it at 6 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose, and returns the glucose to the
+blood for the muscle to use again. The muscle has gained 2 \omterm{def:b1:water-small-molecules:atp}{ATP} per
+glucose without oxygen and passed a bill of 6 to the liver, which
+pays it with oxygen at leisure: the "oxygen debt" of a sprint is
+repaid largely in the liver.
+\end{example}
+
+\section{Storing: glycogen and fat}
+
+\begin{definition}[Glycogen synthesis]\label{def:b1:biosyntheses-integration:glycogensynthesis}
+Glucose is stored as \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} by activating glucose-6-phosphate to
+\emph{UDP-glucose} (one UTP), which \emph{\omterm{def:b1:carbohydrates:polysaccharide}{glycogen} synthase} adds to
+the non-reducing ends of the existing tree; a \emph{branching \omterm{def:b1:enzymes:enzyme}{enzyme}}
+cuts and re-attaches short chains to make the $\alpha(1{\to}6)$
+branches (\cref{ch:b1:carbohydrates}). Synthase and phosphorylase are
+regulated in opposite directions by the same signals: the
+phosphorylation that switches phosphorylase on switches synthase off,
+so the tree is never built and dismantled at once.
+\end{definition}
+
+\begin{definition}[Fatty acid synthesis]\label{def:b1:biosyntheses-integration:fasynthesis}
+\index{fatty acid synthesis}
+\omterm{def:b1:lipids:fattyacid}{Fatty acids} are made in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} from \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} exported from the
+\omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion}. \emph{\omterm{def:b1:respiration-fermentation:pdh}{Acetyl-CoA} carboxylase}, the regulated step,
+carboxylates it (one \omterm{def:b1:water-small-molecules:atp}{ATP}) to malonyl-CoA; \emph{\omterm{def:b1:lipids:fattyacid}{fatty acid} synthase}
+then adds two carbons at a time from malonyl-CoA to a growing chain,
+reducing each addition with two \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}, until palmitate (C16) is
+released: 8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 \omterm{def:b1:water-small-molecules:atp}{ATP} and 14 \omterm{def:b1:biosyntheses-integration:ppp}{NADPH} per palmitate. Elongation
+and desaturation in the \omterm{def:b1:eukaryotic-cell:endomembrane}{endoplasmic reticulum} make the other acids;
+esterification with glycerol-3-phosphate (from triose phosphate)
+makes \omterm{def:b1:lipids:triglyceride}{triglycerides}. The pathway is not $\beta$-oxidation reversed:
+different \omterm{def:b1:enzymes:enzyme}{enzymes}, a different compartment, malonyl-CoA instead of
+\omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, \omterm{def:b1:biosyntheses-integration:ppp}{NADPH} instead of $\mathrm{FADH_2}$ and NADH --- and
+malonyl-CoA blocks the transport of \omterm{def:b1:lipids:fattyacid}{fatty acids} into the \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion},
+so a \omterm{def:b1:cell-unit-of-life:cell}{cell} does not make \omterm{def:b1:lipids:triglyceride}{fat} and burn it at the same time.
+\end{definition}
+
+\begin{example}[Fat from sugar]\label{ex:b1:biosyntheses-integration:fatfromsugar}
+A liver given more glucose than it can store as \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} makes \omterm{def:b1:lipids:triglyceride}{fat}:
+glucose to pyruvate to \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} (losing a third of the carbon as
+$\mathrm{CO_2}$ and gaining \omterm{def:b1:water-small-molecules:atp}{ATP}), \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} to palmitate at the cost of
+that \omterm{def:b1:water-small-molecules:atp}{ATP} and of \omterm{def:b1:biosyntheses-integration:ppp}{NADPH} from the \omterm{def:b1:biosyntheses-integration:ppp}{pentose phosphate pathway}, palmitate to
+\omterm{def:b1:lipids:triglyceride}{triglyceride} shipped to adipose \omterm{def:b1:body-plans-tissues:tissue}{tissue}. Some \qty{15}{\%} of the
+sugar's energy is lost in the conversion; the rest is stored nine
+times more compactly than \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} (\cref{ch:b1:lipids}). The reverse
+--- \omterm{def:b1:lipids:triglyceride}{fat} to sugar --- is impossible.
+\end{example}
+
+\section{Nitrogen: amino acids and nucleotides}
+
+\begin{definition}[Nitrogen assimilation, transamination]\label{def:b1:biosyntheses-integration:nitrogen}
+\index{transamination}\index{glutamate}
+Ammonium enters organic matter almost entirely through
+\emph{glutamate}: glutamate dehydrogenase adds it to
+$\alpha$-ketoglutarate, and glutamine synthetase adds a second to
+glutamate's \omterm{def:b1:proteins:aminoacid}{side chain} (one \omterm{def:b1:water-small-molecules:atp}{ATP}), making glutamine. From these two
+donors, \emph{transaminases} (aminotransferases, with a vitamin
+B$_6$ \omterm{def:b1:enzymes:enzyme}{coenzyme}) move the amino group onto any $\alpha$-keto acid,
+building \omterm{def:b1:proteins:aminoacid}{amino acids} from the carbon skeletons of the central
+pathways: the glutamate family from $\alpha$-ketoglutarate, the
+aspartate family from oxaloacetate, alanine and serine from pyruvate
+and 3-phosphoglycerate. Plants and bacteria make all twenty; animals
+have lost the long pathways to nine of them, the \emph{essential} \omterm{def:b1:proteins:aminoacid}{amino
+acids}, and take them from food. The same transaminases, run backward,
+strip nitrogen from surplus \omterm{def:b1:proteins:aminoacid}{amino acids} for excretion as ammonia (fish),
+urea (mammals) or uric acid (birds, insects).
+\end{definition}
+
+\begin{example}[Nucleotides]\label{ex:b1:biosyntheses-integration:nucleotides}
+A \omterm{def:b1:nucleic-acids:nucleotide}{purine} ring is assembled on ribose-5-phosphate from glycine,
+aspartate, two glutamines, two one-carbon units and $\mathrm{CO_2}$,
+at the cost of six \omterm{def:b1:water-small-molecules:atp}{ATP}; a \omterm{def:b1:nucleic-acids:nucleotide}{pyrimidine} from aspartate and carbamoyl
+phosphate. Deoxynucleotides are made from ribonucleotides by reducing
+the sugar, using \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}. A \omterm{def:b1:cell-unit-of-life:cell}{cell} about to divide makes some $10^{10}$
+\omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} in an hour; the drugs that block these syntheses ---
+methotrexate, 5-fluorouracil --- stop dividing \omterm{def:b1:cell-unit-of-life:cell}{cells} first, which is
+why they treat cancer.
+\end{example}
+
+\section{The integrated mammal}
+
+\begin{proposition}[Fed and fasting]\label{prop:b1:biosyntheses-integration:fedfasting}
+\index{insulin}\index{glucagon}
+The \omterm{def:b1:mammal-organization:organ}{organs} share the work. After a meal, \emph{insulin} from the
+pancreas tells the liver to store glucose as \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} and convert the
+surplus to \omterm{def:b1:lipids:triglyceride}{fat}, the muscles to take up glucose and store \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}, the
+adipose \omterm{def:b1:body-plans-tissues:tissue}{tissue} to take up \omterm{def:b1:lipids:triglyceride}{fat}; the blood glucose, risen to
+\qty{8}{mmol/L}, returns to \qty{5}{} in two hours. Between meals,
+\emph{glucagon} tells the liver to break its \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} down and, as it
+runs low, to make glucose from lactate, glycerol and \omterm{def:b1:proteins:aminoacid}{amino acids}, and
+the adipose \omterm{def:b1:body-plans-tissues:tissue}{tissue} to release \omterm{def:b1:lipids:fattyacid}{fatty acids}, which the muscles and the
+liver burn in place of glucose; the brain, which cannot burn \omterm{def:b1:lipids:triglyceride}{fat},
+keeps its \qty{120}{g} of glucose a day. In a fast of days the liver
+turns \omterm{def:b1:lipids:fattyacid}{fatty acids} into \emph{ketone bodies}, small acids the brain can
+use, and the demand for glucose --- and for the \omterm{def:b1:proteins:peptide}{protein} that makes it
+--- falls by two thirds. The hormonal mechanisms belong to the Year 2
+volume; the metabolic logic is this chapter's.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=24, ymin=0, ymax=10.8,
+  xlabel={time of day (h)}, ylabel={blood glucose (\unit{mmol/L})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,4,8,12,16,20,24}, ytick={0,2,4,6,8,10},
+  clip=false,
+]
+\addplot[very thick, omDef, smooth] coordinates {(0,4.8) (4,4.6) (7,4.5) (8,7.5) (9,7.0) (10,5.5) (11,5.0) (12,4.9) (13,7.8) (14,6.8) (15,5.4) (16,5.0) (18,4.9) (19.5,7.6) (20.5,6.9) (22,5.4) (24,4.8)};
+\draw[thick, omProp] (axis cs:7.5,0) -- (axis cs:7.5,0.5); \draw[thick, omProp] (axis cs:12.5,0) -- (axis cs:12.5,0.5); \draw[thick, omProp] (axis cs:19,0) -- (axis cs:19,0.5);
+\node[font=\scriptsize, omProp, anchor=south] at (axis cs:7.5,0.55) {meal};
+\node[font=\scriptsize, omProp, anchor=south] at (axis cs:12.5,0.55) {meal};
+\node[font=\scriptsize, omProp, anchor=south] at (axis cs:19,0.55) {meal};
+\fill[omExo!25] (axis cs:8,8.6) rectangle (axis cs:11,9.4); \node[font=\scriptsize, anchor=south] at (axis cs:9.5,9.5) {insulin: storing};
+\fill[omThm!20] (axis cs:0,8.6) rectangle (axis cs:7,9.4); \node[font=\scriptsize, anchor=south] at (axis cs:3.5,9.5) {glucagon: liver releasing};
+\fill[omThm!20] (axis cs:22,8.6) rectangle (axis cs:24,9.4);
+\draw[dashed, gray] (axis cs:0,5) -- (axis cs:24,5);
+\end{axis}
+\end{tikzpicture}
+
+{\small Blood glucose over a day. Each meal raises it for two hours
+while insulin drives storage; between meals and through the night,
+glucagon keeps it near \qty{5}{mmol/L} from the liver's \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} and
+\omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}. The \omterm{def:b1:organism-environment:homeostasis}{set point} holds within a factor of two.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.52\linewidth]{images/book3/ai/b3-16-liver-lobule-micrograph.png}
+
+{\small A liver lobule: plates of hepatocytes radiating from a central
+vein, bathed in blood from the gut. These \omterm{def:b1:cell-unit-of-life:cell}{cells} store \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}, make
+glucose, build \omterm{def:b1:lipids:triglyceride}{fat} and ketone bodies, and dispose of nitrogen --- the
+metabolic clearing-house of the body.}
+\end{omfigure}
+
+\begin{method}[Reading a metabolic state]\label{met:b1:biosyntheses-integration:state}
+\begin{enumerate}
+  \item Ask which fuel is abundant: high glucose means storage
+        (\omterm{def:b1:carbohydrates:polysaccharide}{glycogen}, then \omterm{def:b1:lipids:triglyceride}{fat}); low glucose means mobilisation.
+  \item Follow the signals: insulin activates synthases and
+        inactivates phosphorylase and lipase; glucagon does the reverse
+        --- mostly through phosphorylation of the same \omterm{def:b1:enzymes:enzyme}{enzymes}
+        (\cref{ch:b1:enzymes}).
+  \item Check the crossroads: \omterm{def:b1:water-small-molecules:atp}{ATP} and citrate block PFK and open
+        \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}; AMP does the opposite; malonyl-CoA blocks \omterm{def:b1:lipids:triglyceride}{fat}
+        burning while \omterm{def:b1:lipids:triglyceride}{fat} is being made; \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} activates the
+        carboxylase that starts \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}.
+  \item Assign the \omterm{def:b1:mammal-organization:organ}{organs}: liver (stores, makes and exports glucose;
+        makes ketones and urea), muscle (stores \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} for itself,
+        exports lactate and alanine), adipose \omterm{def:b1:body-plans-tissues:tissue}{tissue} (stores and
+        releases \omterm{def:b1:lipids:triglyceride}{fat}), brain (burns glucose, then ketones).
+\end{enumerate}
+\end{method}
+
+\section{The integrated plant}
+
+\begin{proposition}[Source and sink]\label{prop:b1:biosyntheses-integration:sourcesink}
+By day a \omterm{def:b1:flowering-plant-organization:organs}{leaf}'s \omterm{def:b1:eukaryotic-cell:plastid}{chloroplasts} export triose phosphate to the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol},
+where it is made into \emph{sucrose} for export in the phloem
+(\cref{ch:b1:plant-transport}) to the \omterm{def:b1:flowering-plant-organization:organs}{roots}, fruits and growing tips;
+what the phloem cannot take is kept in the chloroplast as
+\emph{\omterm{def:b1:carbohydrates:polysaccharide}{starch}}, a transient store, and mobilised at night to keep the
+sucrose flowing. Where a mammal's liver decides between \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} and
+export by hormones, a \omterm{def:b1:flowering-plant-organization:organs}{leaf} decides between \omterm{def:b1:carbohydrates:polysaccharide}{starch} and sucrose by the
+level of phosphate in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}, which controls the exporter of the
+chloroplast envelope. A plant regulates by the concentrations of its
+own metabolites, \omterm{def:b1:mammal-organization:organ}{organ} by \omterm{def:b1:mammal-organization:organ}{organ}; the mammal adds a nervous and
+hormonal command over the whole.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book3/ai/b3-16-variegated-leaf-iodine.png}
+
+{\small A variegated \omterm{def:b1:flowering-plant-organization:organs}{leaf} before and after the iodine test: \omterm{def:b1:carbohydrates:polysaccharide}{starch}
+(blue-black) has been made only where \omterm{def:b1:photosynthesis:pigments}{chlorophyll} was. The white
+regions, which imported sucrose from the green ones, made no \omterm{def:b1:carbohydrates:polysaccharide}{starch}
+of their own.}
+\end{omfigure}
+
+\begin{example}[A night's starch]\label{ex:b1:biosyntheses-integration:nightstarch}
+A \omterm{def:b1:flowering-plant-organization:organs}{leaf} sets aside as \omterm{def:b1:carbohydrates:polysaccharide}{starch} about half of what it fixes by day and
+degrades it at an almost constant rate through the night, so that the
+store runs out just before dawn: shorten the night artificially and
+\omterm{def:b1:carbohydrates:polysaccharide}{starch} is left over; lengthen it and the plant starves in the last
+hours. The rate is adjusted within the first hour of darkness to the
+size of the store and the expected length of the night --- a
+computation done with \omterm{def:b1:enzymes:enzyme}{enzymes} and a clock, in a \omterm{def:b1:cell-unit-of-life:cell}{cell} with no brain.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:biosyntheses-integration:1}
+Name the three things a biosynthesis needs and the pathway that
+supplies most of an animal \omterm{def:b1:cell-unit-of-life:cell}{cell}'s \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:biosyntheses-integration:2}
+List the three irreversible steps of \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} and the \omterm{def:b1:enzymes:enzyme}{enzyme} that
+bypasses each in \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:biosyntheses-integration:3}
+From the blood-glucose figure, read the peak after breakfast, the
+time to return to \qty{5}{mmol/L}, and the lowest overnight value.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:biosyntheses-integration:4}
+Why can a germinating sunflower seed make sugar from its \omterm{def:b1:lipids:triglyceride}{oil} and a
+starving human cannot?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:biosyntheses-integration:5}
+Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} cost of making one glucose from two lactate, and the
+net cost of one turn of the Cori cycle (muscle gains 2, liver spends 6).
+Who pays, and with what?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:biosyntheses-integration:6}
+One palmitate needs 8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 \omterm{def:b1:water-small-molecules:atp}{ATP} and 14 \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}. How many glucose
+molecules must pass through \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} and pyruvate dehydrogenase to
+supply the \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, and how many through the \omterm{def:b1:biosyntheses-integration:ppp}{pentose phosphate
+pathway} (2 \omterm{def:b1:biosyntheses-integration:ppp}{NADPH} each) to supply the \omterm{def:b1:biosyntheses-integration:ppp}{NADPH}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:biosyntheses-integration:7}
+Explain why \omterm{def:b1:biosyntheses-integration:fasynthesis}{fatty acid synthesis} and $\beta$-oxidation use different
+\omterm{def:b1:enzymes:enzyme}{enzymes}, different compartments and different \omterm{def:b1:enzymes:enzyme}{coenzymes}, and how
+malonyl-CoA prevents them from running together.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:biosyntheses-integration:8}
+Write the \omterm{def:b1:biosyntheses-integration:nitrogen}{transamination} of alanine with $\alpha$-ketoglutarate and
+name the products. Which direction runs after a \omterm{def:b1:proteins:peptide}{protein} meal, and
+which in a fast?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:biosyntheses-integration:9}
+A patient lacks glucose-6-phosphatase. Predict the effects on blood
+glucose between meals, on the liver's size, and on blood lactate, with
+reasons.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:biosyntheses-integration:10}
+The brain needs \qty{120}{g} of glucose a day and \qty{1}{g} of \omterm{def:b1:proteins:peptide}{protein}
+yields \qty{0.55}{g} of glucose. Compute the \omterm{def:b1:proteins:peptide}{protein} a fasting person
+would lose per day to feed the brain by \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis} alone, and the
+muscle it represents (\qty{20}{\%} \omterm{def:b1:proteins:peptide}{protein}). Explain what ketone bodies
+change, if they cut the brain's glucose need to \qty{40}{g}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:biosyntheses-integration:11}
+Insulin activates \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} synthase and inactivates \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}
+phosphorylase; glucagon does the reverse. Explain why both cannot be
+active at once, what would happen if they were (compute the \omterm{def:b1:water-small-molecules:atp}{ATP} wasted
+per cycle: one UTP to add a glucose, none to remove it), and what
+this "futile cycle" is used for in bumblebees warming their flight
+muscles.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:biosyntheses-integration:12}
+"A \omterm{def:b1:cell-unit-of-life:cell}{cell} has no plan; it has valves." Discuss in a paragraph: the
+\omterm{def:b1:proteins:allostery}{allosteric} and hormonal control of the crossroads \omterm{def:b1:enzymes:enzyme}{enzymes}, the role of
+separate \omterm{def:b1:enzymes:enzyme}{enzymes} for opposite directions, and what emerges from them
+that looks like a plan.
+\end{exercise}
+
+\section{Problem: Twenty-four Hours of a Human}
+
+\begin{problem}[{Weekend problem --- a day without breakfast: the
+stores weighed, the brain fed, the protein counted and the fat
+mobilised, ending on the hours of fasting the liver's glycogen can
+cover}]
+\label{pb:b1:biosyntheses-integration:1}
+A \qty{70}{kg} adult expends \qty{8.4}{MJ} a day (\qty{100}{W} on
+average) and holds: liver \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} \qty{100}{g}, muscle \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}
+\qty{400}{g}, \omterm{def:b1:lipids:triglyceride}{fat} \qty{12}{kg}, \omterm{def:b1:proteins:peptide}{protein} \qty{10}{kg} (of which
+\qty{6}{kg} in muscle). The brain uses \qty{120}{g} of glucose a day
+(\qty{5}{g/h}); the other glucose-dependent \omterm{def:b1:body-plans-tissues:tissue}{tissues} (red \omterm{def:b1:cell-unit-of-life:cell}{cells}, kidney
+medulla) \qty{40}{g}. Energy: \omterm{def:b1:carbohydrates:monosaccharide}{carbohydrate} \qty{17}{kJ/g}, \omterm{def:b1:lipids:triglyceride}{fat}
+\qty{38}{kJ/g}, \omterm{def:b1:proteins:peptide}{protein} \qty{17}{kJ/g}; \qty{1}{g} of \omterm{def:b1:proteins:peptide}{protein} yields
+\qty{0.55}{g} of glucose by \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}; \qty{1}{g} of \omterm{def:b1:lipids:triglyceride}{fat} yields
+\qty{0.1}{g} of glucose (from its glycerol).
+
+\medskip
+\noindent\textbf{Part I --- The stores.}
+\begin{enumerate}
+  \item Compute the energy held in each of the four stores, in
+        megajoules, and the days of expenditure each represents.
+  \item Which store can supply glucose to the blood directly? Why not
+        muscle \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}?
+  \item Compute the total glucose the body needs per day for its
+        glucose-dependent \omterm{def:b1:body-plans-tissues:tissue}{tissues}.
+  \item Compute the glucose in the blood itself (\qty{5}{mmol/L},
+        \qty{5}{L}, \qty{180}{g/mol}) and the minutes it would feed
+        the brain alone.
+  \item What fraction of the daily expenditure is the brain's glucose?
+  \item After a meal, the liver's \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} is full and the blood
+        glucose still rising. Name the next fate of the glucose and
+        the hormone that directs it.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The night.}
+The last meal ends at 20:00; from then on the liver alone supplies the
+blood's glucose.
+\begin{enumerate}[resume]
+  \item At \qty{160}{g} of glucose per day, what is the hourly demand
+        of the glucose-dependent \omterm{def:b1:body-plans-tissues:tissue}{tissues}?
+  \item How long does \qty{100}{g} of liver \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} last at that
+        rate, if nothing else supplies glucose?
+  \item In fact \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis} supplies about a third of the glucose
+        from the first hours. Recompute the duration of the \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}.
+  \item At what time in the morning does the liver's \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} run out
+        by each estimate?
+  \item The muscles, meanwhile, burn \omterm{def:b1:lipids:fattyacid}{fatty acids}. Compute the \omterm{def:b1:lipids:triglyceride}{fat}
+        oxidised overnight (\qty{12}{h}) if they account for
+        \qty{60}{\%} of the resting expenditure and burn \omterm{def:b1:lipids:triglyceride}{fat} only.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The next day, without eating.}
+\begin{enumerate}[resume]
+  \item With the \omterm{def:b1:carbohydrates:polysaccharide}{glycogen} gone, the \qty{160}{g} of glucose must come
+        from \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}. Compute the \omterm{def:b1:proteins:peptide}{protein} needed per day, and
+        the mass of muscle it represents.
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} the liver spends making \qty{160}{g} of
+        glucose from pyruvate (6 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose) and its energy at
+        \qty{50}{kJ/mol}.
+  \item Compute the contribution of \omterm{def:b1:lipids:triglyceride}{fat}'s glycerol: how much \omterm{def:b1:lipids:triglyceride}{fat} is
+        oxidised per day if it covers all the non-glucose expenditure,
+        and how much glucose its glycerol yields?
+  \item Recompute the \omterm{def:b1:proteins:peptide}{protein} needed with the glycerol's contribution
+        subtracted.
+  \item At that rate, how many days until half the muscle is gone?
+  \item From the third day the liver makes ketone bodies and the brain
+        takes two thirds of its energy from them; the glucose need
+        falls to \qty{40}{g} for the brain plus \qty{40}{g} for the
+        rest. Recompute the \omterm{def:b1:proteins:peptide}{protein} loss per day and the days to lose
+        half the muscle.
+  \item Compute the days the \omterm{def:b1:lipids:triglyceride}{fat} store lasts at \qty{8.4}{MJ} a day
+        (it falls to \qty{6.5}{MJ} in prolonged fasting: recompute).
+  \item Explain why a fasting person dies of \omterm{def:b1:proteins:peptide}{protein} loss before the
+        \omterm{def:b1:lipids:triglyceride}{fat} is gone, and what ketone bodies delay.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The valves.}
+\begin{enumerate}[resume]
+  \item Name the \omterm{def:b1:enzymes:enzyme}{enzyme} of the liver that must be active at 03:00 and
+        inactive at 09:00, and the one that must be the reverse, for
+        \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}.
+  \item Name the signal (hormone) that sets them each way, and the
+        chemical modification through which it acts.
+  \item A liver \omterm{def:b1:cell-unit-of-life:cell}{cell} at 03:00 has high \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} from \omterm{def:b1:lipids:triglyceride}{fat} oxidation.
+        Name the \omterm{def:b1:enzymes:enzyme}{enzyme} of \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis} this activates and the
+        \omterm{def:b1:enzymes:enzyme}{enzyme} of \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis} that \omterm{def:b1:water-small-molecules:atp}{ATP} inhibits at the same time.
+  \item Explain why \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis} and \omterm{def:b1:respiration-fermentation:glycolysis}{glycolysis}, running at once in
+        the same \omterm{def:b1:cell-unit-of-life:cell}{cell}, would only turn \omterm{def:b1:water-small-molecules:atp}{ATP} into heat, and how the
+        separate \omterm{def:b1:enzymes:enzyme}{enzymes} at the three bypasses prevent it.
+  \item A diabetic without insulin has high blood glucose and yet the
+        liver keeps making glucose and ketone bodies. Explain the
+        paradox from the valves.
+  \item State the result: the hours of fasting the liver's \omterm{def:b1:carbohydrates:polysaccharide}{glycogen}
+        covers (with and without \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenesis}), the daily \omterm{def:b1:proteins:peptide}{protein}
+        loss before and after the switch to ketone bodies, and the
+        days the \omterm{def:b1:lipids:triglyceride}{fat} store lasts.
+\end{enumerate}
+\end{problem}

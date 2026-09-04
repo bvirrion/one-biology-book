@@ -18,9 +18,9 @@ collège SVT biology parts, Book 2 the lycée S SVT biology parts, Books
 of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
-**Current state: Books 1 and 2 written in English (2026-08-28 and
-2026-09-02); Books 3–5 are titled placeholders** (chapter architecture in
-place, no chapter written).
+**Current state: Books 1, 2 and 3 written in English (2026-08-28,
+2026-09-02 and 2026-09-04); Books 4–5 are titled placeholders** (chapter
+architecture in place, no chapter written).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -55,6 +55,27 @@ place, no chapter written).
   Punnett squares and $p^2+2pq+q^2$; no derivatives or logarithms. The
   entry file redefines `\indexspace` with more shrink — without it the
   multicol index reports two overfull columns on its last page.
+
+- **Book 3** (University Biology, Year 1): 29 chapters + 29 solutions
+  files, ~340 pp. Physics/math Year-1 calibration: every chapter carries
+  exactly 12 exercises ramped 4×★, 5×★★, 3×★★★ in order, plus one
+  ~25-question weekend `problem` (Parts I–IV with `[resume]`) ending on a
+  named quantified result (a $K_m$, a P/O ratio, a xylem tension, a
+  carrying capacity, a tree length); every exercise and problem has a
+  keyed solution. University-lecture register: the quantitative laws are
+  `theorem`s with Year-1 derivations (Michaelis–Menten, Nernst, logistic
+  growth, the disc equation, island biogeography), classic experiments
+  are `\begin{proof}[Evidence]`, the rest `\admitted`. 185 figures:
+  TikZ/pgfplots schematics, 69 AI illustrations (`images/book3/ai/`,
+  prompts in `PROMPTS.md`, 14 overlay-label bases named `fig-*`) and 13
+  free-license photographs (`images/book3/`, records in `CREDITS.md`),
+  all credited in `frontmatter/image-credits-book3.tex`. ~5,450
+  generated `\omterm` links; `tools/term_config/book3_en.py` is curated
+  (DROP for the cross-sense words — energy, water, plasma, matrix,
+  vessel, smooth/rough, saturated, operator, resistance, epidermis, stem,
+  character — STOP for "substrate", EXTRA plurals). Math level guard:
+  derivatives, exp/ln, first-order ODEs, log axes; no partial
+  differential equations, no matrices, no statistics beyond a mean.
 
 `CONTRIBUTING.md` holds the authoritative style/structure conventions;
 `THEME.md` documents the One Course cover brand. Read both before writing

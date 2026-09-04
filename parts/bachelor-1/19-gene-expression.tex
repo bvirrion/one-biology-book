@@ -1,6 +1,531 @@
 \chapter{Gene Expression: Transcription and Translation}\label{ch:b1:gene-expression}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A \omterm{def:b1:genomes:gene}{gene} of thirty thousand \omterm{thm:b1:nucleic-acids:helix}{base pairs} is read in a quarter of an hour
+into a working copy, cut down to two thousand letters, shipped out of
+the nucleus, and translated by twenty-five \omterm{def:b1:gene-expression:ribosome}{ribosomes} at once into a
+\omterm{def:b1:proteins:peptide}{protein} of five hundred \omterm{def:b1:proteins:aminoacid}{amino acids} --- one every four seconds, for as
+long as the copy lasts. The \omterm{def:b1:cell-unit-of-life:cell}{cell} spends more energy on this than on
+anything else it does. This chapter follows the information from \omterm{def:b1:nucleic-acids:chain}{DNA}
+to \omterm{def:b1:proteins:peptide}{protein}: the copying of a \omterm{def:b1:genomes:gene}{gene} into \omterm{def:b1:nucleic-acids:chain}{RNA}, the editing of that \omterm{def:b1:nucleic-acids:chain}{RNA} in
+eukaryotes, the code that maps triplets of bases onto \omterm{def:b1:proteins:aminoacid}{amino acids}, the
+\omterm{def:b1:gene-expression:ribosome}{ribosome} that reads it, and what happens to a \omterm{def:b1:proteins:peptide}{protein} once it is made.
 
-\emph{This chapter has not been written yet.}
+\section{From gene to protein}
+
+\begin{proposition}[The flow of information]\label{prop:b1:gene-expression:dogma}
+\index{gene expression}\index{transcription}\index{translation}
+Genetic information flows from \omterm{def:b1:nucleic-acids:chain}{DNA} to \omterm{def:b1:nucleic-acids:chain}{RNA} to \omterm{def:b1:proteins:peptide}{protein}.
+\emph{Transcription} copies one strand of a \omterm{def:b1:genomes:gene}{gene} into an \omterm{def:b1:nucleic-acids:chain}{RNA} of the
+same sequence as the other strand (with U for T); \emph{translation}
+reads the \omterm{def:b1:nucleic-acids:rnas}{messenger RNA} three bases at a time and assembles the
+corresponding \omterm{def:b1:proteins:aminoacid}{amino acids} into a \omterm{def:b1:proteins:peptide}{polypeptide}. Every step uses the
+pairing of bases: \omterm{def:b1:nucleic-acids:chain}{DNA} with \omterm{def:b1:nucleic-acids:chain}{RNA} in transcription, messenger with
+\omterm{def:b1:gene-expression:trna}{transfer RNA} in translation. The sequence of a \omterm{def:b1:proteins:peptide}{protein} is thus a
+transcript of the sequence of its \omterm{def:b1:genomes:gene}{gene}, and a change of one base can
+change one \omterm{def:b1:proteins:aminoacid}{amino acid} --- the link between mutation and phenotype.
+Information does not flow back from \omterm{def:b1:proteins:peptide}{protein} to nucleic acid; the one
+reverse step, \omterm{def:b1:nucleic-acids:chain}{RNA} copied into \omterm{def:b1:nucleic-acids:chain}{DNA} by retroviruses, does not touch
+\omterm{def:b1:proteins:peptide}{protein}.
+\end{proposition}
+
+\section{Transcription}
+
+\begin{definition}[RNA polymerase, promoter, transcription]\label{def:b1:gene-expression:transcription}
+\index{RNA polymerase}\index{promoter}
+\emph{\omterm{def:b1:nucleic-acids:chain}{RNA} polymerase} synthesises \omterm{def:b1:nucleic-acids:chain}{RNA} on a \omterm{def:b1:nucleic-acids:chain}{DNA} template, $5' \to 3'$,
+from the four ribonucleoside triphosphates, without a primer. It
+starts at a \emph{promoter}, a sequence just upstream of the \omterm{def:b1:genomes:gene}{gene}
+that it recognises and binds; in bacteria a subunit called
+$\sigma$ (\emph{sigma}) does the recognising, at two conserved
+stretches ten and thirty-five pairs before the start. The \omterm{def:b1:enzymes:enzyme}{enzyme} opens
+about fifteen pairs of the helix into a \emph{transcription bubble},
+copies the \emph{template strand} (read $3' \to 5'$) into an \omterm{def:b1:nucleic-acids:chain}{RNA}
+identical in sequence to the other, \emph{coding} strand, and moves
+along at about fifty \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} a second, re-closing the helix behind
+it; the \omterm{def:b1:nucleic-acids:chain}{RNA} peels off as it is made. It stops at a
+\emph{terminator}: in bacteria a self-complementary sequence whose \omterm{def:b1:nucleic-acids:chain}{RNA}
+folds into a hairpin that pulls the transcript free. Many polymerases
+can follow one another along a \omterm{def:b1:genomes:gene}{gene}, so a transcript can be started
+every second.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % DNA duplex left and right of bubble
+  \draw[very thick, omDef] (0,0.5) -- (3.0,0.5); \draw[very thick, omDef!50] (0,-0.5) -- (3.0,-0.5);
+  \draw[very thick, omDef] (8.0,0.5) -- (11.5,0.5); \draw[very thick, omDef!50] (8.0,-0.5) -- (11.5,-0.5);
+  \foreach \x in {0.4,0.9,...,2.9} { \draw[gray!60] (\x,0.5) -- (\x,-0.5); }
+  \foreach \x in {8.4,8.9,...,11.4} { \draw[gray!60] (\x,0.5) -- (\x,-0.5); }
+  % bubble: strands separate
+  \draw[very thick, omDef] (3.0,0.5) .. controls (4.0,1.3) and (7.0,1.3) .. (8.0,0.5);
+  \draw[very thick, omDef!50] (3.0,-0.5) .. controls (4.0,-1.3) and (7.0,-1.3) .. (8.0,-0.5);
+  % polymerase
+  \draw[thick, omProp!80!black, fill=omProp!25, opacity=0.85] (5.5,0) ellipse (2.3 and 1.7);
+  \node[omProp!80!black, anchor=east] at (2.7,1.5) {RNA polymerase}; \draw[omProp!80!black] (2.75,1.45) -- (3.6,1.0);
+  % RNA transcript: paired to template in bubble, then exiting
+  \draw[very thick, omThm] (4.0,-0.85) .. controls (5.0,-0.75) .. (6.0,-0.75) .. controls (6.5,-0.4) and (6.3,1.2) .. (5.2,2.3);
+  \node[omThm, anchor=south] at (5.1,2.35) {RNA, $5'$ end emerging};
+  \draw[thin, omThm] (6.0,-0.8) -- (6.4,-1.95);
+  \node[omThm, anchor=north, font=\scriptsize] at (6.4,-2.0) {$3'$: growing end of the RNA};
+  % labels
+  \node[anchor=east, omDef] at (-0.1,0.5) {$5'$ coding strand $3'$};
+  \node[anchor=east, omDef!70!black] at (-0.1,-0.5) {$3'$ template strand $5'$};
+  \draw[->, very thick, omProp!80!black] (8.6,1.9) -- (10.2,1.9) node[midway, above] {direction of transcription};
+  \node[anchor=north, align=center, gray] at (5.5,-2.55) {the RNA is complementary to the template strand and identical (U for T) to the coding strand;\\ about fifteen base pairs are open at a time, and the helix re-forms behind the enzyme};
+\end{tikzpicture}
+
+{\small Transcription. The polymerase opens a bubble, pairs
+ribonucleotides to the template strand and joins them $5' \to 3'$; the
+\omterm{def:b1:nucleic-acids:chain}{RNA} \omterm{def:b1:flowering-plant-organization:organs}{leaves} through a \omterm{def:b1:membranes-transport:transporters}{channel} as the \omterm{def:b1:enzymes:enzyme}{enzyme} advances.}
+\end{omfigure}
+
+\begin{proposition}[Eukaryotic transcription and RNA processing]\label{prop:b1:gene-expression:processing}
+\index{splicing}\index{messenger RNA}\index{cap}\index{poly-A tail}
+Eukaryotes have three polymerases: I for the large \omterm{def:b1:nucleic-acids:rnas}{ribosomal RNAs}, II
+for \omterm{def:b1:nucleic-acids:rnas}{messenger RNAs}, III for transfer and small \omterm{def:b1:nucleic-acids:chain}{RNAs}. Polymerase II does
+not recognise its \omterm{def:b1:gene-expression:transcription}{promoter} alone: a set of \emph{general transcription
+factors} assembles on it (at a TATA sequence about thirty pairs
+upstream in many \omterm{def:b1:genomes:gene}{genes}) and recruits the \omterm{def:b1:enzymes:enzyme}{enzyme}, and regulatory
+\omterm{def:b1:proteins:peptide}{proteins} bound near or far modulate the rate
+(\cref{ch:b1:expression-control}). The primary transcript is
+\emph{processed} in the nucleus: a modified guanine \emph{cap} is added
+to the $5'$ end, a tail of some two hundred adenines (\emph{poly-A})
+to the $3'$ end, and the \omterm{def:b1:genomes:gene}{introns} are removed by \emph{splicing} --- a
+complex of small \omterm{def:b1:nucleic-acids:chain}{RNAs} and \omterm{def:b1:proteins:peptide}{proteins}, the \emph{spliceosome}, recognises
+the GU at each \omterm{def:b1:genomes:gene}{intron}'s start and the AG at its end, cuts, and joins
+the \omterm{def:b1:genomes:gene}{exons}. Only then is the mature messenger exported to the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}.
+Many \omterm{def:b1:genomes:gene}{genes} are spliced in more than one way (\emph{alternative
+splicing}), so that one \omterm{def:b1:genomes:gene}{gene} yields several \omterm{def:b1:proteins:peptide}{proteins}; the twenty
+thousand human \omterm{def:b1:genomes:gene}{genes} make perhaps a hundred thousand.
+\end{proposition}
+\begin{proof}[Evidence]
+Sharp and Roberts (1977) hybridised a viral \omterm{def:b1:nucleic-acids:rnas}{messenger RNA} to the \omterm{def:b1:nucleic-acids:chain}{DNA}
+of its \omterm{def:b1:genomes:gene}{gene} and looked at the hybrids in the \omterm{prop:b1:cell-unit-of-life:microscopes}{electron microscope}: the
+\omterm{def:b1:nucleic-acids:chain}{RNA} paired with the \omterm{def:b1:nucleic-acids:chain}{DNA} in several stretches, and between them the
+\omterm{def:b1:nucleic-acids:chain}{DNA} looped out unpaired --- the \omterm{def:b1:genomes:gene}{introns}, present in the \omterm{def:b1:genomes:gene}{gene} and
+absent from the message. Bacterial \omterm{def:b1:genomes:gene}{genes}, treated the same way, gave
+no loops. The size of a \omterm{def:b1:genomes:gene}{gene}'s primary transcript, measured in the
+nucleus, matches the \omterm{def:b1:genomes:gene}{gene}; the size of the cytoplasmic messenger
+matches the \omterm{def:b1:genomes:gene}{exons} alone.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % gene
+  \draw[very thick, gray] (0,3.2) -- (11,3.2);
+  \fill[omDef!70] (0.6,2.95) rectangle (1.8,3.45); \fill[omDef!70] (4.2,2.95) rectangle (5.4,3.45); \fill[omDef!70] (8.0,2.95) rectangle (9.6,3.45);
+  \node[anchor=east] at (-0.1,3.2) {gene};
+  \node[anchor=south, font=\scriptsize] at (1.2,3.5) {exon 1}; \node[anchor=south, font=\scriptsize] at (4.8,3.5) {exon 2}; \node[anchor=south, font=\scriptsize] at (8.8,3.5) {exon 3};
+  \draw[->, thick] (5.5,2.7) -- (5.5,2.2) node[midway, right] {transcription};
+  % primary transcript
+  \draw[very thick, omThm!60] (0.6,1.8) -- (9.6,1.8);
+  \fill[omDef!70] (0.6,1.6) rectangle (1.8,2.0); \fill[omDef!70] (4.2,1.6) rectangle (5.4,2.0); \fill[omDef!70] (8.0,1.6) rectangle (9.6,2.0);
+  \node[anchor=east] at (-0.1,1.8) {primary transcript};
+  \node[anchor=north, font=\scriptsize] at (3.0,1.55) {intron 1}; \node[anchor=north, font=\scriptsize] at (6.7,1.55) {intron 2};
+  \draw[->, thick] (5.5,1.2) -- (5.5,0.7) node[pos=0.9, right, align=left] {capping, splicing,\\ polyadenylation};
+  % mature mRNA
+  \fill[omExo!70] (0.2,0.15) circle (0.13); \node[anchor=south, font=\scriptsize] at (0.2,0.3) {cap};
+  \fill[omDef!70] (0.4,0.0) rectangle (1.6,0.4); \fill[omDef!70] (1.6,0.0) rectangle (2.8,0.4); \fill[omDef!70] (2.8,0.0) rectangle (4.4,0.4);
+  \draw[very thick, omExo!70] (4.4,0.2) -- (6.0,0.2); \node[anchor=west, font=\scriptsize] at (6.05,0.2) {poly-A tail (AAAA\ldots)};
+  \node[anchor=east] at (-0.1,0.2) {mature mRNA};
+  \node[anchor=north, align=center, gray] at (5.5,-0.4) {exons joined in order; the introns, most of the transcript, are degraded in the nucleus};
+\end{tikzpicture}
+
+{\small From \omterm{def:b1:genomes:gene}{gene} to messenger in a eukaryote: the whole \omterm{def:b1:genomes:gene}{gene} is
+transcribed, then the \omterm{def:b1:genomes:gene}{introns} are cut out and the \omterm{def:b1:genomes:gene}{exons} joined, a cap
+and a \omterm{prop:b1:gene-expression:processing}{poly-A tail} are added, and the mature message \omterm{def:b1:flowering-plant-organization:organs}{leaves} the
+nucleus.}
+\end{omfigure}
+
+\section{The genetic code}
+
+\begin{definition}[The genetic code]\label{def:b1:gene-expression:code}
+\index{genetic code}\index{codon}\index{reading frame}
+The \emph{genetic code} maps triplets of messenger bases,
+\emph{codons}, onto \omterm{def:b1:proteins:aminoacid}{amino acids}. Of the 64 codons, 61 specify the
+twenty \omterm{def:b1:proteins:aminoacid}{amino acids} and three (UAA, UAG, UGA) are \emph{stop} signals;
+AUG specifies methionine and is also the \emph{start} codon, so every
+new \omterm{def:b1:proteins:peptide}{polypeptide} begins with methionine. The code is
+\emph{degenerate} --- most \omterm{def:b1:proteins:aminoacid}{amino acids} have several codons, differing
+mostly at the third position --- \emph{non-overlapping}, read without
+punctuation in a \emph{reading frame} fixed by the start codon, and
+almost \emph{universal}, the same in bacteria, plants and animals
+with minor variants in \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondria}: a human \omterm{def:b1:genomes:gene}{gene} put into a
+bacterium is read correctly.
+\end{definition}
+
+\begin{omfigure}
+\begin{center}
+\footnotesize
+\begin{tabular}{c|cccc|c}
+\hline
+first & \multicolumn{4}{c|}{second base} & third \\
+base & U & C & A & G & base \\
+\hline
+U & Phe Phe Leu Leu & Ser Ser Ser Ser & Tyr Tyr \textbf{stop} \textbf{stop} & Cys Cys \textbf{stop} Trp & U C A G \\
+C & Leu Leu Leu Leu & Pro Pro Pro Pro & His His Gln Gln & Arg Arg Arg Arg & U C A G \\
+A & Ile Ile Ile \textbf{Met} & Thr Thr Thr Thr & Asn Asn Lys Lys & Ser Ser Arg Arg & U C A G \\
+G & Val Val Val Val & Ala Ala Ala Ala & Asp Asp Glu Glu & Gly Gly Gly Gly & U C A G \\
+\hline
+\end{tabular}
+\end{center}
+
+{\small The \omterm{def:b1:gene-expression:code}{genetic code}. Each \omterm{def:b1:cell-unit-of-life:cell}{cell} lists the four \omterm{def:b1:gene-expression:code}{codons} with the
+given first and second bases and third base U, C, A, G in order. AUG
+is methionine and the start signal; UAA, UAG and UGA are stops. The
+third base often does not matter: the code is degenerate.}
+\end{omfigure}
+
+\begin{proposition}[How the code was read]\label{prop:b1:gene-expression:nirenberg}
+The code is a non-overlapping triplet code, and each \omterm{def:b1:gene-expression:code}{codon}'s meaning
+can be determined by chemistry.
+\end{proposition}
+\begin{proof}[Evidence]
+Crick and Brenner (1961) made mutations in a phage \omterm{def:b1:genomes:gene}{gene} that added or
+removed one base: one such change destroyed the \omterm{def:b1:genomes:gene}{gene}'s function, as
+did two, but three insertions (or three deletions) close together
+restored it --- the message is read in threes, from a fixed starting
+point, and an insertion shifts the frame of everything downstream.
+Nirenberg and Matthaei (1961) added a synthetic \omterm{def:b1:nucleic-acids:chain}{RNA} of uracils only to
+a cell-free extract of \emph{E. coli} with the twenty \omterm{def:b1:proteins:aminoacid}{amino acids}: it
+made a chain of phenylalanine only, so UUU means Phe; other synthetic
+messengers, and then binding of single trinucleotides to \omterm{def:b1:gene-expression:ribosome}{ribosomes}
+with their \omterm{def:b1:gene-expression:trna}{transfer RNAs}, assigned all sixty-four by 1966.
+\end{proof}
+
+\begin{example}[Reading a message]\label{ex:b1:gene-expression:reading}
+The messenger $5'$-\ldots{}GC\underline{AUG}GCUUUCGGAUAA\ldots{}-$3'$
+is read from the AUG: AUG GCU UUC GGA UAA --- Met-Ala-Phe-Gly-stop: a
+peptide of four residues. Delete the first G after AUG and the frame
+shifts: AUG CUU UCG GAU AA\ldots{} --- Met-Leu-Ser-Asp\ldots, a
+different \omterm{def:b1:proteins:peptide}{protein} of a different length. Change UUC to UUU and nothing
+changes: both are Phe, a \emph{silent} mutation.
+\end{example}
+
+\section{Translation}
+
+\begin{definition}[Transfer RNA and its synthetases]\label{def:b1:gene-expression:trna}
+\index{transfer RNA}\index{anticodon}\index{aminoacyl-tRNA synthetase}
+A \emph{transfer \omterm{def:b1:nucleic-acids:chain}{RNA}} (\cref{ch:b1:nucleic-acids}) is the adaptor
+between \omterm{def:b1:gene-expression:code}{codon} and \omterm{def:b1:proteins:aminoacid}{amino acid}: its \emph{anticodon}, three bases in a
+loop, pairs antiparallel with a \omterm{def:b1:gene-expression:code}{codon} of the message, and its $3'$
+end carries the corresponding \omterm{def:b1:proteins:aminoacid}{amino acid}. The pairing at the third
+\omterm{def:b1:gene-expression:code}{codon} position is loose (\emph{wobble}), so about forty tRNAs suffice
+for sixty-one \omterm{def:b1:gene-expression:code}{codons}. Each tRNA is loaded by its own
+\emph{aminoacyl-tRNA synthetase}, an \omterm{def:b1:enzymes:enzyme}{enzyme} that recognises both the
+\omterm{def:b1:proteins:aminoacid}{amino acid} and the tRNA and joins them in two steps at the cost of
+one \omterm{def:b1:water-small-molecules:atp}{ATP} (split to AMP: two high-energy bonds), proofreading the \omterm{def:b1:proteins:aminoacid}{amino
+acid} as it does so. These twenty \omterm{def:b1:enzymes:enzyme}{enzymes} are where the code is
+actually implemented: the \omterm{def:b1:gene-expression:ribosome}{ribosome} does not check which \omterm{def:b1:proteins:aminoacid}{amino acid} a
+tRNA carries, only that its anticodon matches.
+\end{definition}
+
+\begin{definition}[The ribosome]\label{def:b1:gene-expression:ribosome}
+\index{ribosome}
+The \emph{ribosome} is a particle of two subunits, each of \omterm{def:b1:nucleic-acids:rnas}{ribosomal
+RNA} and \omterm{def:b1:proteins:peptide}{proteins} (in bacteria: a small 30S subunit and a large 50S
+subunit, together 70S, \qty{2.5}{MDa}; eukaryotic ribosomes are
+larger, 80S). The small subunit binds the messenger and decodes it;
+the large subunit holds the tRNAs and forms the \omterm{def:b1:proteins:peptide}{peptide bond} --- the
+catalyst is the \omterm{def:b1:nucleic-acids:rnas}{ribosomal RNA} itself. Three tRNA sites span both
+subunits: A (aminoacyl, where the next charged tRNA enters), P
+(peptidyl, holding the growing chain), E (exit).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+  \node[anchor=south west, inner sep=0] (img) at (0,0)
+    {\includegraphics[width=0.46\linewidth]{images/book3/ai/fig-ribosome-3d.png}};
+  \begin{scope}[x={(img.south east)}, y={(img.north west)},
+      every node/.style={font=\small}]
+    \draw[omDef, thick] (0.30,0.72) -- (0.30,1.08) node[above] {large subunit: peptide bond made here};
+    \draw[omDef, thick] (0.50,0.15) -- (0.50,-0.08) node[below] {small subunit: decodes the message};
+    \draw[omDef, thick] (0.47,0.52) -- (-0.03,0.44) node[left, align=right] {tRNAs in the\\ P and A sites};
+    \draw[omDef, thick] (0.92,0.36) -- (1.03,0.26) node[right] {mRNA};
+    \draw[omDef, thick] (0.57,0.88) -- (1.03,0.90) node[right, align=left] {polypeptide leaving\\ through the exit tunnel};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The \omterm{def:b1:gene-expression:ribosome}{ribosome}: two subunits clamped on the messenger, two
+\omterm{def:b1:gene-expression:trna}{transfer RNAs} in the cleft, the growing chain leaving through a tunnel
+in the large subunit.}
+\end{omfigure}
+
+\begin{proposition}[The cycle of elongation]\label{prop:b1:gene-expression:elongation}
+Translation starts when the small subunit finds the start \omterm{def:b1:gene-expression:code}{codon} ---
+in bacteria by pairing a \omterm{def:b1:nucleic-acids:rnas}{ribosomal RNA} sequence with a site just
+upstream of the AUG, in eukaryotes by binding the cap and scanning to
+the first AUG --- and the initiator tRNA (methionine) settles in the P
+site; the large subunit then joins. Each round of \emph{elongation}
+adds one residue: a charged tRNA whose \omterm{def:b1:gene-expression:trna}{anticodon} matches the A-site
+\omterm{def:b1:gene-expression:code}{codon} is delivered by an elongation factor and checked (one GTP); the
+\omterm{def:b1:nucleic-acids:rnas}{ribosomal RNA} of the large subunit transfers the growing chain from
+the P-site tRNA onto the \omterm{def:b1:proteins:aminoacid}{amino acid} of the A-site tRNA, forming the
+\omterm{def:b1:proteins:peptide}{peptide bond}; the \omterm{def:b1:gene-expression:ribosome}{ribosome} moves one \omterm{def:b1:gene-expression:code}{codon} along (a second GTP),
+shifting the tRNAs to P and E, and the empty one \omterm{def:b1:flowering-plant-organization:organs}{leaves}. At a stop
+\omterm{def:b1:gene-expression:code}{codon} a \emph{release factor} enters the A site and the chain is
+hydrolysed free. Bacterial \omterm{def:b1:gene-expression:ribosome}{ribosomes} add fifteen to twenty residues a
+second, eukaryotic ones two to five; several \omterm{def:b1:gene-expression:ribosome}{ribosomes} read one
+message at once, forming a \emph{polysome}.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  rib/.style={draw, thick, rounded corners=8pt, fill=omDef!12, minimum width=30mm, minimum height=14mm},
+  trna/.style={draw, thick, fill=omProp!30, minimum width=6mm, minimum height=9mm, inner sep=1pt, font=\scriptsize}]
+  \foreach \i/\title in {0/{1. a charged tRNA enters the A site}, 1/{2. peptide bond: chain moves to the A-site tRNA}, 2/{3. translocation: ribosome advances one codon}} {
+    \begin{scope}[xshift=\i*4.5cm]
+      \node[rib] (r) at (0,0) {};
+      \draw[very thick, omThm] (-2.0,-0.9) -- (2.0,-0.9);
+      \node[font=\scriptsize] at (-0.45,-0.55) {P}; \node[font=\scriptsize] at (0.45,-0.55) {A};
+      \node[anchor=north, align=center, font=\scriptsize, text width=40mm] at (0,-1.75) {\title};
+    \end{scope}
+  }
+  % state 1: P holds chain, A receives new tRNA
+  \node[trna] at (-0.45,0.05) {}; \draw[very thick, omExo!70!black] (-0.45,0.5) -- (-0.45,1.4); \foreach \y in {0.6,0.85,1.1,1.35} { \fill[omExo!70!black] (-0.45,\y) circle (0.09); }
+  \node[trna] at (0.45,0.05) {}; \fill[omExo!70!black] (0.45,0.6) circle (0.09);
+  \draw[->, thick, omProp!80!black] (1.6,1.3) -- (0.75,0.7); \node[font=\scriptsize, anchor=west] at (1.4,1.45) {GTP};
+  % state 2: chain transferred
+  \node[trna] at (4.05,0.05) {}; \node[trna] at (4.95,0.05) {}; \draw[very thick, omExo!70!black] (4.95,0.5) -- (4.95,1.65); \foreach \y in {0.6,0.85,1.1,1.35,1.6} { \fill[omExo!70!black] (4.95,\y) circle (0.09); }
+  % state 3: translocated: chain on P, empty tRNA leaving at E, A free
+  \node[trna, fill=gray!20] at (7.6,0.05) {}; \node[trna] at (8.55,0.05) {}; \draw[very thick, omExo!70!black] (8.55,0.5) -- (8.55,1.65); \foreach \y in {0.6,0.85,1.1,1.35,1.6} { \fill[omExo!70!black] (8.55,\y) circle (0.09); }
+  \draw[->, thick, gray] (7.6,-0.4) -- (7.0,-1.0); \node[font=\scriptsize, gray, anchor=east] at (7.05,-0.4) {E};
+  \draw[->, thick, omProp!80!black] (10.7,0.3) -- (10.7,-0.3); \node[font=\scriptsize, anchor=west] at (10.8,0.3) {GTP};
+  \draw[->, thick, omThm] (9.4,-1.3) -- (10.4,-1.3) node[right, font=\scriptsize, omThm] {mRNA shifts};
+\end{tikzpicture}
+
+{\small One round of elongation. A charged tRNA is admitted to the A
+site when its \omterm{def:b1:gene-expression:trna}{anticodon} matches; the \omterm{def:b1:nucleic-acids:rnas}{ribosomal RNA} joins the chain to
+its \omterm{def:b1:proteins:aminoacid}{amino acid}; the \omterm{def:b1:gene-expression:ribosome}{ribosome} moves on by one \omterm{def:b1:gene-expression:code}{codon}, and the empty tRNA
+\omterm{def:b1:flowering-plant-organization:organs}{leaves}. Two GTP per residue, plus the two high-energy bonds spent in
+charging the tRNA.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-19-polysome-tem.png}
+
+{\small Polysomes under the \omterm{prop:b1:cell-unit-of-life:microscopes}{electron microscope}: \omterm{def:b1:gene-expression:ribosome}{ribosomes} strung
+along a messenger, each making its own copy of the \omterm{def:b1:proteins:peptide}{protein}.}
+\end{omfigure}
+
+\begin{method}[Reckoning a protein's synthesis]\label{met:b1:gene-expression:reckon}
+\begin{enumerate}
+  \item Length: a \omterm{def:b1:proteins:peptide}{protein} of $n$ residues needs a coding sequence of
+        $3n + 3$ \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} (the stop \omterm{def:b1:gene-expression:code}{codon} included), inside a
+        messenger longer by its untranslated ends and, in the \omterm{def:b1:genomes:gene}{gene},
+        by its \omterm{def:b1:genomes:gene}{introns}.
+  \item Time: divide $n$ by the elongation rate (\qtyrange{15}{20}{}
+        per second in bacteria, \qtyrange{2}{5}{} in eukaryotes); the
+        message is being read by one \omterm{def:b1:gene-expression:ribosome}{ribosome} every \qtyrange{80}{100}{}
+        \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}, so the output per message is one chain every
+        (spacing / rate) seconds.
+  \item Energy: four high-energy phosphate bonds per residue (two to
+        charge the tRNA, two GTP on the \omterm{def:b1:gene-expression:ribosome}{ribosome}), plus the
+        transcription of the message at two per \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide}, shared
+        among all the chains that message yields.
+  \item Fidelity: about one wrong \omterm{def:b1:proteins:aminoacid}{amino acid} in $10^4$ \omterm{def:b1:gene-expression:code}{codons}; a
+        \omterm{def:b1:proteins:peptide}{protein} of \qty{500}{} residues is wrong somewhere in one copy
+        out of twenty --- tolerable because \omterm{def:b1:proteins:peptide}{proteins} are replaceable
+        and errors are not inherited.
+\end{enumerate}
+\end{method}
+
+\section{After translation}
+
+\begin{proposition}[What happens to a new polypeptide]\label{prop:b1:gene-expression:after}
+\index{signal peptide}\index{post-translational modification}
+The chain folds as it emerges, helped by \omterm{prop:b1:proteins:denaturation}{chaperones}
+(\cref{ch:b1:proteins}). Its destination is written in its sequence:
+a \emph{\omterm{prop:b1:gene-expression:after}{signal peptide}} at the N-terminus binds a \emph{signal
+recognition particle} that halts translation, docks the \omterm{def:b1:gene-expression:ribosome}{ribosome} on
+the \omterm{def:b1:eukaryotic-cell:endomembrane}{endoplasmic reticulum}, and threads the chain into its lumen
+(\cref{ch:b1:eukaryotic-cell}); other sequences direct \omterm{def:b1:proteins:peptide}{proteins} into
+\omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondria}, \omterm{def:b1:eukaryotic-cell:plastid}{chloroplasts}, the nucleus or \omterm{def:b1:eukaryotic-cell:peroxisome}{peroxisomes} after
+synthesis; a \omterm{def:b1:proteins:peptide}{protein} with no signal stays in the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}. Many
+\omterm{def:b1:proteins:peptide}{proteins} are \emph{modified}: the initial methionine removed, sugars
+attached in the ER and Golgi, phosphates added and removed by kinases
+and phosphatases, \omterm{def:b1:lipids:fattyacid}{lipids} attached, pieces cut out (insulin is made as
+one chain and cut into two; zymogens are cut to activate them). And
+every \omterm{def:b1:proteins:peptide}{protein} is eventually \emph{degraded}: tagged with the small
+\omterm{def:b1:proteins:peptide}{protein} \emph{ubiquitin} and unfolded and digested by the
+\emph{proteasome}, after a life of minutes (regulatory \omterm{def:b1:proteins:peptide}{proteins}) to
+months (haemoglobin) --- so that the \omterm{def:b1:proteins:peptide}{proteins} present are those the
+\omterm{def:b1:cell-unit-of-life:cell}{cell} is currently making.
+\end{proposition}
+
+\begin{example}[The numbers of a cell]\label{ex:b1:gene-expression:numbers}
+A growing \emph{E. coli} holds some \num{20000} \omterm{def:b1:gene-expression:ribosome}{ribosomes}, each
+adding twenty residues a second: $\num{4e5}$ residues a second, a
+million \omterm{def:b1:proteins:peptide}{proteins} of \qty{300}{} residues in an hour --- its own
+content, which is what doubling every hour requires. Half its
+energy goes to \omterm{def:b1:proteins:peptide}{protein} synthesis. A liver \omterm{def:b1:cell-unit-of-life:cell}{cell} holds ten million
+\omterm{def:b1:gene-expression:ribosome}{ribosomes} and makes \omterm{def:b1:proteins:peptide}{proteins} for weeks of use rather than for
+division; a plasma \omterm{def:b1:cell-unit-of-life:cell}{cell}, secreting antibody, devotes nearly all of
+them to one \omterm{def:b1:proteins:peptide}{protein} and pours out two thousand molecules a second.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:gene-expression:1}
+Give the \omterm{def:b1:nucleic-acids:chain}{RNA} transcribed from the template strand
+$3'$-TACGGATTC-$5'$, and the coding strand.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:gene-expression:2}
+List the three modifications a eukaryotic primary transcript
+undergoes before it \omterm{def:b1:flowering-plant-organization:organs}{leaves} the nucleus.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:gene-expression:3}
+Using the code table, translate $5'$-AUGCCGAAAGUUUGA-$3'$.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:gene-expression:4}
+Name the three tRNA sites of the \omterm{def:b1:gene-expression:ribosome}{ribosome} and what happens in each.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:gene-expression:5}
+A messenger of \qty{2400}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} has \qty{150}{} of $5'$
+untranslated region and \qty{450}{} of $3'$ untranslated region and
+poly-A. How many residues has the \omterm{def:b1:proteins:peptide}{protein}? How long does one \omterm{def:b1:gene-expression:ribosome}{ribosome}
+take to make it at four residues a second, and how many \omterm{def:b1:gene-expression:ribosome}{ribosomes}
+can read the message at once at one per \qty{90}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:gene-expression:6}
+Explain why three insertions restore a \omterm{def:b1:genomes:gene}{gene}'s \omterm{def:b1:gene-expression:code}{reading frame} while one
+or two do not, and what the \omterm{def:b1:proteins:peptide}{protein} made from the triple insertion
+looks like.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:gene-expression:7}
+A mutation changes the \omterm{def:b1:gene-expression:code}{codon} CAG to UAG in the middle of a \omterm{def:b1:genomes:gene}{gene} of
+\qty{300}{} \omterm{def:b1:gene-expression:code}{codons}; another changes CAG to CAA; a third changes it to
+CGG. Give the effect of each on the \omterm{def:b1:proteins:peptide}{protein}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:gene-expression:8}
+Explain why the fidelity of translation rests on the \omterm{def:b1:gene-expression:trna}{aminoacyl-tRNA
+synthetases} rather than on the \omterm{def:b1:gene-expression:ribosome}{ribosome}, and describe an experiment
+that showed it (a cysteine attached to its tRNA is chemically
+converted to alanine; where does the alanine end up?).
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:gene-expression:9}
+Compute the energy cost, in high-energy bonds, of a \omterm{def:b1:proteins:peptide}{protein} of
+\qty{400}{} residues, and the fraction of it spent on the \omterm{def:b1:gene-expression:ribosome}{ribosome}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:gene-expression:10}
+In bacteria \omterm{def:b1:gene-expression:ribosome}{ribosomes} begin translating a message while it is still
+being transcribed; in eukaryotes they cannot. Explain why (two
+reasons), and what this difference makes possible in eukaryotes.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:gene-expression:11}
+A \omterm{def:b1:genomes:gene}{gene} of five \omterm{def:b1:genomes:gene}{exons} can be spliced to include or skip \omterm{def:b1:genomes:gene}{exon} 3
+(\qty{90}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}) and \omterm{def:b1:genomes:gene}{exon} 4 (\qty{100}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}). List
+the possible messengers and say which ones keep the \omterm{def:b1:gene-expression:code}{reading frame} of
+\omterm{def:b1:genomes:gene}{exon} 5. What does this show about alternative splicing?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:gene-expression:12}
+"The code is a frozen accident: arbitrary, but too costly to change."
+Discuss in a paragraph: what in the code looks arbitrary, what looks
+optimised (the third position, similar \omterm{def:b1:gene-expression:code}{codons} for similar \omterm{def:b1:proteins:aminoacid}{amino
+acids}), and why a mutation changing a synthetase's specificity is
+almost always lethal.
+\end{exercise}
+
+\section{Problem: From a Gene to a Protein}
+
+\begin{problem}[{Weekend problem --- a thirty-kilobase gene followed
+into a five-hundred-residue protein: transcription timed, splicing
+weighed, ribosomes counted, energy and errors reckoned, ending on the
+cost of one protein in ATP}]
+\label{pb:b1:gene-expression:1}
+A human \omterm{def:b1:genomes:gene}{gene} spans \qty{30}{kb} with eight \omterm{def:b1:genomes:gene}{exons} totalling
+\qty{2000}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} of mature messenger, of which \qty{1503}{}
+code (500 residues plus the stop). Polymerase II transcribes at
+\qty{30}{} \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} per second; \omterm{def:b1:gene-expression:ribosome}{ribosomes} elongate at \qty{4}{}
+residues per second and space themselves one per \qty{80}{}
+\omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}; the messenger's half-life is \qty{2}{h}. Costs: two
+high-energy bonds per \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} transcribed, four per residue
+translated; take one high-energy bond as one \omterm{def:b1:water-small-molecules:atp}{ATP}. Error rates:
+$10^{-5}$ per \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} transcribed, $10^{-4}$ per \omterm{def:b1:gene-expression:code}{codon} translated.
+
+\medskip
+\noindent\textbf{Part I --- Transcription and splicing.}
+\begin{enumerate}
+  \item How long does one polymerase take to transcribe the \omterm{def:b1:genomes:gene}{gene}?
+  \item What fraction of the primary transcript is removed by
+        splicing?
+  \item How many \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides} are transcribed for every \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} of
+        mature messenger?
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} spent transcribing one primary transcript.
+  \item If a polymerase starts every \qty{10}{s}, how many
+        polymerases are on the \omterm{def:b1:genomes:gene}{gene} at once, and how many messengers
+        does the \omterm{def:b1:genomes:gene}{gene} produce per hour?
+  \item Compute the number of \omterm{def:b1:genomes:gene}{introns} and their mean length.
+  \item The spliceosome removes each \omterm{def:b1:genomes:gene}{intron} in about a minute, in
+        parallel. Does splicing or transcription set the time from
+        \omterm{def:b1:genomes:gene}{gene} to messenger?
+  \item Compute the physical length of the \omterm{def:b1:genomes:gene}{gene} and of the mature
+        messenger (\qty{0.34}{nm} per \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Translation.}
+\begin{enumerate}[resume]
+  \item How long does one \omterm{def:b1:gene-expression:ribosome}{ribosome} take to translate the \omterm{def:b1:proteins:peptide}{protein}?
+  \item How many \omterm{def:b1:gene-expression:ribosome}{ribosomes} read one messenger at once?
+  \item How many \omterm{def:b1:proteins:peptide}{protein} molecules does one messenger yield per
+        hour?
+  \item Over its \qty{2}{h} half-life, how many does it yield in all
+        (a message with half-life $t_{1/2}$ yields, on average,
+        $t_{1/2}/\ln 2$ hours of full production)?
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} spent translating one \omterm{def:b1:proteins:peptide}{protein}.
+  \item Compute the \omterm{def:b1:water-small-molecules:atp}{ATP} spent on transcription per \omterm{def:b1:proteins:peptide}{protein}, sharing
+        the transcript's cost among the \omterm{def:b1:proteins:peptide}{proteins} of question 11.
+  \item Compute the total cost of one \omterm{def:b1:proteins:peptide}{protein} and the fraction due to
+        translation.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Errors.}
+\begin{enumerate}[resume]
+  \item Compute the probability that a given messenger carries at
+        least one transcription error in its \qty{1503}{} coding
+        \omterm{def:b1:nucleic-acids:nucleotide}{nucleotides}.
+  \item Compute the probability that a given \omterm{def:b1:proteins:peptide}{protein} molecule carries
+        at least one translation error.
+  \item About a quarter of \omterm{def:b1:nucleic-acids:nucleotide}{nucleotide} changes are silent and a third
+        of amino-acid substitutions are harmless. What fraction of
+        the \omterm{def:b1:proteins:peptide}{protein} molecules made are defective?
+  \item A defective messenger yields defective \omterm{def:b1:proteins:peptide}{proteins} for two
+        hours; a defective \omterm{def:b1:proteins:peptide}{protein} is one molecule. Explain why the
+        \omterm{def:b1:cell-unit-of-life:cell}{cell} can afford a translation error rate ten times the
+        transcription rate, and both far above the replication rate.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The \omterm{def:b1:cell-unit-of-life:cell}{cell}'s budget.}
+The \omterm{def:b1:cell-unit-of-life:cell}{cell} makes \num{3000} copies of this \omterm{def:b1:proteins:peptide}{protein} per hour, and in
+all \num{3e9} residues of \omterm{def:b1:proteins:peptide}{protein} per day.
+\begin{enumerate}[resume]
+  \item How many messengers of this \omterm{def:b1:genomes:gene}{gene} must be present at once
+        (each yielding the number of question 10)?
+  \item How many \omterm{def:b1:gene-expression:ribosome}{ribosomes} are occupied by this \omterm{def:b1:proteins:peptide}{protein}?
+  \item Compute the daily \omterm{def:b1:water-small-molecules:atp}{ATP} the \omterm{def:b1:cell-unit-of-life:cell}{cell} spends on all its \omterm{def:b1:proteins:peptide}{protein}
+        synthesis (four per residue) and, at \qty{50}{kJ/mol}, the
+        power in watts for a \omterm{def:b1:cell-unit-of-life:cell}{cell} of \qty{2000}{\micro m^3}.
+  \item Compare with the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s total power if it consumes
+        \qty{1e9}{} \omterm{def:b1:water-small-molecules:atp}{ATP} per second.
+  \item A drug blocks the spliceosome. Predict its effect on this
+        \omterm{def:b1:proteins:peptide}{protein} and on a bacterial \omterm{def:b1:proteins:peptide}{protein}.
+  \item State the result: the \omterm{def:b1:water-small-molecules:atp}{ATP} cost of one molecule of the
+        \omterm{def:b1:proteins:peptide}{protein}, split between translation and transcription, and the
+        time from the start of transcription to the first finished
+        \omterm{def:b1:proteins:peptide}{protein}.
+\end{enumerate}
+\end{problem}

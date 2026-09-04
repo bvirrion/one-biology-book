@@ -1,6 +1,630 @@
 \chapter{Membranes and Membrane Transport}\label{ch:b1:membranes-transport}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Drop a red blood \omterm{def:b1:cell-unit-of-life:cell}{cell} into pure water and it swells and bursts within a
+second; drop it into strong salt and it shrivels. Put it back into
+plasma and it keeps its biconcave shape for four months, pumping sodium
+out and potassium in every second of that time. The membrane that does
+this is five nanometres thick --- a film of lipid two molecules deep,
+threaded with proteins --- and it is the boundary across which every
+exchange of \cref{ch:b1:organism-environment} finally happens. This
+chapter describes the membrane's structure, the physics of what crosses
+it unaided, the proteins that carry, pump and \omterm{def:b1:membranes-transport:transporters}{channel} the rest, the
+electrical potential this traffic produces, and the vesicles that move
+what no protein can.
 
-\emph{This chapter has not been written yet.}
+\section{The fluid mosaic}
+
+\begin{definition}[The plasma membrane]\label{def:b1:membranes-transport:membrane}
+The \emph{plasma membrane}\index{plasma membrane} --- and every
+membrane of the \omterm{def:b1:cell-unit-of-life:cell}{cell} --- is a \emph{lipid bilayer}\index{lipid bilayer}
+about \qty{5}{nm} thick: two sheets of phospholipids
+(\cref{ch:b1:lipids}) with their hydrophobic tails facing each other
+and their polar heads facing the two aqueous sides, with cholesterol
+between the tails, and \emph{membrane proteins}\index{membrane protein}
+embedded in it or attached to it. In the \emph{fluid mosaic}\index{fluid
+mosaic model} model (Singer and Nicolson, 1972) the bilayer is a
+two-dimensional fluid in which lipids and proteins diffuse laterally,
+and the proteins are a mosaic of independent units, not a continuous
+coat. The two faces differ: sugars attached to lipids and proteins face
+outward only (the \emph{glycocalyx}), and some phospholipids are
+confined to one leaflet.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, line cap=round]
+  % bilayer: heads as circles, tails as lines
+  \foreach \i in {0,...,21} {
+    \pgfmathsetmacro{\x}{0.42*\i}
+    \fill[omDef!60] (\x,1.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,1.2) -- (\x-0.07,0.55) (\x+0.07,1.2) -- (\x+0.07,0.55);
+    \fill[omDef!60] (\x,-0.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,-0.2) -- (\x-0.07,0.45) (\x+0.07,-0.2) -- (\x+0.07,0.45);
+  }
+  % cholesterol
+  \foreach \x in {1.9,6.1,8.2} { \draw[omProp, very thick] (\x,1.1) -- (\x,0.6); \fill[omProp] (\x,1.15) circle (0.08); }
+  % integral protein spanning (channel)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.0,-0.7) rectangle (3.55,1.7);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.85,-0.7) rectangle (4.4,1.7);
+  \fill[white] (3.55,-0.6) rectangle (3.85,1.6);
+  % integral protein (carrier)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (6.8,-0.75) rectangle (7.7,1.75);
+  % peripheral protein
+  \draw[thick, omExo!80!black, fill=omExo!30] (5.3,1.75) ellipse (0.5 and 0.28);
+  % glycocalyx sugar chains on outer face
+  \foreach \x in {0.5,1.3,2.5,4.15,7.25,8.4} { \draw[omProp!80!black, thick] (\x,1.5) .. controls (\x+0.15,1.85) and (\x-0.15,2.1) .. (\x+0.1,2.4); \fill[omProp!70] (\x+0.1,2.45) circle (0.07); }
+  % labels
+  \node[anchor=east] at (-0.3,1.35) {polar heads};
+  \node[anchor=east] at (-0.3,0.5) {hydrophobic tails};
+  \node[anchor=east] at (-0.3,-0.35) {polar heads};
+  \node[anchor=west, align=left] at (9.2,2.2) {sugar chains: outside only};
+  \node[anchor=west, align=left] at (9.2,0.5) {\qty{5}{nm}};
+  \node[anchor=north] at (3.7,-0.95) {channel protein};
+  \node[anchor=north] at (7.25,-0.95) {carrier protein};
+  \node[anchor=south] at (5.3,2.6) {peripheral protein};
+  \node[anchor=north, omProp] at (1.5,-1.0) {cholesterol};
+  \node[anchor=south east, gray] at (-0.3,2.4) {outside};
+  \node[anchor=north east, gray] at (-0.3,-0.95) {cytosol};
+  \draw[<->, gray] (9.05,1.35+0.16) -- (9.05,-0.35-0.16);
+\end{tikzpicture}
+
+{\small The \omterm{def:b1:membranes-transport:membrane}{fluid mosaic}. Two leaflets of phospholipids, tails
+inward, with cholesterol among them; \omterm{def:b1:membranes-transport:proteins}{integral proteins} spanning the
+bilayer (a \omterm{def:b1:membranes-transport:transporters}{channel} with its pore, a carrier), a peripheral protein on
+one face, and sugar chains on the outer face only.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book3/red-cells-nci.jpg}
+
+{\small A red blood \omterm{def:b1:cell-unit-of-life:cell}{cell}, a platelet and a lymphocyte under the
+scanning \omterm{prop:b1:cell-unit-of-life:microscopes}{electron microscope} (colourised). The red \omterm{def:b1:cell-unit-of-life:cell}{cell}'s biconcave
+shape is held by a protein mesh under its membrane; it survives four
+months of squeezing through capillaries narrower than itself. Image:
+National Cancer Institute, public domain.}
+\end{omfigure}
+
+\begin{proposition}[Membranes are bilayers and fluids]\label{prop:b1:membranes-transport:evidence}
+The \omterm{def:b1:membranes-transport:membrane}{plasma membrane} is exactly two lipid molecules thick, and its
+components move within its plane.
+\end{proposition}
+\begin{proof}[Evidence]
+Gorter and Grendel (1925) extracted the lipids of a known number of
+red blood \omterm{def:b1:cell-unit-of-life:cell}{cells} and spread them as a monolayer on water: the area was
+twice the \omterm{def:b1:cell-unit-of-life:cell}{cells}' total surface, so the membrane is a bilayer.
+Electron microscopy shows every membrane as two dark lines
+(the stained heads) around a pale core (the tails), \qty{5}{nm} in all.
+Frye and Edidin (1970) fused a mouse \omterm{def:b1:cell-unit-of-life:cell}{cell} with a human \omterm{def:b1:cell-unit-of-life:cell}{cell} whose
+surface proteins had been labelled with dyes of two colours: after
+forty minutes at \qty{37}{\celsius} the two colours were completely
+intermixed over the hybrid \omterm{def:b1:cell-unit-of-life:cell}{cell}, and not at \qty{4}{\celsius}, where
+the lipid is nearly solid. Bleaching a spot of a fluorescent \omterm{def:b1:membranes-transport:membrane}{membrane
+protein} with a laser and watching the fluorescence return as unbleached
+molecules diffuse in (FRAP) measures the lateral diffusion:
+$\qty{1}{\micro m^2}$ in a few seconds for lipids, slower for proteins,
+and zero for proteins anchored to the \omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytoskeleton}.
+\end{proof}
+
+\begin{definition}[Membrane proteins]\label{def:b1:membranes-transport:proteins}
+\emph{Integral}\index{integral protein} \omterm{def:b1:membranes-transport:membrane}{membrane proteins} span the
+bilayer with one or more hydrophobic helices and can only be extracted
+with detergents; \emph{peripheral} proteins are bound to one face. By
+function: \emph{transporters} (\omterm{def:b1:membranes-transport:transporters}{channels}, carriers, pumps),
+\emph{receptors} that bind a signal outside and act inside,
+\emph{enzymes}, \emph{anchors} linking the \omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytoskeleton} to the
+\omterm{def:b1:body-plans-tissues:connective}{extracellular matrix}, and \emph{recognition} proteins bearing the
+sugars by which \omterm{def:b1:cell-unit-of-life:cell}{cells} identify one another. Proteins are half the mass
+of a typical membrane and nearly all of its function.
+\end{definition}
+
+\section{Crossing the membrane without help}
+
+\begin{proposition}[Permeability of the bilayer]\label{prop:b1:membranes-transport:permeability}
+\index{permeability}
+A pure \omterm{def:b1:membranes-transport:membrane}{lipid bilayer} is freely permeable to small non-polar molecules
+($\mathrm{O_2}$, $\mathrm{CO_2}$, $\mathrm{N_2}$, steroids), fairly
+permeable to small uncharged polar molecules (water, urea, ethanol),
+poorly permeable to larger polar molecules (glucose, amino acids), and
+practically impermeable to ions ($\mathrm{Na^+}$, $\mathrm{K^+}$,
+$\mathrm{Cl^-}$, $\mathrm{H^+}$) and to macromolecules. The
+permeability spans twelve orders of magnitude, from
+$\qty{e-2}{cm/s}$ for water to $\qty{e-14}{cm/s}$ for $\mathrm{Na^+}$:
+a hydrophobic core \qty{3}{nm} thick lets through what dissolves in
+oil and stops what carries a charge.
+\end{proposition}
+
+\begin{theorem}[Fick's law of diffusion]\label{thm:b1:membranes-transport:fick}
+\index{Fick's law}\index{diffusion}
+The net flux $J$ of a solute across a membrane of area $S$ (moles
+per second) is proportional to the concentration difference across it:
+\[
+J = P\,S\,(c_{\text{out}} - c_{\text{in}}),
+\]
+where the \emph{permeability coefficient} $P$ (in \unit{m/s}) lumps
+together the solute's diffusion coefficient in the membrane, its
+solubility in the lipid and the membrane's thickness ($P = DK/\ell$).
+Diffusion needs no energy and always runs down the gradient; it is
+\emph{passive transport}\index{passive transport}.
+\end{theorem}
+\begin{proof}
+Inside the membrane the solute diffuses down a linear concentration
+profile from $Kc_{\text{out}}$ to $Kc_{\text{in}}$ ($K$ the partition
+coefficient between lipid and water); Fick's first law in the bulk,
+$J/S = -D\,\dd c/\dd x$, gives $J/S = DK(c_{\text{out}} -
+c_{\text{in}})/\ell$.
+\end{proof}
+
+\begin{definition}[Osmosis, water potential]\label{def:b1:membranes-transport:osmosis}
+\emph{Osmosis}\index{osmosis} is the net diffusion of water across a
+membrane that lets water through but not the solutes, from the
+solution where water is more concentrated (fewer solutes) to the one
+where it is less. It is described by the \emph{water
+potential}\index{water potential} $\Psi$, the chemical potential of
+water expressed as a pressure, zero for pure water at atmospheric
+pressure:
+\[
+\Psi = \Psi_s + \Psi_p, \qquad \Psi_s = -RTc_s ,
+\]
+where $\Psi_s$, the \emph{solute potential}\index{solute potential},
+falls with the total solute concentration $c_s$ (in osmoles per litre,
+the van 't Hoff law) and $\Psi_p$, the \emph{pressure
+potential}\index{pressure potential}, is the hydrostatic pressure above
+atmospheric. Water moves from higher to lower $\Psi$. At
+\qty{25}{\celsius}, $RT = \qty{2.48}{MPa.L/mol}$: a \qty{0.3}{osmol/L}
+solution has $\Psi_s = \qty{-0.74}{MPa}$. A solution is
+\emph{isotonic}\index{isotonic} to a \omterm{def:b1:cell-unit-of-life:cell}{cell} when no net water moves,
+\emph{hypotonic} when water enters, \emph{hypertonic} when it \omterm{def:b1:flowering-plant-organization:organs}{leaves}.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.78\linewidth]{images/book3/ai/b3-07-red-cells-osmosis.png}
+
+{\small Red blood \omterm{def:b1:cell-unit-of-life:cell}{cells} in an \omterm{def:b1:membranes-transport:osmosis}{isotonic} solution (biconcave discs), in
+a hypotonic one (swollen to spheres, about to burst) and in a
+hypertonic one (shrunken and crenated). Water follows its potential;
+the \omterm{def:b1:cell-unit-of-life:cell}{cell} has no wall to resist.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book3/ai/b3-07-plasmolysis.png}
+
+{\small Plasmolysis: onion epidermis in a strong salt solution. The
+protoplast of each \omterm{def:b1:cell-unit-of-life:cell}{cell} has lost water and pulled away from the rigid
+wall, which keeps its shape. In water the protoplast would swell back
+against the wall and stop, turgid.}
+\end{omfigure}
+
+\begin{example}[A red cell in three solutions]\label{ex:b1:membranes-transport:redcell}
+Plasma is \qty{0.3}{osmol/L}: $\Psi_s = \qty{-0.74}{MPa}$ on both sides,
+no net flow. In pure water ($\Psi = 0$) the \omterm{def:b1:cell-unit-of-life:cell}{cell}, at
+\qty{-0.74}{MPa} inside, takes up water until its membrane, which can
+stretch only a few percent, ruptures. In \qty{0.6}{osmol/L} salt it
+loses water until its inside is as concentrated, at half its volume. A
+plant \omterm{def:b1:cell-unit-of-life:cell}{cell} in pure water does not burst: as water enters, the wall is
+stretched and $\Psi_p$ rises until $\Psi_p = -\Psi_s$, the \omterm{def:b1:membranes-transport:osmosis}{water
+potential} inside is zero, and the flow stops with the \omterm{def:b1:cell-unit-of-life:cell}{cell} turgid at
+\qty{0.74}{MPa}.
+\end{example}
+
+\begin{method}[Water-potential bookkeeping]\label{met:b1:membranes-transport:psi}
+\begin{enumerate}
+  \item Convert every solute concentration to osmoles (a salt that
+        dissociates into two ions counts twice) and compute $\Psi_s =
+        -RTc_s$.
+  \item Add the pressure term: $\Psi_p = 0$ for a solution in an open
+        vessel or an animal \omterm{def:b1:cell-unit-of-life:cell}{cell}, positive for a turgid plant \omterm{def:b1:cell-unit-of-life:cell}{cell},
+        negative for water under tension in a \omterm{def:b1:flowering-plant-organization:tissues}{xylem} vessel.
+  \item Water flows toward the lower $\Psi$. Equilibrium is reached
+        when the two $\Psi$ are equal: by dilution of the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s
+        contents (animal \omterm{def:b1:cell-unit-of-life:cell}{cell}), or by a rise of pressure (plant \omterm{def:b1:cell-unit-of-life:cell}{cell}).
+  \item Read the sign of the result as the direction of flow, and its
+        size as the driving force; the flow rate also depends on the
+        membrane's water permeability, raised a hundredfold by
+        \omterm{def:b1:membranes-transport:transporters}{aquaporin} \omterm{def:b1:membranes-transport:transporters}{channels}.
+\end{enumerate}
+\end{method}
+
+\section{Transport proteins}
+
+\begin{definition}[Channels, carriers, pumps]\label{def:b1:membranes-transport:transporters}
+\emph{Channels}\index{channel} are \omterm{def:b1:membranes-transport:proteins}{integral proteins} with a
+water-filled pore through which a specific ion or small molecule
+diffuses down its gradient at up to $10^8$ per second; many are
+\emph{gated}, opening in response to a voltage, a ligand or a
+mechanical force. \emph{Aquaporins}\index{aquaporin} are water
+channels. \emph{Carriers}\index{carrier} bind their solute on one face,
+change conformation, and release it on the other, a thousand times a
+second at most; the glucose transporter of the red \omterm{def:b1:cell-unit-of-life:cell}{cell} is one.
+Channels and carriers working down a gradient perform \emph{facilitated
+diffusion}\index{facilitated diffusion}, passive but selective and
+saturable. \emph{Pumps}\index{pump} are carriers that couple the
+transport of a solute against its gradient to the hydrolysis of ATP:
+\emph{primary active transport}\index{active transport}. The
+\emph{sodium--potassium pump}\index{sodium--potassium pump} of animal
+\omterm{def:b1:cell-unit-of-life:cell}{cells} exports three $\mathrm{Na^+}$ and imports two $\mathrm{K^+}$ per
+ATP; the \emph{proton pump} of plant, fungal and bacterial membranes
+exports $\mathrm{H^+}$.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % membrane band
+  \fill[omDef!15] (0,0) rectangle (13.1,1.2);
+  \draw[omDef!60!black] (0,0) -- (13.1,0) (0,1.2) -- (13.1,1.2);
+  \node[anchor=east, gray, align=right] at (-0.15,1.5) {outside\\ (high $\mathrm{Na^+}$, low $\mathrm{K^+}$)};
+  \node[anchor=east, gray, align=right] at (-0.15,-0.3) {cytosol\\ (low $\mathrm{Na^+}$, high $\mathrm{K^+}$)};
+  % simple diffusion
+  \draw[->, thick, omProp] (1.0,2.0) -- (1.0,-0.8);
+  \node[anchor=south, align=center] at (1.0,2.1) {simple diffusion\\ $\mathrm{O_2}$, $\mathrm{CO_2}$};
+  % channel
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (2.6,-0.2) rectangle (3.0,1.4);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (3.3,-0.2) rectangle (3.7,1.4);
+  \draw[->, thick, omProp] (3.15,2.0) -- (3.15,-0.8);
+  \node[anchor=south, align=center] at (3.15,2.1) {channel\\ $\mathrm{K^+}$, water};
+  % carrier (facilitated)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (5.0,-0.3) rectangle (6.0,1.5);
+  \draw[->, thick, omProp] (5.5,2.0) -- (5.5,1.55);
+  \draw[->, thick, omProp] (5.5,-0.35) -- (5.5,-0.8);
+  \node[anchor=south, align=center] at (5.5,2.1) {carrier\\ glucose};
+  \node[align=center, font=\scriptsize] at (5.5,0.6) {binds,\\ flips};
+  % pump
+  \draw[thick, omExo!80!black, fill=omExo!30, rounded corners=5pt] (7.5,-0.3) rectangle (8.7,1.5);
+  \draw[->, very thick, omExo!80!black] (7.8,-0.8) -- (7.8,2.0);
+  \draw[->, very thick, omExo!80!black] (8.4,2.0) -- (8.4,-0.8);
+  \node[anchor=south, align=center] at (8.1,2.1) {pump\\ $3\,\mathrm{Na^+}$ out, $2\,\mathrm{K^+}$ in};
+  \node[anchor=north, align=center, font=\scriptsize] at (8.1,-0.85) {ATP $\to$ ADP};
+  % secondary active (symport)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (11.0,-0.3) rectangle (12.2,1.5);
+  \draw[->, very thick, omProp] (11.3,2.0) -- (11.3,-0.8);
+  \draw[->, very thick, omExo!80!black] (11.9,2.0) -- (11.9,-0.8);
+  \node[anchor=south, align=center] at (11.6,2.1) {symport\\ $\mathrm{Na^+}$ down, glucose up};
+  \node[anchor=north, align=center, font=\scriptsize] at (11.6,-0.85) {secondary active};
+  \node[anchor=north west, align=left, gray, font=\scriptsize] at (0,-1.5) {orange arrows: down the gradient (passive); green: against it (active)};
+\end{tikzpicture}
+
+{\small Five ways across. Simple diffusion through the lipid; a
+\omterm{def:b1:membranes-transport:transporters}{channel} and a carrier (\omterm{def:b1:membranes-transport:transporters}{facilitated diffusion}, down the gradient); the
+\omterm{def:b1:membranes-transport:transporters}{sodium--potassium pump} (\omterm{def:b1:membranes-transport:transporters}{primary active transport}, paid in ATP); a
+\omterm{prop:b1:membranes-transport:secondary}{symporter} that uses the sodium gradient the pump built to drag glucose
+uphill (\omterm{prop:b1:membranes-transport:secondary}{secondary active transport}).}
+\end{omfigure}
+
+\begin{proposition}[Secondary active transport]\label{prop:b1:membranes-transport:secondary}
+\index{secondary active transport}
+A gradient built by a pump is a store of energy that other carriers
+spend: a \emph{symporter}\index{symporter} moves a solute uphill by
+coupling it to an ion moving downhill in the same direction (the
+sodium--glucose transporter of the intestine and kidney; the
+proton--sucrose transporter of the phloem), an
+\emph{antiporter}\index{antiporter} couples it to an ion moving the
+opposite way (the sodium--calcium exchanger). In animal \omterm{def:b1:cell-unit-of-life:cell}{cells} the
+currency is the $\mathrm{Na^+}$ gradient; in plants, fungi and bacteria
+the $\mathrm{H^+}$ gradient.
+\end{proposition}
+
+\begin{example}[Kinetics tell the mechanism]\label{ex:b1:membranes-transport:kinetics}
+The flux of glucose into a red \omterm{def:b1:cell-unit-of-life:cell}{cell} rises with the outside
+concentration, then levels off at a maximum, like an enzyme
+(\cref{ch:b1:enzymes}): a carrier, saturable, with a $K_m$ of about
+\qty{1.5}{mmol/L}; a similar sugar, mannose, competes for it. The flux
+of urea rises in proportion to its concentration without limit: simple
+diffusion. The flux of glucose into an intestinal \omterm{def:b1:cell-unit-of-life:cell}{cell} stops when
+sodium is removed from the lumen, or when the pump is poisoned with
+ouabain: \omterm{prop:b1:membranes-transport:secondary}{secondary active transport}.
+\end{example}
+
+\section{The membrane potential}
+
+\begin{definition}[Membrane potential]\label{def:b1:membranes-transport:potential}
+Every living \omterm{def:b1:cell-unit-of-life:cell}{cell} holds an electrical potential difference across its
+\omterm{def:b1:membranes-transport:membrane}{plasma membrane}, the \emph{membrane potential}\index{membrane
+potential} $V_m = V_{\text{in}} - V_{\text{out}}$, negative inside:
+\qty{-70}{mV} in a \omterm{def:b1:body-plans-tissues:nervous}{neuron}, \qty{-90}{mV} in a muscle fibre,
+\qty{-120}{mV} or more in a plant \omterm{def:b1:cell-unit-of-life:cell}{cell}. It arises because the membrane
+is selectively permeable to ions whose concentrations differ across it.
+\end{definition}
+
+\begin{theorem}[The Nernst equation]\label{thm:b1:membranes-transport:nernst}
+\index{Nernst equation}\index{equilibrium potential}
+An ion of charge $z$ at concentrations $c_{\text{out}}$ and
+$c_{\text{in}}$ is at equilibrium across the membrane --- no net flux,
+though the membrane is permeable to it --- when the potential equals
+its \emph{\omterm{thm:b1:membranes-transport:nernst}{equilibrium potential}}
+\[
+E_{\text{ion}} = \frac{RT}{zF}\,\ln\frac{c_{\text{out}}}{c_{\text{in}}}
+= \frac{\qty{61.5}{mV}}{z}\,\log_{10}\frac{c_{\text{out}}}{c_{\text{in}}}
+\quad (\qty{37}{\celsius}).
+\]
+For $\mathrm{K^+}$ at \qty{5}{mmol/L} outside and \qty{140}{mmol/L}
+inside, $E_K = 61.5\log(5/140) = \qty{-89}{mV}$; for $\mathrm{Na^+}$ at
+\qty{145}{} outside and \qty{12}{} inside, $E_{Na} = \qty{+67}{mV}$.
+\end{theorem}
+\begin{proof}
+Moving one mole of the ion from outside to inside changes the free
+energy by the sum of a concentration term and an electrical term:
+\[
+\Delta G = RT\ln\frac{c_{\text{in}}}{c_{\text{out}}} + zFV_m .
+\]
+At equilibrium $\Delta G = 0$, which gives $V_m = (RT/zF)\ln(c_{\text{out}}/c_{\text{in}})$.
+Converting to base-ten logarithms and inserting $R = \qty{8.314}{J.mol^{-1}.K^{-1}}$,
+$T = \qty{310}{K}$, $F = \qty{96485}{C/mol}$ gives the numerical form.
+\end{proof}
+
+\begin{proposition}[Origin of the resting potential]\label{prop:b1:membranes-transport:resting}
+The resting membrane is far more permeable to $\mathrm{K^+}$ (through
+open potassium \omterm{def:b1:membranes-transport:transporters}{channels}) than to $\mathrm{Na^+}$; $\mathrm{K^+}$ leaks
+out down its concentration gradient, leaving the inside negative, until
+the electrical pull back nearly balances the leak. The resting
+potential therefore lies close to $E_K$, pulled a little toward
+$E_{Na}$ by the small sodium leak (the Goldman equation weights each
+ion's Nernst term by its permeability). The pump sustains the
+gradients that the leaks would otherwise dissipate; it also contributes
+a few millivolts directly, since it moves three charges out for two in.
+\end{proposition}
+\begin{proof}[Evidence]
+In a squid axon the resting potential follows $E_K$ when the outside
+potassium is varied over a wide range (a straight line of slope
+\qty{58}{mV} per decade at high concentrations), and departs from it
+at low concentrations exactly as a small sodium permeability predicts.
+Blocking the pump with ouabain \omterm{def:b1:flowering-plant-organization:organs}{leaves} the potential almost unchanged
+for minutes, then lets it decay over hours as the gradients run down:
+the potential is a diffusion potential, the pump its long-term
+support.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0.8, xmax=200, ymin=-135, ymax=10,
+  xlabel={external $\mathrm{K^+}$ (\unit{mmol/L})}, ylabel={membrane potential (\unit{mV})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1,10,100}, log ticks with fixed point, ytick={-120,-100,-80,-60,-40,-20,0},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[thick, dashed, omDef, domain=0.8:200, samples=40] {58*log10(x/140)};
+\addlegendentry{Nernst $E_K$ (slope \qty{58}{mV} per decade)}
+\addplot[very thick, omThm, domain=0.8:200, samples=60] {58*log10((x+0.01*145)/(140+0.01*12))};
+\addlegendentry{measured: $\mathrm{K^+}$ plus a small $\mathrm{Na^+}$ leak}
+\draw[dashed, gray] (axis cs:5,-135) -- (axis cs:5,-82);
+\node[font=\scriptsize, anchor=west] at (axis cs:5.5,-120) {physiological \qty{5}{mmol/L}};
+\end{semilogxaxis}
+\end{tikzpicture}
+
+{\small Resting potential against external potassium. At high
+potassium the membrane behaves as a potassium electrode and follows the
+Nernst line; at low potassium the small sodium leak pulls it above
+$E_K$.}
+\end{omfigure}
+
+\begin{example}[Where the pump's energy goes]\label{ex:b1:membranes-transport:pumpcost}
+Pumping one $\mathrm{Na^+}$ out against \qty{12}{} to \qty{145}{mmol/L}
+and \qty{-70}{mV} costs $RT\ln(145/12) + F\times 0.070 = 6.4 + 6.8 =
+\qty{13.2}{kJ/mol}$; three of them, \qty{40}{kJ}, plus two
+$\mathrm{K^+}$ in at $RT\ln(140/5) - F\times 0.070 = 8.6 - 6.8 =
+\qty{1.8}{kJ/mol}$ each: \qty{43}{kJ} per cycle against the
+\qty{50}{kJ} of one ATP under cellular conditions. The pump runs near
+its thermodynamic limit, and it consumes a third of a resting animal's
+ATP, two thirds in the brain.
+\end{example}
+
+\section{Bulk transport}
+
+\begin{proposition}[Vesicular transport]\label{prop:b1:membranes-transport:vesicles}
+Macromolecules and particles cross the \omterm{def:b1:membranes-transport:membrane}{plasma membrane} without passing
+through it: by \emph{exocytosis}, a vesicle fuses with the membrane and
+empties outward; by \emph{\omterm{def:b1:eukaryotic-cell:endocytosis}{endocytosis}}, the membrane engulfs material
+into a vesicle (\cref{ch:b1:eukaryotic-cell}). Both require ATP, both
+move membrane as well as contents, and both preserve the sidedness of
+the membrane. The three routes across a membrane --- through the lipid,
+through a protein, inside a vesicle --- are selective in three ways: by
+solubility, by molecular recognition, by the choice of what is
+engulfed.
+\end{proposition}
+
+\begin{example}[Cholesterol delivery]\label{ex:b1:membranes-transport:ldl}
+Cholesterol travels in the blood inside protein-coated particles too
+large for any carrier. A \omterm{def:b1:cell-unit-of-life:cell}{cell} needing cholesterol displays receptors
+for the particle; particle and receptor gather in a coated pit, which
+pinches off, and the vesicle delivers the particle to a \omterm{def:b1:eukaryotic-cell:endomembrane}{lysosome} where
+the cholesterol is freed. A person whose receptors are defective
+cannot clear the particles: blood cholesterol doubles and arteries
+clog in early adulthood. One \omterm{def:b1:membranes-transport:membrane}{membrane protein}, one disease.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:1}
+Describe the \omterm{def:b1:membranes-transport:membrane}{fluid mosaic model} in four sentences: the lipids, the
+proteins, the fluidity, the asymmetry.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:2}
+Rank $\mathrm{O_2}$, glucose, $\mathrm{Na^+}$, water and ethanol by
+their permeability through a pure \omterm{def:b1:membranes-transport:membrane}{lipid bilayer}, and explain the order.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:3}
+Compute the \omterm{def:b1:membranes-transport:osmosis}{solute potential} of a \qty{0.1}{mol/L} sucrose solution
+and of a \qty{0.1}{mol/L} NaCl solution at \qty{25}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:4}
+Compute the Nernst potential of $\mathrm{Cl^-}$ at \qty{120}{mmol/L}
+outside and \qty{4}{mmol/L} inside, at \qty{37}{\celsius}. Is chloride
+at equilibrium in a \omterm{def:b1:cell-unit-of-life:cell}{cell} at \qty{-89}{mV}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:5}
+Gorter and Grendel used $\num{4.7e9}$ red \omterm{def:b1:cell-unit-of-life:cell}{cells} of surface
+\qty{100}{\micro m^2} each and obtained a lipid monolayer of
+\qty{0.92}{m^2}. Compute the ratio of monolayer area to \omterm{def:b1:cell-unit-of-life:cell}{cell} surface
+and conclude.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:6}
+A plant \omterm{def:b1:cell-unit-of-life:cell}{cell} has a \omterm{def:b1:membranes-transport:osmosis}{solute potential} of \qty{-0.9}{MPa} and a \omterm{def:b1:membranes-transport:osmosis}{pressure
+potential} of \qty{0.5}{MPa}. It is placed in a solution of \omterm{def:b1:membranes-transport:osmosis}{solute
+potential} \qty{-0.6}{MPa} in an open dish. Which way does water move,
+and what is the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s \omterm{def:b1:membranes-transport:osmosis}{pressure potential} at equilibrium (assume its
+\omterm{def:b1:membranes-transport:osmosis}{solute potential} does not change)?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:7}
+Glucose uptake by a \omterm{def:b1:cell-unit-of-life:cell}{cell} is measured at increasing external
+concentrations: \qtylist{1;2;5;10;20}{mmol/L} give
+\qtylist{0.4;0.67;1.0;1.25;1.43}{\micro mol/min}. Show that the uptake
+saturates, estimate the maximum rate and the concentration giving half
+of it, and name the mechanism.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:8}
+Explain why the resting potential of a \omterm{def:b1:cell-unit-of-life:cell}{cell} is close to $E_K$ and not
+to $E_{Na}$, and what would happen to it if sodium \omterm{def:b1:membranes-transport:transporters}{channels} suddenly
+opened.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:9}
+The sodium--glucose \omterm{prop:b1:membranes-transport:secondary}{symporter} carries two $\mathrm{Na^+}$ per glucose.
+With $\mathrm{Na^+}$ at \qty{145}{mmol/L} outside and \qty{12}{} inside
+and $V_m = \qty{-60}{mV}$, compute the free energy available from the
+two sodium ions and the maximum glucose concentration ratio
+(inside/outside) the \omterm{prop:b1:membranes-transport:secondary}{symporter} can build at \qty{37}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:10}
+A \omterm{def:b1:cell-unit-of-life:cell}{cell} is cooled to \qty{4}{\celsius}. Predict, with reasons, the
+effects on: membrane fluidity, simple diffusion of $\mathrm{O_2}$, the
+pump, the ion gradients over hours, the \omterm{def:b1:membranes-transport:potential}{membrane potential}, and the
+volume of the \omterm{def:b1:cell-unit-of-life:cell}{cell}. (Consider that the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s proteins exert an
+osmotic pull that the sodium gradient normally balances.)
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:11}
+Frye and Edidin's fused \omterm{def:b1:cell-unit-of-life:cell}{cells} showed complete mixing of surface
+proteins at \qty{37}{\celsius} in \qty{40}{min}, none at
+\qty{4}{\celsius}, and none at \qty{37}{\celsius} when ATP synthesis was
+blocked --- the last result was later shown to be wrong. Say what each
+result would imply about the mechanism of mixing, and why the correct
+version (mixing does not need ATP) matters for the \omterm{def:b1:membranes-transport:membrane}{fluid mosaic model}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:12}
+"The \omterm{def:b1:membranes-transport:potential}{membrane potential} is a by-product of the ion gradients, not
+something the \omterm{def:b1:cell-unit-of-life:cell}{cell} builds directly." Discuss in a paragraph, with the
+\omterm{thm:b1:membranes-transport:nernst}{Nernst equation}, the pump, and the number of ions actually needed to
+charge the membrane (a capacitance of \qty{1}{\micro F/cm^2}).
+\end{exercise}
+
+\section{Problem: The Enterocyte}
+
+\begin{problem}[{Weekend problem --- the cell that pulls glucose out of
+the gut: pump, symporter, carrier and the Nernst equation, ending on
+the highest glucose ratio the cell can build}]
+\label{pb:b1:membranes-transport:1}
+An intestinal epithelial \omterm{def:b1:cell-unit-of-life:cell}{cell} (enterocyte) is \qty{25}{\micro m} tall
+and \qty{5}{\micro m} wide; its apical membrane faces the lumen, its
+basolateral membrane the blood. Its \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} holds \qty{12}{mmol/L} of
+$\mathrm{Na^+}$ and \qty{140}{mmol/L} of $\mathrm{K^+}$; the lumen and
+the blood hold \qty{145}{mmol/L} of $\mathrm{Na^+}$ and \qty{5}{mmol/L}
+of $\mathrm{K^+}$. The \omterm{def:b1:membranes-transport:potential}{membrane potential} is \qty{-60}{mV}. Take
+$T = \qty{310}{K}$, $R = \qty{8.314}{J.mol^{-1}.K^{-1}}$,
+$F = \qty{96500}{C/mol}$, $RT/F = \qty{26.7}{mV}$, and
+$\Delta G_{\text{ATP}} = \qty{-50}{kJ/mol}$ in the \omterm{def:b1:cell-unit-of-life:cell}{cell}.
+
+\medskip
+\noindent\textbf{Part I --- The gradients.}
+\begin{enumerate}
+  \item Compute the Nernst potentials of $\mathrm{Na^+}$ and
+        $\mathrm{K^+}$.
+  \item Which ion is nearer equilibrium at \qty{-60}{mV}? What does
+        this say about the resting permeabilities?
+  \item Compute the free energy change for one mole of $\mathrm{Na^+}$
+        entering the \omterm{def:b1:cell-unit-of-life:cell}{cell}, and for one mole of $\mathrm{K^+}$ leaving.
+  \item Compute the free energy cost of one pump cycle ($3\,\mathrm{Na^+}$
+        out, $2\,\mathrm{K^+}$ in) and compare with the energy of one
+        ATP. What is the efficiency?
+  \item The pump is on the basolateral membrane only. Explain why this
+        placement is necessary for the \omterm{def:b1:cell-unit-of-life:cell}{cell} to move glucose from lumen
+        to blood.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Glucose uphill.}
+The apical membrane carries a \omterm{prop:b1:membranes-transport:secondary}{symporter} taking in one glucose with two
+$\mathrm{Na^+}$; the basolateral membrane carries a glucose carrier
+(\omterm{def:b1:membranes-transport:transporters}{facilitated diffusion}).
+\begin{enumerate}[resume]
+  \item Compute the free energy released by two $\mathrm{Na^+}$
+        entering the \omterm{def:b1:cell-unit-of-life:cell}{cell}.
+  \item Write the free energy needed to move one glucose from the
+        lumen (concentration $c_L$) to the \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} ($c_C$).
+  \item At the \omterm{prop:b1:membranes-transport:secondary}{symporter}'s limit the two are equal. Compute the maximum
+        ratio $c_C/c_L$.
+  \item If the lumen falls to \qty{0.1}{mmol/L} of glucose late in
+        absorption, what cytosolic concentration can the \omterm{prop:b1:membranes-transport:secondary}{symporter}
+        still maintain?
+  \item Blood glucose is \qty{5}{mmol/L}. Explain how glucose \omterm{def:b1:flowering-plant-organization:organs}{leaves}
+        the \omterm{def:b1:cell-unit-of-life:cell}{cell} into the blood without any further energy.
+  \item Why is the \omterm{prop:b1:membranes-transport:secondary}{symporter} placed on the apical and the carrier on
+        the basolateral membrane, and not the reverse?
+  \item Oral rehydration solutions for cholera contain glucose and
+        salt. Explain, from the \omterm{prop:b1:membranes-transport:secondary}{symporter}, why the glucose makes the
+        salt --- and the water --- be absorbed.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Counting the traffic.}
+The \omterm{def:b1:cell-unit-of-life:cell}{cell} absorbs \qty{2e-15}{mol} of glucose per second.
+\begin{enumerate}[resume]
+  \item Compute the $\mathrm{Na^+}$ entering per second through the
+        \omterm{prop:b1:membranes-transport:secondary}{symporters}, and the number of pump cycles per second needed to
+        export it.
+  \item Compute the ATP spent per second on this export, and the
+        fraction of the glucose absorbed that would have to be
+        respired to pay for it (about 30 ATP per glucose).
+  \item Each \omterm{prop:b1:membranes-transport:secondary}{symporter} cycles \qty{50}{} times per second. How many
+        \omterm{prop:b1:membranes-transport:secondary}{symporters} does the apical membrane need? The apical membrane
+        is \qty{25}{\micro m^2} with microvilli multiplying it by
+        \qty{20}{}: compute the \omterm{prop:b1:membranes-transport:secondary}{symporter} density per square
+        micrometre.
+  \item The $\mathrm{Na^+}$ that enters brings water by \omterm{def:b1:membranes-transport:osmosis}{osmosis}. Two
+        $\mathrm{Na^+}$ and one glucose, with the accompanying
+        $\mathrm{Cl^-}$, are four osmoles; the \omterm{def:b1:cell-unit-of-life:cell}{cell} keeps its
+        osmolarity at \qty{0.3}{osmol/L}. Compute the volume of water
+        that must follow the solutes per second, and the time it would
+        take to double the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s volume if the water did not leave
+        through the basolateral membrane.
+  \item Compute the number of water molecules absorbed per glucose
+        molecule (\qty{18}{g/mol}, density \qty{1}{g/mL}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Charging the membrane.}
+The membrane is a capacitor of \qty{1}{\micro F/cm^2}.
+\begin{enumerate}[resume]
+  \item Compute the area of the \omterm{def:b1:cell-unit-of-life:cell}{cell}'s membrane (take a box
+        \qty{25}{\micro m} by \qty{5}{\micro m} by \qty{5}{\micro m}
+        without microvilli) and its capacitance.
+  \item Compute the charge needed to hold \qty{-60}{mV} and the number
+        of monovalent ions it represents.
+  \item Compute the number of excess ions per square micrometre of
+        membrane that this represents.
+  \item Compute the number of $\mathrm{K^+}$ ions in the \omterm{def:b1:cell-unit-of-life:cell}{cell}, and the
+        fraction that must leave to charge the membrane. Comment.
+  \item The pump moves a net charge out on each cycle. Using question
+        13, compute the current it carries and the change in potential
+        it would produce in one second if nothing else moved. Why does
+        the potential not in fact run away?
+  \item A drug blocks the pump. Predict, in order, the changes in the
+        sodium gradient, the glucose absorption, the \omterm{def:b1:membranes-transport:potential}{membrane
+        potential} and the \omterm{def:b1:cell-unit-of-life:cell}{cell} volume.
+  \item A drug blocks the potassium \omterm{def:b1:membranes-transport:transporters}{channels} instead. Predict the
+        change in the resting potential.
+  \item State the result: the maximum glucose concentration ratio the
+        enterocyte can build, and the two \omterm{def:b1:membranes-transport:membrane}{membrane proteins} that make
+        it possible.
+\end{enumerate}
+\end{problem}
