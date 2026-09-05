@@ -1,8 +1,9 @@
 #!/bin/bash
 # Structural gate for a translated edition.
 #
-#   bash tools/check_translation.sh bachelor-3 fr     # one year, one language
-#   bash tools/check_translation.sh                   # every year x {fr,nl}
+#   bash tools/check_translation.sh grade-3 fr        # one year, one language
+#   bash tools/check_translation.sh                   # every year x every
+#                                                     # language present on disk
 #
 # A clean pdflatex build proves almost nothing about a translation: \ominput
 # silently falls back to the English body when a translated file is missing,
@@ -85,7 +86,7 @@ check_year_lang() {
   fi
   # "samples at={1,...,16}" is pgfplots syntax, not drafty prose.
   if grep -rn '\.\.\.' "$tdir" "$tsdir" 2>/dev/null \
-       | grep -qv '\\dots\|\\ldots\|\\cdots\|\\foreach\|samples at'; then
+       | grep -qv '\\dots\|\\ldots\|\\cdots\|\\foreach\|samples at\|xtick=\|ytick='; then
     bad "drafty ... in prose (use \\dots)" "$year/$lang"
   fi
   dup=$(grep -rho 'label{[^}]*}' "$tdir" "$tsdir" 2>/dev/null | sort | uniq -d)
@@ -97,13 +98,59 @@ check_year_lang() {
   if grep -rqn "\\\\['\`^\"]{\?[aeiouAEIOU]" "$tdir" "$tsdir" 2>/dev/null; then
     bad "TeX accent escapes (use UTF-8)" "$year/$lang"
   fi
+
+  # ---- 7. Script-specific prose hygiene. Gates 5 and 6 are Latin-oriented
+  #         and score NOTHING on a non-Latin target: a Hindi or Arabic tree
+  #         can pass every gate above and still be the raw machine
+  #         translation it started as. Arabic additionally hides bidi control
+  #         characters and Arabic presentation forms no Latin gate can see.
+  if [ "$lang" = "hi" ]; then
+    python3 tools/check_hindi_prose.py --quiet "$tdir" "$tsdir" \
+      || bad "Devanagari prose hygiene" "$year/$lang"
+  fi
+  if [ "$lang" = "ar" ]; then
+    python3 tools/check_arabic_prose.py --quiet "$tdir" "$tsdir" \
+      || bad "Arabic prose hygiene" "$year/$lang"
+  fi
+
+  # ---- 8. Indonesian prose hygiene -- the opposite problem to gate 7.
+  #         Indonesian is written in the SAME alphabet as the source, so a
+  #         forgotten sentence, TikZ node, \text{...} or optional title is
+  #         indistinguishable from correct output: a tree can be structurally
+  #         perfect, build clean, and still be half English. The gate is a
+  #         curated list of English words that are NOT words of Indonesian.
+  if [ "$lang" = "id" ]; then
+    python3 tools/check_indonesian_prose.py --quiet "$tdir" "$tsdir" \
+      || bad "Indonesian prose hygiene" "$year/$lang"
+  fi
+
+  # ---- 9. The twin comparison, for every Latin-script target. No word list
+  #         can separate an English word from a French one, so this asks a
+  #         question needing no per-language knowledge at all: is this
+  #         fragment BYTE-IDENTICAL to its English twin and does it contain a
+  #         lowercase word? Optional titles, \text{}, TikZ nodes, dup lines.
+  case "$lang" in fr|nl|es|pt|id)
+    python3 tools/check_latin_prose.py --quiet "$tdir" "$tsdir" \
+      || bad "twin-comparison prose gate" "$year/$lang"
+  ;; esac
+
+  # ---- 10. Orphan lines: an English source line whose content the previous
+  #          sentence's translation ABSORBED, so it fell outside every patch
+  #          range and was copied through verbatim -- by design, which is
+  #          exactly why no other gate here objects to it.
+  python3 tools/check_orphan_lines.py --quiet "$tdir" "$tsdir" \
+    || bad "orphan English line" "$year/$lang"
 }
 
 if [ $# -eq 2 ]; then
   check_year_lang "$1" "$2"
 else
-  for year in bachelor-1 bachelor-2 bachelor-3; do
-    for lang in fr nl; do
+  for year in grade-1 grade-2 grade-3 grade-4 grade-5 grade-6 grade-7 \
+              grade-8 grade-9 grade-10 grade-11 grade-12 \
+              bachelor-1 bachelor-2 bachelor-3; do
+    for lang in fr nl es pt hi ar id; do
+      # Skip years that have no translation directory yet.
+      [ -d "parts/$year/$lang" ] || continue
       check_year_lang "$year" "$lang"
     done
   done

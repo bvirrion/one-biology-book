@@ -17,7 +17,13 @@ ENTRY = {
     5: "one_biology_book_5_university_year_3.tex",
 }
 
-LANGS = {1: ("en",), 2: ("en",), 3: ("en",), 4: ("en",), 5: ("en",)}
+LANGS = {
+    1: ("en", "fr", "nl", "es", "pt", "hi", "ar", "id"),
+    2: ("en", "fr", "nl", "es", "pt", "hi", "ar", "id"),
+    3: ("en", "fr", "nl", "es", "pt", "hi", "ar", "id"),
+    4: ("en", "fr", "nl", "es", "pt", "hi", "ar", "id"),
+    5: ("en", "fr", "nl", "es", "pt", "hi", "ar", "id"),
+}
 
 
 def years(book):

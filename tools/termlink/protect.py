@@ -44,7 +44,7 @@ BASE_PROTECT = [
     r'|href|hypertarget|hyperlink|omterm|texorpdfstring)\{[^{}]*\}(?:\{' + GROUP + r'*\})?',
     # Raster includes: never link inside a filename (\omimg first arg, graphicx).
     r'\\omimg\{[^{}]*\}',
-    r'\\includegraphics(?:\[[^\]]*\])?\{[^{}]*\}',
+    r'\\includegraphics(?:\[[^\]]*\])?\s*\{[^{}]*\}',
     # a heading may nest \texorpdfstring{}{} or \ref{}; without the nesting the
     # heading is not masked and the link ends up in the contents and the
     # running head, where it has no business being

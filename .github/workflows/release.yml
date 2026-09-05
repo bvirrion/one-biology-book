@@ -1,0 +1,83 @@
+name: Build and Release PDFs
+
+on:
+  push:
+    tags:
+      - 'v*'            # triggers on tags like v0.0.1, v1.2.3
+
+permissions:
+  contents: write       # needed to create releases and upload assets
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0            # need the tag's metadata for its date
+
+      - name: Generate version info
+        run: |
+          DATE=$(git for-each-ref --format='%(creatordate:short)' "refs/tags/${GITHUB_REF_NAME}")
+          printf '\\renewcommand{\\bookdate}{%s}\n'    "$DATE"            >  version.tex
+          printf '\\renewcommand{\\bookversion}{%s}\n' "$GITHUB_REF_NAME" >> version.tex
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          # One entry file per book of the series.
+          root_file: |
+            one_biology_book_1_primary_middle_school.tex
+            one_biology_book_1_primary_middle_school_fr.tex
+            one_biology_book_1_primary_middle_school_nl.tex
+            one_biology_book_1_primary_middle_school_es.tex
+            one_biology_book_1_primary_middle_school_pt.tex
+            one_biology_book_1_primary_middle_school_hi.tex
+            one_biology_book_1_primary_middle_school_ar.tex
+            one_biology_book_1_primary_middle_school_id.tex
+            one_biology_book_2_high_school.tex
+            one_biology_book_3_university_year_1.tex
+            one_biology_book_4_university_year_2.tex
+            one_biology_book_5_university_year_3.tex
+          latexmk_use_lualatex: false
+          # latexmkrc: pdflatex by default; *_hi.tex forced to XeLaTeX
+          # (Devanagari) and *_ar.tex to LuaLaTeX (right-to-left Arabic, via
+          # babel bidi=basic). Fonts are bundled under assets/fonts/.
+
+      - name: Check for undefined references
+        run: |
+          ! grep -E "(Reference|Citation).*undefined" build/*.log
+
+      - name: Name the PDFs with the version
+        run: |
+          # Glob, not a hardcoded slug list: a new edition is then picked up by
+          # registering it in root_file: above and nowhere else.
+          # Each PDF is attached twice: once versioned, once under its plain
+          # slug — the plain name is what makes the README's
+          # releases/latest/download/<slug>.pdf links permanent.
+          for pdf in build/one_biology_book_*.pdf
+          do
+            slug="$(basename "$pdf" .pdf)"
+            cp "$pdf" "${slug}_${GITHUB_REF_NAME}.pdf"
+            cp "$pdf" "${slug}.pdf"
+          done
+
+      - name: Create release and attach PDFs
+        uses: softprops/action-gh-release@v2
+        with:
+          files: one_biology_book_*.pdf
+          generate_release_notes: true
+          body: |
+            The **One Biology Book** series compiled at `${{ github.ref_name }}`.
+            Books 1 (Primary & Middle School, grades 1–9), 2 (High School,
+            grades 10–12) and 3 (University, Year 1) are fully written;
+            Books 4 and 5 are titled chapter placeholders. Book 1 ships in
+            eight languages — English, French, Dutch, Spanish, Portuguese,
+            Hindi, Arabic and Indonesian — the other volumes in English.
+
+            - **Download**: pick the PDF for your book and language below.
+              Files without a version suffix are stable names — linking to
+              `releases/latest/download/<name>.pdf` always fetches the newest
+              edition.
+            - **Read online**: https://www.one-course.com/books
+            - Found a mistake? [Report an erratum](https://github.com/${{ github.repository }}/issues/new?template=errata.yml).

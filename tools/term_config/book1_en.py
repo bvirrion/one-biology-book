@@ -26,8 +26,19 @@ STOP = {
     "fields",
     # the exercise need in its chapter; "breathing movements" etc.
     "movement",
-    # honest in the classification chapters, imperative elsewhere
-    "sorting", "classify",
+    # honest in the classification chapters, imperative elsewhere.
+    # "Sorting" is listed SEPARATELY and on purpose: the grade-2 definition
+    # writes \emph{Sorting} at the head of its sentence, so the harvested key
+    # is the CAPITALISED form and the lowercase entry never reached it. The
+    # target then collected its only two links from the wrong sense entirely --
+    # "Sorting by body features" (taxonomy, grade 3) and "Part I --- Sorting
+    # the ledger" (grade 9) -- neither of which is waste recycling. Found by
+    # the Dutch Book 1 agent, 2026-09-04, whose DROP of "sorteren" correctly
+    # refused to reproduce it and left that edition one target short of
+    # English. Same trap as the Indonesian \emph{Lensa} case in
+    # ../translation_instruction.md: a definition opening with its term
+    # capitalised registers only the capitalised display.
+    "sorting", "Sorting", "classify",
     # the plant in its chapter; family/kinship trees elsewhere
     "tree",
     # the g2 chapter's subject; "the nature of" turns elsewhere
