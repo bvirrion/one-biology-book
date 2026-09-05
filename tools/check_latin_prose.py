@@ -200,7 +200,15 @@ def _word_count(s):
     # duplicated English sentence. It fired on three shipped editions at once.
     s = re.sub(r"\{[^{}]*:[^{}]*\}", " ", s)
     s = re.sub(r"\\[A-Za-z@]+", " ", s)
-    return len(re.findall(r"[A-Za-z]{2,}", s))
+    # A HYPHENATED COMPOUND IS ONE WORD, not two. Counting the parts put the
+    # international loanword "Crossing-over" -- correct, unchanged prose in
+    # Dutch, French, Spanish and Portuguese -- into the blocking multi-word
+    # tier, and a legitimate environment title FAILED a whole year until it
+    # was retitled to satisfy the gate. That is the gate driving the
+    # translation, which is backwards. A single lexical item, hyphens and
+    # elision apostrophes included, is exactly the true-cognate case the
+    # one-word tier exists for. Found by the Dutch Book 2 agent, 2026-09-05.
+    return len(re.findall(r"[A-Za-z]{2,}(?:[-'\u2019][A-Za-z]{2,})*", s))
 
 
 def _fragments(text):

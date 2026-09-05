@@ -1,0 +1,69 @@
+% ==========================================================================
+% One Biology Book — Biología de secundaria (Años 10–12)
+% Spanish edition of one_biology_book_2_high_school.tex.
+%
+% Build:  latexmk one_biology_book_2_high_school_es.tex
+% Output: build/one_biology_book_2_high_school_es.pdf
+% ==========================================================================
+\documentclass[11pt,a4paper,twoside,openany]{book}
+
+\newcommand{\booklang}{es}
+\usepackage{styles/onebiology}
+
+% Brand the running header: rosette + ONE-COURSE.COM (linking to the site)
+% above the chapter mark and the book title, on even pages; page number at the
+% foot. See \ombrandheader in styles/onebiology.sty.
+\ombrandheader
+
+% Print, at the end of every exercise, a hyperlinked "Solution p. N" pointer
+% to its solution in the end-of-book appendix.
+\omsolutionlinks
+
+% Version and date default to empty / today, but a release build supplies a
+% generated version.tex that overrides them (see .github/workflows/release.yml).
+\newcommand{\bookdate}{\today}
+\newcommand{\bookversion}{}
+\IfFileExists{version.tex}{\input{version.tex}}{}
+
+% This volume's line on the shared cover (frontmatter/titlepage.tex).
+\newcommand{\bookline}{Libro 2: Biología de secundaria}
+
+\title{One Biology Book}
+\author{Los colaboradores del One Biology Book}
+\date{\bookdate}
+
+\begin{document}
+
+\frontmatter
+\input{frontmatter/titlepage}
+\input{frontmatter/colophon}
+\input{frontmatter/preface.es}
+\input{frontmatter/image-credits-book2.es}
+\tableofcontents
+
+\mainmatter
+
+% --------------------------------------------------------------------------
+% Parts — one per year.
+% --------------------------------------------------------------------------
+\input{parts/grade-10/part}
+\input{parts/grade-11/part}
+\input{parts/grade-12/part}
+
+% --------------------------------------------------------------------------
+% Solutions to all exercises
+% --------------------------------------------------------------------------
+\appendix
+\part{\omsolutionspart}
+\input{parts/grade-10/solutions/solutions}
+\input{parts/grade-11/solutions/solutions}
+\input{parts/grade-12/solutions/solutions}
+
+\backmatter
+% The index's multicol balancing needs a little more shrink between letter
+% groups than the class default (10pt plus 5pt minus 3pt), or the last page
+% reports two overfull columns.
+\renewcommand{\indexspace}{\par\vskip 8pt plus 4pt minus 4pt\relax}
+\printindex
+
+\end{document}

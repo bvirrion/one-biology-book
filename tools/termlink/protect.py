@@ -45,6 +45,19 @@ BASE_PROTECT = [
     # Raster includes: never link inside a filename (\omimg first arg, graphicx).
     r'\\omimg\{[^{}]*\}',
     r'\\includegraphics(?:\[[^\]]*\])?\s*\{[^{}]*\}',
+    # siunitx arguments are typeset in MATH mode, so a link inside one is a
+    # \hyperref in math -- and an accented or non-Latin character there expands
+    # to an invalid escape, drops characters from the page and still exits 0.
+    # Nothing else masked these, so the linker itself minted the defect:
+    # \qty{50}{\omterm{...}{nucleotides}/s} shipped in Books 2 and 3, found by
+    # the Portuguese Book 2 agent, 2026-09-05. Note this masks the NUMBER
+    # argument too, which is correct: it is mathematics, never prose.
+    r'\\qty(?:\[[^\]]*\])?\s*\{' + GROUP + r'*\}\s*\{' + GROUP + r'*\}',
+    r'\\qtyrange(?:\[[^\]]*\])?\s*\{' + GROUP + r'*\}\s*\{' + GROUP
+    + r'*\}\s*\{' + GROUP + r'*\}',
+    r'\\(?:qtylist|numrange)(?:\[[^\]]*\])?\s*\{' + GROUP + r'*\}\s*\{'
+    + GROUP + r'*\}',
+    r'\\(?:num|numlist|unit|si|SI)(?:\[[^\]]*\])?\s*\{' + GROUP + r'*\}',
     # a heading may nest \texorpdfstring{}{} or \ref{}; without the nesting the
     # heading is not masked and the link ends up in the contents and the
     # running head, where it has no business being

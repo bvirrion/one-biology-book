@@ -28,7 +28,7 @@ every structural, build, gate and link-hygiene measurement green.
 | Cross-refs / rule compliance | **99** | `\label`, `\cref`/`\ref` targets, `\begin{solution}{key}` keys and `[resume]` options byte-identical to English. No curriculum, programme or country name anywhere in visible text |
 | Figures | **96** | All TikZ / pgfplots drawing code byte-identical — coordinates, `\foreach` lists, axis options, colours untouched; only node text and `{\small …}` captions localized. Three `\foreach` visible-label lists (grades 2, 3, 4) are not blanked by `id_apply`'s `draw` census, so the English line was kept outside the patch ranges and a single targeted post-write edit applied instead — never a file-wide `!draw` opt-out |
 | Solutions | **97** | All 796 exercise solutions and all 35 weekend-problem solutions present and native; headers `\section*{Bab \ref{ch:…} --- <judul>}` with the `ch:…` slug unchanged. Open-answer models rewritten as Indonesian, not glossed (the closing line of the book — ``Siput itu dan kamu dibangun oleh empat huruf yang sama: jagalah seluruh keluarganya.'') |
-| Defined-term links (`\omterm`) | **95** | **8 390 links over 151 distinct targets**, against English's **7 608 over 151** — 110.3 % density on the *same target set* but for two ≤ 7-link divergences (below). Zero links inside `\qty` / `\unit` / `\num` / math / `\label` / solution keys / TikZ bodies / titles |
+| Defined-term links (`\omterm`) | **95** | **8 486 links over 151 distinct targets**, against English's **7 608 over 151** — 110.3 % density on the *same target set* but for two ≤ 7-link divergences (below). Zero links inside `\qty` / `\unit` / `\num` / math / `\label` / solution keys / TikZ bodies / titles |
 | MT-artifact freedom | **95** | `check_indonesian_prose.py`: **silent across all 142 files**. `check_latin_prose.py`: **0 findings across 142 files** (both tiers). `check_orphan_lines.py`: **0 orphan English lines**. `\text{…}` census over course **and** solutions: 4 of 4 translated (*rumput*, *belalang*, *kadal*, *elang*) |
 
 **Overall: 96** (weighted toward terminology + register + MT-artifact freedom; structure is already gated mechanically).
@@ -232,3 +232,25 @@ worked around, and all four were fixed in the shared tools:
   (*permesinannya*, *penahannya*, *pembukuannya*) accumulate. I pruned them
   where a sentence could carry a demonstrative instead, but a native editor
   would still thin a handful further.
+
+## Amendment, 2026-09-05 — link count 8 390 → 8 486
+
+Raised by a change made during the Book 2 `id` run, not by anything wrong here.
+`tools/termlink/morphology.py` refused a `WORD_TAIL` to any term ending in `s`.
+That rule exists for ENGLISH, whose tail is `(?:e?s)?` (*species* + *s* would be
+*specieses*); Indonesian's tail is the ENCLITIC `-nya`, which attaches after `s`
+like any other letter. It is now opt-in per language via `TAIL_AFTER_S`, set
+only in `lang_id.py`, and `lang_id.py` is shared by both volumes.
+
+The 96 recovered links are all the same honest class: *spesiesnya* 20,
+*alveolusnya* 16, *jonjot ususnya* 16, *sinapsisnya* 14, *virusnya* 11,
+*pubertasnya* 8, *usus halusnya* 6, *diabetesnya* 3, *metamorfosisnya* 2,
+*penisnya* 2. Every other language's pattern is byte-identical (all read the
+flag as `False` through `getattr`), and `--check` is green for all eight Book 1
+editions.
+
+Re-verified after the change: 467 pp, 0 errors, 0 undefined, 0 overfull,
+`nullfont` 20 (this book's healthy baseline), 142 files in the `.fls`,
+`check_translation.sh` PASSED for all nine years. Density against English rises
+from 110.3 % to 111.5 % on the same 151-target set. Self-score unchanged at
+96/100 — the mechanism improved, the prose did not change.

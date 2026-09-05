@@ -553,6 +553,81 @@ TATWEEL = "ـ"
 
 ARABIC_INDIC_DIGITS = re.compile(r"[٠-٩۰-۹]")
 
+# A nucleotide sequence printed with its 5'/3' ends, e.g. the biology canon's
+# \texttt{5'-ATGGCTTAC-3'} and \texttt{5'-GTAAGCCAT-3'}. CHEM_FORMULA already
+# clears a bare run of bases (ATGGCTTAC fullmatches (?:[A-Z][a-z]?){2,}), but
+# LATIN_WORD swallows the trailing hyphen of the 3' end, so the token reaching
+# the loop is "ATGGCTTAC-" and no rule can see it. Verified against the
+# UNTRANSLATED English canon, where the gate reports these two sites and no
+# other edition can avoid inheriting them: a base sequence is not English, it
+# is data, and it must stay byte-identical in every language.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+NUCLEOTIDE_SEQ = re.compile(r"[ACGTU]{4,}[-']*")
+
+# Latin genus and species names this BIOLOGY volume uses that the original
+# ALLOWED_WORDS list (written for Book 1) does not carry. Scientific
+# nomenclature is international: an Arabic biology text prints
+# \emph{Chlorella} in Latin exactly as the French, Dutch and Indonesian
+# editions do, and the English canon italicises them for that reason. Found by
+# grepping the Book 2 canon for \emph{...}/\textit{...} whose content is a
+# capitalised Latin word, which is what the ALLOWED_WORDS comment asks a later
+# book to do. Common-noun forms (paramecium, neanderthal) are NOT listed --
+# those are ordinary prose and are written in Arabic.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+ALLOWED_WORDS |= {
+    "chlorella", "euglena", "archaeopteryx", "paranthropus",
+    "africanus", "heidelbergensis",
+}
+
+# The IUPAC three-letter abbreviations for the twenty amino acids. Book 2's
+# genetic-code table prints all twenty of them, and so does every other
+# edition: the French twin keeps "UUU Phe / UCU Ser / UAU Tyr" verbatim and
+# translates only "deuxieme lettre" and "arret" around them. They are
+# international nomenclature, like the Latin binomials above, not English
+# words -- and they are unreachable by the existing rules, since "Phe" is
+# neither all-caps (the acronym exemption) nor a chemical formula.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+ALLOWED_WORDS |= {
+    "ala", "arg", "asn", "asp", "cys", "gln", "glu", "gly", "his", "ile",
+    "leu", "lys", "met", "phe", "pro", "ser", "thr", "trp", "tyr", "val",
+}
+
+# Nucleic-acid abbreviations. The Arabic edition keeps DNA and RNA in Latin --
+# the choice Book 1 `ar` already shipped (\emph{DNA}\index{DNA}) and the one
+# an Arabic biology textbook makes -- so the derived forms mRNA, tRNA and rRNA
+# are Latin too. "DNA" and "RNA" pass already as all-caps acronyms; the mixed
+# case of "mRNA" reaches no existing rule.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+ALLOWED_WORDS |= {"mrna", "trna", "rrna"}
+
+# One more institution that every edition keeps in Latin, for the same reason
+# as "Wikimedia Commons" and "Wellcome Collection" above: this edition's own
+# frontmatter/image-credits-book2.ar.tex already prints "Imperial War
+# Museums" unchanged, so a chapter caption that transliterated it would give
+# the book two spellings of one institution -- the exact defect the Arabic
+# Book 1 agent reported. Kept as a separate pattern rather than folded into
+# ATTRIBUTION so the original stays untouched; the words "war" and "museums"
+# are deliberately NOT added to ALLOWED_WORDS, which would blind the gate.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+ATTRIBUTION_EXTRA = re.compile(
+    r"Imperial\s+War\s+Museums"
+    # The publisher and the title of the textbook a figure is reused from,
+    # for exactly the same reason: frontmatter/image-credits-book2.ar.tex
+    # prints "OpenStax \\emph{Anatomy and Physiology}" in Latin, so a
+    # chapter caption that translated the title would give the book two
+    # names for one source. A work's title and its publisher are names, not
+    # prose. "anatomy" and "physiology" are again deliberately NOT added to
+    # ALLOWED_WORDS -- only this exact phrase is blanked.
+    # Added by the Arabic Biology Book 2 agent, 2026-09-05.
+    r"|OpenStax|Anatomy\s+and\s+Physiology")
+
+# Gene symbols keep their published capitalisation in every language, and the
+# mouse/human convention (mouse \emph{Sry}, human SRY) is part of the name.
+# All-caps symbols (SRY, CFTR, ATP) already pass as acronyms; the mixed-case
+# mouse form does not, and it is the only one Book 2 prints.
+# Added by the Arabic Biology Book 2 agent, 2026-09-05.
+ALLOWED_WORDS |= {"sry"}
+
 
 def check_file(path: pathlib.Path, findings: list) -> None:
     raw = path.read_text(encoding="utf-8")
@@ -563,6 +638,8 @@ def check_file(path: pathlib.Path, findings: list) -> None:
 
     # 1. residual English in visible text
     for m in ATTRIBUTION.finditer(seen):
+        seen = seen[:m.start()] + " " * (m.end() - m.start()) + seen[m.end():]
+    for m in ATTRIBUTION_EXTRA.finditer(seen):
         seen = seen[:m.start()] + " " * (m.end() - m.start()) + seen[m.end():]
     for m in LATIN_WORD.finditer(seen):
         word = m.group(0)
@@ -580,6 +657,17 @@ def check_file(path: pathlib.Path, findings: list) -> None:
         if CHEM_FORMULA.fullmatch(word):
             continue        # MgF(2), NaCl, GaAs, AsH(3): element symbols, not
                             # English, and they stay Latin in every script
+        if NUCLEOTIDE_SEQ.fullmatch(word):
+            continue        # 5'-ATGGCTTAC-3': a DNA sequence, see above
+        if "-" in word and all(
+                part.lower() in ALLOWED_WORDS
+                for part in word.split("-") if part):
+            continue        # Met--Pro--Glu--Phe: LATIN_WORD swallows the
+                            # hyphens, so an amino-acid chain arrives as ONE
+                            # token and no per-word rule can see it. Accepted
+                            # only when EVERY component is separately allowed,
+                            # so an ordinary English compound still fires.
+                            # Added by the Arabic Biology Book 2 agent.
         if len(word) < 3:
             continue        # stray single symbols
         findings.append((rel, _locate(body, word, _occ),

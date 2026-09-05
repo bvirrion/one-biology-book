@@ -1,0 +1,538 @@
+\chapter{Lire la parenté~: les arbres phylogénétiques}\label{ch:g12:phylogenetic-trees}
+
+En 1837, sur une page d'un carnet personnel, Darwin a esquissé une
+ligne ramifiée portant quelques rameaux et a écrit au-dessus deux
+mots~: «~I think~», je pense. Le croquis proposait que les \omterm{def:g10:biodiversity-scales:species}{espèces}
+soient apparentées comme le sont les rameaux d'un arbre --- par
+descendance à partir de branches communes --- et que leur parenté
+puisse être reconstituée. Aujourd'hui, le croquis est devenu un outil
+courant~: un \omterm{def:g12:phylogenetic-trees:tree}{arbre phylogénétique}, construit à partir de caractères
+partagés et de l'\omterm{def:g10:universal-dna:information}{ADN}, lu selon des règles. Ce chapitre enseigne ces
+règles~: comment construire un arbre à partir d'un tableau de
+caractères, comment le lire sans le mal lire, et comment les molécules
+en font une horloge.
+
+\section{Ce que dit un arbre}
+
+\begin{definition}[Arbre phylogénétique]\label{def:g12:phylogenetic-trees:tree}
+Un \emph{arbre phylogénétique}\index{arbre phylogénétique} est un
+schéma de la parenté d'un ensemble d'\omterm{def:g10:biodiversity-scales:species}{espèces} (ou d'autres groupes).
+Ses extrémités sont les \omterm{def:g10:biodiversity-scales:species}{espèces} comparées~; chaque \emph{nœud} où deux
+branches se rejoignent représente leur ancêtre commun le plus
+récent --- une \omterm{def:g12:selection-drift-speciation:population}{population} hypothétique, non un fossile connu~; la
+\emph{racine} est l'ancêtre commun de toutes. Deux \omterm{def:g10:biodiversity-scales:species}{espèces} sont plus
+proches parentes qu'une troisième lorsque leur ancêtre commun (leur
+nœud) est plus récent que le nœud qu'elles partagent avec la
+troisième. La parenté se lit sur les nœuds, jamais sur la position de
+gauche à droite des extrémités.
+\end{definition}
+
+\begin{proposition}[Règles de lecture]\label{prop:g12:phylogenetic-trees:rules}
+\begin{itemize}
+  \item Un arbre peut être tourné autour de n'importe quel nœud sans
+        que son sens change~: l'ordre des extrémités est arbitraire.
+  \item Un nœud n'a pas de nom et n'est pas l'une des extrémités~: une
+        \omterm{def:g10:biodiversity-scales:species}{espèce} n'est jamais l'ancêtre d'une autre \omterm{def:g10:biodiversity-scales:species}{espèce} sur l'arbre~;
+        deux extrémités sont des \emph{groupes frères}, issus d'un
+        ancêtre commun.
+  \item Un groupe formé d'un ancêtre et de \emph{tous} ses
+        descendants --- tout ce qui se trouve au-delà d'un
+        nœud --- est un \emph{clade}\index{clade}, le seul type de
+        groupe que nomme une classification phylogénétique.
+  \item La longueur des branches ne porte une information que si
+        l'arbre le précise (le temps, ou le nombre de changements)~;
+        sinon seul l'ordre de ramification compte.
+\end{itemize}
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % tree 1
+  \begin{scope}
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (4.5,1.2);
+    \draw[thick] (1,0) -- (1,-1.2) -- (2.2,-1.2);
+    \draw[thick] (2.2,-1.2) -- (2.2,-0.5) -- (4.5,-0.5);
+    \draw[thick] (2.2,-1.2) -- (2.2,-1.9) -- (3.4,-1.9);
+    \draw[thick] (3.4,-1.9) -- (3.4,-1.5) -- (4.5,-1.5);
+    \draw[thick] (3.4,-1.9) -- (3.4,-2.3) -- (4.5,-2.3);
+    \node[anchor=west] at (4.6,1.2) {grenouille}; \node[anchor=west] at (4.6,-0.5) {lézard};
+    \node[anchor=west] at (4.6,-1.5) {souris}; \node[anchor=west] at (4.6,-2.3) {humain};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,-1.2) circle (2pt); \fill[omThm] (3.4,-1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {arbre A};
+  \end{scope}
+  % tree 2: same topology, rotated
+  \begin{scope}[xshift=8cm]
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (2.2,1.2);
+    \draw[thick] (2.2,1.2) -- (2.2,1.9) -- (3.4,1.9);
+    \draw[thick] (3.4,1.9) -- (3.4,2.3) -- (4.5,2.3);
+    \draw[thick] (3.4,1.9) -- (3.4,1.5) -- (4.5,1.5);
+    \draw[thick] (2.2,1.2) -- (2.2,0.5) -- (4.5,0.5);
+    \draw[thick] (1,0) -- (1,-1.2) -- (4.5,-1.2);
+    \node[anchor=west] at (4.6,2.3) {humain}; \node[anchor=west] at (4.6,1.5) {souris};
+    \node[anchor=west] at (4.6,0.5) {lézard}; \node[anchor=west] at (4.6,-1.2) {grenouille};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,1.2) circle (2pt); \fill[omThm] (3.4,1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {arbre B~: le même arbre};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Deux dessins d'un seul et même arbre. Faire tourner les
+branches à chaque nœud change l'ordre des extrémités mais pas une
+seule parenté~: dans les deux, la souris et l'humain sont groupes
+frères, le lézard est leur plus proche parent, et la grenouille est la
+plus éloignée. Lire sur l'arbre A que «~le lézard est entre la
+grenouille et la souris~» serait une erreur.}
+\end{omfigure}
+
+\begin{example}[Erreurs de lecture à éviter]\label{ex:g12:phylogenetic-trees:misreadings}
+«~L'humain descend du chimpanzé~»~: non --- sur l'arbre, l'humain et
+le chimpanzé sont des extrémités sœurs, issues d'un ancêtre commun qui
+n'était ni l'un ni l'autre. «~La grenouille est plus primitive~»~:
+non --- chaque extrémité est une \omterm{def:g10:biodiversity-scales:species}{espèce} actuelle qui compte la même
+durée d'histoire depuis la racine~; la lignée de la grenouille a
+évolué aussi longtemps que la nôtre. «~Le lézard est plus proche de la
+grenouille que de la souris~» (sur l'arbre A)~: non --- le lézard et
+la souris partagent un nœud plus récent.
+\end{example}
+
+\section{Construire un arbre à partir des caractères}
+
+\begin{definition}[États ancestral et dérivé]\label{def:g12:phylogenetic-trees:states}
+Un \emph{caractère} est un trait qui varie parmi les \omterm{def:g10:biodiversity-scales:species}{espèces} comparées
+(la présence d'une colonne vertébrale, de quatre membres, d'un œuf
+amniotique, de poils). Chaque caractère possède un état
+\emph{ancestral} --- celui que possédait l'ancêtre commun du
+groupe --- et un ou plusieurs états \emph{dérivés} apparus plus tard
+dans certaines lignées. Seuls les \emph{états dérivés partagés}
+indiquent une parenté~: deux \omterm{def:g10:biodiversity-scales:species}{espèces} qui partagent un état dérivé
+l'ont hérité de l'ancêtre chez lequel il est apparu. Un état ancestral
+partagé ne dit rien, puisque l'ancêtre de tous le possédait.
+\end{definition}
+
+\begin{method}[D'une matrice de caractères à un arbre]\label{met:g12:phylogenetic-trees:build}
+\begin{enumerate}
+  \item Construire un tableau~: les \omterm{def:g10:biodiversity-scales:species}{espèces} en lignes, les caractères
+        en colonnes, 1 pour l'état dérivé et 0 pour l'état ancestral.
+        Décider quel état est ancestral en comparant avec un
+        \emph{groupe externe}, une \omterm{def:g10:biodiversity-scales:species}{espèce} dont on sait qu'elle est
+        extérieure au groupe étudié.
+  \item Chercher l'état dérivé partagé par le plus grand nombre
+        d'\omterm{def:g10:biodiversity-scales:species}{espèces}~: il définit le premier \omterm{prop:g12:phylogenetic-trees:rules}{clade}, le plus vaste. À
+        l'intérieur de celui-ci, chercher l'état dérivé partagé le
+        plus largement ensuite, et ainsi de suite.
+  \item Dessiner les \omterm{prop:g12:phylogenetic-trees:rules}{clades} emboîtés sous forme d'arbre~: chaque état
+        dérivé partagé marque un nœud, et le caractère s'écrit sur la
+        branche où il est apparu.
+  \item Vérifier les conflits~: un caractère partagé par des \omterm{def:g10:biodiversity-scales:species}{espèces}
+        que d'autres caractères séparent est soit apparu deux fois
+        (convergence), soit perdu une fois. Choisir l'arbre qui exige
+        le moins de changements au total --- l'arbre le plus
+        \emph{parcimonieux}.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % matrix
+  \node[anchor=east] at (-0.2,2.4) {};
+  \matrix (m) [matrix of nodes, nodes={font=\small, minimum width=1.1cm, minimum height=0.5cm, anchor=center},
+               column 1/.style={nodes={anchor=east, minimum width=1.6cm}}] at (1.6,0.5) {
+    \phantom{o} & mâchoires & membres & amnios & poils \\
+    lamproie & 0 & 0 & 0 & 0 \\
+    truite & 1 & 0 & 0 & 0 \\
+    grenouille & 1 & 1 & 0 & 0 \\
+    lézard & 1 & 1 & 1 & 0 \\
+    souris & 1 & 1 & 1 & 1 \\
+  };
+  \draw (m-1-1.south west) -- (m-1-5.south east);
+  \draw (m-1-2.north west) -- (m-6-2.south west);
+  % tree
+  \begin{scope}[xshift=7.2cm, yshift=-1.4cm]
+    \draw[thick] (0,0) -- (0.8,0);
+    \draw[thick] (0.8,0) -- (0.8,3.2) -- (5,3.2);
+    \draw[thick] (0.8,0) -- (0.8,-0.6) -- (1.8,-0.6);
+    \draw[thick] (1.8,-0.6) -- (1.8,2.4) -- (5,2.4);
+    \draw[thick] (1.8,-0.6) -- (1.8,-1.0) -- (2.8,-1.0);
+    \draw[thick] (2.8,-1.0) -- (2.8,1.6) -- (5,1.6);
+    \draw[thick] (2.8,-1.0) -- (2.8,-1.3) -- (3.8,-1.3);
+    \draw[thick] (3.8,-1.3) -- (3.8,0.8) -- (5,0.8);
+    \draw[thick] (3.8,-1.3) -- (3.8,-1.5) -- (5,-1.5);
+    \node[anchor=west] at (5.1,3.2) {lamproie}; \node[anchor=west] at (5.1,2.4) {truite};
+    \node[anchor=west] at (5.1,1.6) {grenouille}; \node[anchor=west] at (5.1,0.8) {lézard};
+    \node[anchor=west] at (5.1,-1.5) {souris};
+    \foreach \x/\y/\t in {1.3/-0.6/mâchoires, 2.3/-1.0/membres, 3.3/-1.3/amnios, 4.4/-1.5/poils}
+      { \draw[very thick, omThm] (\x,\y+0.15) -- (\x,\y-0.15); \node[font=\scriptsize, omThm, anchor=north] at (\x,\y-0.2) {\t}; }
+    \node[anchor=east, font=\scriptsize] at (-0.1,0) {groupe externe~: lamproie};
+  \end{scope}
+\end{tikzpicture}
+
+{\small De la matrice à l'arbre. Chaque état dérivé (1) partagé par un
+ensemble d'\omterm{def:g10:biodiversity-scales:species}{espèces} marque le nœud de leur ancêtre commun~; les barres
+rouges indiquent où chaque caractère est apparu. La lamproie, qui ne
+possède aucun état dérivé, est le groupe externe qui fixe les états
+ancestraux.}
+\end{omfigure}
+
+\begin{example}[Un conflit tranché par la parcimonie]\label{ex:g12:phylogenetic-trees:parsimony}
+Ajoutons «~ailes~» à une matrice contenant la chauve-souris, le pigeon
+et la souris. Les ailes grouperaient la chauve-souris avec le pigeon~;
+les poils et le lait groupent la chauve-souris avec la souris. Un
+arbre réunissant la chauve-souris et la souris exige que les ailes
+soient apparues deux fois (deux changements)~; un arbre réunissant la
+chauve-souris et le pigeon exige que les poils, le lait, la mâchoire
+des mammifères et une douzaine d'autres caractères soient apparus deux
+fois chacun. Le premier arbre est bien plus parcimonieux~: les ailes
+sont une convergence, les caractères mammaliens un héritage commun. La
+parcimonie ne prouve pas l'arbre~; elle choisit le moins improbable.
+\end{example}
+
+\section{Des arbres tirés des molécules}
+
+\begin{proposition}[Phylogénie moléculaire]\label{prop:g12:phylogenetic-trees:molecular}
+Un \omterm{def:g10:universal-dna:gene}{gène} ou une \omterm{def:g11:gene-expression:protein}{protéine} que partagent toutes les \omterm{def:g10:biodiversity-scales:species}{espèces} comparées est
+à lui seul une matrice de caractères~: chaque position de la séquence
+est un caractère, et chaque \omterm{def:g10:universal-dna:nucleotide}{nucléotide} ou \omterm{def:g10:chemistry-of-life:families}{acide aminé} un état. Aligner
+les séquences et compter les différences entre chaque paire donne une
+matrice de distances, à partir de laquelle on construit un arbre en
+réunissant d'abord les paires les plus proches. L'arbre moléculaire,
+calculé sur des séquences qui ne doivent rien à l'anatomie, coïncide
+avec l'arbre anatomique dans la grande majorité des cas --- le test le
+plus fort pour l'un comme pour l'autre.
+\end{proposition}
+\begin{proof}[Preuves]
+Le \cref{ch:g10:common-ancestry} a donné les distances du cytochrome c
+chez les \omterm{def:g10:common-ancestry:bodyplan}{vertébrés}, qui reproduisent les boîtes tracées à partir de
+leurs squelettes. Chez les primates, les séquences de dizaines de
+\omterm{def:g10:universal-dna:gene}{gènes} concordent~: l'humain et le chimpanzé diffèrent d'environ 1.2\%
+de leur \omterm{def:g10:universal-dna:information}{ADN}, l'un et l'autre du gorille de 1.6\%, les trois de
+l'orang-outan de 3\%, et les grands singes du macaque de 7\%. Un arbre
+construit sur n'importe lequel de ces \omterm{def:g10:universal-dna:gene}{gènes} a la même forme~; les
+rares exceptions concernent les nœuds les plus récents, là où les
+différences sont les plus faibles.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  \draw[thick] (0,0) -- (1,0);
+  \draw[thick] (1,0) -- (1,2.4) -- (8,2.4);
+  \draw[thick] (1,0) -- (1,-0.8) -- (3,-0.8);
+  \draw[thick] (3,-0.8) -- (3,1.2) -- (8,1.2);
+  \draw[thick] (3,-0.8) -- (3,-1.4) -- (5.2,-1.4);
+  \draw[thick] (5.2,-1.4) -- (5.2,0) -- (8,0);
+  \draw[thick] (5.2,-1.4) -- (5.2,-2.0) -- (6.4,-2.0);
+  \draw[thick] (6.4,-2.0) -- (6.4,-1.2) -- (8,-1.2);
+  \draw[thick] (6.4,-2.0) -- (6.4,-2.8) -- (8,-2.8);
+  \node[anchor=west] at (8.1,2.4) {macaque}; \node[anchor=west] at (8.1,1.2) {orang-outan};
+  \node[anchor=west] at (8.1,0) {gorille}; \node[anchor=west] at (8.1,-1.2) {chimpanzé};
+  \node[anchor=west] at (8.1,-2.8) {humain};
+  \foreach \x/\t in {1/{25}, 3/{14}, 5.2/{9}, 6.4/{6}}
+    { \fill[omThm] (\x,-3.4) circle (0); \node[font=\scriptsize, omThm, anchor=north] at (\x,-3.4) {\t}; \draw[gray, dashed] (\x,-3.3) -- (\x,-3.0); }
+  \draw[->, gray] (0.5,-3.5) -- (8,-3.5) node[midway, below=7pt, font=\scriptsize] {millions d'années (nœuds datés par l'horloge moléculaire et les fossiles)};
+  \node[font=\scriptsize, anchor=south] at (7.2,-1.05) {1.2\% de l'ADN};
+  \node[font=\scriptsize, anchor=south] at (6.6,0.15) {1.6\%};
+  \node[font=\scriptsize, anchor=south] at (5.5,1.35) {3\%};
+  \node[font=\scriptsize, anchor=south] at (4.5,2.55) {7\% de l'ADN diffère};
+\end{tikzpicture}
+
+{\small L'arbre de cinq primates d'après la comparaison de l'\omterm{def:g10:universal-dna:information}{ADN}.
+L'humain et le chimpanzé sont groupes frères~; le gorille les rejoint
+ensuite, puis l'orang-outan, puis le macaque. Le pourcentage porté sur
+chaque branche est la différence d'\omterm{def:g10:universal-dna:information}{ADN} entre les \omterm{def:g10:biodiversity-scales:species}{espèces} qu'elle
+réunit~; les dates portées au-dessous viennent de l'horloge
+moléculaire calibrée par les fossiles.}
+\end{omfigure}
+
+\begin{proposition}[L'horloge moléculaire]\label{prop:g12:phylogenetic-trees:clock}
+Pour un \omterm{def:g10:universal-dna:gene}{gène} donné, les différences entre deux lignées s'accumulent à
+un rythme à peu près constant sur de longues durées, car la plupart
+des substitutions sont neutres et se fixent par dérive au rythme où
+elles apparaissent. Le nombre de différences entre deux \omterm{def:g10:biodiversity-scales:species}{espèces} est
+donc proportionnel au temps écoulé depuis leur ancêtre commun.
+Calibrée sur un nœud daté par les fossiles, l'horloge date les
+autres --- avec cette réserve que les rythmes diffèrent d'un \omterm{def:g10:universal-dna:gene}{gène} à
+l'autre et d'une lignée à l'autre, et que la calibration porte sa
+propre incertitude.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.84\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=30, ymin=0, ymax=8,
+  xlabel={temps écoulé depuis l'ancêtre commun (millions d'années, d'après les fossiles)},
+  ylabel={différence d'ADN (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20,25,30}, ytick={0,2,4,6,8},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=2pt, omThm] coordinates {(6,1.2) (9,1.6) (14,3.0) (25,7.0)};
+\addplot[thick, omDef, domain=0:28] {0.27*x};
+\node[font=\scriptsize, anchor=west] at (axis cs:6.4,1.0) {humain--chimpanzé};
+\node[font=\scriptsize, anchor=west] at (axis cs:9.4,1.5) {--gorille};
+\node[font=\scriptsize, anchor=west] at (axis cs:14.4,2.9) {--orang-outan};
+\node[font=\scriptsize, anchor=east] at (axis cs:24.6,7.1) {--macaque};
+\end{axis}
+\end{tikzpicture}
+
+{\small L'horloge moléculaire chez les primates~: la différence d'\omterm{def:g10:universal-dna:information}{ADN}
+en fonction de l'âge de l'ancêtre commun. Les points se placent près
+d'une droite d'environ 0.27\% par million d'années~; la droite permet
+de dater d'après sa seule différence d'\omterm{def:g10:universal-dna:information}{ADN} un nœud dépourvu de
+fossiles.}
+\end{omfigure}
+
+\begin{example}[Dater un nœud]\label{ex:g12:phylogenetic-trees:dating}
+Deux \omterm{def:g10:biodiversity-scales:species}{espèces} diffèrent par 4.5\% de leur \omterm{def:g10:universal-dna:information}{ADN}~; à 0.27\% par million
+d'années, leur ancêtre commun a vécu il y a quelque 17 millions
+d'années. L'estimation suppose que le rythme des primates s'applique~;
+pour un \omterm{def:g10:universal-dna:gene}{gène} évoluant deux fois plus vite, ou dans une lignée aux
+générations plus courtes, les mêmes 4.5\% signifieraient deux fois
+moins de temps. Une horloge ne vaut que ce que vaut sa calibration.
+\end{example}
+
+\section{Classer, à partir des arbres}
+
+\begin{proposition}[Classer par la descendance]\label{prop:g12:phylogenetic-trees:classification}
+Une classification phylogénétique ne nomme que des \omterm{prop:g12:phylogenetic-trees:rules}{clades}~: des
+groupes définis par un nœud et contenant tous ses descendants. Les
+groupes familiers qui échouent à ce test ne sont pas employés~: les
+«~poissons~» excluent les tétrapodes qui descendent du même nœud~; les
+«~reptiles~» excluent les oiseaux qui descendent de l'intérieur du
+groupe~; les «~invertébrés~» sont tout sauf un \omterm{prop:g12:phylogenetic-trees:rules}{clade}. Les conséquences
+méritent d'être énoncées franchement~: les oiseaux sont des
+dinosaures, le dipneuste est plus proche de nous que de la truite, et
+l'humain est une branche des singes, qui sont une branche des
+primates, des mammifères, des amniotes, des tétrapodes, des \omterm{def:g10:common-ancestry:bodyplan}{vertébrés}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book1/darwin.jpg}
+
+{\small Charles Darwin, qui le premier a dessiné la parenté des
+\omterm{def:g10:biodiversity-scales:species}{espèces} sous la forme d'un arbre et a proposé le mécanisme, la
+\omterm{def:g12:selection-drift-speciation:selection}{sélection naturelle}, qui la fait croître. Photographie Henry Maull et
+John Fox, vers~1854, domaine public.}
+\end{omfigure}
+
+\begin{remark}[Ce qu'un arbre n'est pas]\label{rem:g12:phylogenetic-trees:not}
+Un arbre est une hypothèse sur l'histoire, construite à partir des
+\omterm{def:g10:biodiversity-scales:species}{espèces} actuelles et éprouvée par chaque nouveau caractère et chaque
+nouvelle séquence~; il est redessiné lorsqu'ils se contredisent, et ce
+redessin est le travail de la discipline. Il n'a ni sommet ni sens du
+progrès~: l'humain occupe une extrémité parmi des millions, ni plus
+haute ni plus achevée que la lamproie à une autre. Et il n'a d'ancêtre
+à aucune extrémité~: les ancêtres sont les nœuds, \omterm{def:g12:selection-drift-speciation:population}{populations}
+disparues, dont l'arbre infère l'existence et dont les fossiles,
+lorsqu'on les trouve, se placent à côté des branches plutôt que sur
+elles.
+\end{remark}
+
+\section{Exercices}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:1}
+Que représentent les extrémités, les nœuds et la racine d'un \omterm{def:g12:phylogenetic-trees:tree}{arbre
+phylogénétique}~?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:2}
+Sur l'arbre A de la première figure, quelle \omterm{def:g10:biodiversity-scales:species}{espèce} est la plus proche
+parente du lézard~? Et de la grenouille~?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:3}
+Définir un état dérivé partagé et expliquer pourquoi un état ancestral
+partagé n'indique aucune parenté.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:4}
+Qu'est-ce qu'un \omterm{prop:g12:phylogenetic-trees:rules}{clade}~? Les «~oiseaux~» en forment-ils un~? Et les
+«~reptiles~» (au sens courant)~?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:5}
+D'après l'arbre des primates, quel est le plus proche parent de
+l'humain, et quel nœud est le plus ancien~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:6}
+Redessiner l'arbre A de la première figure avec l'humain en haut et la
+grenouille en bas, et vérifier qu'aucune parenté n'est changée.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:7}
+Ajouter le pigeon (mâchoires 1, membres 1, amnios 1, poils 0, plumes
+1) à la matrice de la deuxième figure et le placer sur l'arbre.
+Qu'apporte le caractère «~plumes~»~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:8}
+Le dauphin a un corps fuselé et des nageoires comme le requin, ainsi
+que des poils, du lait et une mâchoire de mammifère. Quel arbre est le
+plus parcimonieux, et que sont les nageoires~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:9}
+À l'aide de la figure de l'horloge, dater l'ancêtre commun de deux
+\omterm{def:g10:biodiversity-scales:species}{espèces} dont l'\omterm{def:g10:universal-dna:information}{ADN} diffère de 2.2\%.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:10}
+Expliquer pourquoi la phrase «~le chimpanzé est notre ancêtre~» est
+une mauvaise lecture de l'arbre, et écrire la phrase correcte.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:11}
+Pourquoi la lamproie sert-elle de groupe externe dans la deuxième
+figure, et qu'est-ce qui irait de travers si l'on prenait la souris à
+sa place~?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:12}
+Deux \omterm{def:g10:universal-dna:gene}{gènes} donnent des arbres différents pour trois \omterm{def:g10:biodiversity-scales:species}{espèces} proches
+séparées à moins d'un million d'années d'intervalle. Expliquer comment
+cela peut arriver sans qu'aucun des deux arbres soit «~faux~», à
+l'aide du brassage des \omterm{def:g10:universal-dna:gene}{allèles} dans la \omterm{def:g12:selection-drift-speciation:population}{population} ancestrale.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:13}
+L'horloge moléculaire d'un virus à évolution rapide tourne à 1\% par
+an~; celle d'un \omterm{def:g10:universal-dna:gene}{gène} de mammifère à 0.3\% par million d'années.
+Expliquer pourquoi la première sert à retracer une épidémie et la
+seconde à dater l'origine des mammifères, et pourquoi aucune ne peut
+faire le travail de l'autre.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:14}
+Un oiseau fossile à dents et à longue queue osseuse est trouvé dans
+des roches vieilles de 150 millions d'années. Expliquer pourquoi on le
+place à côté d'une branche de l'arbre plutôt qu'à un nœud, et ce qu'il
+apprend sur ce nœud.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:15}
+«~L'arbre du vivant a l'humain à son sommet.~» Discuter en un
+paragraphe à l'aide des règles de lecture, de l'âge égal des
+extrémités et du nombre d'extrémités.
+\end{exercise}
+
+\section{Problème~: six espèces et une horloge}
+
+\begin{problem}[{Problème du week-end --- un arbre construit deux
+fois, à partir d'un tableau de caractères et à partir de distances
+d'ADN, les deux comparés, et les nœuds datés}]
+\label{pb:g12:phylogenetic-trees:1}
+Six \omterm{def:g10:biodiversity-scales:species}{espèces}~: le requin, le saumon, la salamandre, le crocodile, le
+pigeon, le chat. Le groupe externe est la lamproie. Tableau des
+caractères (1 = état dérivé)~:
+
+\begin{center}
+\footnotesize
+\begin{tabular}{lcccccc}
+ & squelette osseux & quatre membres & œuf amniotique & plumes & poils & fenêtre temporale \\ \hline
+requin & 0 & 0 & 0 & 0 & 0 & 0 \\
+saumon & 1 & 0 & 0 & 0 & 0 & 0 \\
+salamandre & 1 & 1 & 0 & 0 & 0 & 0 \\
+crocodile & 1 & 1 & 1 & 0 & 0 & 0 \\
+pigeon & 1 & 1 & 1 & 1 & 0 & 0 \\
+chat & 1 & 1 & 1 & 0 & 1 & 1 \\
+\end{tabular}
+\end{center}
+
+Différences d'\omterm{def:g10:universal-dna:information}{ADN} (\%) pour un \omterm{def:g10:universal-dna:gene}{gène}~:
+
+\begin{center}
+\begin{tabular}{lccccc}
+ & saumon & salamandre & crocodile & pigeon & chat \\ \hline
+requin & 30 & 31 & 30 & 31 & 30 \\
+saumon & & 24 & 25 & 25 & 24 \\
+salamandre & & & 19 & 20 & 19 \\
+crocodile & & & & 8 & 15 \\
+pigeon & & & & & 15 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Partie I --- D'après les caractères.}
+\begin{enumerate}
+  \item Quel état dérivé est partagé par le plus grand nombre
+        d'\omterm{def:g10:biodiversity-scales:species}{espèces}~? Nommer le \omterm{prop:g12:phylogenetic-trees:rules}{clade} qu'il définit et les \omterm{def:g10:biodiversity-scales:species}{espèces}
+        laissées en dehors. (Le dernier caractère est l'ouverture
+        unique percée sur le côté du crâne que possèdent les
+        mammifères.)
+  \item Poursuivre avec les états partagés les plus largement
+        ensuite et énumérer les \omterm{prop:g12:phylogenetic-trees:rules}{clades} emboîtés.
+  \item Les plumes, les poils et la fenêtre temporale ne se
+        rencontrent chacun que chez une \omterm{def:g10:biodiversity-scales:species}{espèce}. Aident-ils à
+        construire cet arbre~? Que faudrait-il pour les rendre
+        utiles~?
+  \item Dessiner l'arbre en écrivant chaque caractère sur la branche
+        où il est apparu.
+  \item Quelle \omterm{def:g10:biodiversity-scales:species}{espèce} est le plus proche parent du crocodile d'après
+        ce tableau~? Quelle paire le tableau seul ne permet-il pas de
+        trancher~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie II --- D'après l'\omterm{def:g10:universal-dna:information}{ADN}.}
+\begin{enumerate}[resume]
+  \item Quelle paire d'\omterm{def:g10:biodiversity-scales:species}{espèces} présente la plus petite distance~? La
+        réunir en premier.
+  \item Quelle \omterm{def:g10:biodiversity-scales:species}{espèce} rejoint cette paire ensuite~? Poursuivre jusqu'à
+        ce que l'arbre soit complet.
+  \item Comparer l'arbre de l'\omterm{def:g10:universal-dna:information}{ADN} et l'arbre des caractères~: où
+        s'accordent-ils, et que tranche l'\omterm{def:g10:universal-dna:information}{ADN} que les caractères ne
+        pouvaient pas trancher~?
+  \item Les distances du requin à toutes les autres \omterm{def:g10:biodiversity-scales:species}{espèces} sont
+        presque égales. Expliquer pourquoi, d'après la forme de
+        l'arbre.
+  \item La distance crocodile--pigeon (8) est plus petite que la
+        distance crocodile--chat (15). Que dit cela du groupe courant
+        des «~reptiles~»~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie III --- L'horloge.}
+Les fossiles datent la séparation de la lignée de la salamandre et des
+amniotes de 340 millions d'années.
+\begin{enumerate}[resume]
+  \item À l'aide des distances salamandre--amniotes (environ 19\%),
+        calculer le rythme de l'horloge en pour cent par million
+        d'années. (Les deux lignées ont changé~: la distance compte
+        les changements sur les deux branches.)
+  \item Dater le nœud crocodile--pigeon et le nœud des amniotes
+        (crocodile/pigeon contre chat).
+  \item Dater le nœud du saumon et le nœud du requin.
+  \item Les fossiles donnent environ 250 millions d'années pour la
+        séparation crocodile--oiseau et 310 pour celle des amniotes.
+        Comparer avec vos dates et commenter la justesse d'une horloge
+        fondée sur un seul \omterm{def:g10:universal-dna:gene}{gène}.
+  \item Les distances du requin (30--31\%) dépassent à peine celles du
+        saumon (24--25\%) alors que le nœud du requin est bien plus
+        ancien. Proposer une explication, et dire ce qu'elle implique
+        pour dater avec ce \omterm{def:g10:universal-dna:gene}{gène} des nœuds très anciens.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie IV --- Lire et nommer.}
+\begin{enumerate}[resume]
+  \item Énumérer les \omterm{prop:g12:phylogenetic-trees:rules}{clades} de votre arbre qui contiennent le chat, du
+        plus petit au plus grand.
+  \item Les «~poissons~» (requin et saumon) forment-ils un \omterm{prop:g12:phylogenetic-trees:rules}{clade}~? Et
+        les amniotes~? Justifier.
+  \item Un élève dit que la salamandre est «~un intermédiaire entre
+        les poissons et les reptiles~». Corriger cette affirmation
+        dans les termes de l'arbre.
+  \item On trouve un fossile à squelette osseux, à quatre membres et
+        sans œuf amniotique, daté de 360 millions d'années. Où se
+        place-t-il par rapport à l'arbre, et que confirme sa date~?
+  \item Énoncer le résultat~: l'arbre des six \omterm{def:g10:biodiversity-scales:species}{espèces} (sous forme de
+        parenthèses emboîtées), la seule parenté que l'\omterm{def:g10:universal-dna:information}{ADN} a tranchée,
+        et la date estimée de la séparation crocodile--pigeon.
+\end{enumerate}
+\end{problem}

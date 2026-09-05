@@ -115,7 +115,18 @@ def pattern(term, lang, langcfg, no_capital=()):
         first = i == 0
         p = _cap(w) if (first and w[:1].isalpha() and w[:1].islower()
                         and term not in no_capital) else _esc(w)
-        if (last or langcfg.TAIL_ON_EVERY_WORD) and not w.endswith(NO_TAIL_END):
+        # NO_TAIL_END's "s" exists for ENGLISH, where the tail is (?:e?s)? and
+        # "species" + "s" would be "specieses". A language whose tail is an
+        # ENCLITIC, not a plural, has no such problem: Indonesian -nya attaches
+        # after "s" like any other letter, and suppressing it cost the id Book 2
+        # edition ~110 links across refleksnya (28), spesiesnya (27),
+        # mitosisnya (16), meiosisnya (12), pubertasnya (11) and six more, each
+        # of which had to be declared by hand in EXTRA. Opt-in per language so
+        # the en/fr/nl/es/pt/hi/ar patterns are byte-identical; "$", "]" and ")"
+        # stay suppressed for everyone, since those end mathematics, not a word.
+        no_tail = (NO_TAIL_END[1:] if getattr(langcfg, "TAIL_AFTER_S", False)
+                   else NO_TAIL_END)
+        if (last or langcfg.TAIL_ON_EVERY_WORD) and not w.endswith(no_tail):
             p += langcfg.WORD_TAIL
         # Arabic attaches its article and its one-letter prepositions to the
         # FRONT of the word, and inside a noun phrase every word takes them

@@ -403,6 +403,12 @@ NOT_GATED = {
     "kilogram", "sentimeter", "milimeter", "kilometer", "detik", "sekon",
     # Indonesian technical vocabulary that happens to be Latin-looking and
     # would otherwise trip the -s plural rule or a suffix.
+    # ---- appended by the Indonesian Biology Book 2 agent, 2026-09-05 -------
+    # "minimal" is ordinary Indonesian (KBBI; "medium minimal", "suhu
+    # minimal", "biaya minimal") and fired on the correct grade-11 sentence
+    # about Beadle and Tatum's minimal medium. Its neighbour "minimum" was
+    # already in this set for the same reason; "minimal" was simply missed.
+    "minimal",
     "impuls", "fluks", "entropi", "entalpi", "adiabatik", "isotermal",
     "isobarik", "isokorik", "kapasitas", "resistansi", "impedansi",
     "induktansi", "kapasitansi", "reaktansi", "amplitudo", "fase",
@@ -477,11 +483,36 @@ ATTRIBUTION = re.compile(
     r"Wikimedia\s+Commons|Wellcome\s+Collection|Creative\s+Commons"
     r"|\bCC[~\s]?(?:BY(?:[~\s-](?:SA|NC|ND))*(?:[~\s]?\d+(?:\.\d+)?)?|0)")
 
+# The twenty standard THREE-LETTER AMINO-ACID SYMBOLS. These are international
+# chemical symbols, identical in every language, and a genetic-code table has
+# to print them: "CAU His" is as untranslatable as "Na" or "kg". The gate
+# lower-cases before the membership test, so His becomes the English possessive
+# "his" and fires; the eponym exemption cannot rescue it either, because the
+# word before it in a code table is the codon, which is upper case. Blanked
+# here the way NUMBER_ABBREV and ATTRIBUTION are, so the surrounding prose
+# stays fully gated. Appended by the Indonesian Biology Book 2 agent,
+# 2026-09-05, for parts/grade-11/04-gene-expression.tex.
+AMINO_ACID = re.compile(
+    r"\b(?:Ala|Arg|Asn|Asp|Cys|Gln|Glu|Gly|His|Ile|Leu|Lys"
+    r"|Met|Phe|Pro|Ser|Thr|Trp|Tyr|Val)\b")
+
 # Indonesian writes a decade as "1840-an" (EYD). The suffix tokenises as the
 # bare word "an", which is gated English. Any agent writing a date will hit
 # this and the hyphenated form is the correct one, so recognise it rather than
 # forcing "dasawarsa 1840". Same shape for "tahun 1990-an", "abad ke-19".
 DECADE_SUFFIX = re.compile(r"(?<=\d)-(?:an|nya|ke)\b")
+
+# The TITLE OF A CITED WORK inside an image credit. A credit line names the
+# source work exactly as it is published -- "Illustration from OpenStax
+# \\emph{Anatomy and Physiology}, CC~BY~3.0." -- and a title is not
+# translatable prose: every other edition (fr, es, pt, nl) keeps it verbatim,
+# and the licence itself is already exempted above by ATTRIBUTION. Left
+# ungated this is unreachable: the conjunction "and" fires on ENGLISH_WORDS
+# and there is no way to reword a bibliographic title. Blanked here the way
+# ATTRIBUTION is, so the surrounding credit prose stays fully gated. Appended
+# by the Indonesian Biology Book 2 agent, 2026-09-05, for
+# parts/grade-12/14-brain-and-movement.tex.
+WORK_TITLE = re.compile(r"Anatomy\s+and\s+Physiology")
 
 # ---------------------------------------------------------------------------
 # 2. Untranslated sentences.
@@ -690,7 +721,8 @@ def check_file(path: pathlib.Path, findings: list) -> None:
     _occ: dict = {}
 
     # --- 1. residual English -------------------------------------------
-    for pat in (NUMBER_ABBREV, ATTRIBUTION, DECADE_SUFFIX):
+    for pat in (NUMBER_ABBREV, ATTRIBUTION, DECADE_SUFFIX, AMINO_ACID,
+                WORK_TITLE):
         for m in pat.finditer(seen):
             seen = seen[:m.start()] + " " * (m.end() - m.start()) + seen[m.end():]
     # An EPONYM is a capitalised proper noun sitting in native prose: "sindrom

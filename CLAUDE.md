@@ -19,8 +19,9 @@ of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
 **Current state: Books 1, 2 and 3 written in English (2026-08-28,
-2026-09-02 and 2026-09-04); Books 4–5 are titled placeholders** (chapter
-architecture in place, no chapter written).
+2026-09-02 and 2026-09-04); Books 1 and 2 also ship in all seven target
+languages (2026-09-04 and 2026-09-05); Books 4–5 are titled placeholders**
+(chapter architecture in place, no chapter written).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -55,6 +56,8 @@ architecture in place, no chapter written).
   Punnett squares and $p^2+2pq+q^2$; no derivatives or logarithms. The
   entry file redefines `\indexspace` with more shrink — without it the
   multicol index reports two overfull columns on its last page.
+  **Translated into all seven target languages on 2026-09-05**, each
+  edition self-scored 96/100.
 
 - **Book 3** (University Biology, Year 1): 29 chapters + 29 solutions
   files, ~340 pp. Physics/math Year-1 calibration: every chapter carries
@@ -125,12 +128,13 @@ grep -c 'Overfull' $L           # overfull boxes — keep at 0
 
 ## Language editions
 
-**Book 1 ships in eight languages** — English plus `fr`, `nl`, `es`, `pt`,
-`hi`, `ar` and `id`, all seven translated 2026-09-04, one agent per edition,
-**each self-scored 96/100** under the native-academic bar. Books 2–5 are
-English only.
+**Books 1 and 2 ship in eight languages** — English plus `fr`, `nl`, `es`,
+`pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04 and Book 2 on
+2026-09-05, one agent per edition, **every one self-scored 96/100** under the
+native-academic bar. Books 3–5 are English only.
 
-Per-edition figures, all from forced (`-g`) builds so they are comparable:
+Per-edition figures, all from forced (`-g`) builds so they are comparable.
+**Book 1** (142 files, `nullfont` 20, `\index` 331 in all eight):
 
 | | pages | `\omterm` links | distinct targets |
 |---|------:|-----:|-----:|
@@ -141,11 +145,25 @@ Per-edition figures, all from forced (`-g`) builds so they are comparable:
 | `nl` | 453 | 6,451 | 151 |
 | `hi` | 419 | 7,923 | 150 |
 | `ar` | 396 | 6,781 | 152 |
-| `id` | 467 | 8,390 | 151 |
+| `id` | 467 | 8,486 | 151 |
 
-Every edition: 0 errors, 0 undefined, 0 overfull, `nullfont` 20, 142 files in
-the `.fls`, `\index` 331 in all eight, and `check_translation.sh` green for
-all nine years.
+**Book 2** (72 files, `nullfont` **0** — not 20, this book's baseline differs —
+and `\index` 182 in all eight):
+
+| | pages | `\omterm` links | distinct targets |
+|---|------:|-----:|-----:|
+| `en` | 379 | 5,547 | 103 |
+| `fr` | 399 | 5,789 | 106 |
+| `es` | 395 | 5,893 | 105 |
+| `pt` | 392 | 5,501 | 103 |
+| `nl` | 395 | 4,971 | 103 |
+| `hi` | 367 | 5,833 | 107 |
+| `ar` | 344 | 4,831 | 103 |
+| `id` | 401 | 6,264 | 105 |
+
+Every edition of both books: 0 errors, 0 undefined, 0 overfull, the file count
+in the `.fls` equal to the files on disk, and `check_translation.sh` green for
+every year.
 
 **Translation found three defects in the ENGLISH canon**, which is the most
 useful thing about running seven editions at once — nothing compares English
@@ -161,7 +179,34 @@ disagreed:
   by six translators, but linked to the grade-1 body-parts definition and
   mistranslated as the anatomical leg by the seventh. Reworded to "stretches".
 - Both are instances of the same rule: **a homograph collision can live in the
-  source.** See `../translation_instruction.md`. Read the workspace-root
+  source.** See `../translation_instruction.md`.
+
+**Book 2's run found five more, plus three tool bugs** (2026-09-05). The canon
+defects: the term linker had wrapped `\omterm` INSIDE a `\qty{}` unit argument,
+which siunitx typesets in math mode; `def:g10:biodiversity-scales:species` was
+an ORPHAN TARGET, `\emph{species}` appearing both in the Biodiversity
+definition and as the Species definition's own display, so the harvest dropped
+it as "defined twice" and one of the book's commonest nouns linked nowhere
+(fixing it took English 5,275 -> 5,547 links); the artificial-selection figure
+called *Brassica oleracea* "wild mustard" instead of wild cabbage; a weekend
+problem asked for "the two **animals**" where its own solution answers "the
+wind and the jay"; and `$1/180 = \qty{5.55}{mmol/L}$` was dimensionally false.
+The tool bugs: `protect.py` never masked siunitx arguments (root cause of the
+first); `check_latin_prose.py` counted a hyphenated compound as two words, so
+`Crossing-over` hit its blocking tier and a legitimate Dutch title FAILED a
+year — the gate driving the translation instead of checking it; and
+`morphology.py` refused a `WORD_TAIL` to any term ending in `s`, which is right
+for English (*specieses*) but wrong for an ENCLITIC tail, now opt-in via
+`TAIL_AFTER_S` (set only in `lang_id.py`, worth ~110 links per Indonesian
+volume).
+
+**The capitalised-harvest class has now appeared four times** — `Sorting`
+(Book 1), `Fermentation` and `Testosterone` (Book 2 English), `Xilem`/`Floem`
+(Book 2 `id`). A definition whose display OPENS its sentence is harvested
+capitalised only, and `STOP`/`DROP` are matched case-sensitively, so a
+lowercase entry never reaches it. Treat it as a standing property of
+`harvest.py`: when a target's link count looks wrong, check the case actually
+harvested before blaming the language. Read the workspace-root
 `translation_instruction.md` before touching any of this; it is the
 authoritative procedure and it records, generically, every defect class the
 math and physics runs paid for.

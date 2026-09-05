@@ -1,0 +1,513 @@
+\chapter{Ler o parentesco: as árvores filogenéticas}\label{ch:g12:phylogenetic-trees}
+
+Em 1837, numa página de um caderno particular, Darwin rabiscou uma
+linha ramificada com alguns galhinhos e escreveu acima dela duas
+palavras: ``Eu acho''. O rabisco propunha que as \omterm{def:g10:biodiversity-scales:species}{espécies} são
+aparentadas como os galhinhos de uma árvore --- por descendência a
+partir de ramos comuns --- e que o parentesco delas podia ser
+reconstruído. Hoje o rabisco é uma ferramenta padrão: uma \omterm{def:g12:phylogenetic-trees:tree}{árvore
+filogenética}, construída a partir de caracteres compartilhados e do
+\omterm{def:g10:universal-dna:information}{DNA}, lida segundo regras. Este capítulo ensina essas regras: como
+construir uma árvore a partir de uma tabela de caracteres, como ler uma
+sem ler errado, e como as moléculas a transformam num relógio.
+
+\section{O que uma árvore diz}
+
+\begin{definition}[Árvore filogenética]\label{def:g12:phylogenetic-trees:tree}
+Uma \emph{árvore filogenética}\index{árvore filogenética} é um diagrama
+do parentesco de um conjunto de \omterm{def:g10:biodiversity-scales:species}{espécies} (ou de outros grupos). As
+pontas dela são as \omterm{def:g10:biodiversity-scales:species}{espécies} comparadas; cada \emph{nó} onde dois ramos
+se encontram representa o ancestral comum mais recente delas --- uma
+\omterm{def:g12:selection-drift-speciation:population}{população} hipotética, não um fóssil conhecido; a \emph{raiz} é o
+ancestral comum de todas. Duas \omterm{def:g10:biodiversity-scales:species}{espécies} são parentes mais próximas que
+uma terceira quando o ancestral comum delas (o nó delas) é mais recente
+que o nó que elas compartilham com a terceira. O parentesco é lido nos
+nós, nunca na posição da esquerda para a direita das pontas.
+\end{definition}
+
+\begin{proposition}[Regras de leitura]\label{prop:g12:phylogenetic-trees:rules}
+\begin{itemize}
+  \item Uma árvore pode ser girada em qualquer nó sem que o sentido
+        dela mude: a ordem das pontas é arbitrária.
+  \item Um nó não tem nome e não é uma das pontas: uma \omterm{def:g10:biodiversity-scales:species}{espécie} nunca é
+        a ancestral de outra \omterm{def:g10:biodiversity-scales:species}{espécie} na árvore; duas pontas são
+        \emph{grupos-irmãos}, descendentes de um ancestral compartilhado.
+  \item Um grupo feito de um ancestral e de \emph{todos} os
+        descendentes dele --- tudo o que vem depois de um nó --- é um
+        \emph{clado}\index{clado}, o único tipo de grupo que uma
+        classificação filogenética nomeia.
+  \item Os comprimentos dos ramos carregam informação apenas se a
+        árvore disser isso (tempo, ou número de mudanças); fora isso,
+        só a ordem de ramificação conta.
+\end{itemize}
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % tree 1
+  \begin{scope}
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (4.5,1.2);
+    \draw[thick] (1,0) -- (1,-1.2) -- (2.2,-1.2);
+    \draw[thick] (2.2,-1.2) -- (2.2,-0.5) -- (4.5,-0.5);
+    \draw[thick] (2.2,-1.2) -- (2.2,-1.9) -- (3.4,-1.9);
+    \draw[thick] (3.4,-1.9) -- (3.4,-1.5) -- (4.5,-1.5);
+    \draw[thick] (3.4,-1.9) -- (3.4,-2.3) -- (4.5,-2.3);
+    \node[anchor=west] at (4.6,1.2) {rã}; \node[anchor=west] at (4.6,-0.5) {lagarto};
+    \node[anchor=west] at (4.6,-1.5) {camundongo}; \node[anchor=west] at (4.6,-2.3) {ser humano};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,-1.2) circle (2pt); \fill[omThm] (3.4,-1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {árvore A};
+  \end{scope}
+  % tree 2: same topology, rotated
+  \begin{scope}[xshift=8cm]
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (2.2,1.2);
+    \draw[thick] (2.2,1.2) -- (2.2,1.9) -- (3.4,1.9);
+    \draw[thick] (3.4,1.9) -- (3.4,2.3) -- (4.5,2.3);
+    \draw[thick] (3.4,1.9) -- (3.4,1.5) -- (4.5,1.5);
+    \draw[thick] (2.2,1.2) -- (2.2,0.5) -- (4.5,0.5);
+    \draw[thick] (1,0) -- (1,-1.2) -- (4.5,-1.2);
+    \node[anchor=west] at (4.6,2.3) {ser humano}; \node[anchor=west] at (4.6,1.5) {camundongo};
+    \node[anchor=west] at (4.6,0.5) {lagarto}; \node[anchor=west] at (4.6,-1.2) {rã};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,1.2) circle (2pt); \fill[omThm] (3.4,1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {árvore B: a mesma árvore};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Dois desenhos de uma árvore só. Girar os ramos em cada nó muda
+a ordem das pontas, mas não um parentesco sequer: nas duas, o
+camundongo e o ser humano são irmãos, o lagarto é o parente mais
+próximo deles, e a rã é a mais distante. Ler ``o lagarto está entre a
+rã e o camundongo'' na árvore A seria um erro.}
+\end{omfigure}
+
+\begin{example}[Leituras erradas a evitar]\label{ex:g12:phylogenetic-trees:misreadings}
+``Os seres humanos descendem dos chimpanzés'': não --- na árvore, os
+seres humanos e os chimpanzés são pontas irmãs, descendentes de um
+ancestral comum que não era nem um nem outro. ``A rã é mais
+primitiva'': não --- toda ponta é uma \omterm{def:g10:biodiversity-scales:species}{espécie} do presente com a mesma
+extensão de história desde a raiz; a linhagem da rã evoluiu por tanto
+tempo quanto a nossa. ``O lagarto é mais próximo da rã que do
+camundongo'' (a partir da árvore A): não --- o lagarto e o camundongo
+compartilham um nó mais recente.
+\end{example}
+
+\section{Construir uma árvore a partir dos caracteres}
+
+\begin{definition}[Estados ancestrais e derivados]\label{def:g12:phylogenetic-trees:states}
+Um \emph{caráter} é uma característica que varia entre as \omterm{def:g10:biodiversity-scales:species}{espécies}
+comparadas (a presença de uma coluna vertebral, de quatro membros, de
+um ovo amniótico, de pelos). Cada caráter tem um estado
+\emph{ancestral} --- o que o ancestral comum do grupo tinha --- e um ou
+mais estados \emph{derivados} que apareceram depois em alguma linhagem.
+Só os \emph{estados derivados compartilhados} indicam parentesco: duas
+\omterm{def:g10:biodiversity-scales:species}{espécies} que compartilham um estado derivado o herdaram do ancestral em
+que ele surgiu. Um estado ancestral compartilhado não diz nada, já que
+o ancestral de todo mundo o tinha.
+\end{definition}
+
+\begin{method}[De uma matriz de caracteres a uma árvore]\label{met:g12:phylogenetic-trees:build}
+\begin{enumerate}
+  \item Faça uma tabela: \omterm{def:g10:biodiversity-scales:species}{espécies} nas linhas, caracteres nas colunas, 1
+        para o estado derivado e 0 para o ancestral. Decida qual estado
+        é o ancestral comparando com um \emph{grupo externo}, uma
+        \omterm{def:g10:biodiversity-scales:species}{espécie} sabidamente fora do grupo estudado.
+  \item Encontre o estado derivado compartilhado pelo maior número de
+        \omterm{def:g10:biodiversity-scales:species}{espécies}: ele define o primeiro \omterm{prop:g12:phylogenetic-trees:rules}{clado}, o maior. Dentro dele,
+        encontre o estado derivado compartilhado mais amplamente
+        depois, e assim por diante.
+  \item Desenhe os \omterm{prop:g12:phylogenetic-trees:rules}{clados} encaixados como uma árvore: cada estado
+        derivado compartilhado marca um nó, e o caráter é escrito no
+        ramo em que ele apareceu.
+  \item Procure conflitos: um caráter compartilhado por \omterm{def:g10:biodiversity-scales:species}{espécies} que os
+        outros caracteres colocam separadas ou surgiu duas vezes
+        (convergência) ou foi perdido uma vez. Escolha a árvore que
+        exija o menor número de mudanças no total --- a árvore mais
+        \emph{parcimoniosa}.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % matrix
+  \node[anchor=east] at (-0.2,2.4) {};
+  \matrix (m) [matrix of nodes, nodes={font=\small, minimum width=1.1cm, minimum height=0.5cm, anchor=center},
+               column 1/.style={nodes={anchor=east, minimum width=1.6cm}}] at (1.6,0.5) {
+    \phantom{o} & mandíbulas & membros & âmnio & pelos \\
+    lampreia & 0 & 0 & 0 & 0 \\
+    truta & 1 & 0 & 0 & 0 \\
+    rã & 1 & 1 & 0 & 0 \\
+    lagarto & 1 & 1 & 1 & 0 \\
+    camundongo & 1 & 1 & 1 & 1 \\
+  };
+  \draw (m-1-1.south west) -- (m-1-5.south east);
+  \draw (m-1-2.north west) -- (m-6-2.south west);
+  % tree
+  \begin{scope}[xshift=6.6cm, yshift=-1.4cm]
+    \draw[thick] (0,0) -- (0.8,0);
+    \draw[thick] (0.8,0) -- (0.8,3.2) -- (5,3.2);
+    \draw[thick] (0.8,0) -- (0.8,-0.6) -- (1.8,-0.6);
+    \draw[thick] (1.8,-0.6) -- (1.8,2.4) -- (5,2.4);
+    \draw[thick] (1.8,-0.6) -- (1.8,-1.0) -- (2.8,-1.0);
+    \draw[thick] (2.8,-1.0) -- (2.8,1.6) -- (5,1.6);
+    \draw[thick] (2.8,-1.0) -- (2.8,-1.3) -- (3.8,-1.3);
+    \draw[thick] (3.8,-1.3) -- (3.8,0.8) -- (5,0.8);
+    \draw[thick] (3.8,-1.3) -- (3.8,-1.5) -- (5,-1.5);
+    \node[anchor=west] at (5.1,3.2) {lampreia}; \node[anchor=west] at (5.1,2.4) {truta};
+    \node[anchor=west] at (5.1,1.6) {rã}; \node[anchor=west] at (5.1,0.8) {lagarto};
+    \node[anchor=west] at (5.1,-1.5) {camundongo};
+    \foreach \x/\y/\t in {1.3/-0.6/mandíbulas, 2.3/-1.0/membros, 3.3/-1.3/âmnio, 4.4/-1.5/pelos}
+      { \draw[very thick, omThm] (\x,\y+0.15) -- (\x,\y-0.15); \node[font=\scriptsize, omThm, anchor=north] at (\x,\y-0.2) {\t}; }
+    \node[anchor=east, font=\scriptsize, align=right] at (-0.1,0) {grupo externo:\\ lampreia};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Da matriz à árvore. Cada estado derivado (1) compartilhado por
+um conjunto de \omterm{def:g10:biodiversity-scales:species}{espécies} marca o nó do ancestral comum delas; as barras
+vermelhas mostram onde cada caráter apareceu. A lampreia, sem nenhum
+estado derivado, é o grupo externo que fixa os estados ancestrais.}
+\end{omfigure}
+
+\begin{example}[Um conflito resolvido pela parcimônia]\label{ex:g12:phylogenetic-trees:parsimony}
+Acrescente ``asas'' a uma matriz com morcego, pombo e camundongo. As
+asas agrupariam o morcego com o pombo; os pelos e o leite agrupam o
+morcego com o camundongo. Uma árvore com o morcego e o camundongo
+juntos precisa que as asas tenham surgido duas vezes (duas mudanças);
+uma árvore com o morcego e o pombo juntos precisa que os pelos, o
+leite, a mandíbula dos mamíferos e uma dúzia de outros caracteres
+tenham surgido duas vezes cada um. A primeira árvore é bem mais
+parcimoniosa: as asas são uma convergência, os caracteres dos mamíferos
+uma herança comum. A parcimônia não prova a árvore; ela escolhe a menos
+improvável.
+\end{example}
+
+\section{Árvores a partir das moléculas}
+
+\begin{proposition}[Filogenia molecular]\label{prop:g12:phylogenetic-trees:molecular}
+Um \omterm{def:g10:universal-dna:gene}{gene} ou uma \omterm{def:g11:gene-expression:protein}{proteína} compartilhada por todas as \omterm{def:g10:biodiversity-scales:species}{espécies} comparadas
+é uma matriz de caracteres em si: cada posição da sequência é um
+caráter, e cada \omterm{def:g10:universal-dna:nucleotide}{nucleotídeo} ou \omterm{def:g10:chemistry-of-life:families}{aminoácido} um estado. Alinhar as
+sequências e contar as diferenças entre cada par dá uma matriz de
+distâncias, a partir da qual uma árvore é construída juntando primeiro
+os pares mais próximos. A árvore molecular, calculada a partir de
+sequências que não devem nada à anatomia, bate com a árvore anatômica
+na grande maioria dos casos --- o teste mais forte das duas.
+\end{proposition}
+\begin{proof}[Evidence]
+O \cref{ch:g10:common-ancestry} deu as distâncias do citocromo c dos
+\omterm{def:g10:common-ancestry:bodyplan}{vertebrados}, que reproduzem as caixas desenhadas a partir dos
+esqueletos deles. Entre os primatas, sequências de dezenas de \omterm{def:g10:universal-dna:gene}{genes}
+concordam: o ser humano e o chimpanzé diferem em cerca de 1.2\% do \omterm{def:g10:universal-dna:information}{DNA}
+deles, cada um do gorila em 1.6\%, os três do orangotango em 3\%, e os
+grandes primatas do macaco em 7\%. Uma árvore construída a partir de
+qualquer um desses \omterm{def:g10:universal-dna:gene}{genes} tem a mesma forma; as poucas exceções dizem
+respeito aos nós mais recentes, onde as diferenças são as menores.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  \draw[thick] (0,0) -- (1,0);
+  \draw[thick] (1,0) -- (1,2.4) -- (8,2.4);
+  \draw[thick] (1,0) -- (1,-0.8) -- (3,-0.8);
+  \draw[thick] (3,-0.8) -- (3,1.2) -- (8,1.2);
+  \draw[thick] (3,-0.8) -- (3,-1.4) -- (5.2,-1.4);
+  \draw[thick] (5.2,-1.4) -- (5.2,0) -- (8,0);
+  \draw[thick] (5.2,-1.4) -- (5.2,-2.0) -- (6.4,-2.0);
+  \draw[thick] (6.4,-2.0) -- (6.4,-1.2) -- (8,-1.2);
+  \draw[thick] (6.4,-2.0) -- (6.4,-2.8) -- (8,-2.8);
+  \node[anchor=west] at (8.1,2.4) {macaco}; \node[anchor=west] at (8.1,1.2) {orangotango};
+  \node[anchor=west] at (8.1,0) {gorila}; \node[anchor=west] at (8.1,-1.2) {chimpanzé};
+  \node[anchor=west] at (8.1,-2.8) {ser humano};
+  \foreach \x/\t in {1/{25}, 3/{14}, 5.2/{9}, 6.4/{6}}
+    { \fill[omThm] (\x,-3.4) circle (0); \node[font=\scriptsize, omThm, anchor=north] at (\x,-3.4) {\t}; \draw[gray, dashed] (\x,-3.3) -- (\x,-3.0); }
+  \draw[->, gray] (0.5,-3.5) -- (8,-3.5) node[midway, below=7pt, font=\scriptsize] {milhões de anos atrás (nós datados pelo relógio molecular e por fósseis)};
+  \node[font=\scriptsize, anchor=south] at (7.2,-1.05) {1.2\% do DNA};
+  \node[font=\scriptsize, anchor=south] at (6.6,0.15) {1.6\%};
+  \node[font=\scriptsize, anchor=south] at (5.5,1.35) {3\%};
+  \node[font=\scriptsize, anchor=south] at (4.5,2.55) {7\% do DNA difere};
+\end{tikzpicture}
+
+{\small A árvore de cinco primatas a partir da comparação do \omterm{def:g10:universal-dna:information}{DNA}. O ser
+humano e o chimpanzé são grupos-irmãos; o gorila se junta a eles em
+seguida, depois o orangotango, depois o macaco. A porcentagem em cada
+ramo é a diferença de \omterm{def:g10:universal-dna:information}{DNA} entre as \omterm{def:g10:biodiversity-scales:species}{espécies} que ele junta; as datas
+abaixo vêm do relógio molecular calibrado por fósseis.}
+\end{omfigure}
+
+\begin{proposition}[O relógio molecular]\label{prop:g12:phylogenetic-trees:clock}
+Para um dado \omterm{def:g10:universal-dna:gene}{gene}, as diferenças entre duas linhagens se acumulam a uma
+taxa mais ou menos constante ao longo de períodos longos, já que a
+maioria das substituições é neutra e se fixa por deriva na taxa em que
+surge. O número de diferenças entre duas \omterm{def:g10:biodiversity-scales:species}{espécies} é, portanto,
+proporcional ao tempo desde o ancestral comum delas. Calibrado num nó
+datado por fósseis, o relógio data os outros --- com a ressalva de que
+as taxas diferem entre \omterm{def:g10:universal-dna:gene}{genes} e entre linhagens, e de que a calibração
+carrega a própria incerteza.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.84\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=30, ymin=0, ymax=8,
+  xlabel={tempo desde o ancestral comum (milhões de anos, a partir de fósseis)},
+  ylabel={diferença de DNA (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20,25,30}, ytick={0,2,4,6,8},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=2pt, omThm] coordinates {(6,1.2) (9,1.6) (14,3.0) (25,7.0)};
+\addplot[thick, omDef, domain=0:28] {0.27*x};
+\node[font=\scriptsize, anchor=west] at (axis cs:6.4,1.0) {ser humano--chimpanzé};
+\node[font=\scriptsize, anchor=west] at (axis cs:9.4,1.5) {--gorila};
+\node[font=\scriptsize, anchor=west] at (axis cs:14.4,2.9) {--orangotango};
+\node[font=\scriptsize, anchor=east] at (axis cs:24.6,7.1) {--macaco};
+\end{axis}
+\end{tikzpicture}
+
+{\small O relógio molecular entre os primatas: diferença de \omterm{def:g10:universal-dna:information}{DNA} contra
+a idade do ancestral comum. Os pontos caem perto de uma reta de cerca
+de 0.27\% por milhão de anos; a reta permite datar um nó sem fósseis a
+partir da diferença de \omterm{def:g10:universal-dna:information}{DNA} dele.}
+\end{omfigure}
+
+\begin{example}[Datar um nó]\label{ex:g12:phylogenetic-trees:dating}
+Duas \omterm{def:g10:biodiversity-scales:species}{espécies} diferem em 4.5\% do \omterm{def:g10:universal-dna:information}{DNA} delas; a 0.27\% por milhão de
+anos, o ancestral comum delas viveu uns 17 milhões de anos atrás. A
+estimativa supõe que a taxa dos primatas se aplica; para um \omterm{def:g10:universal-dna:gene}{gene} que
+evolui duas vezes mais rápido, ou numa linhagem de gerações mais
+curtas, os mesmos 4.5\% significariam metade do tempo. Um relógio só
+vale o que vale a calibração dele.
+\end{example}
+
+\section{A classificação, a partir das árvores}
+
+\begin{proposition}[Classificar por descendência]\label{prop:g12:phylogenetic-trees:classification}
+Uma classificação filogenética nomeia apenas \omterm{prop:g12:phylogenetic-trees:rules}{clados}: grupos definidos
+por um nó e que contêm todos os descendentes dele. Grupos familiares
+que não passam nesse teste não são usados: ``peixes'' exclui os
+tetrápodes que descendem do mesmo nó; ``répteis'' exclui as aves que
+descendem de dentro deles; ``invertebrados'' é tudo menos um \omterm{prop:g12:phylogenetic-trees:rules}{clado}. As
+consequências merecem ser ditas com todas as letras: as aves são
+dinossauros, o peixe pulmonado é mais próximo de nós que da truta, e os
+seres humanos são um ramo dos primatas antropoides, que são um ramo dos
+primatas, dos mamíferos, dos amniotas, dos tetrápodes, dos \omterm{def:g10:common-ancestry:bodyplan}{vertebrados}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book1/darwin.jpg}
+
+{\small Charles Darwin, que primeiro desenhou o parentesco das \omterm{def:g10:biodiversity-scales:species}{espécies}
+como uma árvore e propôs o mecanismo, a \omterm{def:g12:selection-drift-speciation:selection}{seleção natural}, que a faz
+crescer. Foto Henry Maull e John Fox, c.~1854, domínio público.}
+\end{omfigure}
+
+\begin{remark}[O que uma árvore não é]\label{rem:g12:phylogenetic-trees:not}
+Uma árvore é uma hipótese sobre a história, construída a partir das
+\omterm{def:g10:biodiversity-scales:species}{espécies} do presente e testada por cada caráter novo e cada sequência
+nova; ela é redesenhada quando eles discordam, e o redesenho é o
+trabalho da área. Ela não tem topo nem direção de progresso: os seres
+humanos ficam numa ponta entre milhões, nem mais alta nem mais acabada
+que a lampreia numa outra. E ela não tem ancestral em ponta nenhuma: os
+ancestrais são os nós, populações que se foram, cuja existência a
+árvore infere e cujos fósseis, quando são encontrados, ficam ao lado
+dos ramos, e não em cima deles.
+\end{remark}
+
+\section{Exercícios}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:1}
+O que as pontas, os nós e a raiz de uma \omterm{def:g12:phylogenetic-trees:tree}{árvore filogenética}
+representam?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:2}
+Na árvore A da primeira figura, qual \omterm{def:g10:biodiversity-scales:species}{espécie} é a parente mais próxima
+do lagarto? E da rã?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:3}
+Defina um estado derivado compartilhado e explique por que um estado
+ancestral compartilhado não indica parentesco.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:4}
+O que é um \omterm{prop:g12:phylogenetic-trees:rules}{clado}? ``Aves'' é um \omterm{prop:g12:phylogenetic-trees:rules}{clado}? ``Répteis'' (no sentido
+cotidiano) é?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:5}
+A partir da árvore dos primatas, qual é o parente mais próximo do ser
+humano, e qual nó é o mais antigo?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:6}
+Redesenhe a árvore A da primeira figura com o ser humano em cima e a rã
+embaixo, e verifique que todo parentesco fica inalterado.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:7}
+Acrescente o pombo (mandíbulas 1, membros 1, âmnio 1, pelos 0, penas 1)
+à matriz da segunda figura e o coloque na árvore. O que o caráter
+``penas'' acrescenta?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:8}
+Um golfinho tem o corpo hidrodinâmico e nadadeiras como um tubarão, e
+pelos, leite e mandíbula de mamífero. Qual árvore é a mais
+parcimoniosa, e o que são as nadadeiras?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:9}
+Usando a figura do relógio, date o ancestral comum de duas \omterm{def:g10:biodiversity-scales:species}{espécies}
+cujo \omterm{def:g10:universal-dna:information}{DNA} difere em 2.2\%.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:10}
+Explique por que a frase ``o chimpanzé é nosso ancestral'' lê a árvore
+errado, e escreva a frase correta.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:11}
+Por que a lampreia é usada como grupo externo na segunda figura, e o
+que daria errado se o camundongo fosse usado no lugar dela?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:12}
+Dois \omterm{def:g10:universal-dna:gene}{genes} dão árvores diferentes para três \omterm{def:g10:biodiversity-scales:species}{espécies} próximas que se
+separaram com menos de um milhão de anos de intervalo. Explique como
+isso pode acontecer sem que nenhuma das árvores esteja ``errada'',
+usando o embaralhamento dos \omterm{def:g10:universal-dna:gene}{alelos} na \omterm{def:g12:selection-drift-speciation:population}{população} ancestral.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:13}
+O relógio molecular de um vírus de evolução rápida corre a 1\% por ano;
+o de um \omterm{def:g10:universal-dna:gene}{gene} de mamífero, a 0.3\% por milhão de anos. Explique por que
+o primeiro é usado para rastrear uma epidemia e o segundo para datar a
+origem dos mamíferos, e por que nenhum consegue fazer o trabalho do outro.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:14}
+Uma ave fóssil com dentes e uma longa cauda óssea é encontrada em
+rochas de 150 milhões de anos. Explique por que ela é colocada ao lado
+de um ramo da árvore, e não num nó, e o que ela diz sobre o nó.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:15}
+``A árvore da vida tem os seres humanos no topo dela.'' Discuta num
+parágrafo com as regras de leitura, a idade igual das pontas e o número
+de pontas.
+\end{exercise}
+
+\section{Problema: seis espécies e um relógio}
+
+\begin{problem}[{Problema de fim de semana --- uma árvore construída
+duas vezes, a partir de uma tabela de caracteres e de distâncias de
+DNA, as duas comparadas, e os nós datados}]
+\label{pb:g12:phylogenetic-trees:1}
+Seis \omterm{def:g10:biodiversity-scales:species}{espécies}: tubarão, salmão, salamandra, crocodilo, pombo, gato. O
+grupo externo é a lampreia. Tabela de caracteres (1 = derivado):
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lcccccc}
+ & esqueleto ósseo & quatro membros & ovo amniótico & penas & pelos & abertura no crânio \\ \hline
+tubarão & 0 & 0 & 0 & 0 & 0 & 0 \\
+salmão & 1 & 0 & 0 & 0 & 0 & 0 \\
+salamandra & 1 & 1 & 0 & 0 & 0 & 0 \\
+crocodilo & 1 & 1 & 1 & 0 & 0 & 0 \\
+pombo & 1 & 1 & 1 & 1 & 0 & 0 \\
+gato & 1 & 1 & 1 & 0 & 1 & 1 \\
+\end{tabular}
+\end{center}
+
+Diferenças de \omterm{def:g10:universal-dna:information}{DNA} (\%) para um \omterm{def:g10:universal-dna:gene}{gene}:
+
+\begin{center}
+\begin{tabular}{lccccc}
+ & salmão & salamandra & crocodilo & pombo & gato \\ \hline
+tubarão & 30 & 31 & 30 & 31 & 30 \\
+salmão & & 24 & 25 & 25 & 24 \\
+salamandra & & & 19 & 20 & 19 \\
+crocodilo & & & & 8 & 15 \\
+pombo & & & & & 15 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Parte I --- A partir dos caracteres.}
+\begin{enumerate}
+  \item Qual estado derivado é compartilhado pelo maior número de
+        \omterm{def:g10:biodiversity-scales:species}{espécies}? Nomeie o \omterm{prop:g12:phylogenetic-trees:rules}{clado} que ele define e as \omterm{def:g10:biodiversity-scales:species}{espécies} deixadas
+        de fora. (O último caráter é a abertura única na lateral do
+        crânio que os mamíferos têm.)
+  \item Continue com os estados compartilhados mais amplamente em
+        seguida e liste os \omterm{prop:g12:phylogenetic-trees:rules}{clados} encaixados.
+  \item As penas, os pelos e a abertura no crânio ocorrem, cada um,
+        numa \omterm{def:g10:biodiversity-scales:species}{espécie} só. Eles ajudam a construir esta árvore? O que os
+        tornaria úteis?
+  \item Desenhe a árvore, escrevendo cada caráter no ramo em que ele
+        apareceu.
+  \item Qual \omterm{def:g10:biodiversity-scales:species}{espécie} é a parente mais próxima do crocodilo segundo esta
+        tabela? Qual par não pode ser resolvido só pela tabela?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte II --- A partir do \omterm{def:g10:universal-dna:information}{DNA}.}
+\begin{enumerate}[resume]
+  \item Qual par de \omterm{def:g10:biodiversity-scales:species}{espécies} tem a menor distância? Junte-as primeiro.
+  \item Qual \omterm{def:g10:biodiversity-scales:species}{espécie} se junta a esse par em seguida? Continue até a
+        árvore ficar completa.
+  \item Compare a árvore do \omterm{def:g10:universal-dna:information}{DNA} com a árvore dos caracteres: em que
+        elas concordam, e o que o \omterm{def:g10:universal-dna:information}{DNA} resolve que os caracteres não conseguiram?
+  \item As distâncias do tubarão a todos os outros são quase iguais.
+        Explique por quê, a partir da forma da árvore.
+  \item A distância crocodilo--pombo (8) é menor que a distância
+        crocodilo--gato (15). O que isso diz sobre o grupo cotidiano
+        ``répteis''?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte III --- O relógio.}
+Fósseis datam a separação da linhagem da salamandra em relação aos
+amniotas em 340 milhões de anos.
+\begin{enumerate}[resume]
+  \item Usando as distâncias salamandra--amniotas (cerca de 19\%),
+        calcule a taxa do relógio em por cento por milhão de anos. (As
+        duas linhagens vêm mudando: a distância conta as mudanças nos
+        dois ramos.)
+  \item Date o nó crocodilo--pombo e o nó dos amniotas
+        (crocodilo/pombo contra gato).
+  \item Date o nó do salmão e o nó do tubarão.
+  \item Os fósseis dão cerca de 250 milhões de anos para a separação
+        crocodilo--aves e 310 para a separação dos amniotas. Compare
+        com as suas datas e comente a precisão de um relógio de um \omterm{def:g10:universal-dna:gene}{gene} só.
+  \item As distâncias do tubarão (30--31\%) quase não superam as do
+        salmão (24--25\%), embora o nó do tubarão seja bem mais antigo.
+        Proponha uma explicação e diga o que ela implica para datar nós
+        muito antigos com esse \omterm{def:g10:universal-dna:gene}{gene}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte IV --- Ler e nomear.}
+\begin{enumerate}[resume]
+  \item Liste os \omterm{prop:g12:phylogenetic-trees:rules}{clados} da sua árvore que contêm o gato, do menor ao
+        maior.
+  \item ``Peixes'' (tubarão e salmão) é um \omterm{prop:g12:phylogenetic-trees:rules}{clado}? ``Amniotas'' é?
+        Justifique.
+  \item Um estudante diz que a salamandra é ``um intermediário entre os
+        peixes e os répteis''. Corrija a afirmação nos termos da árvore.
+  \item Um fóssil com esqueleto ósseo, quatro membros e nenhum ovo
+        amniótico, datado de 360 milhões de anos, é encontrado. Onde
+        ele fica em relação à árvore, e o que a data dele confirma?
+  \item Enuncie o resultado: a árvore das seis \omterm{def:g10:biodiversity-scales:species}{espécies} (como
+        parênteses encaixados), o único parentesco que o \omterm{def:g10:universal-dna:information}{DNA} resolveu, e
+        a data estimada da separação crocodilo--pombo.
+\end{enumerate}
+\end{problem}

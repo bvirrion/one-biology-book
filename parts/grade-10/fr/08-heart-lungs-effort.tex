@@ -1,0 +1,507 @@
+\chapter{Le cœur et les poumons à l'effort}\label{ch:g10:heart-lungs-effort}
+
+Montez quatre étages en courant et arrêtez-vous en haut. Votre poitrine
+se soulève --- quarante respirations par minute au lieu de douze,
+chacune trois fois plus profonde --- et votre cœur cogne à cent
+soixante-dix. Rien dans ces escaliers ne vous demandait d'en décider~;
+le corps l'a organisé, en quelques secondes, parce que les muscles du
+\cref{ch:g10:exercise-and-energy} réclamaient dix fois plus d'oxygène
+qu'une minute plus tôt. Ce chapitre porte sur le système de livraison
+--- poumons, cœur, vaisseaux sanguins --- et sur la façon dont son
+débit est multiplié quand l'effort commence.
+
+\section{La ventilation}
+
+\begin{definition}[Ventilation]\label{def:g10:heart-lungs-effort:ventilation}
+La \emph{ventilation pulmonaire}\index{ventilation} est le volume d'air
+qui entre et sort des poumons par minute~: le volume d'une respiration
+(le \emph{volume courant}) multiplié par le nombre de respirations par
+minute (la \emph{fréquence respiratoire}). Au repos, environ
+\qty{0.5}{L} douze à quinze fois par minute~: \qtyrange{6}{8}{L/min}.
+Dans les poumons, l'air atteint quelque 300 millions
+d'\emph{alvéoles}\index{alvéole}, sacs à paroi mince enveloppés de
+capillaires, où l'oxygène passe dans le sang et le dioxyde de carbone
+en sort.
+\end{definition}
+
+\begin{proposition}[La ventilation à l'effort]\label{prop:g10:heart-lungs-effort:vent-exercise}
+À l'effort, le volume courant et la fréquence montent tous deux~: un
+adulte en forme peut respirer \qty{2.5}{L} quarante fois par minute,
+soit \qty{100}{L/min} ou plus, quinze fois la valeur de repos. La
+montée commence dès les premières secondes de l'effort, avant tout
+changement dans le sang, et se stabilise à un niveau proportionnel à
+l'oxygène consommé.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=40, ymin=0, ymax=6.5,
+  xlabel={temps (s)}, ylabel={volume pulmonaire (L)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,10,20,30,40}, ytick={0,1,2,3,4,5,6},
+  clip=false,
+]
+\addplot[thick, omDef, smooth, samples=200, domain=0:16]
+  {2.7 + 0.25*sin(deg(2*pi*x/4))};
+\addplot[thick, omDef] coordinates {(16,2.7) (18,2.95) (21,5.7) (25,5.7) (30,1.2) (33,1.2) (35,2.7)};
+\addplot[thick, omDef, smooth, samples=100, domain=35:40]
+  {2.7 + 0.25*sin(deg(2*pi*(x-35)/4))};
+\draw[dashed, gray] (axis cs:0,1.2) -- (axis cs:40,1.2);
+\draw[dashed, gray] (axis cs:0,5.7) -- (axis cs:40,5.7);
+\draw[dashed, gray] (axis cs:0,2.45) -- (axis cs:18,2.45);
+\draw[dashed, gray] (axis cs:0,2.95) -- (axis cs:18,2.95);
+\draw[<->, omThm] (axis cs:38,1.2) -- (axis cs:38,5.7);
+\node[font=\small, anchor=west, omThm] at (axis cs:38.4,3.5) {capacité};
+\node[font=\small, anchor=west, omThm] at (axis cs:38.4,3.1) {vitale};
+\draw[<->] (axis cs:8,2.45) -- (axis cs:8,2.95);
+\node[font=\small, anchor=south] at (axis cs:8,3.0) {volume courant, \qty{0.5}{L}};
+\node[font=\small, anchor=north] at (axis cs:20,1.1) {volume résiduel};
+\node[font=\small, anchor=south, align=center] at (axis cs:23,5.75) {inspiration\\ maximale};
+\node[font=\small, anchor=north, align=center] at (axis cs:31.5,1.1) {};
+\end{axis}
+\end{tikzpicture}
+
+{\small Un spirogramme~: le volume d'air contenu dans les poumons en
+fonction du temps. La respiration calme déplace \qty{0.5}{L} par cycle
+autour d'un niveau moyen~; une inspiration maximale suivie d'une
+expiration maximale balaie la capacité vitale, environ \qty{4.5}{L}~;
+les \qty{1.2}{L} qu'on ne peut jamais chasser sont le volume résiduel.}
+\end{omfigure}
+
+\begin{example}[Lire un spirogramme]\label{ex:g10:heart-lungs-effort:spirogram}
+Sur la figure, quatre cycles prennent \qty{16}{s}~: 15 respirations par
+minute de \qty{0.5}{L}, d'où \qty{7.5}{L/min}. Le balayage maximal va
+de \qty{5.7}{L} à \qty{1.2}{L}~: une capacité vitale de \qty{4.5}{L}. Un
+volume courant de \qty{2.5}{L} à l'effort utilise plus de la moitié de
+cette capacité, et c'est bien ce qu'on ressent quand on souffle fort.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.58\linewidth]{images/book2/ai/g10-lungs-spirometer.png}
+
+{\small Mesurer les volumes pulmonaires~: le sujet respire par un
+embout dans un spiromètre, le nez pincé, et l'appareil enregistre le
+volume de chaque cycle.}
+\end{omfigure}
+
+\section{Le cœur et les deux circulations}
+
+\begin{definition}[Débit cardiaque]\label{def:g10:heart-lungs-effort:output}
+Le cœur est une double pompe à quatre cavités. Le côté droit reçoit le
+sang qui revient des organes et l'envoie aux poumons (la
+\emph{circulation pulmonaire})~; le côté gauche le reçoit en retour des
+poumons et l'envoie aux organes (la \emph{circulation systémique}). Des
+valves entre les cavités et à leurs sorties rendent l'écoulement à sens
+unique. Le \emph{débit cardiaque}\index{débit cardiaque} $Q$ est le
+volume de sang que chaque côté pompe par minute~: le volume éjecté à
+chaque battement, le \emph{volume d'éjection systolique} $V_s$,
+multiplié par la \emph{fréquence cardiaque} $f$,
+\[
+Q = f \times V_s .
+\]
+Au repos, $70$ battements par minute de \qty{70}{mL}~: environ
+\qty{5}{L/min} --- tout le volume sanguin une fois par minute.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[>=Stealth, font=\small,
+  ch/.style={draw, thick, rounded corners, minimum width=1.9cm, minimum height=1.0cm, align=center},
+  org/.style={draw, thick, rounded corners, minimum width=2.6cm, minimum height=1.0cm, align=center}]
+  \node[org, fill=omDef!15] (lungs) at (3.5,3.6) {poumons};
+  \node[ch, fill=omDef!25] (ra) at (0.7,1.2) {oreillette\\ droite};
+  \node[ch, fill=omDef!25] (rv) at (0.7,0) {ventricule\\ droit};
+  \node[ch, fill=omThm!20] (la) at (6.3,1.2) {oreillette\\ gauche};
+  \node[ch, fill=omThm!20] (lv) at (6.3,0) {ventricule\\ gauche};
+  \node[org, fill=omThm!12] (org) at (3.5,-2.8) {muscles et\\ autres organes};
+  \draw[->, thick, omDef] (ra) -- (rv);
+  \draw[->, thick, omDef, rounded corners=6pt] (rv.west) -- (-1.55,0) -- (-1.55,3.6) -- (lungs.west);
+  \node[anchor=east, align=right, omDef] at (-1.7,2.4) {artère\\ pulmonaire};
+  \draw[->, thick, omThm, rounded corners=6pt] (lungs.east) -- (8.6,3.6) -- (8.6,1.2) -- (la.east);
+  \node[anchor=west, align=left, omThm] at (8.75,2.4) {veines\\ pulmonaires};
+  \draw[->, thick, omThm] (la) -- (lv);
+  \draw[->, thick, omThm, rounded corners=6pt] (lv.east) -- (8.6,0) -- (8.6,-2.8) -- (org.east);
+  \node[anchor=west, omThm] at (8.75,-1.4) {aorte};
+  \draw[->, thick, omDef, rounded corners=6pt] (org.west) -- (-2.3,-2.8) -- (-2.3,1.2) -- (ra.west);
+  \node[anchor=east, omDef] at (-2.45,-1.4) {veines};
+  \node[font=\small, anchor=north, text width=3.2cm, align=center] at (3.5,-3.6) {oxygène sortant, $\mathrm{CO_2}$ entrant};
+  \node[font=\small, anchor=south, text width=3.2cm, align=center] at (3.5,4.2) {oxygène entrant, $\mathrm{CO_2}$ sortant};
+  \draw[thick, dashed, gray] (3.5,2.5) -- (3.5,-1.9);
+\end{tikzpicture}
+
+{\small La double circulation. En bleu~: le sang pauvre en oxygène,
+pompé par le cœur droit vers les poumons. En rouge~: le sang riche en
+oxygène, pompé par le cœur gauche vers les organes. Les deux côtés
+battent ensemble et pompent le même volume par minute.}
+\end{omfigure}
+
+\begin{proposition}[Le débit cardiaque à l'effort]\label{prop:g10:heart-lungs-effort:output-exercise}
+À l'effort, la fréquence cardiaque monte avec la puissance fournie,
+jusqu'à un maximum d'à peu près $220$ moins l'âge en années, et le
+volume d'éjection systolique monte aussi, de moitié environ chez une
+personne non entraînée et davantage chez une personne entraînée. Le
+\omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} d'un jeune adulte passe de \qty{5}{L/min} au repos à
+\qtyrange{20}{25}{L/min} à l'effort maximal, et à \qty{35}{L/min} ou
+plus chez un champion d'endurance, dont le volume d'éjection peut
+dépasser \qty{180}{mL}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=320, ymin=0, ymax=210,
+  xlabel={puissance mécanique (W)}, ylabel={fréquence (par min), volume d'éjection (mL)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small},
+  xtick={0,50,100,150,200,250,300}, ytick={0,50,100,150,200},
+  legend style={at={(0.5,-0.3)}, anchor=north, legend columns=3, font=\small, draw=none},
+  clip=false,
+]
+\addplot[thick, omThm, mark=*, mark size=1.5pt] coordinates
+  {(0,70) (50,95) (100,120) (150,145) (200,170) (250,190) (300,198)};
+\addplot[thick, omDef, mark=square*, mark size=1.5pt] coordinates
+  {(0,70) (50,90) (100,105) (150,112) (200,115) (250,115) (300,115)};
+\addplot[thick, omMeth, dashed, mark=triangle*, mark size=1.8pt] coordinates
+  {(0,4.9) (50,8.6) (100,12.6) (150,16.2) (200,19.6) (250,21.9) (300,22.8)};
+\legend{fréquence cardiaque, volume d'éjection, débit (L/min)}
+\end{axis}
+\end{tikzpicture}
+
+{\small Fréquence cardiaque, volume d'éjection systolique et \omterm{def:g10:heart-lungs-effort:output}{débit
+cardiaque} d'un sujet de vingt ans à puissance croissante. Le volume
+d'éjection plafonne à effort modéré~; au-delà, le débit ne monte plus
+que par la fréquence, et la fréquence elle-même plafonne près de
+$220 - 20 = 200$.}
+\end{omfigure}
+
+\begin{example}[Le débit à \qty{200}{W}]\label{ex:g10:heart-lungs-effort:output200}
+D'après la figure~: $f = 170$ par minute, $V_s = \qty{115}{mL}$, donc
+$Q = 170 \times 0.115 \approx \qty{19.6}{L/min}$~: quatre fois le débit
+de repos. Le cœur déplace tout le volume sanguin du corps quatre fois
+par minute.
+\end{example}
+
+\section{Amener le sang là où il faut}
+
+\begin{proposition}[Redistribution du débit sanguin]\label{prop:g10:heart-lungs-effort:redistribution}
+Au repos, les muscles reçoivent environ un cinquième du \omterm{def:g10:heart-lungs-effort:output}{débit
+cardiaque}~; le tube digestif, le foie et les reins en prennent la
+moitié. À l'effort intense, les petites artères des muscles au travail
+s'élargissent et celles du tube digestif et des reins se resserrent~:
+les muscles reçoivent alors plus des quatre cinquièmes d'un débit qui a
+lui-même quadruplé --- quelque \qty{20}{L/min} au lieu de
+\qty{1}{L/min}, vingt fois plus. La part du cerveau est maintenue
+constante en valeur absolue, et celle de la peau augmente pour évacuer
+la chaleur.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  xbar stacked, bar width=15pt,
+  width=0.86\linewidth, height=3.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=25, xlabel={débit sanguin (L/min)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.3)}, anchor=north},
+  symbolic y coords={repos, effort maximal},
+  ytick=data, tick label style={font=\small},
+  enlarge y limits=0.5,
+  legend style={at={(0.5,-0.65)}, anchor=north, legend columns=5, font=\small, draw=none},
+]
+\addplot[fill=omThm!50, draw=omThm] coordinates {(1.0,repos) (20.5,effort maximal)};
+\addplot[fill=omProp!50, draw=omProp] coordinates {(2.5,repos) (0.9,effort maximal)};
+\addplot[fill=omDef!50, draw=omDef] coordinates {(0.75,repos) (0.75,effort maximal)};
+\addplot[fill=gray!40, draw=gray] coordinates {(0.5,repos) (1.2,effort maximal)};
+\addplot[fill=omMeth!50, draw=omMeth] coordinates {(0.25,repos) (0.65,effort maximal)};
+\legend{muscles, tube digestif et reins, cerveau, peau, autres}
+\end{axis}
+\end{tikzpicture}
+
+{\small Où va le \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque}, au repos (\qty{5}{L/min}) et à
+l'effort maximal (\qty{24}{L/min}). La part des muscles passe d'un
+cinquième à plus des quatre cinquièmes~; le cerveau garde ses
+\qty{0.75}{L/min} d'un bout à l'autre.}
+\end{omfigure}
+
+\begin{proposition}[Livraison et extraction de l'oxygène]\label{prop:g10:heart-lungs-effort:extraction}
+Chaque litre de sang artériel transporte environ \qty{200}{mL}
+d'oxygène, presque tout fixé sur l'hémoglobine des globules rouges. Au
+repos, les organes en retirent environ \qty{50}{mL} par litre~; à
+l'effort, les muscles au travail en retirent jusqu'à \qty{150}{mL},
+trois fois plus. L'oxygène consommé par minute est le \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque}
+multiplié par la quantité retirée par litre --- de sorte que la
+multiplication par cinq du débit et celle par trois de l'extraction
+donnent ensemble la multiplication par quinze de la consommation
+d'oxygène du \cref{ch:g10:exercise-and-energy}.
+\end{proposition}
+\admitted
+
+\begin{example}[Le bilan de l'oxygène vérifié]\label{ex:g10:heart-lungs-effort:fick}
+Repos~: \qty{5}{L/min} $\times$ \qty{50}{mL/L} $= \qty{250}{mL/min}$,
+la consommation de repos. Effort maximal d'un élève entraîné~:
+\qty{23}{L/min} $\times$ \qty{150}{mL/L} $= \qty{3.45}{L/min}$ --- une
+$\dot V\!\mathrm{O_2}$max de \qty{50}{mL/min} par kilogramme pour
+\qty{69}{kg}, exactement le chiffre du chapitre précédent.
+\end{example}
+
+\section{Comment la réponse est commandée}
+
+\begin{proposition}[Commande nerveuse et hormonale]\label{prop:g10:heart-lungs-effort:control}
+Le cœur et les muscles respiratoires sont commandés par des centres
+nerveux situés à la base du cerveau. Deux jeux de nerfs atteignent le
+cœur~: l'un le ralentit, actif au repos~; l'autre l'accélère et
+renforce chaque battement. Au début de l'effort, la commande que le
+cerveau envoie aux muscles est copiée vers ces centres --- le cœur
+accélère en un ou deux battements --- et des capteurs situés dans les
+muscles et les articulations signalent le mouvement. Puis, l'effort se
+poursuivant, des capteurs des artères mesurent le dioxyde de carbone et
+l'acidité du sang et ajustent la \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} et la fréquence cardiaque
+pour les maintenir près de leurs valeurs de repos. Les glandes
+surrénales y ajoutent l'hormone \emph{adrénaline}\index{adrénaline},
+qui renforce l'accélération et élargit les artères des muscles.
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Sectionner le nerf ralentisseur d'un animal fait passer sa fréquence
+cardiaque de repos de 70 à environ 100~; le stimuler arrête le cœur.
+Stimuler le nerf accélérateur double la fréquence. Une personne
+prévenue qu'un effort l'attend voit sa fréquence cardiaque monter avant
+tout mouvement~; un sujet respirant un air enrichi en dioxyde de
+carbone augmente sa \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} en moins d'une minute, et un sujet dont
+on maintient artificiellement constant le dioxyde de carbone sanguin
+pendant l'effort l'augmente quand même dès le début du mouvement ---
+les deux mécanismes, anticipation et correction, sont bien réels.
+\end{proof}
+
+\begin{method}[Calculer la livraison d'oxygène]\label{met:g10:heart-lungs-effort:compute}
+\begin{enumerate}
+  \item \omterm{def:g10:heart-lungs-effort:ventilation}{Ventilation}~: volume courant $\times$ fréquence. Seuls 70~\%
+        environ de chaque cycle atteignent les \omterm{def:g10:heart-lungs-effort:ventilation}{alvéoles}~; le reste
+        emplit les voies aériennes.
+  \item \omterm{def:g10:heart-lungs-effort:output}{Débit cardiaque}~: $Q = f \times V_s$, en litres par minute si
+        $V_s$ est en litres.
+  \item Oxygène consommé par minute~: $Q \times$ (oxygène retiré par
+        litre de sang).
+  \item Débit vers un organe~: sa part de $Q$. Comparer les débits
+        absolus, non les parts --- une part plus petite d'un débit plus
+        grand peut représenter davantage de sang.
+  \item Vérifier~: la consommation ne peut pas dépasser la
+        $\dot V\!\mathrm{O_2}$max, et $f$ ne peut pas dépasser environ
+        $220 - $ l'âge.
+\end{enumerate}
+\end{method}
+
+\begin{remark}[Où se situe la limite]\label{rem:g10:heart-lungs-effort:limit}
+La \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} peut dépasser \qty{150}{L/min} et le sang qui quitte les
+poumons reste presque saturé à l'effort maximal~: les poumons ne sont
+pas le goulot d'étranglement. Le volume d'éjection systolique l'est~: il
+fixe la quantité de sang, donc d'oxygène, que chaque battement livre.
+L'entraînement en endurance agrandit le cœur et son volume d'éjection
+--- ce qui explique qu'un cœur entraîné batte au repos à 45 au lieu de
+70 pour les mêmes \qty{5}{L/min}, et que la
+$\dot V\!\mathrm{O_2}$max monte avec l'entraînement.
+\end{remark}
+
+\section{Exercices}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:1}
+Calculer la \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} d'une personne respirant \qty{0.6}{L} quatorze
+fois par minute~; puis celle de la même personne respirant \qty{2.2}{L}
+trente-cinq fois par minute.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:2}
+Définir le \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} et donner sa formule. Le calculer pour une
+fréquence cardiaque de 65 par minute et un volume d'éjection de
+\qty{75}{mL}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:3}
+Suivre le trajet d'un globule rouge de l'oreillette droite jusqu'à
+l'oreillette droite, en nommant les cavités et les deux circulations.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:4}
+D'après la figure du spirogramme, donner le volume courant, la capacité
+vitale et le volume résiduel.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g10:heart-lungs-effort:5}
+Quelle est la fréquence cardiaque maximale d'une personne de 16 ans~?
+D'une personne de 60 ans~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:6}
+D'après la figure de la fréquence cardiaque, calculer le \omterm{def:g10:heart-lungs-effort:output}{débit
+cardiaque} à \qty{100}{W} et à \qty{300}{W}, et le facteur entre les
+deux.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:7}
+Au repos, le tube digestif et les reins reçoivent 50~\% de
+\qty{5}{L/min}~; à l'effort maximal, 4~\% de \qty{24}{L/min}. Calculer
+les deux débits. Qu'est-ce qui change le plus, la part ou le débit
+absolu~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:8}
+Une sujette a un \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} de \qty{18}{L/min} et ses muscles
+retirent \qty{140}{mL} d'oxygène par litre. Calculer sa consommation
+d'oxygène. Est-elle proche du plafond d'une élève entraînée~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:9}
+Pourquoi le débit sanguin du cerveau reste-t-il à \qty{0.75}{L/min}
+alors que celui du tube digestif est réduit des deux tiers à l'effort~?
+Penser à ce que chaque organe peut supporter.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:10}
+Une cycliste entraînée a une fréquence cardiaque de repos de 42 et un
+débit de repos de \qty{5}{L/min}. Calculer son volume d'éjection
+systolique et le comparer à celui d'une personne non entraînée.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g10:heart-lungs-effort:11}
+Expliquer pourquoi la fréquence cardiaque commence à monter avant la
+première foulée d'une course, et ce qui arriverait à un coureur dont la
+commande ne fonctionnerait que par détection du dioxyde de carbone
+sanguin.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:12}
+Deux sujets atteignent la même fréquence cardiaque maximale de 195.
+L'un a un volume d'éjection maximal de \qty{110}{mL}, l'autre de
+\qty{160}{mL}. Avec la même extraction d'oxygène de \qty{150}{mL/L},
+calculer leurs \omterm{def:g10:exercise-and-energy:vo2max}{consommations maximales d'oxygène}, et dire ce que la
+\cref{rem:g10:heart-lungs-effort:limit} prévoit de leurs histoires
+d'entraînement.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:13}
+L'air contient 21~\% d'oxygène. Une sujette ventile \qty{100}{L/min} à
+l'effort maximal et consomme \qty{3.5}{L/min} d'oxygène. Quelle
+fraction de l'oxygène qu'elle inspire utilise-t-elle réellement~? Que
+devient le reste~?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:14}
+Un médicament bloque les nerfs accélérateurs et l'effet de
+l'\omterm{prop:g10:heart-lungs-effort:control}{adrénaline} sur le cœur, limitant la fréquence cardiaque à 110.
+Prévoir son effet sur le \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} à l'effort maximal, sur la
+$\dot V\!\mathrm{O_2}$max, et sur ce que le patient peut faire.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g10:heart-lungs-effort:15}
+Chez une personne en altitude, le sang artériel transporte
+\qty{150}{mL} d'oxygène par litre au lieu de \num{200}. À \omterm{def:g10:heart-lungs-effort:output}{débit
+cardiaque} maximal identique et avec la même extraction de 75~\% de
+l'oxygène livré, calculer la perte de $\dot V\!\mathrm{O_2}$max en pour
+cent. Proposer une adaptation que le corps met en place les semaines
+suivantes.
+\end{exercise}
+
+\section{Problème~: l'épreuve d'effort}
+
+\begin{problem}[{Problème du week-end --- une épreuve d'effort chez le
+cardiologue~: fréquence cardiaque, volume d'éjection, ventilation et
+extraction d'oxygène mesurés à puissance croissante, et la
+multiplication qu'ils réalisent ensemble}]
+\label{pb:g10:heart-lungs-effort:1}
+Tom, 17 ans, \qty{68}{kg}, pédale sur un vélo de laboratoire pendant
+qu'on enregistre sa fréquence cardiaque, sa \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} et son air
+expiré. Résultats~:
+
+\begin{center}
+\begin{tabular}{lccccc}
+puissance (W) & 0 & 75 & 150 & 225 & 300 \\ \hline
+fréquence cardiaque (par min) & 62 & 105 & 140 & 175 & 198 \\
+volume d'éjection (mL) & 72 & 100 & 116 & 120 & 120 \\
+volume courant (L) & 0.5 & 1.2 & 1.8 & 2.3 & 2.6 \\
+respirations par min & 13 & 18 & 24 & 32 & 44 \\
+$\mathrm{O_2}$ retiré par litre de sang (mL) & 52 & 90 & 120 & 145 & 155 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Partie I --- Le cœur.}
+\begin{enumerate}
+  \item Calculer le \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} de Tom à chaque puissance.
+  \item De quel facteur le débit a-t-il monté à \qty{300}{W}~? Quelle
+        part de ce facteur vient de la fréquence et quelle part du
+        volume d'éjection~?
+  \item Au-dessus de quelle puissance le volume d'éjection cesse-t-il
+        de monter~? Qu'est-ce qui augmente seul le débit au-delà~?
+  \item Comparer la fréquence cardiaque maximale de Tom à la règle
+        empirique.
+  \item Son débit de repos vaut environ \qty{4.5}{L/min}. Si son volume
+        sanguin est de \qty{5}{L}, combien de temps dure un tour
+        complet au repos, et à \qty{300}{W}~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie II --- Les poumons.}
+\begin{enumerate}[resume]
+  \item Calculer la \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} à chaque puissance.
+  \item De quel facteur a-t-elle monté à \qty{300}{W}~? Lequel des deux
+        facteurs, volume ou fréquence, y contribue le plus~?
+  \item La capacité vitale de Tom vaut \qty{5.0}{L}. Quelle fraction en
+        utilise chaque cycle à \qty{300}{W}~?
+  \item La \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} a monté d'un facteur plus grand que le \omterm{def:g10:heart-lungs-effort:output}{débit
+        cardiaque}. Cela signifie-t-il que les poumons limitent la
+        performance~? Utiliser la
+        \cref{rem:g10:heart-lungs-effort:limit}.
+  \item Seuls 70~\% de chaque cycle atteignent les \omterm{def:g10:heart-lungs-effort:ventilation}{alvéoles}. Calculer
+        la \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation} alvéolaire au repos et à \qty{300}{W}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie III --- L'oxygène.}
+\begin{enumerate}[resume]
+  \item Calculer la consommation d'oxygène de Tom à chaque puissance,
+        à partir du \omterm{def:g10:heart-lungs-effort:output}{débit cardiaque} et de l'oxygène retiré par litre.
+  \item Exprimer la valeur à \qty{300}{W} en millilitres par minute et
+        par kilogramme. Est-ce une $\dot V\!\mathrm{O_2}$max, et de
+        quel genre de sujet~?
+  \item De quel facteur la consommation a-t-elle monté du repos à
+        \qty{300}{W}~? La décomposer en facteur dû au cœur et facteur
+        dû à l'extraction.
+  \item En prenant \qty{20}{kJ} par litre d'oxygène, calculer la
+        puissance métabolique à \qty{300}{W} et le rendement des
+        muscles (puissance mécanique divisée par la puissance
+        métabolique au-dessus du repos).
+  \item Tracer, ou décrire, la consommation d'oxygène en fonction de
+        la puissance mécanique. Est-elle linéaire~? Où est le plafond~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie IV --- La commande et le verdict.}
+\begin{enumerate}[resume]
+  \item La fréquence cardiaque de Tom atteignait 75 alors qu'il
+        attendait assis le début de l'épreuve. Expliquer.
+  \item À \qty{300}{W}, son sang artériel est encore saturé à 95~\% en
+        oxygène. Que cela vous apprend-il sur les échanges alvéolaires,
+        et sur le lieu où se situe la limite de sa
+        $\dot V\!\mathrm{O_2}$max~?
+  \item Le cardiologue note que les muscles reçoivent désormais environ
+        \qty{20}{L/min} de sang. Quelle fraction du débit cela
+        représente-t-il, et où est passé le reste de la répartition de
+        repos~?
+  \item Après six mois d'entraînement, le volume d'éjection maximal de
+        Tom vaut \qty{140}{mL} à la même fréquence maximale et à la
+        même extraction. Calculer sa nouvelle
+        $\dot V\!\mathrm{O_2}$max.
+  \item Énoncer le résultat~: les trois nombres (cœur, extraction,
+        \omterm{def:g10:heart-lungs-effort:ventilation}{ventilation}) par lesquels le corps de Tom a multiplié son
+        apport d'oxygène de repos, et celui des trois que
+        l'entraînement a modifié.
+\end{enumerate}
+\end{problem}

@@ -1,0 +1,523 @@
+\chapter{Sélection, dérive et spéciation}\label{ch:g12:selection-drift-speciation}
+
+En 1848, une forme noire de la phalène du bouleau fut capturée près
+d'une ville industrielle où chaque tronc d'arbre était couvert de
+suie~; en 1895, presque toutes les phalènes de la région étaient
+noires. Un siècle plus tard, la suie disparue et les troncs redevenus
+clairs, la forme noire avait presque disparu. Personne n'a élevé ces
+papillons~; ce sont les oiseaux qui les mangent qui ont fait le tri.
+Les deux chapitres précédents ont décrit comment naît la variation~;
+celui-ci porte sur ce qu'elle devient dans une \omterm{def:g12:selection-drift-speciation:population}{population} --- comment
+certains \omterm{def:g10:universal-dna:gene}{allèles} deviennent fréquents et d'autres rares, par la
+sélection et par le hasard --- et comment, à la fin, une \omterm{def:g12:selection-drift-speciation:population}{population}
+devient deux \omterm{def:g10:biodiversity-scales:species}{espèces}.
+
+\section{Les populations et leurs allèles}
+
+\begin{definition}[Population, fréquence allélique]\label{def:g12:selection-drift-speciation:population}
+Une \emph{population}\index{population} est l'ensemble des individus
+d'une \omterm{def:g10:biodiversity-scales:species}{espèce} qui vivent au même endroit et se reproduisent entre eux.
+Sa composition génétique est décrite par les
+\emph{fréquences}\index{fréquence allélique} des \omterm{def:g10:universal-dna:gene}{allèles} de chaque
+\omterm{def:g10:universal-dna:gene}{gène}~: pour un \omterm{def:g10:universal-dna:gene}{gène} à deux \omterm{def:g10:universal-dna:gene}{allèles} $A$ et $a$, la fraction $p$ des
+exemplaires qui sont $A$ et la fraction $q = 1 - p$ qui sont $a$.
+L'évolution, à cette échelle, est un changement des fréquences
+alléliques d'une génération à la suivante.
+\end{definition}
+
+\begin{proposition}[Les fréquences en l'absence de toute force]\label{prop:g12:selection-drift-speciation:hw}
+Dans une \omterm{def:g12:selection-drift-speciation:population}{population} nombreuse où les unions sont au hasard, où aucun
+\omterm{def:g10:universal-dna:gene}{allèle} ne donne d'avantage, et où ne survient ni \omterm{def:g11:mutations:mutation}{mutation} ni migration,
+les \omterm{def:g12:selection-drift-speciation:population}{fréquences alléliques} restent les mêmes d'une génération à l'autre,
+et les \omterm{def:g11:enzymes-and-phenotype:phenotype}{génotypes} apparaissent dans les proportions
+\[
+AA : Aa : aa = p^2 : 2pq : q^2 .
+\]
+C'est l'état de référence~: tout écart à cet état, observé au fil des
+générations, est le signe qu'une des conditions n'est pas remplie ---
+que la sélection, le hasard, la migration ou la \omterm{def:g11:mutations:mutation}{mutation} est à l'œuvre.
+\end{proposition}
+\begin{proof}
+Chaque gamète porte $A$ avec une probabilité $p$ et $a$ avec une
+probabilité $q$~; deux gamètes tirés au hasard donnent $AA$ avec une
+probabilité $p^2$, $aa$ avec $q^2$, et $Aa$ avec $pq + qp = 2pq$. En
+comptant les \omterm{def:g10:universal-dna:gene}{allèles} de la nouvelle génération~: les exemplaires de $A$
+font $p^2 + \tfrac12 (2pq) =
+p(p + q) = p$ du total. La fréquence est inchangée.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small]
+  \draw[thick] (0,0) rectangle (5,5);
+  \fill[omDef!25] (0,1.5) rectangle (3.5,5);
+  \fill[omProp!25] (3.5,1.5) rectangle (5,5);
+  \fill[omProp!25] (0,0) rectangle (3.5,1.5);
+  \fill[omThm!30] (3.5,0) rectangle (5,1.5);
+  \draw (3.5,0) -- (3.5,5); \draw (0,1.5) -- (5,1.5);
+  \node at (1.75,3.25) {$AA$~: $p^2$}; \node at (4.25,3.25) {$Aa$~: $pq$};
+  \node at (1.75,0.75) {$Aa$~: $pq$}; \node at (4.25,0.75) {$aa$~: $q^2$};
+  \node[anchor=south] at (1.75,5.1) {$A$, fréquence $p$}; \node[anchor=south] at (4.25,5.1) {$a$, $q$};
+  \node[anchor=east] at (-0.1,3.25) {$A$, $p$}; \node[anchor=east] at (-0.1,0.75) {$a$, $q$};
+  \node[anchor=south, font=\small\itshape] at (2.5,5.6) {gamète du père};
+  \node[font=\small\itshape, rotate=90, anchor=south] at (-1.1,2.5) {gamète de la mère};
+  \node[anchor=west, align=left, text width=6cm] at (6,2.5) {Avec $p = 0.7$ et $q = 0.3$~: $AA$ 49~\%, $Aa$ 42~\%, $aa$ 9~\%. Un caractère récessif porté par 9~\% d'une population est porté, en silence, par 42~\% de plus.};
+\end{tikzpicture}
+
+{\small Les proportions génotypiques des unions au hasard, en aires.
+Les côtés du carré sont les \omterm{def:g12:selection-drift-speciation:population}{fréquences} des gamètes~; les quatre
+rectangles sont les \omterm{def:g11:enzymes-and-phenotype:phenotype}{génotypes}. Les hétérozygotes détiennent l'essentiel
+des exemplaires de l'\omterm{def:g10:universal-dna:gene}{allèle} rare.}
+\end{omfigure}
+
+\begin{example}[Compter les allèles]\label{ex:g12:selection-drift-speciation:count}
+Sur 1000 personnes, 490 sont $AA$, 420 $Aa$ et 90 $aa$. Exemplaires de
+$a$~: $420 + 2 \times 90 = 600$ sur 2000, d'où $q = 0.3$ et $p = 0.7$
+--- et les effectifs génotypiques valent exactement $p^2$, $2pq$, $q^2$
+de 1000~: la \omterm{def:g12:selection-drift-speciation:population}{population} est à l'état de référence pour ce \omterm{def:g10:universal-dna:gene}{gène}. Une
+maladie récessive qui touche un nouveau-né sur 2500 ($q^2 = 1/2500$)
+implique $q = 1/50$ et des \omterm{def:g11:genes-and-disease:genetic}{porteurs} $2pq \approx 1/25$~: les chiffres
+du \cref{ch:g11:genes-and-disease}, retrouvés par le calcul.
+\end{example}
+
+\section{La sélection}
+
+\begin{definition}[La sélection naturelle]\label{def:g12:selection-drift-speciation:selection}
+La \emph{sélection naturelle}\index{sélection naturelle} est la
+différence de reproduction entre des individus \omterm{def:g11:genes-and-disease:genetic}{porteurs} d'\omterm{def:g10:universal-dna:gene}{allèles}
+différents, dans un environnement donné~: les \omterm{def:g11:genes-and-disease:genetic}{porteurs} d'un \omterm{def:g10:universal-dna:gene}{allèle}
+laissent en moyenne plus de descendants que les \omterm{def:g11:genes-and-disease:genetic}{porteurs} d'un autre, et
+la fréquence de cet \omterm{def:g10:universal-dna:gene}{allèle} monte de génération en génération. Ce qui
+est sélectionné, c'est l'individu entier --- sa survie, ses unions, sa
+fécondité --- et les \omterm{def:g10:universal-dna:gene}{allèles} suivent.
+\end{definition}
+
+\begin{proposition}[La sélection change les fréquences dans une direction]\label{prop:g12:selection-drift-speciation:direction}
+Un \omterm{def:g10:universal-dna:gene}{allèle} dont les \omterm{def:g11:genes-and-disease:genetic}{porteurs} ont un succès reproducteur même légèrement
+supérieur se répand~; celui dont les \omterm{def:g11:genes-and-disease:genetic}{porteurs} en ont moins devient
+rare. La direction est fixée par l'environnement, et s'inverse si
+celui-ci change~; la vitesse dépend de la taille de l'avantage et de ce
+que l'\omterm{def:g10:universal-dna:gene}{allèle} s'exprime en un seul exemplaire (\omterm{def:g11:genes-and-disease:genetic}{dominant}, vite) ou
+seulement en deux (\omterm{def:g11:genes-and-disease:genetic}{récessif}, lent au début, et jamais tout à fait
+éliminé, puisque ses rares exemplaires se cachent chez les
+hétérozygotes).
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+La phalène du bouleau~: les oiseaux prennent les papillons qu'ils
+voient~; sur les troncs couverts de suie, c'est la forme claire qui se
+voit, sur les troncs propres, la forme sombre~; la fréquence de
+l'\omterm{def:g10:universal-dna:gene}{allèle} sombre est passée de presque zéro à 98~\% en cinquante ans de
+pollution et est redescendue sous 10~\% en quarante ans d'air propre,
+en suivant la couleur des troncs. La \omterm{prop:g11:antibiotic-resistance:mechanisms}{résistance aux antibiotiques}
+(\cref{ch:g11:antibiotic-resistance})~: seuls les \omterm{def:g11:genes-and-disease:genetic}{porteurs} de l'\omterm{def:g10:universal-dna:gene}{allèle}
+de résistance se reproduisent en présence du médicament. La persistance
+de la lactase (\cref{ch:g11:enzymes-and-phenotype})~: l'\omterm{def:g10:universal-dna:gene}{allèle} est
+fréquent exactement là où le lait est un aliment des adultes depuis des
+millénaires. Dans chaque cas, le sort de l'\omterm{def:g10:universal-dna:gene}{allèle} suit
+l'environnement.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=1840, xmax=2000, ymin=0, ymax=110,
+  xlabel={année}, ylabel={phalènes sombres (\% des captures)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1850,1875,1900,1925,1950,1975,2000}, ytick={0,25,50,75,100},
+  clip=false,
+]
+\addplot[thick, omThm, mark=*, mark size=1.3pt] coordinates
+  {(1848,1) (1860,10) (1870,40) (1880,75) (1895,98) (1920,97) (1950,95) (1960,90) (1970,60) (1980,30) (1990,10) (1998,4)};
+\draw[dashed, gray] (axis cs:1956,0) -- (axis cs:1956,105);
+\node[font=\scriptsize, anchor=south] at (axis cs:1956,105) {lois sur l'air propre};
+\end{axis}
+\end{tikzpicture}
+
+{\small Fréquence de la forme sombre de la phalène du bouleau près
+d'une ville industrielle (chiffres arrondis, d'après les collections de
+musée et les captures). La montée suit le noircissement des troncs~; la
+baisse, leur nettoyage. La sélection s'est inversée quand
+l'environnement l'a fait.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book2/ai/g12-selection-peppered-moths.png}
+
+{\small Les deux formes de la phalène du bouleau sur un tronc noirci
+par la suie. Les oiseaux chassent à vue~: sur cette écorce, la forme
+claire est prise et la sombre survit~; sur un tronc propre couvert de
+lichens, c'est l'inverse.}
+\end{omfigure}
+
+\begin{example}[La sélection par l'autre sexe]\label{ex:g12:selection-drift-speciation:sexual}
+La traîne d'un paon le rend plus lent et plus visible pour les
+prédateurs, et pourtant elle se maintient parce que les paonnes
+choisissent les mâles à la traîne la plus grande et la plus
+régulière~: un \omterm{def:g10:universal-dna:gene}{allèle} qui améliore la traîne est transmis plus souvent,
+quoi qu'il en coûte en survie. La \emph{sélection sexuelle} --- le
+choix des partenaires --- produit les ornements, les chants et les
+combats des animaux, et peut pousser un caractère dans une direction
+que la survie seule ne favoriserait jamais.
+\end{example}
+
+\section{Le hasard~: la dérive génétique}
+
+\begin{proposition}[La dérive génétique]\label{prop:g12:selection-drift-speciation:drift}
+Dans toute \omterm{def:g12:selection-drift-speciation:population}{population} de taille finie, les \omterm{def:g10:universal-dna:gene}{allèles} d'une génération
+sont un échantillon aléatoire de ceux de la précédente~: quels
+individus se reproduisent, et quels \omterm{def:g10:universal-dna:gene}{allèles} leurs gamètes portent,
+fluctuent par hasard. Les \omterm{def:g12:selection-drift-speciation:population}{fréquences alléliques} errent donc d'une
+génération à l'autre sans qu'aucun avantage soit en jeu --- c'est la
+\emph{dérive génétique}\index{dérive génétique}. Plus la \omterm{def:g12:selection-drift-speciation:population}{population} est
+petite, plus l'errance est grande~; dans une petite \omterm{def:g12:selection-drift-speciation:population}{population}, un
+\omterm{def:g10:universal-dna:gene}{allèle} peut être perdu, ou atteindre 100~\%, par le seul hasard en
+quelques générations, quelle que soit sa valeur.
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Les \omterm{def:g12:selection-drift-speciation:population}{populations} fondées par quelques individus --- une île colonisée
+par une poignée d'oiseaux, une communauté humaine descendue de quelques
+dizaines de colons --- portent un échantillon déformé des \omterm{def:g10:universal-dna:gene}{allèles} de la
+\omterm{def:g12:selection-drift-speciation:population}{population} d'origine~: un \omterm{def:g10:universal-dna:gene}{allèle} de maladie rare peut y être fréquent,
+et une grande part de la diversité d'origine y manquer. Les \omterm{def:g10:biodiversity-scales:species}{espèces}
+passées par un \emph{goulot d'étranglement} de très peu de survivants
+(le guépard du \cref{ch:g10:biodiversity-scales}, l'éléphant de mer du
+Nord réduit à vingt animaux en 1890) ne montrent presque aucune
+\omterm{def:g10:biodiversity-scales:biodiversity}{diversité génétique} aujourd'hui, même après être remontées à plusieurs
+milliers. Et au laboratoire, de nombreuses petites \omterm{def:g12:selection-drift-speciation:population}{populations}
+répliquées parties de la même fréquence se dispersent dans toutes les
+directions en quelques générations, tandis que les grandes ne bougent
+pas.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=20, ymin=0, ymax=1.05,
+  xlabel={génération}, ylabel={fréquence de l'allèle $A$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20}, ytick={0,0.25,0.5,0.75,1},
+  legend style={at={(0.5,-0.3)}, anchor=north, legend columns=2, font=\small, draw=none},
+]
+\addplot[thick, omThm] coordinates {(0,0.5) (1,0.55) (2,0.6) (3,0.5) (4,0.65) (5,0.7) (6,0.6) (7,0.75) (8,0.85) (9,0.8) (10,0.9) (11,0.95) (12,1) (13,1) (14,1) (15,1) (16,1) (17,1) (18,1) (19,1) (20,1)};
+\addplot[thick, omThm!60] coordinates {(0,0.5) (1,0.4) (2,0.45) (3,0.3) (4,0.35) (5,0.25) (6,0.3) (7,0.2) (8,0.1) (9,0.15) (10,0.05) (11,0.1) (12,0) (13,0) (14,0) (15,0) (16,0) (17,0) (18,0) (19,0) (20,0)};
+\addplot[thick, omThm!35] coordinates {(0,0.5) (1,0.45) (2,0.55) (3,0.6) (4,0.5) (5,0.4) (6,0.45) (7,0.55) (8,0.6) (9,0.7) (10,0.65) (11,0.55) (12,0.5) (13,0.6) (14,0.65) (15,0.75) (16,0.7) (17,0.8) (18,0.75) (19,0.85) (20,0.8)};
+\addplot[thick, omDef] coordinates {(0,0.5) (1,0.51) (2,0.49) (3,0.5) (4,0.52) (5,0.51) (6,0.5) (7,0.49) (8,0.48) (9,0.49) (10,0.5) (11,0.51) (12,0.52) (13,0.51) (14,0.5) (15,0.5) (16,0.49) (17,0.5) (18,0.51) (19,0.5) (20,0.5)};
+\legend{trois populations de 20, une population de 5000}
+\end{axis}
+\end{tikzpicture}
+
+{\small Dérive simulée d'un \omterm{def:g10:universal-dna:gene}{allèle} neutre partant de 50~\%. Dans des
+\omterm{def:g12:selection-drift-speciation:population}{populations} de 20 individus, il est fixé ou perdu en une douzaine de
+générations, dans une direction différente à chaque fois~; dans une
+\omterm{def:g12:selection-drift-speciation:population}{population} de 5000, il bouge à peine.}
+\end{omfigure}
+
+\begin{example}[Un effet fondateur]\label{ex:g12:selection-drift-speciation:founder}
+Une communauté insulaire a été fondée par quelques dizaines de colons,
+dont l'un portait un \omterm{def:g10:universal-dna:gene}{allèle} d'un trouble rare de l'\omterm{def:g11:the-eye:parts}{œil}. Dix générations
+plus tard, la fréquence de cet \omterm{def:g10:universal-dna:gene}{allèle} dans la communauté est d'un sur
+dix --- cent fois la valeur du continent --- parce qu'un \omterm{def:g11:genes-and-disease:genetic}{porteur} parmi
+trente fondateurs représente déjà 1.7~\% des exemplaires, et que la
+dérive dans une \omterm{def:g12:selection-drift-speciation:population}{population} petite et isolée l'a poussé plus loin.
+L'\omterm{def:g10:universal-dna:gene}{allèle} ne confère aucun avantage~; son abondance est un accident lié
+à qui est monté sur le bateau.
+\end{example}
+
+\begin{method}[Sélection ou dérive~?]\label{met:g12:selection-drift-speciation:which}
+Devant un changement de \omterm{def:g12:selection-drift-speciation:population}{fréquence allélique}~:
+\begin{enumerate}
+  \item Estimer la taille de la \omterm{def:g12:selection-drift-speciation:population}{population}~: la dérive est forte en
+        dessous de quelques centaines, négligeable dans les millions.
+  \item Chercher une direction qui suive l'environnement (sélection),
+        ou une marche au hasard (dérive). Des \omterm{def:g12:selection-drift-speciation:population}{populations} répliquées
+        qui bougent dans le même sens indiquent la sélection~; qui
+        bougent dans des sens différents, la dérive.
+  \item Chercher un mécanisme reliant l'\omterm{def:g10:universal-dna:gene}{allèle} à la survie ou à la
+        reproduction~; à défaut, soupçonner la dérive.
+  \item Se rappeler que les deux agissent en même temps~: la sélection
+        fixe une tendance, la dérive ajoute du bruit, et dans les
+        petites \omterm{def:g12:selection-drift-speciation:population}{populations} le bruit peut noyer la tendance.
+\end{enumerate}
+\end{method}
+
+\section{De la population à l'espèce}
+
+\begin{proposition}[La spéciation]\label{prop:g12:selection-drift-speciation:speciation}
+Deux \omterm{def:g12:selection-drift-speciation:population}{populations} d'une même \omterm{def:g10:biodiversity-scales:species}{espèce} qui cessent d'échanger des \omterm{def:g10:universal-dna:gene}{gènes} ---
+séparées par une barrière géographique, comportementale ou de
+calendrier --- évoluent séparément~: chacune accumule ses propres
+\omterm{def:g11:mutations:mutation}{mutations}, est sélectionnée par son propre environnement et dérive à sa
+façon. Quand la divergence est assez avancée pour que les individus des
+deux \omterm{def:g12:selection-drift-speciation:population}{populations} ne se reproduisent plus entre eux, ou ne donnent
+qu'une descendance stérile, même lorsqu'ils se rencontrent de nouveau,
+deux \omterm{def:g10:biodiversity-scales:species}{espèces} existent là où il n'y en avait qu'une. La
+\emph{spéciation}\index{spéciation} est ce processus~; il demande
+d'ordinaire des milliers à des millions de générations, même si la
+polyploïdie (\cref{ch:g12:diversification-of-life}) y parvient en une
+seule.
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Les îles~: chacune des îles Galápagos porte ses propres pinsons,
+descendus d'une \omterm{def:g10:biodiversity-scales:species}{espèce} continentale et les plus proches de ceux des
+îles voisines. Les lacs~: un seul poisson cichlidé ancestral a donné
+des centaines d'\omterm{def:g10:biodiversity-scales:species}{espèces} dans un même lac africain en quelques centaines
+de milliers d'années, séparées par l'habitat et par le choix, chez les
+femelles, de la couleur du mâle. Les \omterm{def:g10:biodiversity-scales:species}{espèces} en anneau~: des
+\omterm{def:g12:selection-drift-speciation:population}{populations} d'un goéland se sont répandues autour de l'Arctique, se
+reproduisant chacune avec ses voisines tout au long du tour, jusqu'à ce
+que les deux extrémités se rencontrent en Europe sous la forme de deux
+types qui ne se reproduisent pas entre eux --- une frontière d'\omterm{def:g10:biodiversity-scales:species}{espèce}
+saisie en train de se former. Et des \omterm{def:g10:biodiversity-scales:species}{espèces} séparées récemment, comme
+l'ours polaire et l'ours brun, produisent encore parfois des hybrides
+fertiles~: la frontière est affaire de degré.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, >=Stealth]
+  % one population
+  \draw[thick, fill=omDef!12] (0,0) ellipse (1.4 and 0.8);
+  \node at (0,0) {une population};
+  \draw[->, thick] (1.6,0) -- (2.6,0) node[midway, above, font=\scriptsize, align=center] {une barrière\\ apparaît};
+  % two separated
+  \draw[thick, fill=omDef!12] (4.0,0.9) ellipse (1.2 and 0.6); \node at (4.0,0.9) {population 1};
+  \draw[thick, fill=omDef!12] (4.0,-0.9) ellipse (1.2 and 0.6); \node at (4.0,-0.9) {population 2};
+  \draw[very thick, gray] (2.7,0) -- (5.3,0);
+  \draw[->, thick] (5.5,0) -- (6.5,0) node[midway, above, font=\scriptsize, align=center] {évolution\\ séparée};
+  % diverged
+  \draw[thick, fill=omMeth!15] (7.9,0.9) ellipse (1.2 and 0.6); \node at (7.9,0.9) {mutations 1};
+  \draw[thick, fill=omThm!15] (7.9,-0.9) ellipse (1.2 and 0.6); \node at (7.9,-0.9) {mutations 2};
+  \node[font=\scriptsize, align=center] at (7.9,0.0) {sélection propre,\\ dérive propre};
+  \draw[->, thick] (9.3,0) -- (10.3,0) node[midway, above, font=\scriptsize, align=center] {barrière\\ disparue};
+  % two species
+  \draw[thick, fill=omMeth!15] (11.6,0.7) ellipse (1.1 and 0.55); \node at (11.6,0.7) {espèce 1};
+  \draw[thick, fill=omThm!15] (11.6,-0.7) ellipse (1.1 and 0.55); \node at (11.6,-0.7) {espèce 2};
+  \node[font=\scriptsize, align=center] at (11.6,0.0) {plus d'union};
+\end{tikzpicture}
+
+{\small La \omterm{prop:g12:selection-drift-speciation:speciation}{spéciation} par séparation. Une barrière scinde une
+\omterm{def:g12:selection-drift-speciation:population}{population}~; chaque moitié évolue de son côté~; quand elles se
+retrouvent, elles ne se reproduisent plus ensemble. La barrière peut
+être un détroit, une montagne, un changement d'habitat, ou une
+préférence dans le choix du partenaire.}
+\end{omfigure}
+
+\begin{proposition}[L'espèce, revisitée]\label{prop:g12:selection-drift-speciation:concept}
+Une \omterm{def:g10:biodiversity-scales:species}{espèce} est une \omterm{def:g12:selection-drift-speciation:population}{population}, ou un ensemble de \omterm{def:g12:selection-drift-speciation:population}{populations}, dont les
+membres se reproduisent entre eux et sont génétiquement isolés des
+autres ensembles de ce genre --- une définition qui fonctionne pour la
+plupart des animaux et des plantes à un instant donné, mais qui a ses
+marges~: des \omterm{def:g12:selection-drift-speciation:population}{populations} en cours de séparation, des \omterm{def:g10:biodiversity-scales:species}{espèces} qui
+s'hybrident encore, des organismes qui se reproduisent sans sexualité.
+Une \omterm{def:g10:biodiversity-scales:species}{espèce} n'est pas un type figé mais une lignée dans le temps~: elle
+commence quand une \omterm{def:g12:selection-drift-speciation:population}{population} devient isolée, existe tant que ses
+membres continuent de se reproduire entre eux, et s'achève par
+l'extinction ou par une scission en \omterm{def:g10:biodiversity-scales:species}{espèces} nouvelles. Les \omterm{def:g10:biodiversity-scales:species}{espèces}
+vivantes d'aujourd'hui sont les extrémités d'un arbre dont les branches
+font l'objet du \cref{ch:g12:phylogenetic-trees}.
+\end{proposition}
+\admitted
+
+\begin{remark}[L'évolution, assemblée]\label{rem:g12:selection-drift-speciation:assembled}
+La \omterm{def:g11:mutations:mutation}{mutation} et le brassage fournissent la variation~; la duplication,
+le transfert, la polyploïdie, la régulation et la \omterm{def:g12:diversification-of-life:symbiosis}{symbiose} en
+fournissent davantage~; la sélection la trie par l'environnement, la
+dérive par le hasard~; l'isolement laisse les \omterm{def:g12:selection-drift-speciation:population}{populations} diverger
+jusqu'à devenir des \omterm{def:g10:biodiversity-scales:species}{espèces}~; l'extinction les supprime. Aucune de ces
+étapes n'a de but, et aucune ne regarde devant elle~; ensemble, sur les
+quatre milliards d'années du registre fossile, elles ont produit la
+diversité du \cref{ch:g10:biodiversity-scales}. La théorie qui nomme
+ces étapes et leur jeu est la théorie de l'évolution, et chaque
+chapitre de cette année en a été une pièce de preuve.
+\end{remark}
+
+\section{Exercices}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:1}
+Définir la \omterm{def:g12:selection-drift-speciation:population}{fréquence allélique}, et donner les proportions génotypiques
+d'une \omterm{def:g12:selection-drift-speciation:population}{population} à l'état de référence avec $p = 0.8$.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:2}
+Définir la \omterm{def:g12:selection-drift-speciation:selection}{sélection naturelle} et la \omterm{prop:g12:selection-drift-speciation:drift}{dérive génétique}, et énoncer la
+différence essentielle entre elles.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:3}
+D'après la figure des phalènes, lire la fréquence de la forme sombre en
+1880 et en 1980, et nommer le changement d'environnement responsable de
+chacune.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:4}
+Pourquoi la dérive compte-t-elle davantage dans une petite \omterm{def:g12:selection-drift-speciation:population}{population}~?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:selection-drift-speciation:5}
+Que faut-il pour qu'une \omterm{def:g12:selection-drift-speciation:population}{population} devienne deux \omterm{def:g10:biodiversity-scales:species}{espèces}~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:6}
+Dans une \omterm{def:g12:selection-drift-speciation:population}{population} de 500, 320 sont $AA$, 160 $Aa$ et 20 $aa$.
+Calculer $p$ et $q$, puis les effectifs génotypiques attendus à l'état
+de référence, et comparer.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:7}
+Un \omterm{def:g10:universal-dna:gene}{allèle} \omterm{def:g11:genes-and-disease:genetic}{récessif} a une fréquence de 0.01. Quelle fraction de la
+\omterm{def:g12:selection-drift-speciation:population}{population} montre le caractère \omterm{def:g11:genes-and-disease:genetic}{récessif}, et quelle fraction porte
+l'\omterm{def:g10:universal-dna:gene}{allèle} sans le montrer~? Pourquoi cet \omterm{def:g10:universal-dna:gene}{allèle} est-il si difficile à
+éliminer par une sélection contre le caractère~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:8}
+D'après la figure de la dérive, en combien de générations l'\omterm{def:g10:universal-dna:gene}{allèle}
+a-t-il été fixé ou perdu dans les deux petites \omterm{def:g12:selection-drift-speciation:population}{populations} qui ont
+atteint les extrémités~? Pourquoi la troisième ne l'a-t-elle pas fait~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:9}
+Expliquer pourquoi l'\omterm{def:g10:universal-dna:gene}{allèle} sombre de la phalène du bouleau n'a pas
+atteint 100~\% pendant les décennies de suie, en tenant compte des
+phalènes qui vivent et se reproduisent à la campagne.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:10}
+Vingt phoques ont survécu à un goulot d'étranglement~; l'\omterm{def:g10:biodiversity-scales:species}{espèce} compte
+aujourd'hui 100\,000 individus mais ne montre presque aucune \omterm{def:g10:biodiversity-scales:biodiversity}{diversité
+génétique}. Expliquer par la dérive.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:selection-drift-speciation:11}
+Appliquer la \cref{met:g12:selection-drift-speciation:which} à deux
+cas~: un \omterm{def:g10:universal-dna:gene}{allèle} qui monte dans dix \omterm{def:g12:selection-drift-speciation:population}{populations} lacustres distinctes à
+la fois après l'arrivée d'un nouveau prédateur~; et un \omterm{def:g10:universal-dna:gene}{allèle} qui
+atteint 80~\% dans une \omterm{def:g12:selection-drift-speciation:population}{population} insulaire de trente oiseaux.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:12}
+Dans une région où sévit le paludisme, l'\omterm{def:g10:universal-dna:gene}{allèle} drépanocytaire a une
+fréquence de 0.15 bien que les enfants $aa$ survivent rarement. À
+l'aide des proportions génotypiques, calculer les fractions de
+nouveau-nés $AA$, $Aa$ et $aa$, et expliquer comment l'avantage des
+$Aa$ contre le paludisme maintient l'\omterm{def:g10:universal-dna:gene}{allèle} fréquent malgré la perte
+des $aa$.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:13}
+Deux \omterm{def:g10:biodiversity-scales:species}{espèces} de cichlidés d'un même lac diffèrent surtout par la
+couleur des mâles, et les femelles de chacune choisissent leur propre
+couleur. En eau trouble, où les couleurs ne se voient pas, les deux
+s'hybrident librement. Qu'est-ce qui isole les \omterm{def:g10:biodiversity-scales:species}{espèces}, et que dit le
+cas de l'eau trouble sur l'ancienneté de la séparation~?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:14}
+Expliquer pourquoi l'\omterm{def:g10:biodiversity-scales:species}{espèce} en anneau des goélands est un argument en
+faveur d'une \omterm{prop:g12:selection-drift-speciation:speciation}{spéciation} graduelle, et pourquoi les deux extrémités qui
+se rencontrent en Europe sont néanmoins appelées deux \omterm{def:g10:biodiversity-scales:species}{espèces}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:selection-drift-speciation:15}
+«~La sélection rend les organismes meilleurs.~» Discuter en un
+paragraphe~: meilleurs à quoi, où et par rapport à qui~; et ce
+qu'ajoutent la dérive, les inversions et la sélection sexuelle.
+\end{exercise}
+
+\section{Problème~: les souris de l'île}
+
+\begin{problem}[{Problème du week-end --- une population de souris sur
+une île~: ses fréquences alléliques calculées, la sélection d'un nouveau
+prédateur suivie, la dérive d'une colonie minuscule simulée, et la
+naissance d'une espèce prévue}]
+\label{pb:g12:selection-drift-speciation:1}
+Sur une île rocheuse, des souris portent un \omterm{def:g10:universal-dna:gene}{gène} de couleur du pelage à
+deux \omterm{def:g10:universal-dna:gene}{allèles}~: $D$ (sombre, \omterm{def:g11:genes-and-disease:genetic}{dominant}) et $d$ (clair). Un recensement de
+2000 souris compte 720 souris sombres de \omterm{def:g11:enzymes-and-phenotype:phenotype}{génotype} $DD$, 960 sombres
+$Dd$, et 320 claires $dd$.
+
+\medskip
+\noindent\textbf{Partie I --- La \omterm{def:g12:selection-drift-speciation:population}{population} aujourd'hui.}
+\begin{enumerate}
+  \item Calculer les \omterm{def:g12:selection-drift-speciation:population}{fréquences} $p$ de $D$ et $q$ de $d$ en comptant
+        les exemplaires.
+  \item Calculer les effectifs génotypiques attendus à l'état de
+        référence et les comparer au recensement. La \omterm{def:g12:selection-drift-speciation:population}{population} est-elle
+        à l'état de référence~?
+  \item Quelle fraction des souris sombres sont porteuses de $d$~?
+  \item Expliquer, à partir de la réponse précédente, pourquoi retirer
+        de l'île toutes les souris claires pendant une génération
+        n'abaisserait $q$ que légèrement. Calculer le nouveau $q$ après
+        un tel retrait, si les souris restantes se reproduisent au
+        hasard.
+  \item Laquelle des quatre conditions de l'état de référence risque le
+        plus de ne pas être remplie sur une petite île, et avec quel
+        effet~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie II --- Un prédateur arrive.}
+Des chouettes colonisent l'île. Sur la roche claire, les souris sombres
+sont vues et mangées deux fois plus souvent~: à chaque génération, la
+moitié des souris sombres meurent avant de se reproduire tandis que
+toutes les souris claires survivent.
+\begin{enumerate}[resume]
+  \item À partir des effectifs du recensement, calculer le nombre de
+        souris de chaque \omterm{def:g11:enzymes-and-phenotype:phenotype}{génotype} qui survivent pour se reproduire à la
+        première génération.
+  \item Calculer $p$ et $q$ chez les survivantes.
+  \item Si les survivantes s'unissent au hasard, calculer les
+        proportions génotypiques de la génération suivante, puis
+        appliquer de nouveau les chouettes et calculer $q$ chez ses
+        survivantes.
+  \item Recommencer encore une fois (deux chiffres significatifs).
+        Décrire la tendance de $q$ sur les trois générations.
+  \item Expliquer pourquoi $q$ monte régulièrement, et pourquoi $D$,
+        contrairement à un \omterm{def:g10:universal-dna:gene}{allèle} \omterm{def:g11:genes-and-disease:genetic}{récessif} soumis à la même sélection,
+        peut être éliminé complètement.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie III --- Une colonie de six.}
+Une tempête emporte six souris sur un îlot voisin~: 2 $DD$, 3 $Dd$, 1 $dd$.
+\begin{enumerate}[resume]
+  \item Calculer $q$ dans la colonie et le comparer à celui de l'île.
+  \item Dans la première portée, par hasard, seules les deux $DD$ et
+        une $Dd$ se reproduisent. Quelles sont les valeurs possibles de
+        $q$ à la génération suivante~? Qu'est-il advenu de la variation
+        de la \omterm{def:g12:selection-drift-speciation:population}{population}~?
+  \item Expliquer pourquoi, sur l'îlot, un \omterm{def:g10:universal-dna:gene}{allèle} peut disparaître en
+        quelques générations sans chouettes ni aucun avantage.
+  \item L'îlot n'a pas de chouettes. Prévoir le sort de $d$ là-bas, et
+        dire pourquoi deux îles voisines peuvent finir avec des
+        couleurs de pelage différentes sans aucune raison d'adaptation.
+  \item Donner le nom du processus, et le caractère de la colonie qui
+        l'y rend \omterm{def:g11:genes-and-disease:genetic}{dominant}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie IV --- Dix mille ans plus tard.}
+Les souris de l'îlot, isolées, ont divergé~: plus petites, plus claires,
+se reproduisant à une autre saison. Réunies au laboratoire avec les
+souris de l'île, elles s'accouplent rarement, et les quelques hybrides
+sont stériles.
+\begin{enumerate}[resume]
+  \item Les souris de l'îlot forment-elles une \omterm{def:g10:biodiversity-scales:species}{espèce} nouvelle~?
+        Justifier avec la définition.
+  \item Nommer la barrière qui a lancé le processus et les deux
+        mécanismes qui ont conduit la divergence.
+  \item La saison de reproduction diffère entre les deux. Expliquer
+        comment une telle différence, une fois présente, renforce
+        l'isolement.
+  \item Si l'îlot rejoignait l'île demain, les deux fusionneraient-elles
+        de nouveau en une seule \omterm{def:g12:selection-drift-speciation:population}{population}~? Distinguer le cas de la
+        question 17 d'un stade plus précoce, disons après 100 ans.
+  \item Énoncer le résultat~: la fréquence de $d$ sur l'île avant et
+        après trois générations de chouettes, le sort de $d$ sur l'îlot
+        et le processus responsable, et le nombre d'\omterm{def:g10:biodiversity-scales:species}{espèces} à la fin.
+\end{enumerate}
+\end{problem}

@@ -60,6 +60,30 @@ ALLOWED_WORDS = {
     "escherichia", "coli", "staphylococcus", "aureus", "aequorea", "victoria",
 }
 
+# --- appended 2026-09-05 by the Biology Book 2 `hi` agent -------------------
+# REASON: the block above says outright to grep the English bodies again when a
+# later book adds species, and Book 2 (grades 10-12) adds these. Every one is a
+# genus or species epithet the canon prints in italic Latin, which a Devanagari
+# edition keeps in Latin exactly as the Latin-script editions do -- they are
+# international nomenclature, not residual English. `sry` is the mouse gene
+# symbol \emph{Sry}: gene symbols are Latin in every edition too, and the
+# lowercase-with-capital form falls through the <= 4-letter acronym escape.
+ALLOWED_WORDS |= {
+    "heidelbergensis", "paranthropus", "africanus",
+    "euglena", "chlorella", "archaeopteryx", "sry",
+    # RNA species abbreviations, the same three letters in every edition and
+    # exactly the kind of token "dna"/"rna"/"atp" are already whitelisted for.
+    # Their mixed case (mRNA) defeats both the <= 4-letter acronym escape and
+    # CHEM_FORMULA.
+    "mrna", "trna", "rrna",
+}
+
+# 2026-09-05, biology Book 2 `hi`: the title of a CC BY work must be reproduced
+# as published for the licence's attribution to be valid, so the image credit
+# in parts/grade-12 keeps the Latin title *Anatomy & Physiology* (OpenStax).
+# These two words are only ever the title of that book in this edition.
+ALLOWED_WORDS |= {"anatomy", "physiology"}
+
 # Unit and symbol strings that may appear bare in a table cell or node.
 ALLOWED_UNITS = {
     "m", "s", "kg", "g", "mg", "km", "cm", "mm", "nm", "um",
@@ -142,6 +166,55 @@ MATH_PLACEHOLDER = "\x00"
 # "Mg{}F" with an empty group to silence the gate, which is a source wart of
 # exactly the kind this project refuses elsewhere.
 CHEM_FORMULA = re.compile(r"(?:[A-Z][a-z]?){2,}")
+
+# --- appended 2026-09-05 by the Biology Book 2 `hi` agent -------------------
+# REASON: a biology book prints nucleotide strands and residue chains, and
+# both reach the `english` class as false positives that no translator can
+# remove, because they are data and are identical in every language edition.
+#
+#   \texttt{5'-ATGGCTTAC-3'}  ->  LATIN_WORD is greedy over "-", so the token
+#       tested is 'ATGGCTTAC-', which no longer fullmatches CHEM_FORMULA (the
+#       bare 'ATGGCTTAC' does). 8 sites in parts/grade-10/03-universal-dna.
+#   Met--Lys--Gly--Trp        ->  a chain of three-letter amino-acid codes; the
+#       hyphens defeat CHEM_FORMULA. 20+ sites in grade-11/04-gene-expression.
+#
+# Deliberately narrow, so nothing English can hide behind either rule:
+#   * the strand rule is UPPERCASE-only and needs 5+ letters, so the ordinary
+#     words spelled from A/C/G/T/U (cat, act, tag, tact, gut) stay gated, and
+#     the existing "uppercase and <= 4 chars" acronym escape already covers
+#     the three-letter codon spellings;
+#   * the residue rule needs at least TWO codes joined by hyphens and matches
+#     the exact Xxx casing, so a lone 'His' or 'Met' -- and lowercase 'his',
+#     'met', 'leu' -- are still reported. A chain that still contains an
+#     English word (Met--Pro--stop) is still reported, which is the point.
+AMINO_CODES = {"ala", "arg", "asn", "asp", "cys", "gln", "glu", "gly", "his",
+               "ile", "leu", "lys", "met", "phe", "pro", "ser", "thr", "trp",
+               "tyr", "val"}
+NUCLEOTIDE_STRAND = re.compile(r"[ACGTU]{5,}")
+AMINO_CHAIN = re.compile(r"[A-Z][a-z]{2}(?:-+[A-Z][a-z]{2})+")
+
+
+SINGLE_RESIDUE = re.compile(r"[A-Z][a-z]{2}")
+
+
+def is_biochemical_token(word: str) -> bool:
+    """A printed nucleotide strand or amino-acid residue chain -- not prose."""
+    core = word.strip("-'")
+    if NUCLEOTIDE_STRAND.fullmatch(core):
+        return True
+    # A LONE three-letter residue code, in its exact Xxx casing. The genetic
+    # code table of parts/grade-11/04-gene-expression prints all twenty of
+    # them, one per cell (64 sites), and every Hindi biology textbook keeps
+    # them in Latin exactly as this one does. Cost of the escape: capitalised
+    # 'His', 'Met' and 'Pro' can no longer be reported on their own -- an
+    # acceptable blind spot, because an untranslated English sentence
+    # containing one of them carries several other words this class still
+    # catches, and the lowercase forms stay gated.
+    if SINGLE_RESIDUE.fullmatch(core) and core.lower() in AMINO_CODES:
+        return True
+    if not AMINO_CHAIN.fullmatch(core):
+        return False
+    return all(p.lower() in AMINO_CODES for p in re.split(r"-+", core) if p)
 
 
 # Environments taking a column specification ({c|ccc}) before their body.
@@ -531,6 +604,9 @@ def check_file(path: pathlib.Path, findings: list) -> None:
         if CHEM_FORMULA.fullmatch(word):
             continue        # MgF(2), NaCl, GaAs, AsH(3): element symbols, not
                             # English, and they stay Latin in every script
+        if is_biochemical_token(word):
+            continue        # 5'-ATGGCTTAC-3', Met--Lys--Gly--Trp: see the
+                            # note beside is_biochemical_token above
         if len(word) < 3:
             continue        # stray single symbols
         findings.append((rel, _locate(body, word, _occ),

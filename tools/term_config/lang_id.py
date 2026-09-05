@@ -24,5 +24,15 @@ Two known, accepted gaps, both the same shape as the gender gap es/pt carry:
 """
 WORD_TAIL = r'(?:-?nya)?'
 TAIL_ON_EVERY_WORD = False
+# morphology.py's NO_TAIL_END refuses the tail to a word ending in "s". That
+# entry is there for ENGLISH, whose tail is the PLURAL (?:e?s)?, where "species"
+# + "s" would be "specieses". Indonesian's tail is not a plural at all -- it is
+# the ENCLITIC -nya, and an enclitic attaches after "s" exactly as it attaches
+# after any other letter: "refleksnya", "spesiesnya", "mitosisnya",
+# "pulau pankreasnya". Suppressing it silently lost every "-nya" form of every
+# term ending in "s", which in Indonesian prose is the commonest form of all
+# (~123 sites in Biology Book 2 alone, over 14 terms). "$", "]" and ")" stay
+# suppressed by NO_TAIL_END for every language, since those end mathematics.
+TAIL_AFTER_S = True
 HEAD = r'(?:[^\W\d_]+-)?'
 DERIVE = False

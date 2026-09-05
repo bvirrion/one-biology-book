@@ -1,0 +1,527 @@
+\chapter{Membaca Kekerabatan: Pohon Filogenetik}\label{ch:g12:phylogenetic-trees}
+
+Pada 1837, di sehalaman buku catatan pribadi, Darwin menggambar sebuah
+garis bercabang dengan beberapa ranting dan menulis di atasnya dua
+kata: ``saya kira''. Sketsa itu mengusulkan bahwa \omterm{def:g10:biodiversity-scales:species}{spesies} berkerabat
+seperti ranting sebuah pohon --- oleh penurunan dari cabang bersama
+--- dan bahwa kekerabatan mereka dapat direkonstruksi. Hari ini sketsa
+itu adalah alat baku: \omterm{def:g12:phylogenetic-trees:tree}{pohon filogenetik}, yang dibangun dari karakter
+bersama dan dari \omterm{def:g10:universal-dna:information}{DNA}, dan dibaca menurut aturan. Bab ini mengajarkan
+aturan tersebut: bagaimana membangun pohon dari sebuah tabel karakter,
+bagaimana membacanya tanpa salah baca, dan bagaimana molekul
+mengubahnya menjadi sebuah jam.
+
+\section{Apa yang dikatakan sebuah pohon}
+
+\begin{definition}[Pohon filogenetik]\label{def:g12:phylogenetic-trees:tree}
+Sebuah \emph{pohon filogenetik}\index{pohon filogenetik} adalah
+diagram kekerabatan sehimpunan \omterm{def:g10:biodiversity-scales:species}{spesies} (atau kelompok lain).
+Ujung-ujungnya adalah \omterm{def:g10:biodiversity-scales:species}{spesies} yang dibandingkan; setiap \emph{simpul}
+tempat dua cabang bertemu mewakili nenek moyang bersama terkini mereka
+--- sebuah \omterm{def:g12:selection-drift-speciation:population}{populasi} hipotetis, bukan fosil yang dikenal;
+\emph{akarnya} adalah nenek moyang bersama semuanya. Dua \omterm{def:g10:biodiversity-scales:species}{spesies} lebih
+dekat kerabatnya daripada \omterm{def:g10:biodiversity-scales:species}{spesies} ketiga bila nenek moyang bersama
+keduanya (simpulnya) lebih muda daripada simpul yang dibagi keduanya
+dengan \omterm{def:g10:biodiversity-scales:species}{spesies} ketiga itu. Kekerabatan dibaca dari simpul, tak pernah
+dari kedudukan ujung dari kiri ke kanan.
+\end{definition}
+
+\begin{proposition}[Aturan membaca]\label{prop:g12:phylogenetic-trees:rules}
+\begin{itemize}
+  \item Sebuah pohon dapat diputar pada simpul mana pun tanpa mengubah
+        maknanya: urutan ujungnya sembarang.
+  \item Simpul tidak punya nama dan bukan salah satu ujung: sebuah
+        \omterm{def:g10:biodiversity-scales:species}{spesies} tak pernah menjadi nenek moyang \omterm{def:g10:biodiversity-scales:species}{spesies} lain pada
+        pohon; dua ujung adalah \emph{kelompok saudari}, yaitu
+        keturunan satu nenek moyang bersama.
+  \item Kelompok yang terdiri atas satu nenek moyang dan \emph{semua}
+        keturunannya --- segala sesuatu di seberang satu simpul ---
+        adalah sebuah \emph{klad}\index{klad}, satu-satunya jenis
+        kelompok yang dinamai oleh klasifikasi filogenetik.
+  \item Panjang cabang membawa keterangan hanya jika pohonnya
+        menyatakan demikian (waktu, atau cacah perubahan); jika tidak,
+        hanya urutan percabangan yang berarti.
+\end{itemize}
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % tree 1
+  \begin{scope}
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (4.5,1.2);
+    \draw[thick] (1,0) -- (1,-1.2) -- (2.2,-1.2);
+    \draw[thick] (2.2,-1.2) -- (2.2,-0.5) -- (4.5,-0.5);
+    \draw[thick] (2.2,-1.2) -- (2.2,-1.9) -- (3.4,-1.9);
+    \draw[thick] (3.4,-1.9) -- (3.4,-1.5) -- (4.5,-1.5);
+    \draw[thick] (3.4,-1.9) -- (3.4,-2.3) -- (4.5,-2.3);
+    \node[anchor=west] at (4.6,1.2) {katak}; \node[anchor=west] at (4.6,-0.5) {kadal};
+    \node[anchor=west] at (4.6,-1.5) {mencit}; \node[anchor=west] at (4.6,-2.3) {manusia};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,-1.2) circle (2pt); \fill[omThm] (3.4,-1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {pohon A};
+  \end{scope}
+  % tree 2: same topology, rotated
+  \begin{scope}[xshift=8cm]
+    \draw[thick] (0,0) -- (1,0);
+    \draw[thick] (1,0) -- (1,1.2) -- (2.2,1.2);
+    \draw[thick] (2.2,1.2) -- (2.2,1.9) -- (3.4,1.9);
+    \draw[thick] (3.4,1.9) -- (3.4,2.3) -- (4.5,2.3);
+    \draw[thick] (3.4,1.9) -- (3.4,1.5) -- (4.5,1.5);
+    \draw[thick] (2.2,1.2) -- (2.2,0.5) -- (4.5,0.5);
+    \draw[thick] (1,0) -- (1,-1.2) -- (4.5,-1.2);
+    \node[anchor=west] at (4.6,2.3) {manusia}; \node[anchor=west] at (4.6,1.5) {mencit};
+    \node[anchor=west] at (4.6,0.5) {kadal}; \node[anchor=west] at (4.6,-1.2) {katak};
+    \fill[omThm] (1,0) circle (2pt); \fill[omThm] (2.2,1.2) circle (2pt); \fill[omThm] (3.4,1.9) circle (2pt);
+    \node[anchor=north, align=center] at (2.8,-2.7) {pohon B: pohon yang sama};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Dua gambar untuk satu pohon. Memutar cabang pada setiap simpul
+mengubah urutan ujungnya tetapi tak mengubah satu pun kekerabatan:
+pada keduanya, mencit dan manusia bersaudari, kadal adalah kerabat
+terdekat mereka, dan katak yang paling jauh. Membaca ``kadal terletak
+antara katak dan mencit'' dari pohon A akan menjadi kekeliruan.}
+\end{omfigure}
+
+\begin{example}[Salah baca yang harus dihindari]\label{ex:g12:phylogenetic-trees:misreadings}
+``Manusia berasal dari simpanse'': tidak --- pada pohon itu, manusia
+dan simpanse adalah ujung bersaudari, keturunan satu nenek moyang
+bersama yang bukan keduanya. ``Katak lebih primitif'': tidak ---
+setiap ujung adalah \omterm{def:g10:biodiversity-scales:species}{spesies} masa kini dengan panjang sejarah yang sama
+sejak akarnya; garis keturunan katak telah berevolusi selama garis
+keturunan kita. ``Kadal lebih dekat kepada katak daripada kepada
+mencit'' (dari pohon A): tidak --- kadal dan mencit berbagi simpul
+yang lebih muda.
+\end{example}
+
+\section{Membangun pohon dari karakter}
+
+\begin{definition}[Keadaan leluhur dan keadaan turunan]\label{def:g12:phylogenetic-trees:states}
+Sebuah \emph{karakter} adalah ciri yang beragam di antara \omterm{def:g10:biodiversity-scales:species}{spesies} yang
+dibandingkan (adanya tulang belakang, empat tungkai, telur amniota,
+rambut). Setiap karakter punya keadaan \emph{leluhur} --- keadaan yang
+dimiliki nenek moyang bersama kelompok itu --- dan satu atau lebih
+keadaan \emph{turunan} yang muncul kemudian pada suatu garis
+keturunan. Hanya \emph{keadaan turunan bersama} yang menunjukkan
+kekerabatan: dua \omterm{def:g10:biodiversity-scales:species}{spesies} yang berbagi keadaan turunan mewarisinya dari
+nenek moyang tempat keadaan itu muncul. Keadaan leluhur bersama tidak
+mengatakan apa-apa, sebab nenek moyang setiap makhluk memilikinya.
+\end{definition}
+
+\begin{method}[Dari matriks karakter menjadi pohon]\label{met:g12:phylogenetic-trees:build}
+\begin{enumerate}
+  \item Buatlah tabel: \omterm{def:g10:biodiversity-scales:species}{spesies} pada baris, karakter pada kolom, 1
+        untuk keadaan turunan dan 0 untuk keadaan leluhur. Tentukan
+        keadaan mana yang leluhur dengan membandingkannya terhadap
+        sebuah \emph{kelompok luar}, yaitu \omterm{def:g10:biodiversity-scales:species}{spesies} yang diketahui
+        berada di luar kelompok yang dipelajari.
+  \item Carilah keadaan turunan yang dibagi oleh paling banyak
+        \omterm{def:g10:biodiversity-scales:species}{spesies}: keadaan itu menentukan \omterm{prop:g12:phylogenetic-trees:rules}{klad} pertama dan terbesar. Di
+        dalamnya, carilah keadaan turunan bersama terluas berikutnya,
+        dan seterusnya.
+  \item Gambarlah \omterm{prop:g12:phylogenetic-trees:rules}{klad} bersarang itu sebagai sebuah pohon: setiap
+        keadaan turunan bersama menandai satu simpul, dan karakternya
+        ditulis pada cabang tempat ia muncul.
+  \item Periksalah pertentangan: karakter yang dibagi oleh \omterm{def:g10:biodiversity-scales:species}{spesies}
+        yang oleh karakter lain ditempatkan berjauhan entah muncul dua
+        kali (konvergensi) atau hilang sekali. Pilihlah pohon yang
+        menuntut paling sedikit perubahan secara keseluruhan --- pohon
+        yang paling \emph{pelit}.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  % matrix
+  \node[anchor=east] at (-0.2,2.4) {};
+  \matrix (m) [matrix of nodes, nodes={font=\small, minimum width=1.1cm, minimum height=0.5cm, anchor=center},
+               column 1/.style={nodes={anchor=east, minimum width=1.6cm}}] at (1.6,0.5) {
+    \phantom{o} & rahang & tungkai & amnion & rambut \\
+    lamprei & 0 & 0 & 0 & 0 \\
+    trout & 1 & 0 & 0 & 0 \\
+    katak & 1 & 1 & 0 & 0 \\
+    kadal & 1 & 1 & 1 & 0 \\
+    mencit & 1 & 1 & 1 & 1 \\
+  };
+  \draw (m-1-1.south west) -- (m-1-5.south east);
+  \draw (m-1-2.north west) -- (m-6-2.south west);
+  % tree
+  \begin{scope}[xshift=7.2cm, yshift=-1.4cm]
+    \draw[thick] (0,0) -- (0.8,0);
+    \draw[thick] (0.8,0) -- (0.8,3.2) -- (5,3.2);
+    \draw[thick] (0.8,0) -- (0.8,-0.6) -- (1.8,-0.6);
+    \draw[thick] (1.8,-0.6) -- (1.8,2.4) -- (5,2.4);
+    \draw[thick] (1.8,-0.6) -- (1.8,-1.0) -- (2.8,-1.0);
+    \draw[thick] (2.8,-1.0) -- (2.8,1.6) -- (5,1.6);
+    \draw[thick] (2.8,-1.0) -- (2.8,-1.3) -- (3.8,-1.3);
+    \draw[thick] (3.8,-1.3) -- (3.8,0.8) -- (5,0.8);
+    \draw[thick] (3.8,-1.3) -- (3.8,-1.5) -- (5,-1.5);
+    \node[anchor=west] at (5.1,3.2) {lamprei}; \node[anchor=west] at (5.1,2.4) {trout};
+    \node[anchor=west] at (5.1,1.6) {katak}; \node[anchor=west] at (5.1,0.8) {kadal};
+    \node[anchor=west] at (5.1,-1.5) {mencit};
+    \foreach \x/\y/\t in {1.3/-0.6/rahang, 2.3/-1.0/tungkai, 3.3/-1.3/amnion, 4.4/-1.5/rambut}
+      { \draw[very thick, omThm] (\x,\y+0.15) -- (\x,\y-0.15); \node[font=\scriptsize, omThm, anchor=north] at (\x,\y-0.2) {\t}; }
+    \node[anchor=east, font=\scriptsize] at (-0.1,0) {kelompok luar: lamprei};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Dari matriks menjadi pohon. Setiap keadaan turunan (1) yang
+dibagi oleh sehimpunan \omterm{def:g10:biodiversity-scales:species}{spesies} menandai simpul nenek moyang bersama
+mereka; palang merahnya menunjukkan tempat setiap karakter muncul.
+Lamprei, yang tak punya satu pun keadaan turunan, adalah kelompok luar
+yang menetapkan keadaan leluhurnya.}
+\end{omfigure}
+
+\begin{example}[Pertentangan yang diselesaikan oleh kepelitan]\label{ex:g12:phylogenetic-trees:parsimony}
+Tambahkan ``sayap'' ke sebuah matriks berisi kelelawar, merpati dan
+mencit. Sayap akan mengelompokkan kelelawar dengan merpati; rambut dan
+susu mengelompokkan kelelawar dengan mencit. Pohon dengan kelelawar
+dan mencit bersama menuntut sayap muncul dua kali (dua perubahan);
+pohon dengan kelelawar dan merpati bersama menuntut rambut, susu,
+rahang mamalia dan selusin karakter lain masing-masing muncul dua
+kali. Pohon pertama jauh lebih pelit: sayap adalah konvergensi, dan
+karakter mamalia adalah warisan bersama. Kepelitan tidak membuktikan
+pohon itu; ia memilih pohon yang paling tidak mustahil.
+\end{example}
+
+\section{Pohon dari molekul}
+
+\begin{proposition}[Filogeni molekuler]\label{prop:g12:phylogenetic-trees:molecular}
+\omterm{def:g10:universal-dna:gene}{Gen} atau \omterm{def:g11:gene-expression:protein}{protein} yang dimiliki semua \omterm{def:g10:biodiversity-scales:species}{spesies} yang dibandingkan sudah
+merupakan matriks karakter tersendiri: setiap posisi urutannya adalah
+sebuah karakter, dan setiap \omterm{def:g10:universal-dna:nucleotide}{nukleotida} atau \omterm{def:g10:chemistry-of-life:families}{asam amino} sebuah keadaan.
+Menyejajarkan urutan itu dan mencacah perbedaan antara setiap pasangan
+memberi sebuah matriks jarak, yang darinya pohon dibangun dengan
+menggabungkan pasangan terdekat lebih dahulu. Pohon molekuler, yang
+dihitung dari urutan yang tak berutang apa pun kepada anatomi, cocok
+dengan pohon anatomis pada sebagian besar kasus --- uji terkuat bagi
+keduanya.
+\end{proposition}
+\begin{proof}[Bukti percobaan]
+\cref{ch:g10:common-ancestry} memberikan jarak sitokrom c pada
+\omterm{def:g10:common-ancestry:bodyplan}{vertebrata}, yang menghasilkan kembali kotak yang digambar dari
+rangkanya. Di antara primata, urutan puluhan \omterm{def:g10:universal-dna:gene}{gen} sepakat: manusia dan
+simpanse berbeda kira-kira 1.2\% \omterm{def:g10:universal-dna:information}{DNA-nya}, keduanya berbeda dari gorila
+sebesar 1.6\%, ketiganya dari orangutan sebesar 3\%, dan kera besar
+dari makaka sebesar 7\%. Pohon yang dibangun dari salah satu \omterm{def:g10:universal-dna:gene}{gen} ini
+berbentuk sama; sedikit kekecualiannya menyangkut simpul termuda,
+tempat perbedaannya paling kecil.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\small, line cap=round]
+  \draw[thick] (0,0) -- (1,0);
+  \draw[thick] (1,0) -- (1,2.4) -- (8,2.4);
+  \draw[thick] (1,0) -- (1,-0.8) -- (3,-0.8);
+  \draw[thick] (3,-0.8) -- (3,1.2) -- (8,1.2);
+  \draw[thick] (3,-0.8) -- (3,-1.4) -- (5.2,-1.4);
+  \draw[thick] (5.2,-1.4) -- (5.2,0) -- (8,0);
+  \draw[thick] (5.2,-1.4) -- (5.2,-2.0) -- (6.4,-2.0);
+  \draw[thick] (6.4,-2.0) -- (6.4,-1.2) -- (8,-1.2);
+  \draw[thick] (6.4,-2.0) -- (6.4,-2.8) -- (8,-2.8);
+  \node[anchor=west] at (8.1,2.4) {makaka}; \node[anchor=west] at (8.1,1.2) {orangutan};
+  \node[anchor=west] at (8.1,0) {gorila}; \node[anchor=west] at (8.1,-1.2) {simpanse};
+  \node[anchor=west] at (8.1,-2.8) {manusia};
+  \foreach \x/\t in {1/{25}, 3/{14}, 5.2/{9}, 6.4/{6}}
+    { \fill[omThm] (\x,-3.4) circle (0); \node[font=\scriptsize, omThm, anchor=north] at (\x,-3.4) {\t}; \draw[gray, dashed] (\x,-3.3) -- (\x,-3.0); }
+  \draw[->, gray] (0.5,-3.5) -- (8,-3.5) node[midway, below=7pt, font=\scriptsize] {juta tahun lalu (simpul ditanggali oleh jam molekuler dan fosil)};
+  \node[font=\scriptsize, anchor=south] at (7.2,-1.05) {1.2\% DNA};
+  \node[font=\scriptsize, anchor=south] at (6.6,0.15) {1.6\%};
+  \node[font=\scriptsize, anchor=south] at (5.5,1.35) {3\%};
+  \node[font=\scriptsize, anchor=south] at (4.5,2.55) {7\% DNA berbeda};
+\end{tikzpicture}
+
+{\small Pohon lima primata dari perbandingan \omterm{def:g10:universal-dna:information}{DNA}. Manusia dan simpanse
+adalah kelompok saudari; gorila bergabung berikutnya, lalu orangutan,
+lalu makaka. Persentase pada setiap cabang adalah perbedaan \omterm{def:g10:universal-dna:information}{DNA} antara
+\omterm{def:g10:biodiversity-scales:species}{spesies} yang digabungkannya; tanggal di bawahnya berasal dari jam
+molekuler yang dikalibrasi oleh fosil.}
+\end{omfigure}
+
+\begin{proposition}[Jam molekuler]\label{prop:g12:phylogenetic-trees:clock}
+Untuk suatu \omterm{def:g10:universal-dna:gene}{gen} tertentu, perbedaan antara dua garis keturunan
+menumpuk pada laju yang kira-kira tetap sepanjang kurun yang panjang,
+sebab sebagian besar substitusinya netral dan terpancang oleh hanyutan
+pada laju kemunculannya. Karena itu cacah perbedaan antara dua \omterm{def:g10:biodiversity-scales:species}{spesies}
+sebanding dengan waktu sejak nenek moyang bersama mereka. Setelah
+dikalibrasi pada satu simpul yang ditanggali oleh fosil, jam itu
+menanggali simpul yang lain --- dengan catatan bahwa lajunya berbeda
+antargen dan antargaris keturunan, dan bahwa kalibrasinya membawa
+ketakpastiannya sendiri.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.84\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=30, ymin=0, ymax=8,
+  xlabel={waktu sejak nenek moyang bersama (juta tahun, dari fosil)},
+  ylabel={perbedaan DNA (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20,25,30}, ytick={0,2,4,6,8},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=2pt, omThm] coordinates {(6,1.2) (9,1.6) (14,3.0) (25,7.0)};
+\addplot[thick, omDef, domain=0:28] {0.27*x};
+\node[font=\scriptsize, anchor=west] at (axis cs:6.4,1.0) {manusia--simpanse};
+\node[font=\scriptsize, anchor=west] at (axis cs:9.4,1.5) {--gorila};
+\node[font=\scriptsize, anchor=west] at (axis cs:14.4,2.9) {--orangutan};
+\node[font=\scriptsize, anchor=east] at (axis cs:24.6,7.1) {--makaka};
+\end{axis}
+\end{tikzpicture}
+
+{\small Jam molekuler di antara primata: perbedaan \omterm{def:g10:universal-dna:information}{DNA} terhadap umur
+nenek moyang bersama. Titiknya jatuh dekat sebuah garis lurus berlaju
+sekitar 0.27\% per juta tahun; garis itu memungkinkan sebuah simpul
+tanpa fosil ditanggali dari perbedaan \omterm{def:g10:universal-dna:information}{DNA-nya}.}
+\end{omfigure}
+
+\begin{example}[Menanggali sebuah simpul]\label{ex:g12:phylogenetic-trees:dating}
+Dua \omterm{def:g10:biodiversity-scales:species}{spesies} berbeda 4.5\% \omterm{def:g10:universal-dna:information}{DNA-nya}; pada 0.27\% per juta tahun, nenek
+moyang bersama mereka hidup sekitar 17 juta tahun lalu. Taksiran itu
+mengandaikan laju primata berlaku; untuk \omterm{def:g10:universal-dna:gene}{gen} yang berevolusi dua kali
+lebih cepat, atau pada garis keturunan dengan generasi lebih pendek,
+4.5\% yang sama akan berarti separuh waktunya. Sebuah jam hanya sebaik
+kalibrasinya.
+\end{example}
+
+\section{Klasifikasi, dari pohon}
+
+\begin{proposition}[Mengklasifikasi menurut penurunan]\label{prop:g12:phylogenetic-trees:classification}
+Klasifikasi filogenetik hanya menamai \omterm{prop:g12:phylogenetic-trees:rules}{klad}: kelompok yang ditentukan
+oleh sebuah simpul dan memuat semua keturunannya. Kelompok akrab yang
+gagal dalam uji ini tidak dipakai: ``ikan'' tidak memuat tetrapoda
+yang turun dari simpul yang sama; ``reptil'' tidak memuat burung yang
+turun dari dalamnya; ``avertebrata'' adalah segalanya kecuali sebuah
+\omterm{prop:g12:phylogenetic-trees:rules}{klad}. Akibatnya patut dinyatakan terus terang: burung adalah
+dinosaurus, ikan paru lebih dekat kepada kita daripada kepada trout,
+dan manusia adalah satu cabang kera, yang merupakan satu cabang
+primata, mamalia, amniota, tetrapoda, dan \omterm{def:g10:common-ancestry:bodyplan}{vertebrata}.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book1/darwin.jpg}
+
+{\small Charles Darwin, yang pertama kali menggambar kekerabatan
+\omterm{def:g10:biodiversity-scales:species}{spesies} sebagai sebuah pohon dan mengusulkan mekanisme yang
+menumbuhkannya, yaitu \omterm{def:g12:selection-drift-speciation:selection}{seleksi alam}. Foto Henry Maull dan John Fox,
+sekitar 1854, domain publik.}
+\end{omfigure}
+
+\begin{remark}[Apa yang bukan pohon]\label{rem:g12:phylogenetic-trees:not}
+Sebuah pohon adalah hipotesis tentang sejarah, dibangun dari \omterm{def:g10:biodiversity-scales:species}{spesies}
+masa kini dan diuji oleh setiap karakter baru dan setiap urutan baru;
+ia digambar ulang ketika keduanya tak sepakat, dan penggambaran ulang
+itulah pekerjaan bidang ini. Pohon tak punya puncak dan tak punya arah
+kemajuan: manusia duduk pada satu ujung di antara jutaan ujung, tidak
+lebih tinggi dan tidak lebih rampung daripada lamprei di ujung lain.
+Pohon juga tak punya nenek moyang di ujung mana pun: nenek moyangnya
+adalah simpul, yaitu \omterm{def:g12:selection-drift-speciation:population}{populasi} yang telah lenyap, yang keberadaannya
+disimpulkan oleh pohon dan yang fosilnya, ketika ditemukan, duduk di
+samping cabang bukan di atasnya.
+\end{remark}
+
+\section{Latihan}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:1}
+Apa yang diwakili oleh ujung, simpul dan akar sebuah \omterm{def:g12:phylogenetic-trees:tree}{pohon
+filogenetik}?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:2}
+Pada pohon A gambar pertama, \omterm{def:g10:biodiversity-scales:species}{spesies} mana kerabat terdekat kadal? Dan
+kerabat terdekat katak?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:3}
+Definisikan keadaan turunan bersama dan jelaskan mengapa keadaan
+leluhur bersama tidak menunjukkan kekerabatan.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:4}
+Apa itu \omterm{prop:g12:phylogenetic-trees:rules}{klad}? Apakah ``burung'' sebuah \omterm{prop:g12:phylogenetic-trees:rules}{klad}? Apakah ``reptil'' (dalam
+arti sehari-hari) sebuah \omterm{prop:g12:phylogenetic-trees:rules}{klad}?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:g12:phylogenetic-trees:5}
+Dari pohon primata, mana kerabat terdekat manusia, dan simpul mana
+yang paling tua?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:6}
+Gambarlah ulang pohon A gambar pertama dengan manusia di atas dan
+katak di bawah, lalu periksa bahwa setiap kekerabatan tidak berubah.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:7}
+Tambahkan merpati (rahang 1, tungkai 1, amnion 1, rambut 0, bulu 1) ke
+matriks gambar kedua lalu tempatkan ia pada pohonnya. Apa yang
+ditambahkan oleh karakter ``bulu''?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:8}
+Seekor lumba-lumba bertubuh ramping dan bersirip seperti hiu, dan
+punya rambut, susu serta rahang mamalia. Pohon mana yang paling pelit,
+dan sirip itu sebenarnya apa?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:9}
+Dengan memakai gambar jam, tanggalilah nenek moyang bersama dua
+\omterm{def:g10:biodiversity-scales:species}{spesies} yang \omterm{def:g10:universal-dna:information}{DNA-nya} berbeda 2.2\%.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:10}
+Jelaskan mengapa kalimat ``simpanse adalah nenek moyang kita'' salah
+membaca pohon itu, lalu tuliskan kalimat yang benar.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:g12:phylogenetic-trees:11}
+Mengapa lamprei dipakai sebagai kelompok luar pada gambar kedua, dan
+apa yang akan keliru bila mencit yang dipakai sebagai gantinya?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:12}
+Dua \omterm{def:g10:universal-dna:gene}{gen} memberi pohon berbeda untuk tiga \omterm{def:g10:biodiversity-scales:species}{spesies} berkerabat dekat yang
+berpisah dalam selang kurang dari sejuta tahun. Jelaskan bagaimana ini
+dapat terjadi tanpa salah satu pohon menjadi ``salah'', dengan memakai
+pengocokan \omterm{def:g10:universal-dna:gene}{alel} pada \omterm{def:g12:selection-drift-speciation:population}{populasi} leluhurnya.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:13}
+Jam molekuler sebuah virus yang cepat berevolusi berjalan 1\% per
+tahun; jam sebuah \omterm{def:g10:universal-dna:gene}{gen} mamalia 0.3\% per juta tahun. Jelaskan mengapa
+yang pertama dipakai untuk melacak wabah dan yang kedua untuk
+menanggali asal-usul mamalia, dan mengapa tak satu pun dapat
+mengerjakan tugas yang lain.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:14}
+Sebuah fosil burung bergigi dengan ekor bertulang panjang ditemukan
+dalam batuan berumur 150 juta tahun. Jelaskan mengapa ia ditempatkan
+di samping sebuah cabang pohon dan bukan pada sebuah simpul, dan apa
+yang diberitahukannya tentang simpul itu.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:g12:phylogenetic-trees:15}
+``Pohon kehidupan menempatkan manusia di puncaknya.'' Bahaslah dalam
+satu paragraf dengan aturan membaca, umur ujung yang sama, dan jumlah
+ujungnya.
+\end{exercise}
+
+\section{Soal: Enam Spesies dan Sebuah Jam}
+
+\begin{problem}[{Soal akhir pekan --- sebuah pohon dibangun dua kali,
+dari tabel karakter dan dari jarak DNA, keduanya dibandingkan, lalu
+simpulnya ditanggali}]
+\label{pb:g12:phylogenetic-trees:1}
+Enam \omterm{def:g10:biodiversity-scales:species}{spesies}: hiu, salmon, salamander, buaya, merpati, kucing.
+Kelompok luarnya adalah lamprei. Tabel karakter (1 = turunan):
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lcccccc}
+ & rangka bertulang & empat tungkai & telur amniota & bulu & rambut & lubang tengkorak \\ \hline
+hiu & 0 & 0 & 0 & 0 & 0 & 0 \\
+salmon & 1 & 0 & 0 & 0 & 0 & 0 \\
+salamander & 1 & 1 & 0 & 0 & 0 & 0 \\
+buaya & 1 & 1 & 1 & 0 & 0 & 0 \\
+merpati & 1 & 1 & 1 & 1 & 0 & 0 \\
+kucing & 1 & 1 & 1 & 0 & 1 & 1 \\
+\end{tabular}
+\end{center}
+
+Perbedaan \omterm{def:g10:universal-dna:information}{DNA} (\%) untuk satu \omterm{def:g10:universal-dna:gene}{gen}:
+
+\begin{center}
+\begin{tabular}{lccccc}
+ & salmon & salamander & buaya & merpati & kucing \\ \hline
+hiu & 30 & 31 & 30 & 31 & 30 \\
+salmon & & 24 & 25 & 25 & 24 \\
+salamander & & & 19 & 20 & 19 \\
+buaya & & & & 8 & 15 \\
+merpati & & & & & 15 \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Bagian I --- Dari karakternya.}
+\begin{enumerate}
+  \item Keadaan turunan mana yang dibagi oleh paling banyak \omterm{def:g10:biodiversity-scales:species}{spesies}?
+        Sebutkan \omterm{prop:g12:phylogenetic-trees:rules}{klad} yang ditentukannya dan \omterm{def:g10:biodiversity-scales:species}{spesies} yang tertinggal
+        di luar. (Karakter terakhir adalah lubang tunggal di sisi
+        tengkorak yang dimiliki mamalia.)
+  \item Lanjutkan dengan keadaan bersama terluas berikutnya lalu
+        daftarkan \omterm{prop:g12:phylogenetic-trees:rules}{klad} bersarangnya.
+  \item Bulu, rambut dan lubang tengkorak masing-masing hanya ada pada
+        satu \omterm{def:g10:biodiversity-scales:species}{spesies}. Apakah ketiganya membantu membangun pohon ini?
+        Apa yang akan membuatnya berguna?
+  \item Gambarlah pohonnya, dengan menuliskan setiap karakter pada
+        cabang tempat ia muncul.
+  \item \omterm{def:g10:biodiversity-scales:species}{Spesies} mana kerabat terdekat buaya menurut tabel ini?
+        Pasangan mana yang tak dapat diselesaikan oleh tabel itu saja?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian II --- Dari \omterm{def:g10:universal-dna:information}{DNA-nya}.}
+\begin{enumerate}[resume]
+  \item Pasangan \omterm{def:g10:biodiversity-scales:species}{spesies} mana yang berjarak paling kecil? Gabungkan
+        keduanya lebih dahulu.
+  \item \omterm{def:g10:biodiversity-scales:species}{Spesies} mana yang bergabung dengan pasangan itu berikutnya?
+        Lanjutkan sampai pohonnya lengkap.
+  \item Bandingkan pohon \omterm{def:g10:universal-dna:information}{DNA} dengan pohon karakter: di mana keduanya
+        sepakat, dan apa yang diputuskan oleh \omterm{def:g10:universal-dna:information}{DNA} yang tak dapat
+        diputuskan oleh karakternya?
+  \item Jarak hiu ke semua \omterm{def:g10:biodiversity-scales:species}{spesies} lain hampir sama. Jelaskan mengapa,
+        dari bentuk pohonnya.
+  \item Jarak buaya--merpati (8) lebih kecil daripada jarak
+        buaya--kucing (15). Apa yang dikatakan hal ini tentang
+        kelompok sehari-hari ``reptil''?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian III --- Jamnya.}
+Fosil menanggali pemisahan garis keturunan salamander dari amniota
+pada 340 juta tahun.
+\begin{enumerate}[resume]
+  \item Dengan memakai jarak salamander--amniota (sekitar 19\%),
+        hitunglah laju jam itu dalam persen per juta tahun. (Kedua
+        garis keturunan sama-sama berubah: jarak itu mencacah
+        perubahan pada kedua cabangnya.)
+  \item Tanggalilah simpul buaya--merpati dan simpul amniota
+        (buaya/merpati lawan kucing).
+  \item Tanggalilah simpul salmon dan simpul hiu.
+  \item Fosil memberi sekitar 250 juta tahun untuk pemisahan
+        buaya--burung dan 310 untuk pemisahan amniota. Bandingkan
+        dengan tanggal hasil hitunganmu lalu berilah komentar tentang
+        ketelitian sebuah jam bergen tunggal.
+  \item Jarak hiu (30--31\%) nyaris tidak melebihi jarak salmon
+        (24--25\%) walaupun simpul hiu jauh lebih tua. Usulkan sebuah
+        penjelasan, lalu katakan apa artinya bagi penanggalan simpul
+        yang sangat tua dengan \omterm{def:g10:universal-dna:gene}{gen} ini.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian IV --- Membaca dan menamai.}
+\begin{enumerate}[resume]
+  \item Daftarkan \omterm{prop:g12:phylogenetic-trees:rules}{klad} pohonmu yang memuat kucing, dari yang terkecil
+        sampai yang terbesar.
+  \item Apakah ``ikan'' (hiu dan salmon) sebuah \omterm{prop:g12:phylogenetic-trees:rules}{klad}? Apakah
+        ``amniota''? Berikan alasannya.
+  \item Seorang siswa mengatakan salamander adalah ``perantara antara
+        ikan dan reptil''. Betulkan pernyataan itu dalam istilah
+        pohonnya.
+  \item Sebuah fosil dengan rangka bertulang, empat tungkai dan tanpa
+        telur amniota, bertarikh 360 juta tahun, ditemukan. Di mana
+        letaknya terhadap pohon itu, dan apa yang ditegaskan oleh
+        tarikhnya?
+  \item Nyatakan hasilnya: pohon keenam \omterm{def:g10:biodiversity-scales:species}{spesies} itu (sebagai kurung
+        bersarang), satu kekerabatan yang diputuskan oleh \omterm{def:g10:universal-dna:information}{DNA}, dan
+        taksiran tanggal pemisahan buaya--merpati.
+\end{enumerate}
+\end{problem}

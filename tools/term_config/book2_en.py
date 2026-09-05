@@ -19,6 +19,14 @@ STOP = {
     "frequencies",
     # the sense of "resolution" in the microscopy chapter only
     "resolution",
+    # A sentence-initial \emph{Fermentation} inside prop:g12:...:fermentation is
+    # harvested as a term of its OWN, distinct from the lowercase "fermentation"
+    # defined a volume earlier in grade-10. The lowercase term wins every
+    # occurrence (morphology matches a sentence-initial capital for it), so the
+    # proposition ends up an ORPHAN TARGET with zero links -- and which of the
+    # two wins depends on capitalisation, so the link graph is not reproducible
+    # across editions. Found by the Dutch Book 2 agent, 2026-09-05.
+    "Fermentation",
 }
 
 NO_CAPITAL = set()
