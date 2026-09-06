@@ -82,6 +82,10 @@ jobs:
           # releases/latest/download/<slug>.pdf links permanent.
           # Move + hard link, never copy: copying tripled the disk footprint
           # of the series and filled the runner.
+          # The LaTeX step runs in a container as root, so build/ comes back
+          # root-owned: mv out of it (and ln, under protected_hardlinks) are
+          # "Permission denied" for the runner user until we own the files.
+          sudo chown -R "$(id -u):$(id -g)" build
           for pdf in build/one_biology_book_*.pdf
           do
             slug="$(basename "$pdf" .pdf)"
