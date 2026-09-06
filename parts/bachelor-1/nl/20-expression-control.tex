@@ -1,0 +1,508 @@
+\chapter{Regeling van de genexpressie}\label{ch:b1:expression-control}
+
+Een bacterie die op glucose groeit draagt vijf moleculen van het \omterm{def:b1:enzymes:enzyme}{enzym} dat lactose
+verteert; geef haar lactose en zij draagt er binnen enkele minuten vijfduizend. Een
+levercel en een \omterm{def:b1:body-plans-tissues:nervous}{neuron} dragen dezelfde twintigduizend \omterm{def:b1:genomes:gene}{genen} en maken vrijwel geheel
+verschillende stellen \omterm{def:b1:proteins:peptide}{eiwitten}, en geen van beide zal ooit die van de ander maken.
+Niets in \cref{ch:b1:gene-expression} verklaart dat: de machinerie van de expressie
+is voor elk \omterm{def:b1:genomes:gene}{gen} dezelfde. Wat verschilt is of een \omterm{def:b1:genomes:gene}{gen} wordt gelezen, hoe vaak, en
+hoe lang --- beslissingen die bij de promotor worden genomen door \omterm{def:b1:proteins:peptide}{eiwitten} die aan
+\omterm{def:b1:nucleic-acids:chain}{DNA} binden, en daarna door het lot van de boodschapper en het \omterm{def:b1:proteins:peptide}{eiwit}. Dit hoofdstuk
+beschrijft hoe bacteriën \omterm{def:b1:genomes:gene}{genen} aan- en uitzetten naar gelang hun voedsel, hoe
+eukaryoten hun \omterm{def:b1:genomes:gene}{genen} sturen via het chromatine, verre \omterm{def:b1:expression-control:enhancer}{enhancers} en combinaties van
+factoren, en hoe diezelfde sturing, op verschillende \omterm{def:b1:genomes:gene}{genen} in verschillende \omterm{def:b1:cell-unit-of-life:cell}{cellen}
+toegepast, uit één \omterm{def:b1:genomes:genome}{genoom} een lichaam maakt.
+
+\section{Waarom en waar genen worden geregeld}
+
+\begin{proposition}[De expressie wordt op elk niveau geregeld]\label{prop:b1:expression-control:levels}
+\index{genregulatie}\index{constitutief gen}
+Sommige \omterm{def:b1:genomes:gene}{genen} zijn \emph{constitutief} --- zij komen altijd op een gelijkmatig
+niveau tot expressie omdat hun producten altijd nodig zijn (de \omterm{def:b1:proteins:peptide}{eiwitten} van het
+\omterm{def:b1:gene-expression:ribosome}{ribosoom}, de \omterm{def:b1:enzymes:enzyme}{enzymen} van de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse}). De meeste zijn \emph{geregeld}: zij komen
+alleen in bepaalde omstandigheden, bepaalde \omterm{def:b1:cell-unit-of-life:cell}{cellen} en bepaalde momenten tot
+expressie. De regeling grijpt bij elke stap van de stroom aan --- vooral bij het
+begin van de \omterm{prop:b1:gene-expression:dogma}{transcriptie}, de goedkoopste plaats om te beslissen, maar ook bij de
+bewerking, de uitvoer, de stabiliteit en de vertaling van de boodschapper, en bij
+de wijziging en de afbraak van het \omterm{def:b1:proteins:peptide}{eiwit} --- en de reactietijden lopen van seconden
+(een \omterm{def:b1:proteins:peptide}{eiwit} dat wordt gewijzigd) via minuten (een bacterieel \omterm{def:b1:genomes:gene}{gen} dat wordt
+aangezet) tot dagen (een chromatinetoestand die verandert).
+\end{proposition}
+
+\begin{example}[Alleen enzymen maken wanneer zij nodig zijn]\label{ex:b1:expression-control:economy}
+Het \omterm{def:b1:enzymes:enzyme}{enzym} $\beta$-galactosidase, dat lactose splitst, is een tetrameer van vier
+ketens van \qty{1024}{} residuen: vijfduizend kopieën zijn \qty{3}{\%} van het \omterm{def:b1:proteins:peptide}{eiwit}
+van een \omterm{def:b1:cell-unit-of-life:cell}{cel} en kosten \qty{8e7}{} \omterm{def:b1:water-small-molecules:atp}{ATP} per generatie. Een bacterie die ze zou maken
+zonder lactose om te verteren, zou ongeveer een procent trager groeien dan een
+concurrent die dat niet deed, en zou binnen enkele honderden generaties in de
+minderheid zijn. Regeling wordt geselecteerd omdat expressie duur is.
+\end{example}
+
+\section{Het lac-operon}
+
+\begin{definition}[Operon, repressor en operator]\label{def:b1:expression-control:operon}
+\index{operon}\index{repressor}\index{operator}\index{lac-operon}
+Een \emph{operon} is een groep bacteriële \omterm{def:b1:genomes:gene}{genen} die vanaf één promotor samen tot
+één boodschapper worden overgeschreven, en dus samen worden geregeld. Het
+\emph{lac-operon} van \emph{E. coli} bestaat uit drie \omterm{def:b1:genomes:gene}{genen} voor het gebruik van
+lactose --- \emph{lacZ} ($\beta$-galactosidase), \emph{lacY} (de lactosepermease
+die haar invoert) en \emph{lacA} --- achter een promotor en een \emph{operator},
+een korte sequentie die de promotor overlapt. Een apart \omterm{def:b1:genomes:gene}{gen}, \emph{lacI}, maakt de
+\emph{lac-repressor}, een \omterm{def:b1:proteins:peptide}{eiwit} dat de operator bindt en het polymerase blokkeert.
+Lactose, in de \omterm{def:b1:cell-unit-of-life:cell}{cel} tot allolactose omgezet, is de \emph{inductor}: zij bindt de
+repressor, verandert diens vorm, en laat hem de operator loslaten. Het operon staat
+dus uit tenzij er lactose aanwezig is --- \emph{negatieve regeling} die door
+\emph{inductie} wordt opgeheven.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % state 1: no lactose
+  \begin{scope}
+    \draw[very thick, gray] (0,0) -- (11,0);
+    \fill[omExo!50] (0.2,-0.2) rectangle (1.6,0.2); \node[anchor=south, font=\scriptsize] at (0.9,0.25) {\emph{lacI}};
+    \fill[omProp!50] (2.4,-0.2) rectangle (3.6,0.2); \node[anchor=north, font=\scriptsize] at (3.0,-0.25) {promotor};
+    \fill[omThm!50] (3.6,-0.2) rectangle (4.4,0.2); \node[anchor=south, font=\scriptsize] at (4.0,0.25) {operator};
+    \fill[omDef!60] (4.5,-0.2) rectangle (7.2,0.2); \node[anchor=south, font=\scriptsize] at (5.85,0.25) {\emph{lacZ}};
+    \fill[omDef!60] (7.3,-0.2) rectangle (9.0,0.2); \node[anchor=south, font=\scriptsize] at (8.15,0.25) {\emph{lacY}};
+    \fill[omDef!60] (9.1,-0.2) rectangle (10.3,0.2); \node[anchor=south, font=\scriptsize] at (9.7,0.25) {\emph{lacA}};
+    \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt] (rep) at (4.0,-0.95) {repressor};
+    \draw[->, thick] (0.9,-0.25) -- (0.9,-0.95) -- (3.3,-0.95);
+    \draw[thick] (rep) -- (4.0,-0.22);
+    \node[draw, thick, fill=omProp!25, rounded corners=3pt, inner sep=2pt] at (2.2,0.9) {RNA-polymerase};
+    \node[font=\scriptsize, anchor=west] at (3.45,0.9) {geblokkeerd};
+    \node[anchor=east, align=right] at (-0.2,0) {geen lactose:\\ operon UIT};
+  \end{scope}
+  % state 2: lactose present
+  \begin{scope}[yshift=-3.0cm]
+    \draw[very thick, gray] (0,0) -- (11,0);
+    \fill[omExo!50] (0.2,-0.2) rectangle (1.6,0.2);
+    \fill[omProp!50] (2.4,-0.2) rectangle (3.6,0.2);
+    \fill[omThm!50] (3.6,-0.2) rectangle (4.4,0.2);
+    \fill[omDef!60] (4.5,-0.2) rectangle (7.2,0.2); \fill[omDef!60] (7.3,-0.2) rectangle (9.0,0.2); \fill[omDef!60] (9.1,-0.2) rectangle (10.3,0.2);
+    \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt] (rep2) at (4.0,-1.0) {repressor + inductor};
+    \node[font=\scriptsize, anchor=west] at (5.6,-1.0) {losgelaten van de operator};
+    \node[draw, thick, fill=omProp!25, rounded corners=3pt, inner sep=2pt] at (3.0,0.85) {RNA-polymerase};
+    \draw[->, very thick, omProp!80!black] (4.0,0.85) -- (10.3,0.85) node[midway, above, font=\scriptsize] {één boodschapper voor de drie genen};
+    \node[anchor=east, align=right] at (-0.2,0) {lactose aanwezig:\\ operon AAN};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Het \omterm{def:b1:expression-control:operon}{lac-operon}. Zonder lactose zit de \omterm{def:b1:expression-control:operon}{repressor} op de \omterm{def:b1:expression-control:operon}{operator} en kan het
+polymerase niet beginnen; met lactose trekt de inductor de \omterm{def:b1:expression-control:operon}{repressor} eraf en worden
+de drie \omterm{def:b1:genomes:gene}{genen} tot één boodschapper overgeschreven.}
+\end{omfigure}
+
+\begin{proposition}[Het operonmodel]\label{prop:b1:expression-control:jacobmonod}
+De \omterm{def:b1:genomes:gene}{lac-genen} worden geregeld door een diffundeerbare \omterm{def:b1:expression-control:operon}{repressor} die aangrijpt op een
+plaats naast de \omterm{def:b1:genomes:gene}{genen}: de regeling is negatief, de \omterm{def:b1:expression-control:operon}{repressor} werkt in \emph{trans}
+(vanuit de hele \omterm{def:b1:cell-unit-of-life:cell}{cel}), en de \omterm{def:b1:expression-control:operon}{operator} werkt in \emph{cis} (alleen op de \omterm{def:b1:genomes:gene}{genen} ernaast).
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+Jacob en Monod (1959--1961) redeneerden vanuit mutanten. Stammen met een mutatie in
+\emph{lacI} ($I^-$) maakten het \omterm{def:b1:enzymes:enzyme}{enzym} met of zonder lactose (\emph{constitutief});
+een normaal \emph{lacI}-gen dat op een tweede kopie van het gebied werd
+ingebracht, herstelde de regeling, dus is het product van dat \omterm{def:b1:genomes:gene}{gen} een
+diffundeerbare \omterm{def:b1:expression-control:operon}{repressor} die een mutant mist. Stammen met een mutatie in de
+\omterm{def:b1:expression-control:operon}{operator} ($O^c$) waren eveneens constitutief, maar een tweede normale \omterm{def:b1:expression-control:operon}{operator} op
+een andere kopie herstelde de regeling niet --- de \omterm{def:b1:expression-control:operon}{operator} regelt alleen de \omterm{def:b1:genomes:gene}{genen}
+die er fysiek aan vastzitten, en is dus een plaats, geen product. Een derde klasse
+($I^s$) kon in het geheel niet worden geïnduceerd en was dominant: een \omterm{def:b1:expression-control:operon}{repressor}
+die de inductor niet meer bindt. In de PaJaMo-proef (1959) legde een normaal
+\emph{lacI}-gen dat door conjugatie in een $I^-$-cel werd overgebracht de
+enzymsynthese binnen enkele minuten stil: de \omterm{def:b1:expression-control:operon}{repressor} werkt snel, en op de
+\omterm{prop:b1:gene-expression:dogma}{transcriptie} --- van de boodschapper werd later aangetoond dat zij een
+halveringstijd van minuten heeft.
+\end{proof}
+
+\begin{definition}[Positieve regeling: CAP en cAMP]\label{def:b1:expression-control:cap}
+\index{katabolietrepressie}\index{diauxie}
+De lac-promotor is zwak: zelfs zonder de \omterm{def:b1:expression-control:operon}{repressor} begint het polymerase er zelden
+tenzij een tweede \omterm{def:b1:proteins:peptide}{eiwit}, \emph{CAP} (catabolite activator protein), er vlak vóór is
+gebonden, het \omterm{def:b1:nucleic-acids:chain}{DNA} buigt en het polymerase op zijn plaats houdt. CAP bindt alleen
+aan \omterm{def:b1:nucleic-acids:chain}{DNA} wanneer het \emph{cyclisch AMP} draagt, waarvan het gehalte in de \omterm{def:b1:cell-unit-of-life:cell}{cel} daalt
+zodra er veel glucose is. Het \omterm{def:b1:expression-control:operon}{operon} staat dus pas volledig aan wanneer er lactose
+aanwezig is \emph{en} glucose ontbreekt: twee signalen, een negatief en een
+positief, worden bij één promotor samengebracht. Krijgt \emph{E. coli} beide
+suikers, dan eet zij eerst de glucose, pauzeert zij terwijl het cAMP stijgt en de
+\omterm{def:b1:enzymes:enzyme}{lac-enzymen} worden gemaakt, en eet zij daarna de lactose --- de tweefasige
+groeicurve die \emph{diauxie} heet, die Monod in 1941 beschreef en die hem op het
+spoor van het \omterm{def:b1:expression-control:operon}{operon} zette.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=6, ymin=1e7, ymax=3e9,
+  xlabel={tijd (h)}, ylabel={cellen per mL},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2,3,4,5,6},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:2, samples=30] {1e7*2^(x/0.333)};
+\addplot[very thick, omDef, domain=2:2.6, samples=5] {6.4e8};
+\addplot[very thick, omDef, domain=2.6:4.0, samples=30] {6.4e8*2^((x-2.6)/0.5)};
+\addplot[very thick, omDef, domain=4.0:6, samples=5] {6.4e8*2^(1.4/0.5)};
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:0.15,8e8) {fase 1: glucose\\ (verdubbeling \qty{20}{min})};
+\node[font=\scriptsize, anchor=south, align=center] at (axis cs:2.3,7e8) {aanloop: cAMP stijgt,\\ lac-enzymen gemaakt};
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:3.0,9e8) {fase 2: lactose\\ (verdubbeling \qty{30}{min})};
+\node[font=\scriptsize, anchor=south west] at (axis cs:4.1,4.4e9) {};
+\end{semilogyaxis}
+\end{tikzpicture}
+
+{\small Diauxische groei van \emph{E. coli} op glucose plus lactose. De kweek groeit
+op glucose alleen, stopt zodra die op is, en hervat op lactose na het half uur dat
+het induceren van het \omterm{def:b1:expression-control:operon}{lac-operon} kost.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book3/ai/b3-20-xgal-plate.png}
+
+{\small Het \omterm{def:b1:expression-control:operon}{lac-operon} zichtbaar gemaakt: kolonies op een plaat met X-gal, een
+kleurloos \omterm{def:b1:enzymes:enzyme}{substraat} dat $\beta$-galactosidase blauw maakt. Blauwe kolonies brengen
+\emph{lacZ} tot expressie; witte dragen een kapot \omterm{def:b1:genomes:gene}{gen} --- de reporter die in
+duizend proeven is gebruikt.}
+\end{omfigure}
+
+\begin{method}[Een lac-fenotype voorspellen]\label{met:b1:expression-control:lacphenotype}
+\begin{enumerate}
+  \item Schrijf het genotype van elke kopie van het gebied op: $I$, $P$,
+        $O$, $Z$ ($^+$ normaal, $^-$ inactief, $O^c$
+        operator-constitutief, $I^s$ superrepressor).
+  \item De \omterm{def:b1:expression-control:operon}{repressor} werkt in trans: één $I^+$ waar dan ook onderdrukt elke
+        normale \omterm{def:b1:expression-control:operon}{operator}; $I^s$ onderdrukt ongeacht de inductor.
+  \item De \omterm{def:b1:expression-control:operon}{operator} en de promotor werken in cis: een $O^c$ bevrijdt alleen
+        de $Z$ op zijn eigen \omterm{def:b1:nucleic-acids:chain}{DNA}; een $P^-$ legt alleen zijn eigen \omterm{def:b1:genomes:gene}{genen}
+        stil.
+  \item Vraag, met en zonder inductor, of elk $Z^+$-gen wordt
+        overgeschreven; het fenotype is dienovereenkomstig induceerbaar,
+        constitutief of niet-induceerbaar. Voeg daarna glucose toe: zonder
+        cAMP--CAP is de \omterm{prop:b1:gene-expression:dogma}{transcriptie} laag, wat de \omterm{def:b1:expression-control:operon}{repressor} ook doet.
+\end{enumerate}
+\end{method}
+
+\begin{example}[Twee partiële diploïden]\label{ex:b1:expression-control:diploids}
+$I^-\,O^+\,Z^+ / I^+\,O^+\,Z^-$: de $I^+$-kopie maakt \omterm{def:b1:expression-control:operon}{repressor} die de $O^+$ naast
+$Z^+$ bindt; induceerbaar --- de mutatie wordt gecomplementeerd.
+$I^+\,O^c\,Z^+ / I^+\,O^+\,Z^-$: de enige werkende $Z$ zit achter een \omterm{def:b1:expression-control:operon}{operator} die
+de \omterm{def:b1:expression-control:operon}{repressor} niet kan binden; constitutief --- de normale \omterm{def:b1:expression-control:operon}{operator} op de andere
+kopie kan niet helpen, want zij regelt alleen de kapotte $Z$.
+\end{example}
+
+\section{Andere strategieën van bacteriën}
+
+\begin{proposition}[Repressie, attenuatie en sigmafactoren]\label{prop:b1:expression-control:trp}
+\index{trp-operon}\index{attenuatie}\index{sigmafactor}
+\omterm{def:b1:expression-control:operon}{Operons} voor biosynthese worden in de omgekeerde zin geregeld: het
+\emph{\omterm{prop:b1:expression-control:trp}{trp-operon}}, vijf \omterm{def:b1:genomes:gene}{genen} om tryptofaan te maken, wordt overgeschreven tenzij
+er tryptofaan aanwezig is --- het \omterm{def:b1:proteins:aminoacid}{aminozuur} bindt de \omterm{def:b1:expression-control:operon}{trp-repressor} en \emph{stelt}
+hem in staat de \omterm{def:b1:expression-control:operon}{operator} te binden (een corepressor). Een tweede, fijnere regeling,
+de \emph{\omterm{prop:b1:expression-control:trp}{attenuatie}}, gebruikt de koppeling van \omterm{prop:b1:gene-expression:dogma}{transcriptie} en \omterm{prop:b1:gene-expression:dogma}{translatie} bij
+bacteriën: het begin van de boodschapper codeert voor een kort peptide met twee
+tryptofanen achter elkaar; is er veel tRNA met tryptofaan geladen, dan vertaalt een
+\omterm{def:b1:gene-expression:ribosome}{ribosoom} dat snel en vouwt het \omterm{def:b1:nucleic-acids:chain}{RNA} erachter zich tot een terminatorhaarspeld die
+het polymerase vóór de \omterm{def:b1:genomes:gene}{genen} stilzet; is tryptofaan schaars, dan blijft het
+\omterm{def:b1:gene-expression:ribosome}{ribosoom} bij de tryptofaancodons steken en vouwt het \omterm{def:b1:nucleic-acids:chain}{RNA} zich anders, waardoor de
+\omterm{prop:b1:gene-expression:dogma}{transcriptie} doorloopt. Bacteriën schakelen ook hele stellen \omterm{def:b1:genomes:gene}{genen} om door de
+$\sigma$-subeenheid van hun polymerase te wisselen: een hitteschok-$\sigma$ stuurt
+het naar de promotors van chaperonnegenen; een sporulatie-$\sigma$ naar die van de
+sporenvorming.
+\end{proposition}
+
+\section{Regeling bij eukaryoten}
+
+\begin{definition}[Transcriptiefactoren, enhancers]\label{def:b1:expression-control:enhancer}
+\index{transcriptiefactor}\index{enhancer}
+Bij eukaryoten begint het polymerase nooit uit zichzelf: de algemene factoren bij
+de promotor (\cref{ch:b1:gene-expression}) halen het erbij, en de snelheid wordt
+bepaald door \emph{transcriptiefactoren} die aan \emph{regelsequenties} zijn
+gebonden --- sommige dicht bij de promotor, vele in \emph{enhancers} die
+duizenden \omterm{thm:b1:nucleic-acids:helix}{basenparen} verderop kunnen liggen, stroomopwaarts, stroomafwaarts of in
+een \omterm{def:b1:genomes:gene}{intron}, in beide richtingen, en die werken doordat het \omterm{def:b1:nucleic-acids:chain}{DNA} een \emph{lus} maakt
+waardoor de eraan gebonden factoren het complex bij de promotor via
+mediatoreiwitten aanraken. Een transcriptiefactor is \omterm{prop:b1:flowering-plant-organization:modular}{modulair} opgebouwd: een
+\emph{DNA-bindend domein} dat een korte sequentie herkent (de families
+helix-turn-helix, zinkvinger, leucinerits) en een \emph{activerings-} of
+\emph{onderdrukkingsdomein} dat de machinerie erbij haalt of tegenhoudt. Een \omterm{def:b1:genomes:gene}{gen}
+wordt gelezen wanneer de juiste \emph{combinatie} factoren aanwezig is: enkele
+honderden factoren sturen, in combinaties, twintigduizend \omterm{def:b1:genomes:gene}{genen}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % DNA with enhancer far upstream, looped to promoter
+  \draw[very thick, gray] (0,0) -- (2.2,0) .. controls (3.2,0) and (3.4,2.6) .. (5.0,2.6) .. controls (6.6,2.6) and (6.8,0) .. (7.8,0) -- (12.5,0);
+  \fill[omExo!60] (0.4,-0.2) rectangle (2.0,0.2); \node[anchor=north, font=\scriptsize] at (1.2,-0.25) {enhancer (\qtyrange{1}{100}{kb} verderop)};
+  \fill[omProp!50] (8.0,-0.2) rectangle (9.4,0.2); \node[anchor=north, font=\scriptsize] at (8.7,-0.25) {promotor};
+  \fill[omDef!60] (9.5,-0.2) rectangle (12.3,0.2); \node[anchor=north, font=\scriptsize] at (10.9,-0.25) {gen};
+  % looped enhancer brought near promoter: draw factors at the loop apex near promoter? Simplify: activators on enhancer, mediator bridging
+  \node[draw, thick, fill=omExo!30, rounded corners=3pt, inner sep=2pt] (act) at (1.2,0.75) {activatoren};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt, align=center] (med) at (5.0,1.5) {mediator};
+  \node[draw, thick, fill=omProp!30, rounded corners=3pt, inner sep=2pt, align=center] (pol) at (8.7,0.85) {algemene factoren\\ + polymerase};
+  \draw[thick, omExo!80!black] (act) -- (2.4,1.2) -- (med);
+  \draw[thick, omThm] (med) -- (pol);
+  \node[anchor=north, align=center, gray] at (6.2,-1.0) {het DNA maakt een lus zodat ver weg gebonden factoren het promotorcomplex raken;\\ een gen wordt gelezen wanneer de juiste combinatie factoren gebonden is};
+\end{tikzpicture}
+
+{\small De werking van een \omterm{def:b1:expression-control:enhancer}{enhancer}. Activatoren die aan een verre \omterm{def:b1:expression-control:enhancer}{enhancer} zijn
+gebonden worden door een lus in het \omterm{def:b1:nucleic-acids:chain}{DNA} bij de promotor gebracht, en een
+mediatorcomplex geeft hun signaal aan het polymerase door.}
+\end{omfigure}
+
+\begin{proposition}[Het chromatine hoort bij de regeling]\label{prop:b1:expression-control:chromatin}
+\index{histonacetylering}\index{DNA-methylering}
+Een \omterm{def:b1:genomes:gene}{gen} dat in nucleosomen is gewikkeld en tot heterochromatine is gepakt kan niet
+worden gelezen: de factoren kunnen er niet bij. Activatoren halen \omterm{def:b1:enzymes:enzyme}{enzymen} erbij die
+de \omterm{def:b1:genomes:nucleosome}{histonen} \emph{acetyleren}, waardoor die het \omterm{def:b1:nucleic-acids:chain}{DNA} losser vasthouden en het gebied
+als open wordt gemerkt; \omterm{def:b1:expression-control:operon}{repressoren} halen \omterm{def:b1:enzymes:enzyme}{enzymen} erbij die de acetylgroepen
+verwijderen en merken aanbrengen die het chromatine samenpakken. Methylgroepen op
+cytosinen van een promotor leggen die duurzaam stil, en de merken worden bij de
+replicatie meegekopieerd, zodat het patroon van open en gesloten \omterm{def:b1:genomes:gene}{genen} van een \omterm{def:b1:cell-unit-of-life:cell}{cel}
+door haar dochters wordt geërfd --- het geheugen waardoor de dochters van een
+levercel levercellen blijven (het deel van jaar 3 behandelt deze
+\emph{epigenetische} mechanismen uitgebreid).
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+In de reuzenchromosomen (polyteenchromosomen) van vliegenlarven (duizend kopieën
+van elk \omterm{def:b1:genomes:genome}{chromosoom} zij aan zij, met banden) verschijnen \omterm{def:b1:genomes:gene}{genen} die worden
+overgeschreven als \emph{puffs} waar het chromatine zich heeft ontvouwen; het
+hormoon ecdyson, dat de vervelling op gang brengt, laat binnen enkele minuten een
+bepaald stel puffs verschijnen en uren later andere, in een vaste volgorde --- de
+\omterm{prop:b1:gene-expression:dogma}{transcriptie} rechtstreeks zichtbaar, en door een signaal geschakeld. \omterm{def:b1:genomes:gene}{Genen} die door
+een chromosoomherschikking naast heterochromatine belanden worden in sommige \omterm{def:b1:cell-unit-of-life:cell}{cellen}
+stilgelegd en in andere niet, en de toestand wordt door hun dochters geërfd.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book3/ai/b3-20-polytene-chromosome.png}
+
+{\small Een polyteenchromosoom uit de speekselklier van een vlieg: gebandeerd, met
+twee puffs waar het chromatine zich voor de \omterm{prop:b1:gene-expression:dogma}{transcriptie} heeft geopend. Puffs
+verschijnen en verdwijnen naarmate \omterm{def:b1:genomes:gene}{genen} worden aan- en uitgezet.}
+\end{omfigure}
+
+\begin{example}[Een signaal wordt een expressiepatroon]\label{ex:b1:expression-control:steroid}
+Cortisol komt een levercel binnen en bindt zijn receptor, een \omterm{def:b1:expression-control:enhancer}{transcriptiefactor}
+die in het \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} inactief wordt gehouden; het complex gaat de celkern in, bindt
+een sequentie van vijftien basen die bij een honderdtal \omterm{def:b1:genomes:gene}{genen} voorkomt --- waaronder
+die van de \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{gluconeogenese} (\cref{ch:b1:biosyntheses-integration}) --- en haalt
+acetylasen en mediator erbij: binnen een uur worden de \omterm{def:b1:enzymes:enzyme}{enzymen} van de
+glucosesynthese gemaakt. Hetzelfde hormoon zet in een lymfocyt, waarvan het open
+chromatine een ander stel van die sequenties blootlegt, \omterm{def:b1:genomes:gene}{genen} aan die de \omterm{def:b1:cell-unit-of-life:cell}{cel} doden.
+Eén signaal, één receptor, twee antwoorden: het verschil is welke \omterm{def:b1:genomes:gene}{genen}
+toegankelijk waren.
+\end{example}
+
+\section{Na de transcriptie, en het maken van een lichaam}
+
+\begin{proposition}[Regeling voorbij de promotor]\label{prop:b1:expression-control:posttranscriptional}
+\index{mRNA-stabiliteit}
+Een \omterm{def:b1:cell-unit-of-life:prokeuk}{eukaryote cel} beslist ook hoe een transcript wordt gespliced (alternatieve
+\omterm{prop:b1:gene-expression:processing}{splicing} geeft een spier en een brein uit één \omterm{def:b1:genomes:gene}{gen} verschillende \omterm{def:b1:proteins:peptide}{eiwitten}), of het
+wordt uitgevoerd, hoe lang het meegaat (halveringstijden van minuten voor de
+boodschappen van regeleiwitten tot dagen voor die van hemoglobine, vastgelegd door
+sequenties in de niet-vertaalde gebieden die \omterm{def:b1:proteins:peptide}{eiwitten} en kleine regulerende \omterm{def:b1:nucleic-acids:chain}{RNA}'s
+binden), en of het wordt vertaald (\omterm{def:b1:cell-unit-of-life:cell}{cellen} met ijzergebrek blokkeren de vertaling
+van de ferritineboodschap met een \omterm{def:b1:proteins:peptide}{eiwit} dat aan haar $5'$-uiteinde is gebonden, en
+laten haar los zodra er ijzer is). Het \omterm{def:b1:proteins:peptide}{eiwit} wordt, eenmaal gemaakt, geregeld door
+wijziging en afbraak (\cref{ch:b1:enzymes}). Elk later niveau is sneller en
+plaatselijker dan het vorige, en duurder: de \omterm{prop:b1:gene-expression:dogma}{transcriptie} beslist wat de \omterm{def:b1:cell-unit-of-life:cell}{cel} kan
+doen, de latere niveaus wat zij nu doet.
+\end{proposition}
+
+\begin{proposition}[Verschillen in expressie maken een lichaam]\label{prop:b1:expression-control:differentiation}
+\index{differentiatie}
+Elke \omterm{def:b1:cell-unit-of-life:cell}{cel} van een meercellig \omterm{def:b1:organism-environment:organism}{organisme} draagt hetzelfde \omterm{def:b1:genomes:genome}{genoom}; de \omterm{def:b1:cell-unit-of-life:cell}{cellen} verschillen
+doordat zij er verschillende delen van tot expressie brengen.
+\emph{Huishoudgenen} --- enkele duizenden voor de stofwisseling, het \omterm{def:b1:gene-expression:ribosome}{ribosoom}, het
+\omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytoskelet} --- staan in elke \omterm{def:b1:cell-unit-of-life:cell}{cel} aan; de rest wordt in sommige \omterm{def:b1:cell-unit-of-life:cell}{cellen} aan- en in
+andere uitgezet door de combinaties \omterm{def:b1:expression-control:enhancer}{transcriptiefactoren} die elke \omterm{def:b1:cell-unit-of-life:cell}{cel} draagt en de
+chromatinetoestanden die zij heeft geërfd. De voorloper van een rode \omterm{def:b1:cell-unit-of-life:cell}{cel} zet
+globine aan en vrijwel al het overige uit; een \omterm{def:b1:body-plans-tissues:nervous}{neuron} zet zijn \omterm{def:b1:membranes-transport:transporters}{kanalen} aan en deelt
+nooit meer. \emph{Differentiatie} is het verwerven van een stabiel expressiepatroon,
+en de \emph{ontwikkeling} (het deel van jaar 2) is het proces waarmee signalen
+tussen \omterm{def:b1:cell-unit-of-life:cell}{cellen} die patronen op de juiste plaatsen vastleggen.
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+Een kern die uit een gedifferentieerde kikkercel wordt gehaald en in een eicel wordt
+gebracht waarvan de eigen kern is verwijderd, kan de ontwikkeling van een hele
+kikkervis aansturen (Gurdon, 1962; bekend uit het deel over de bovenbouw): de
+gedifferentieerde \omterm{def:b1:cell-unit-of-life:cell}{cel} had geen \omterm{def:b1:genomes:gene}{genen} verloren, alleen uitgezet, en het \omterm{def:b1:cell-unit-of-life:cell}{cytoplasma}
+van de eicel zette de schakelaars terug. De \omterm{def:b1:proteins:peptide}{eiwitten} van een celtype, op een gel
+gescheiden, verschillen van die van een ander type; zijn boodschappers zijn,
+eenmaal gesequencet, een voor dat type kenmerkende deelverzameling van het \omterm{def:b1:genomes:genome}{genoom};
+en een handvol \omterm{def:b1:expression-control:enhancer}{transcriptiefactoren} die in een huidcel worden gebracht, kunnen die
+tot stamcel of \omterm{def:b1:body-plans-tissues:nervous}{neuron} herprogrammeren.
+\end{proof}
+
+\begin{example}[Eén gen in twee organen gelezen]\label{ex:b1:expression-control:twoorgans}
+Het \omterm{def:b1:genomes:gene}{gen} voor het \omterm{def:b1:enzymes:enzyme}{enzym} dat glucose uit glucose-6-fosfaat maakt komt tot expressie in
+de lever en de nier en in geen enkel ander \omterm{def:b1:body-plans-tissues:tissue}{weefsel}: zijn promotor draagt plaatsen
+voor factoren die alleen daar aanwezig zijn, en in andere \omterm{def:b1:cell-unit-of-life:cell}{cellen} is zijn promotor
+gemethyleerd en zijn chromatine gesloten. Een spier, die het \omterm{def:b1:genomes:gene}{gen} ongeschonden
+draagt, kan geen glucose aan het bloed afgeven
+(\cref{ch:b1:biosyntheses-integration}) --- niet bij gebrek aan het \omterm{def:b1:genomes:gene}{gen} maar omdat
+het \omterm{def:b1:genomes:gene}{gen} niet wordt gelezen. Het \omterm{def:b1:genomes:genome}{genoom} is hetzelfde; de expressie is het \omterm{def:b1:mammal-organization:organ}{orgaan}.
+\end{example}
+
+\section{Opgaven}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:1}
+Noem de onderdelen van het \omterm{def:b1:expression-control:operon}{lac-operon} en geef de toestand van het \omterm{def:b1:expression-control:operon}{operon} met en
+zonder lactose, met en zonder glucose.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:2}
+Leg het verschil uit tussen een genproduct dat in trans werkt en een plaats die in
+cis werkt, met van elk één voorbeeld uit het \omterm{def:b1:expression-control:operon}{operon}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:3}
+Lees uit de diauxiefiguur de duur van de aanloop af en de verdubbelingstijden op
+elke suiker.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:4}
+Definieer \omterm{def:b1:expression-control:enhancer}{enhancer}, \omterm{def:b1:expression-control:enhancer}{transcriptiefactor} en huishoudgen.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:5}
+Geef het fenotype (induceerbaar, constitutief, niet-induceerbaar) van: $I^-$;
+$O^c$; $I^s$; $I^-\,O^+\,Z^+ / I^+\,O^+\,Z^+$; $I^s\,O^+\,Z^+ /
+I^+\,O^+\,Z^+$; $I^+\,O^c\,Z^- / I^+\,O^+\,Z^+$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:6}
+Vergelijk het lac- en het \omterm{prop:b1:expression-control:trp}{trp-operon}: wat het kleine molecuul in elk met de
+\omterm{def:b1:expression-control:operon}{repressor} doet, en waarom de logica omgekeerd is.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:7}
+Een mutant kan geen cAMP maken. Voorspel haar groei op glucose, op alleen lactose,
+en op beide, en het gehalte aan $\beta$-galactosidase in elk geval.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:8}
+Leg uit waarom \omterm{prop:b1:expression-control:trp}{attenuatie} bij eukaryoten onmogelijk is, vanuit de bouw van de
+\omterm{def:b1:cell-unit-of-life:prokeuk}{eukaryote cel}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:9}
+Een \omterm{def:b1:expression-control:enhancer}{enhancer} wordt van \qty{5}{kb} vóór zijn \omterm{def:b1:genomes:gene}{gen} naar \qty{5}{kb} erachter
+verplaatst en omgekeerd; het \omterm{def:b1:genomes:gene}{gen} komt nog steeds tot expressie. Leg uit wat dat
+laat zien over de werking van \omterm{def:b1:expression-control:enhancer}{enhancers}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:10}
+Hoeveel \omterm{def:b1:water-small-molecules:atp}{ATP} kosten vijfduizend $\beta$-galactosidasetetrameren van \qty{4096}{}
+residuen (vier per residu)? De begroting van een \omterm{def:b1:cell-unit-of-life:cell}{cel} per generatie is ongeveer
+\qty{1e10}{} \omterm{def:b1:water-small-molecules:atp}{ATP}. Bereken het groeinadeel van een constitutieve mutant, en het
+aantal generaties waarin haar aandeel in een gemengde populatie van een helft tot
+een honderdste daalt.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:11}
+Een levercel en een \omterm{def:b1:body-plans-tissues:nervous}{neuron} van dezelfde persoon worden vergeleken: hetzelfde
+\omterm{def:b1:genomes:genome}{genoom}, andere \omterm{def:b1:proteins:peptide}{eiwitten}, en elke deling van de levercel geeft levercellen. Leg met
+het chromatine, de factoren en de vererving van merken uit hoe het verschil ontstaat
+en hoe het in stand blijft.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:12}
+``Een bacterie leest haar omgeving; een \omterm{def:b1:cell-unit-of-life:cell}{cel} van een lichaam leest haar
+geschiedenis.'' Bespreek in een alinea de twee typen regeling, hun signalen, hun
+tijdschalen en hun omkeerbaarheid.
+\end{exercise}
+
+\section{Vraagstuk: diauxie}
+
+\begin{problem}[{Weekendvraagstuk --- de tweefasige groeicurve van Monod cel voor
+cel gereconstrueerd: glucose uitgeput, lactose geïnduceerd, enzymen geteld, mutanten
+voorspeld en de kosten van de regeling becijferd, eindigend op de inductiefactor van
+$\beta$-galactosidase}]
+\label{pb:b1:expression-control:1}
+Een kweek van \emph{E. coli} begint met $10^7$ \omterm{def:b1:cell-unit-of-life:cell}{cellen} per milliliter in een medium
+met \qty{0.5}{mmol/L} glucose en \qty{1.0}{mmol/L} lactose. Op glucose verdubbelen
+de \omterm{def:b1:cell-unit-of-life:cell}{cellen} elke \qty{20}{min}, op lactose elke \qty{30}{min}; een \omterm{def:b1:cell-unit-of-life:cell}{cel} heeft per
+deling \qty{1.5e-12}{g} suiker nodig (\qty{180}{g/mol} voor glucose; lactose,
+\qty{342}{g/mol}, telt als twee glucosen). Niet-geïnduceerde \omterm{def:b1:cell-unit-of-life:cell}{cellen} bevatten 5
+moleculen $\beta$-galactosidase; volledig geïnduceerd \num{5000}. De inductie duurt
+\qty{30}{min}. Het \omterm{def:b1:enzymes:enzyme}{enzym} is een tetrameer van $4\times 1024$ residuen; elk residu
+kost 4 \omterm{def:b1:water-small-molecules:atp}{ATP}; de ATP-begroting van een \omterm{def:b1:cell-unit-of-life:cell}{cel} is $10^{10}$ per deling en haar \omterm{def:b1:proteins:peptide}{eiwit}
+$\qty{1.5e-13}{g}$ (\qty{110}{Da} per residu).
+
+\medskip
+\noindent\textbf{Deel I --- De glucosefase.}
+\begin{enumerate}
+  \item Bereken de beschikbare glucose per milliliter, in gram.
+  \item Hoeveel delingen per milliliter kan die dragen?
+  \item Hoeveel \omterm{def:b1:cell-unit-of-life:cell}{cellen} zijn er, uitgaande van $10^7$ \omterm{def:b1:cell-unit-of-life:cell}{cellen}, wanneer de
+        glucose op is? (Eén deling maakt één nieuwe \omterm{def:b1:cell-unit-of-life:cell}{cel}.)
+  \item Hoeveel verdubbelingen is dat, en hoe lang duurt de glucosefase?
+  \item Wat is in deze fase de toestand van het \omterm{def:b1:expression-control:operon}{lac-operon}, en waarom, in
+        moleculaire termen (\omterm{def:b1:expression-control:operon}{repressor} en CAP)?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel II --- De omschakeling.}
+\begin{enumerate}[resume]
+  \item Wat stijgt er in de \omterm{def:b1:cell-unit-of-life:cell}{cellen} zodra de glucose op is, en wat bindt
+        het?
+  \item Er was de hele tijd lactose aanwezig. Waarom stond het \omterm{def:b1:expression-control:operon}{operon} in de
+        glucosefase toch vrijwel uit?
+  \item Tijdens de aanloop van \qty{30}{min} maakt elke \omterm{def:b1:cell-unit-of-life:cell}{cel} haar
+        \num{5000} \omterm{def:b1:enzymes:enzyme}{enzymen}. Bereken het aantal enzymmoleculen per seconde
+        per \omterm{def:b1:cell-unit-of-life:cell}{cel}, en het aantal residuen per seconde.
+  \item Een \omterm{def:b1:cell-unit-of-life:cell}{cel} bevat \num{20000} \omterm{def:b1:gene-expression:ribosome}{ribosomen} bij \qty{20}{} residuen per
+        seconde. Welk deel van haar \omterm{prop:b1:gene-expression:dogma}{translatie} gaat er tijdens de aanloop
+        naar $\beta$-galactosidase?
+  \item Bereken de massa van \num{5000} tetrameren en het deel van het
+        celeiwit dat zij vormen.
+  \item Bereken de inductiefactor.
+  \item Waarom is de permease (\emph{lacY}) voor groei op lactose even
+        noodzakelijk als het \omterm{def:b1:enzymes:enzyme}{enzym}, en wat gebeurt er met een
+        \emph{lacY}$^-$-mutant die lactose krijgt?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel III --- De lactosefase.}
+\begin{enumerate}[resume]
+  \item Bereken de beschikbare lactose per milliliter in
+        glucose-equivalenten, in gram.
+  \item Hoeveel verdere delingen draagt die, en wat is het uiteindelijke
+        celaantal?
+  \item Hoe lang duurt de lactosefase?
+  \item Stel de tijdlijn op: glucosefase, aanloop, lactosefase, totaal.
+  \item Leg uit waarom de verdubbelingstijd op lactose langer is (twee
+        redenen: één over de enzymstap, één over de permease).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel IV --- Mutanten en kosten.}
+\begin{enumerate}[resume]
+  \item Een $I^-$-mutant: beschrijf haar groeicurve op hetzelfde medium en
+        haar enzymgehalte gedurende de hele tijd.
+  \item Een CAP$^-$-mutant: beschrijf haar curve en haar enzymgehalte.
+  \item Een $O^c$-mutant in een medium met alleen lactose: enig verschil
+        met het wildtype? En met alleen glucose?
+  \item Bereken de ATP-kosten per generatie van het maken van \num{5000}
+        tetrameren, en het deel van de begroting van de \omterm{def:b1:cell-unit-of-life:cell}{cel}.
+  \item Als dat deel de generatietijd met datzelfde deel verlengt, hoeveel
+        loopt de groeisnelheid van de $I^-$-mutant op glucose dan achter
+        bij die van het wildtype?
+  \item Na hoeveel generaties op glucose is de mutant, uitgaande van
+        gelijke aantallen, een tiende van de populatie? ($r^n =
+        0.1/0.9$ met $r$ de verhouding van de groeisnelheden per
+        generatie, oftewel $2^{-\delta}$ bij een achterstand $\delta$ in
+        verdubbelingen.)
+  \item Leg uit waarom $I^-$-mutanten desondanks veel voorkomen in
+        laboratoriumstammen die op lactose worden gekweekt.
+  \item Geef het resultaat: de inductiefactor van
+        $\beta$-galactosidase, de kosten van het onnodig maken ervan als
+        deel van de ATP-begroting, en de totale duur van de
+        diauxieproef.
+\end{enumerate}
+\end{problem}

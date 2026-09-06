@@ -68,6 +68,40 @@ ALLOWED_WORDS = {
     # book adds species.
     "homo", "sapiens", "habilis", "erectus", "australopithecus", "afarensis",
     "escherichia", "coli", "staphylococcus", "aureus", "aequorea", "victoria",
+    # Biology Book 3's own binomials and higher taxa, grepped from the
+    # English bodies as the note above instructs. A Linnaean name is Latin
+    # in every script -- an Arabic biology textbook italicises
+    # \emph{Quercus robur} exactly as an English one does -- and the
+    # domain and supergroup names of a classification chapter are the same
+    # kind of thing. Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    "quercus", "robur", "felis", "catus", "canis", "lupus", "familiaris",
+    "paramecium", "aurelia", "caudatum", "bursaria", "trypanosoma", "euglena",
+    "mytilus", "pisaster", "rhizobium", "dryas", "paris", "japonica",
+    "bacteria", "archaea", "eukarya", "amoebozoa", "excavata",
+    "archaeplastida", "opisthokonta", "sar",
+    # The Linnaean higher taxa the classification chapter prints as formal
+    # names -- "kingdom Animalia", "family Felidae". A formal taxon name is
+    # Latin in every language and is italicised or capitalised exactly as
+    # here in the French, Dutch, Spanish and Portuguese twins; only the RANK
+    # word beside it ("kingdom", "family") is translated, and this edition
+    # translates it. Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    "animalia", "chordata", "mammalia", "carnivora", "felidae", "canidae",
+    "reptilia", "aves",
+    # "Alu" is the name of a repeated element (after the AluI enzyme that
+    # cuts it), not an English word; it keeps its published capitalisation
+    # in every language, like a gene symbol.
+    "alu",
+    # Bacterial gene symbols and reagent/protein acronyms of the
+    # gene-regulation chapter. A gene symbol is an international identifier,
+    # not an English word: the French, Dutch, Spanish and Portuguese twins of
+    # parts/bachelor-1/20-expression-control.tex all print \emph{lacZ},
+    # \emph{lacY}, \emph{lacA} and \emph{lacI} verbatim, exactly as the
+    # English canon does, and so does the figure that labels the operon map.
+    # "X-gal" is the trade name of a chromogenic substrate and "PaJaMo" the
+    # published name of the Pardee--Jacob--Monod experiment; both are kept in
+    # Latin by every other edition. Added by the Arabic Biology Book 3 agent,
+    # 2026-09-06.
+    "lacz", "lacy", "laca", "laci", "x-gal", "pajamo",
 }
 
 # Image attribution that EVERY edition must keep verbatim: a CC licence
@@ -107,6 +141,11 @@ ALLOWED_UNITS = {
     "n", "j", "w", "hz", "pa", "mol", "cd", "k", "a", "v", "c", "t",
     "wb", "f", "ev", "min", "h", "l", "ml", "rad", "sr", "bq", "gy", "sv",
     "kwh", "kj", "mj", "gpa", "mpa", "kpa", "khz", "mhz", "ghz",
+    # Units that Biology Book 3 prints bare inside a tikz node, where
+    # \unit{} is not available: an energy budget labelled
+    # "\num{8800} kcal\,m$^{-2}$\,yr$^{-1}$". A unit symbol is the same in
+    # every language. Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    "cal", "kcal", "yr", "ha",
 }
 
 LATIN_WORD = re.compile(r"[A-Za-z][A-Za-z'\-]{1,}")
@@ -140,6 +179,16 @@ TECHNICAL_MACROS = {
     "documentclass": 1, "bibliography": 1, "bibliographystyle": 1,
     "ominput": 2, "ominputsol": 2, "omsollink": 1,
     "qty": 2, "unit": 1, "num": 1, "ang": 1, "SI": 2, "si": 1,
+    # 2026-09-06, biology Book 3 `ar`: the siunitx FAMILY, not just \qty.
+    # \qtylist{1;2;5;10;20}{mmol/L} left "mmol" in visible text and was
+    # reported as residual English -- a defect no translator can remove,
+    # because the unit argument is mathematics in every language. This gate
+    # is an independent COPY of check_hindi_prose.py's reduction rather than
+    # an import, so the identical fix made there the same day did not reach
+    # it; ported verbatim. The whole family takes fixed argument counts:
+    # qtyrange/SIrange 3, qtylist/numrange 2, numlist 1.
+    "qtyrange": 3, "qtylist": 2, "numlist": 1, "numrange": 2,
+    "SIrange": 3, "SIlist": 2, "unitlist": 1,
     "newcommand": 2, "renewcommand": 2, "providecommand": 2,
     "color": 1, "textcolor": 1, "definecolor": 3, "pgfplotsset": 1,
     "hypersetup": 1, "setlength": 2, "addtolength": 2, "url": 1,
@@ -175,6 +224,17 @@ MATH_PLACEHOLDER = "\x00"
 # "Mg{}F" with an empty group to silence the gate, which is a source wart of
 # exactly the kind this project refuses elsewhere.
 CHEM_FORMULA = re.compile(r"(?:[A-Z][a-z]?){2,}")
+
+# The same thing written as a STRUCTURAL formula: element symbols joined by
+# bond dashes. "O--H" and "S--S" already pass (the hyphen-splitting rule
+# below sees two one-letter parts), but a chain of three or more --
+# "H--O--H", the bond angle of the water molecule, and "C--C--C" -- reaches
+# no rule and was reported as residual English. It is a formula in every
+# language and every script; rewording the Arabic around it would be the
+# gate driving the translation. Each link is a capital plus at most one
+# lower-case letter, so no English word and no surname pair (Michaelis--
+# Menten) can match. Added by the Arabic Biology Book 3 agent, 2026-09-06.
+CHEM_CHAIN = re.compile(r"(?:[A-Z][a-z]?)(?:-{1,2}(?:[A-Z][a-z]?))+")
 
 
 # Environments taking a column specification ({c|ccc}) before their body.
@@ -407,6 +467,15 @@ def visible_text(text: str, findings: list, path: str, depth: int = 0) -> str:
 
         m = re.match(r"\\([A-Za-z@]+)\*?", text[i:])
         if not m:
+            # A control SYMBOL, not a control word. The spacing ones are
+            # visible white space, and dropping them silently GLUES the words
+            # on either side into one token: the canon's
+            # "kcal\\,m$^{-2}$\\,yr$^{-1}$" was reported as the English word
+            # "kcalm", which no translator can remove without breaking the
+            # unit. Emit a space for them so the tokeniser sees two words.
+            # Found by the Arabic Biology Book 3 agent, 2026-09-06.
+            if text[i + 1:i + 2] in {",", ";", ":", "!", " ", "/"}:
+                out.append(" ")
             i += 2 if i + 1 < n else 1
             continue
         name = m.group(1)
@@ -466,8 +535,20 @@ def visible_text(text: str, findings: list, path: str, depth: int = 0) -> str:
         if name == "index":
             inner, j = match_group(text, skip_ws(text, j), "{", "}")
             if inner:
-                out.append(" " + nested_text(
-                    inner.replace("!", " ").replace("@", " "), depth) + " ")
+                # makeindex syntax: "sortkey@visible", and "!" separates the
+                # levels of a subentry. The sort key is NEVER printed, so
+                # reading it as visible text reports residual English that no
+                # translator can remove: the canon's \index{pKa@p$K_a$} was
+                # flagged as "pKa". It matters more than one site -- the
+                # French edition of this book added 164 ASCII sort keys so
+                # that makeindex would not file every accent-initial entry
+                # after Z, and an Arabic edition needing the same would have
+                # been flagged 164 times. Keep only what is printed, per
+                # level. Fixed by the Arabic Biology Book 3 agent, 2026-09-06.
+                visible = " ".join(
+                    lvl.split("@", 1)[1] if "@" in lvl else lvl
+                    for lvl in inner.split("!"))
+                out.append(" " + nested_text(visible, depth) + " ")
             i = j
             continue
 
@@ -619,7 +700,52 @@ ATTRIBUTION_EXTRA = re.compile(
     # prose. "anatomy" and "physiology" are again deliberately NOT added to
     # ALLOWED_WORDS -- only this exact phrase is blanked.
     # Added by the Arabic Biology Book 2 agent, 2026-09-05.
-    r"|OpenStax|Anatomy\s+and\s+Physiology")
+    r"|OpenStax|Anatomy\s+and\s+Physiology"
+    # Book 3's own frontmatter/image-credits-book3.ar.tex prints "National
+    # Cancer Institute" in Latin (the coordinator wrote it that way, following
+    # the ruling that an attribution string is the legally required credit and
+    # stays verbatim). A chapter caption crediting the same photograph must
+    # therefore print it identically, or the book carries two spellings of one
+    # institution -- the defect the Arabic Book 1 agent reported. As above,
+    # "national", "cancer" and "institute" are deliberately NOT added to
+    # ALLOWED_WORDS; only this exact phrase is blanked.
+    # Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    r"|National\s+Cancer\s+Institute"
+    # The two portrait subjects of the classification chapter and the two
+    # works its captions name. The personal-name ruling for this edition is
+    # that the SUBJECT of a portrait is transliterated with the Latin form in
+    # parentheses on first mention -- which is exactly what
+    # frontmatter/image-credits-book3.ar.tex prints ("كارل لينيوس (Carl
+    # Linnaeus)"), so the caption must print it identically or the book
+    # carries two spellings of one person. A work's TITLE is a name too, like
+    # \emph{Micrographia} below. Exact phrases only: "carl", "species" and
+    # "naturae" stay out of ALLOWED_WORDS.
+    # Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    r"|Carl\s+Linnaeus|Carl\s+Woese|Ernst\s+Haeckel"
+    r"|Species\s+Plantarum|Systema\s+Naturae"
+    # Same rule, same book: frontmatter/image-credits-book3.ar.tex prints
+    # "Nobel Foundation" in Latin for the two portrait photographs it
+    # credits, so the chapter captions crediting them must print it
+    # identically. "nobel" and "foundation" stay out of ALLOWED_WORDS.
+    # Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    r"|Nobel\s+Foundation"
+    # The rest of the attribution strings that Book 3's own
+    # frontmatter/image-credits-book3.ar.tex prints in Latin: the
+    # institutions and repositories that hold the photographs, the
+    # photographers and painters who made them, and the titles of the two
+    # published works a plate is reproduced from. A chapter caption
+    # crediting the same image must print the same string, or the book
+    # carries two spellings of one credit -- the defect the Arabic Book 1
+    # agent reported. The SUBJECT of a portrait is a different case and is
+    # transliterated, so no subject name is listed here. None of these
+    # words is added to ALLOWED_WORDS; only these exact phrases are
+    # blanked. Added by the Arabic Biology Book 3 agent, 2026-09-06.
+    r"|Lawrence\s+Berkeley\s+Laboratory"
+    r"|National\s+Human\s+Genome\s+Research\s+Institute"
+    r"|Electron\s+Microscopy\s+Facility"
+    r"|Jan\s+Verkolje|Alexander\s+Roslin|Don\s+Hamerman"
+    r"|Nationalmuseum|Rijksmuseum"
+    r"|Micrographia|Kunstformen\s+der\s+Natur")
 
 # Gene symbols keep their published capitalisation in every language, and the
 # mouse/human convention (mouse \emph{Sry}, human SRY) is part of the name.
@@ -657,6 +783,8 @@ def check_file(path: pathlib.Path, findings: list) -> None:
         if CHEM_FORMULA.fullmatch(word):
             continue        # MgF(2), NaCl, GaAs, AsH(3): element symbols, not
                             # English, and they stay Latin in every script
+        if CHEM_CHAIN.fullmatch(word):
+            continue        # H--O--H, C--C, S--S: a structural formula
         if NUCLEOTIDE_SEQ.fullmatch(word):
             continue        # 5'-ATGGCTTAC-3': a DNA sequence, see above
         if "-" in word and all(

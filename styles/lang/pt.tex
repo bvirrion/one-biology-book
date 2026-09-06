@@ -76,7 +76,16 @@
 % \qtyrange printed "5 to 4186 Hz" and \cref{a,b} printed "Capítulos 25 and 29"
 % in the middle of Portuguese prose.
 % cleveref installs its conjunctions at \begin{document}, so redefine them there.
-\sisetup{range-phrase={ a }, list-pair-separator={ e }, list-final-separator={ e }}
+% siunitx typesets range phrases and list separators in MATH MODE, where a
+% bare string loses its spaces (\qtyrange inside $...$ printed "1a100") and a
+% non-ASCII character is worse: "a" expands to \`a, which LaTeX reports as
+% "Command \` invalid in math mode" and drops from the page. siunitx's own
+% defaults are wrapped in \text{} for exactly this reason; these overrides
+% must be too. Found on Biology Book 3 fr, 2026-09-05, where the book's 56
+% \qtyrange sites made it visible; it was latent in every language edition of
+% every book in this repo.
+\sisetup{range-phrase={\text{ a }}, list-pair-separator={\text{ e }},
+         list-final-separator={\text{ e }}}
 \AtBeginDocument{%
   \renewcommand{\crefpairconjunction}{ e }%
   \renewcommand{\creflastconjunction}{ e }%

@@ -1,0 +1,625 @@
+\chapter{Membranen en membraantransport}\label{ch:b1:membranes-transport}
+
+Laat een rode bloedcel in zuiver water vallen en zij zwelt op en barst binnen een
+seconde; laat haar in geconcentreerd zout vallen en zij schrompelt. Zet haar
+terug in \omterm{def:b1:mammal-organization:compartments}{plasma} en zij behoudt vier maanden lang haar biconcave vorm, terwijl zij
+elke seconde van die tijd natrium naar buiten en kalium naar binnen pompt. De
+membraan die dat doet is vijf nanometer dik --- een film van lipide, twee
+moleculen diep, doorregen met eiwitten --- en zij is de grens waarover elke
+uitwisseling van \cref{ch:b1:organism-environment} uiteindelijk plaatsvindt. Dit
+hoofdstuk beschrijft de bouw van de membraan, de fysica van wat haar zonder hulp
+passeert, de eiwitten die de rest dragen, pompen en doorlaten, de elektrische
+potentiaal die dit verkeer opwekt, en de blaasjes die verplaatsen wat geen enkel
+eiwit aankan.
+
+\section{Het vloeibare mozaïek}
+
+\begin{definition}[De plasmamembraan]\label{def:b1:membranes-transport:membrane}
+De \emph{plasmamembraan}\index{plasmamembraan} --- en elke membraan van de \omterm{def:b1:cell-unit-of-life:cell}{cel}
+--- is een \emph{lipidedubbellaag}\index{lipidedubbellaag} van ongeveer
+\qty{5}{nm} dik: twee bladen fosfolipiden (\cref{ch:b1:lipids}) met hun hydrofobe
+staarten naar elkaar toe en hun polaire koppen naar de twee waterige zijden, met
+cholesterol tussen de staarten, en
+\emph{membraaneiwitten}\index{membraaneiwit} die erin zijn ingebed of eraan
+vastzitten. In het model van het \emph{vloeibare mozaïek}\index{vloeibaar-mozaïekmodel}
+(Singer en Nicolson, 1972) is de dubbellaag een tweedimensionale vloeistof waarin
+lipiden en eiwitten zijdelings diffunderen, en zijn de eiwitten een mozaïek van
+onafhankelijke eenheden en geen aaneengesloten laag. De twee zijden verschillen:
+suikers die aan lipiden en eiwitten vastzitten wijzen uitsluitend naar buiten
+(de \emph{glycocalyx}), en sommige fosfolipiden blijven tot één \omterm{def:b1:flowering-plant-organization:organs}{blad} beperkt.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, line cap=round]
+  % bilayer: heads as circles, tails as lines
+  \foreach \i in {0,...,21} {
+    \pgfmathsetmacro{\x}{0.42*\i}
+    \fill[omDef!60] (\x,1.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,1.2) -- (\x-0.07,0.55) (\x+0.07,1.2) -- (\x+0.07,0.55);
+    \fill[omDef!60] (\x,-0.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,-0.2) -- (\x-0.07,0.45) (\x+0.07,-0.2) -- (\x+0.07,0.45);
+  }
+  % cholesterol
+  \foreach \x in {1.9,6.1,8.2} { \draw[omProp, very thick] (\x,1.1) -- (\x,0.6); \fill[omProp] (\x,1.15) circle (0.08); }
+  % integral protein spanning (channel)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.0,-0.7) rectangle (3.55,1.7);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.85,-0.7) rectangle (4.4,1.7);
+  \fill[white] (3.55,-0.6) rectangle (3.85,1.6);
+  % integral protein (carrier)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (6.8,-0.75) rectangle (7.7,1.75);
+  % peripheral protein
+  \draw[thick, omExo!80!black, fill=omExo!30] (5.3,1.75) ellipse (0.5 and 0.28);
+  % glycocalyx sugar chains on outer face
+  \foreach \x in {0.5,1.3,2.5,4.15,7.25,8.4} { \draw[omProp!80!black, thick] (\x,1.5) .. controls (\x+0.15,1.85) and (\x-0.15,2.1) .. (\x+0.1,2.4); \fill[omProp!70] (\x+0.1,2.45) circle (0.07); }
+  % labels
+  \node[anchor=east] at (-0.3,1.35) {polaire koppen};
+  \node[anchor=east] at (-0.3,0.5) {hydrofobe staarten};
+  \node[anchor=east] at (-0.3,-0.35) {polaire koppen};
+  \node[anchor=west, align=left] at (9.2,2.2) {suikerketens: alleen buiten};
+  \node[anchor=west, align=left] at (9.2,0.5) {\qty{5}{nm}};
+  \node[anchor=north] at (3.7,-0.95) {kanaaleiwit};
+  \node[anchor=north] at (7.25,-0.95) {carriereiwit};
+  \node[anchor=south] at (5.3,2.6) {perifeer eiwit};
+  \node[anchor=north, omProp] at (1.5,-1.0) {cholesterol};
+  \node[anchor=south east, gray] at (-0.3,2.4) {buiten};
+  \node[anchor=north east, gray] at (-0.3,-0.95) {cytosol};
+  \draw[<->, gray] (9.05,1.35+0.16) -- (9.05,-0.35-0.16);
+\end{tikzpicture}
+
+{\small Het \omterm{def:b1:membranes-transport:membrane}{vloeibare mozaïek}. Twee bladen fosfolipiden, met de staarten naar
+binnen en cholesterol ertussen; \omterm{def:b1:membranes-transport:proteins}{integrale eiwitten} die de dubbellaag doorkruisen
+(een \omterm{def:b1:membranes-transport:transporters}{kanaal} met zijn porie, een \omterm{def:b1:membranes-transport:transporters}{carrier}), een perifeer eiwit op één zijde, en
+suikerketens uitsluitend op de buitenzijde.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book3/red-cells-nci.jpg}
+
+{\small Een rode bloedcel, een bloedplaatje en een lymfocyt onder de
+rasterelektronenmicroscoop (ingekleurd). De biconcave vorm van de rode \omterm{def:b1:cell-unit-of-life:cell}{cel} wordt
+vastgehouden door een eiwitnetwerk onder haar membraan; zij overleeft vier
+maanden van persen door haarvaten die nauwer zijn dan zijzelf. Beeld:
+National Cancer Institute, publiek domein.}
+\end{omfigure}
+
+\begin{proposition}[Membranen zijn dubbellagen en vloeistoffen]\label{prop:b1:membranes-transport:evidence}
+De \omterm{def:b1:membranes-transport:membrane}{plasmamembraan} is precies twee lipidemoleculen dik, en haar onderdelen bewegen
+binnen haar vlak.
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+Gorter en Grendel (1925) haalden de lipiden uit een bekend aantal rode
+bloedcellen en spreidden ze als een enkellaag op water uit: het oppervlak was
+twee keer het totale oppervlak van de \omterm{def:b1:cell-unit-of-life:cell}{cellen}, dus is de membraan een dubbellaag.
+Elektronenmicroscopie toont elke membraan als twee donkere lijnen (de gekleurde
+koppen) rond een bleke kern (de staarten), alles bijeen \qty{5}{nm}.
+Frye en Edidin (1970) versmolten een muizencel met een menselijke \omterm{def:b1:cell-unit-of-life:cell}{cel} waarvan de
+oppervlakte-eiwitten met kleurstoffen van twee kleuren waren gemerkt: na veertig
+minuten bij \qty{37}{\celsius} waren de twee kleuren volledig over de hybride \omterm{def:b1:cell-unit-of-life:cell}{cel}
+vermengd, en bij \qty{4}{\celsius} niet, waar de lipide vrijwel vast is. Het
+wegbleken van een vlek van een fluorescerend \omterm{def:b1:membranes-transport:membrane}{membraaneiwit} met een laser en het
+volgen van de terugkeer van de fluorescentie naarmate ongebleekte moleculen
+binnendiffunderen (FRAP) meet de zijdelingse diffusie:
+$\qty{1}{\micro m^2}$ in enkele seconden voor lipiden, trager voor eiwitten, en
+nul voor eiwitten die aan het \omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytoskelet} verankerd zijn.
+\end{proof}
+
+\begin{definition}[Membraaneiwitten]\label{def:b1:membranes-transport:proteins}
+\emph{Integrale}\index{integraal eiwit} \omterm{def:b1:membranes-transport:membrane}{membraaneiwitten} doorkruisen de
+dubbellaag met een of meer hydrofobe helices en kunnen alleen met detergentia
+worden losgemaakt; \emph{perifere} eiwitten zijn aan één zijde gebonden. Naar
+functie: \emph{transporteiwitten} (\omterm{def:b1:membranes-transport:transporters}{kanalen}, \omterm{def:b1:membranes-transport:transporters}{carriers}, pompen),
+\emph{receptoren} die buiten een signaal binden en binnen in werking treden,
+\emph{enzymen}, \emph{ankers} die het \omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytoskelet} met de \omterm{def:b1:body-plans-tissues:connective}{extracellulaire matrix}
+verbinden, en \emph{herkenningseiwitten} die de suikers dragen waaraan \omterm{def:b1:cell-unit-of-life:cell}{cellen}
+elkaar herkennen. Eiwitten zijn de helft van de massa van een gebruikelijke
+membraan en vrijwel haar hele functie.
+\end{definition}
+
+\section{De membraan passeren zonder hulp}
+
+\begin{proposition}[Doorlaatbaarheid van de dubbellaag]\label{prop:b1:membranes-transport:permeability}
+\index{permeabiliteit}
+Een zuivere \omterm{def:b1:membranes-transport:membrane}{lipidedubbellaag} is vrij doorlaatbaar voor kleine apolaire moleculen
+($\mathrm{O_2}$, $\mathrm{CO_2}$, $\mathrm{N_2}$, steroïden), redelijk
+doorlaatbaar voor kleine ongeladen polaire moleculen (water, ureum, ethanol),
+slecht doorlaatbaar voor grotere polaire moleculen (glucose, aminozuren), en
+praktisch ondoorlaatbaar voor ionen ($\mathrm{Na^+}$, $\mathrm{K^+}$,
+$\mathrm{Cl^-}$, $\mathrm{H^+}$) en voor macromoleculen. De doorlaatbaarheid
+beslaat twaalf ordes van grootte, van $\qty{e-2}{cm/s}$ voor water tot
+$\qty{e-14}{cm/s}$ voor $\mathrm{Na^+}$: een hydrofobe kern van \qty{3}{nm} dik
+laat door wat in olie oplost en houdt tegen wat een lading draagt.
+\end{proposition}
+
+\begin{theorem}[De wet van Fick]\label{thm:b1:membranes-transport:fick}
+\index{wet van Fick}\index{diffusie}
+De netto flux $J$ van een opgeloste stof door een membraan met oppervlak $S$ (mol
+per seconde) is evenredig met het concentratieverschil erover:
+\[
+J = P\,S\,(c_{\text{uit}} - c_{\text{in}}),
+\]
+waarin de \emph{permeabiliteitscoëfficiënt} $P$ (in \unit{m/s}) de
+diffusiecoëfficiënt van de stof in de membraan, haar oplosbaarheid in de lipide
+en de dikte van de membraan samenvat ($P = DK/\ell$). Diffusie vraagt geen
+energie en verloopt altijd de gradiënt af; zij is
+\emph{passief transport}\index{passief transport}.
+\end{theorem}
+\begin{proof}
+Binnen de membraan diffundeert de opgeloste stof langs een lineair
+concentratieprofiel van $Kc_{\text{uit}}$ naar $Kc_{\text{in}}$ ($K$ is de
+verdelingscoëfficiënt tussen lipide en water); de eerste \omterm{thm:b1:membranes-transport:fick}{wet van Fick} in bulk,
+$J/S = -D\,\dd c/\dd x$, geeft $J/S = DK(c_{\text{uit}} -
+c_{\text{in}})/\ell$.
+\end{proof}
+
+\begin{definition}[Osmose, waterpotentiaal]\label{def:b1:membranes-transport:osmosis}
+\emph{Osmose}\index{osmose} is de netto diffusie van water door een membraan die
+water doorlaat maar de opgeloste stoffen niet, van de oplossing waar water het
+meest geconcentreerd is (minder opgeloste stof) naar die waar het dat het minst
+is. Zij wordt beschreven met de \emph{waterpotentiaal}\index{waterpotentiaal}
+$\Psi$, de chemische potentiaal van water uitgedrukt als een druk, nul voor
+zuiver water bij atmosferische druk:
+\[
+\Psi = \Psi_s + \Psi_p, \qquad \Psi_s = -RTc_s ,
+\]
+waarin $\Psi_s$, de \emph{osmotische potentiaal}\index{osmotische potentiaal},
+daalt met de totale concentratie opgeloste stof $c_s$ (in osmol per liter, de wet
+van van 't Hoff) en $\Psi_p$, de \emph{drukpotentiaal}\index{drukpotentiaal}, de
+hydrostatische druk boven de atmosferische is. Water gaat van hogere naar lagere
+$\Psi$. Bij \qty{25}{\celsius} is $RT = \qty{2.48}{MPa.L/mol}$: een oplossing van
+\qty{0.3}{osmol/L} heeft $\Psi_s = \qty{-0.74}{MPa}$. Een oplossing is
+\emph{isotoon}\index{isotoon} ten opzichte van een \omterm{def:b1:cell-unit-of-life:cell}{cel} wanneer er netto geen water
+beweegt, \emph{hypotoon} wanneer er water binnenkomt, \emph{hypertoon} wanneer er
+water vertrekt.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.78\linewidth]{images/book3/ai/b3-07-red-cells-osmosis.png}
+
+{\small Rode bloedcellen in een isotone oplossing (biconcave schijven), in een
+hypotone (bolvormig opgezwollen, op het punt te barsten) en in een hypertone
+(geschrompeld en gekarteld). Water volgt zijn potentiaal; de \omterm{def:b1:cell-unit-of-life:cell}{cel} heeft geen wand
+om weerstand te bieden.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book3/ai/b3-07-plasmolysis.png}
+
+{\small Plasmolyse: uienepidermis in een geconcentreerde zoutoplossing. De
+protoplast van elke \omterm{def:b1:cell-unit-of-life:cell}{cel} heeft water verloren en is van de stijve wand weggetrokken,
+die haar vorm behoudt. In water zou de protoplast weer tegen de wand opzwellen en
+turgescent tot stilstand komen.}
+\end{omfigure}
+
+\begin{example}[Een rode cel in drie oplossingen]\label{ex:b1:membranes-transport:redcell}
+\omterm{def:b1:mammal-organization:compartments}{Plasma} is \qty{0.3}{osmol/L}: $\Psi_s = \qty{-0.74}{MPa}$ aan beide zijden, geen
+netto stroom. In zuiver water ($\Psi = 0$) neemt de \omterm{def:b1:cell-unit-of-life:cell}{cel}, die binnen op
+\qty{-0.74}{MPa} zit, water op tot haar membraan, die maar enkele procenten kan
+rekken, scheurt. In zout van \qty{0.6}{osmol/L} verliest zij water tot haar
+binnenkant even geconcentreerd is, bij de helft van haar volume. Een plantencel
+in zuiver water barst niet: naarmate er water binnenkomt wordt de wand gerekt en
+stijgt $\Psi_p$ tot $\Psi_p = -\Psi_s$, is de \omterm{def:b1:membranes-transport:osmosis}{waterpotentiaal} binnen nul, en stopt
+de stroom met de \omterm{def:b1:cell-unit-of-life:cell}{cel} turgescent bij \qty{0.74}{MPa}.
+\end{example}
+
+\begin{method}[Boekhouden met waterpotentialen]\label{met:b1:membranes-transport:psi}
+\begin{enumerate}
+  \item Reken elke concentratie opgeloste stof om naar osmol (een zout dat
+        in twee ionen uiteenvalt telt dubbel) en bereken $\Psi_s =
+        -RTc_s$.
+  \item Tel de drukterm erbij op: $\Psi_p = 0$ voor een oplossing in een
+        open vat of een dierlijke \omterm{def:b1:cell-unit-of-life:cell}{cel}, positief voor een turgescente
+        plantencel, negatief voor water onder spanning in een xyleemvat.
+  \item Water stroomt naar de lagere $\Psi$. Het evenwicht is bereikt
+        wanneer de twee $\Psi$ gelijk zijn: door verdunning van de inhoud
+        van de \omterm{def:b1:cell-unit-of-life:cell}{cel} (dierlijke \omterm{def:b1:cell-unit-of-life:cell}{cel}), of door een drukstijging
+        (plantencel).
+  \item Lees het teken van de uitkomst als de stroomrichting en de grootte
+        ervan als de drijvende kracht; de stroomsnelheid hangt ook af van
+        de waterdoorlaatbaarheid van de membraan, die door
+        aquaporinekanalen honderdvoudig wordt verhoogd.
+\end{enumerate}
+\end{method}
+
+\section{Transporteiwitten}
+
+\begin{definition}[Kanalen, carriers, pompen]\label{def:b1:membranes-transport:transporters}
+\emph{Kanalen}\index{kanaal} zijn \omterm{def:b1:membranes-transport:proteins}{integrale eiwitten} met een watergevulde porie
+waardoor een bepaald ion of klein molecuul zijn gradiënt af diffundeert, tot
+$10^8$ per seconde; vele zijn \emph{gesloten te schakelen} en gaan open op een
+spanning, een ligand of een mechanische kracht.
+\emph{Aquaporines}\index{aquaporine} zijn waterkanalen.
+\emph{Carriers}\index{carrier} binden hun opgeloste stof aan de ene zijde,
+veranderen van vorm, en laten haar aan de andere zijde los, hoogstens duizend keer
+per seconde; de glucosetransporter van de rode \omterm{def:b1:cell-unit-of-life:cell}{cel} is er een. Kanalen en carriers
+die de gradiënt af werken verzorgen \emph{gefaciliteerde
+diffusie}\index{gefaciliteerde diffusie}, passief maar selectief en verzadigbaar.
+\emph{Pompen}\index{pomp} zijn carriers die het transport van een opgeloste stof
+tegen haar gradiënt in koppelen aan de hydrolyse van ATP: \emph{primair actief
+transport}\index{actief transport}. De
+\emph{natrium-kaliumpomp}\index{natrium-kaliumpomp} van dierlijke \omterm{def:b1:cell-unit-of-life:cell}{cellen} voert
+per ATP drie $\mathrm{Na^+}$ uit en twee $\mathrm{K^+}$ in; de
+\emph{protonpomp} van plantaardige, schimmel- en bacteriemembranen voert
+$\mathrm{H^+}$ uit.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % membrane band
+  \fill[omDef!15] (0,0) rectangle (13.1,1.2);
+  \draw[omDef!60!black] (0,0) -- (13.1,0) (0,1.2) -- (13.1,1.2);
+  \node[anchor=east, gray, align=right] at (-0.15,1.5) {buiten\\ (veel $\mathrm{Na^+}$,\\ weinig $\mathrm{K^+}$)};
+  \node[anchor=east, gray, align=right] at (-0.15,-0.3) {cytosol\\ (weinig $\mathrm{Na^+}$,\\ veel $\mathrm{K^+}$)};
+  % simple diffusion
+  \draw[->, thick, omProp] (1.0,2.0) -- (1.0,-0.8);
+  \node[anchor=south, align=center] at (1.0,2.1) {enkelvoudige diffusie\\ $\mathrm{O_2}$, $\mathrm{CO_2}$};
+  % channel
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (2.6,-0.2) rectangle (3.0,1.4);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (3.3,-0.2) rectangle (3.7,1.4);
+  \draw[->, thick, omProp] (3.15,2.0) -- (3.15,-0.8);
+  \node[anchor=south, align=center] at (3.15,2.1) {kanaal\\ $\mathrm{K^+}$, water};
+  % carrier (facilitated)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (5.0,-0.3) rectangle (6.0,1.5);
+  \draw[->, thick, omProp] (5.5,2.0) -- (5.5,1.55);
+  \draw[->, thick, omProp] (5.5,-0.35) -- (5.5,-0.8);
+  \node[anchor=south, align=center] at (5.5,2.1) {carrier\\ glucose};
+  \node[align=center, font=\scriptsize] at (5.5,0.6) {bindt,\\ klapt om};
+  % pump
+  \draw[thick, omExo!80!black, fill=omExo!30, rounded corners=5pt] (7.5,-0.3) rectangle (8.7,1.5);
+  \draw[->, very thick, omExo!80!black] (7.8,-0.8) -- (7.8,2.0);
+  \draw[->, very thick, omExo!80!black] (8.4,2.0) -- (8.4,-0.8);
+  \node[anchor=south, align=center] at (8.1,2.1) {pomp\\ $3\,\mathrm{Na^+}$ uit, $2\,\mathrm{K^+}$ in};
+  \node[anchor=north, align=center, font=\scriptsize] at (8.1,-0.85) {ATP $\to$ ADP};
+  % secondary active (symport)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (11.0,-0.3) rectangle (12.2,1.5);
+  \draw[->, very thick, omProp] (11.3,2.0) -- (11.3,-0.8);
+  \draw[->, very thick, omExo!80!black] (11.9,2.0) -- (11.9,-0.8);
+  \node[anchor=south, align=center] at (11.6,2.1) {symport\\ $\mathrm{Na^+}$ omlaag,\\ glucose omhoog};
+  \node[anchor=north, align=center, font=\scriptsize] at (11.6,-0.85) {secundair actief};
+  \node[anchor=north west, align=left, gray, font=\scriptsize] at (0,-1.5) {oranje pijlen: de gradiënt af (passief);\\ groen: ertegenin (actief)};
+\end{tikzpicture}
+
+{\small Vijf manieren om over te steken. Enkelvoudige diffusie door de lipide;
+een \omterm{def:b1:membranes-transport:transporters}{kanaal} en een \omterm{def:b1:membranes-transport:transporters}{carrier} (\omterm{def:b1:membranes-transport:transporters}{gefaciliteerde diffusie}, de gradiënt af); de
+\omterm{def:b1:membranes-transport:transporters}{natrium-kaliumpomp} (\omterm{def:b1:membranes-transport:transporters}{primair actief transport}, betaald in ATP); een \omterm{prop:b1:membranes-transport:secondary}{symporter} die
+de natriumgradiënt gebruikt die de pomp heeft opgebouwd om glucose bergop te
+slepen (\omterm{prop:b1:membranes-transport:secondary}{secundair actief transport}).}
+\end{omfigure}
+
+\begin{proposition}[Secundair actief transport]\label{prop:b1:membranes-transport:secondary}
+\index{secundair actief transport}
+Een gradiënt die door een pomp is opgebouwd, is een energievoorraad die andere
+\omterm{def:b1:membranes-transport:transporters}{carriers} uitgeven: een \emph{symporter}\index{symporter} brengt een opgeloste stof
+bergop door haar te koppelen aan een ion dat in dezelfde richting bergaf gaat (de
+natrium-glucosetransporter van darm en nier; de protonsucrosetransporter van het
+floëem), een \emph{antiporter}\index{antiporter} koppelt haar aan een ion dat de
+andere kant op gaat (de natrium-calciumwisselaar). In dierlijke \omterm{def:b1:cell-unit-of-life:cell}{cellen} is de
+munteenheid de $\mathrm{Na^+}$-gradiënt; in planten, schimmels en bacteriën de
+$\mathrm{H^+}$-gradiënt.
+\end{proposition}
+
+\begin{example}[De kinetiek verraadt het mechanisme]\label{ex:b1:membranes-transport:kinetics}
+De flux van glucose een rode \omterm{def:b1:cell-unit-of-life:cell}{cel} in stijgt met de buitenconcentratie en vlakt dan
+af bij een maximum, net als bij een enzym (\cref{ch:b1:enzymes}): een \omterm{def:b1:membranes-transport:transporters}{carrier},
+verzadigbaar, met een $K_m$ van ongeveer \qty{1.5}{mmol/L}; een verwante suiker,
+mannose, concurreert erom. De flux van ureum stijgt onbegrensd evenredig met zijn
+concentratie: enkelvoudige diffusie. De flux van glucose een darmcel in stopt
+zodra natrium uit het lumen wordt verwijderd, of zodra de pomp met ouabaïne wordt
+vergiftigd: \omterm{prop:b1:membranes-transport:secondary}{secundair actief transport}.
+\end{example}
+
+\section{De membraanpotentiaal}
+
+\begin{definition}[Membraanpotentiaal]\label{def:b1:membranes-transport:potential}
+Elke levende \omterm{def:b1:cell-unit-of-life:cell}{cel} houdt over haar \omterm{def:b1:membranes-transport:membrane}{plasmamembraan} een elektrisch
+potentiaalverschil in stand, de
+\emph{membraanpotentiaal}\index{membraanpotentiaal}
+$V_m = V_{\text{in}} - V_{\text{uit}}$, binnen negatief: \qty{-70}{mV} in een
+\omterm{def:b1:body-plans-tissues:nervous}{neuron}, \qty{-90}{mV} in een spiervezel, \qty{-120}{mV} of meer in een plantencel.
+Zij ontstaat doordat de membraan selectief doorlaatbaar is voor ionen waarvan de
+concentraties aan weerszijden verschillen.
+\end{definition}
+
+\begin{theorem}[De nernstvergelijking]\label{thm:b1:membranes-transport:nernst}
+\index{nernstvergelijking}\index{evenwichtspotentiaal}
+Een ion met lading $z$ bij concentraties $c_{\text{uit}}$ en $c_{\text{in}}$ is
+over de membraan in evenwicht --- geen netto flux, hoewel de membraan het
+doorlaat --- wanneer de potentiaal gelijk is aan zijn
+\emph{\omterm{thm:b1:membranes-transport:nernst}{evenwichtspotentiaal}}
+\[
+E_{\text{ion}} = \frac{RT}{zF}\,\ln\frac{c_{\text{uit}}}{c_{\text{in}}}
+= \frac{\qty{61.5}{mV}}{z}\,\log_{10}\frac{c_{\text{uit}}}{c_{\text{in}}}
+\quad (\qty{37}{\celsius}).
+\]
+Voor $\mathrm{K^+}$ bij \qty{5}{mmol/L} buiten en \qty{140}{mmol/L} binnen is
+$E_K = 61.5\log(5/140) = \qty{-89}{mV}$; voor $\mathrm{Na^+}$ bij \qty{145}{}
+buiten en \qty{12}{} binnen is $E_{Na} = \qty{+67}{mV}$.
+\end{theorem}
+\begin{proof}
+Het verplaatsen van één mol van het ion van buiten naar binnen verandert de vrije
+energie met de som van een concentratieterm en een elektrische term:
+\[
+\Delta G = RT\ln\frac{c_{\text{in}}}{c_{\text{uit}}} + zFV_m .
+\]
+In evenwicht is $\Delta G = 0$, wat $V_m = (RT/zF)\ln(c_{\text{uit}}/c_{\text{in}})$
+geeft. Omrekenen naar logaritmen met grondtal tien en invullen van
+$R = \qty{8.314}{J.mol^{-1}.K^{-1}}$, $T = \qty{310}{K}$, $F = \qty{96485}{C/mol}$
+geeft de numerieke vorm.
+\end{proof}
+
+\begin{proposition}[Oorsprong van de rustpotentiaal]\label{prop:b1:membranes-transport:resting}
+De rustende membraan is veel doorlaatbaarder voor $\mathrm{K^+}$ (via open
+kaliumkanalen) dan voor $\mathrm{Na^+}$; $\mathrm{K^+}$ lekt zijn
+concentratiegradiënt af naar buiten en laat de binnenkant negatief achter, tot de
+elektrische aantrekking terug het lek bijna in evenwicht houdt. De rustpotentiaal
+ligt daarom dicht bij $E_K$, een klein stukje naar $E_{Na}$ toe getrokken door het
+kleine natriumlek (de goldmanvergelijking weegt de nernstterm van elk ion met zijn
+doorlaatbaarheid). De pomp houdt de gradiënten in stand die de lekken anders
+zouden opheffen; zij draagt ook enkele millivolt rechtstreeks bij, omdat zij drie
+ladingen naar buiten en twee naar binnen brengt.
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+In een inktvisaxon volgt de rustpotentiaal $E_K$ wanneer het kalium buiten over
+een groot bereik wordt gevarieerd (een rechte lijn met een helling van
+\qty{58}{mV} per decade bij hoge concentraties), en wijkt zij bij lage
+concentraties er precies zo van af als een kleine natriumdoorlaatbaarheid
+voorspelt. Het blokkeren van de pomp met ouabaïne laat de potentiaal minutenlang
+vrijwel onveranderd en laat haar dan over uren wegzakken naarmate de gradiënten
+teruglopen: de potentiaal is een diffusiepotentiaal en de pomp haar steun op
+lange termijn.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0.8, xmax=200, ymin=-135, ymax=10,
+  xlabel={$\mathrm{K^+}$ buiten (\unit{mmol/L})}, ylabel={membraanpotentiaal (\unit{mV})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1,10,100}, log ticks with fixed point, ytick={-120,-100,-80,-60,-40,-20,0},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[thick, dashed, omDef, domain=0.8:200, samples=40] {58*log10(x/140)};
+\addlegendentry{nernst $E_K$ (helling \qty{58}{mV} per decade)}
+\addplot[very thick, omThm, domain=0.8:200, samples=60] {58*log10((x+0.01*145)/(140+0.01*12))};
+\addlegendentry{gemeten: $\mathrm{K^+}$ plus een klein $\mathrm{Na^+}$-lek}
+\draw[dashed, gray] (axis cs:5,-135) -- (axis cs:5,-82);
+\node[font=\scriptsize, anchor=west] at (axis cs:5.5,-120) {fysiologisch \qty{5}{mmol/L}};
+\end{semilogxaxis}
+\end{tikzpicture}
+
+{\small De rustpotentiaal tegen het kalium buiten. Bij veel kalium gedraagt de
+membraan zich als een kaliumelektrode en volgt zij de nernstlijn; bij weinig
+kalium trekt het kleine natriumlek haar boven $E_K$.}
+\end{omfigure}
+
+\begin{example}[Waar de energie van de pomp heen gaat]\label{ex:b1:membranes-transport:pumpcost}
+Eén $\mathrm{Na^+}$ naar buiten pompen tegen \qty{12}{} naar \qty{145}{mmol/L} en
+\qty{-70}{mV} kost $RT\ln(145/12) + F\times 0.070 = 6.4 + 6.8 =
+\qty{13.2}{kJ/mol}$; drie daarvan, \qty{40}{kJ}, plus twee $\mathrm{K^+}$ naar
+binnen bij $RT\ln(140/5) - F\times 0.070 = 8.6 - 6.8 =
+\qty{1.8}{kJ/mol}$ elk: \qty{43}{kJ} per cyclus tegenover de \qty{50}{kJ} van één
+ATP onder cellulaire omstandigheden. De pomp werkt dicht bij haar thermodynamische
+grens, en zij verbruikt een derde van het ATP van een rustend dier, in de hersenen
+twee derde.
+\end{example}
+
+\section{Transport in bulk}
+
+\begin{proposition}[Blaasjestransport]\label{prop:b1:membranes-transport:vesicles}
+Macromoleculen en deeltjes passeren de \omterm{def:b1:membranes-transport:membrane}{plasmamembraan} zonder er doorheen te gaan:
+door \emph{exocytose} versmelt een blaasje met de membraan en leegt het zich naar
+buiten; door \emph{\omterm{def:b1:eukaryotic-cell:endocytosis}{endocytose}} slaat de membraan materiaal in een blaasje in
+(\cref{ch:b1:eukaryotic-cell}). Beide vragen ATP, beide verplaatsen membraan
+zowel als inhoud, en beide behouden de zijdigheid van de membraan. De drie routes
+door een membraan --- door de lipide, door een eiwit, binnen een blaasje --- zijn
+op drie manieren selectief: op oplosbaarheid, op moleculaire herkenning, en op de
+keuze van wat er wordt ingeslagen.
+\end{proposition}
+
+\begin{example}[Cholesterol bezorgen]\label{ex:b1:membranes-transport:ldl}
+Cholesterol reist door het bloed binnen met eiwit beklede deeltjes die voor elke
+\omterm{def:b1:membranes-transport:transporters}{carrier} te groot zijn. Een \omterm{def:b1:cell-unit-of-life:cell}{cel} die cholesterol nodig heeft, brengt receptoren voor
+het deeltje tot uitdrukking; deeltje en receptor verzamelen zich in een bekleed
+putje, dat afsnoert, en het blaasje bezorgt het deeltje bij een \omterm{def:b1:eukaryotic-cell:endomembrane}{lysosoom} waar de
+cholesterol vrijkomt. Iemand van wie de receptoren defect zijn, kan de deeltjes
+niet opruimen: het bloedcholesterol verdubbelt en de slagaders raken al op jonge
+volwassen leeftijd verstopt. Eén \omterm{def:b1:membranes-transport:membrane}{membraaneiwit}, één ziekte.
+\end{example}
+
+\section{Opgaven}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:1}
+Beschrijf het \omterm{def:b1:membranes-transport:membrane}{vloeibaar-mozaïekmodel} in vier zinnen: de lipiden, de eiwitten, de
+vloeibaarheid, de asymmetrie.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:2}
+Rangschik $\mathrm{O_2}$, glucose, $\mathrm{Na^+}$, water en ethanol naar hun
+doorlaatbaarheid door een zuivere \omterm{def:b1:membranes-transport:membrane}{lipidedubbellaag}, en verklaar de volgorde.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:3}
+Bereken de \omterm{def:b1:membranes-transport:osmosis}{osmotische potentiaal} van een sucrose-oplossing van \qty{0.1}{mol/L} en
+van een NaCl-oplossing van \qty{0.1}{mol/L} bij \qty{25}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:4}
+Bereken de nernstpotentiaal van $\mathrm{Cl^-}$ bij \qty{120}{mmol/L} buiten en
+\qty{4}{mmol/L} binnen, bij \qty{37}{\celsius}. Is chloride in evenwicht in een
+\omterm{def:b1:cell-unit-of-life:cell}{cel} bij \qty{-89}{mV}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:5}
+Gorter en Grendel gebruikten $\num{4.7e9}$ rode \omterm{def:b1:cell-unit-of-life:cell}{cellen} met elk een oppervlak van
+\qty{100}{\micro m^2} en kregen een lipide-enkellaag van \qty{0.92}{m^2}. Bereken
+de verhouding van het oppervlak van de enkellaag tot het celoppervlak en trek een
+conclusie.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:6}
+Een plantencel heeft een \omterm{def:b1:membranes-transport:osmosis}{osmotische potentiaal} van \qty{-0.9}{MPa} en een
+\omterm{def:b1:membranes-transport:osmosis}{drukpotentiaal} van \qty{0.5}{MPa}. Zij wordt in een open schaal in een oplossing
+met een \omterm{def:b1:membranes-transport:osmosis}{osmotische potentiaal} van \qty{-0.6}{MPa} gezet. Welke kant gaat het water
+op, en wat is de \omterm{def:b1:membranes-transport:osmosis}{drukpotentiaal} van de \omterm{def:b1:cell-unit-of-life:cell}{cel} in evenwicht (neem aan dat haar
+\omterm{def:b1:membranes-transport:osmosis}{osmotische potentiaal} niet verandert)?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:7}
+De opname van glucose door een \omterm{def:b1:cell-unit-of-life:cell}{cel} wordt bij toenemende buitenconcentraties
+gemeten: \qtylist{1;2;5;10;20}{mmol/L} geven
+\qtylist{0.4;0.67;1.0;1.25;1.43}{\micro mol/min}. Toon aan dat de opname
+verzadigt, schat de maximale snelheid en de concentratie waarbij de helft daarvan
+wordt bereikt, en benoem het mechanisme.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:8}
+Leg uit waarom de rustpotentiaal van een \omterm{def:b1:cell-unit-of-life:cell}{cel} dicht bij $E_K$ ligt en niet bij
+$E_{Na}$, en wat ermee zou gebeuren als er plotseling natriumkanalen opengingen.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:9}
+De natrium-glucosesymporter vervoert twee $\mathrm{Na^+}$ per glucose. Bereken,
+met $\mathrm{Na^+}$ bij \qty{145}{mmol/L} buiten en \qty{12}{} binnen en
+$V_m = \qty{-60}{mV}$, de vrije energie die de twee natriumionen leveren en de
+grootste verhouding van glucoseconcentraties (binnen/buiten) die de \omterm{prop:b1:membranes-transport:secondary}{symporter} bij
+\qty{37}{\celsius} kan opbouwen.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:10}
+Een \omterm{def:b1:cell-unit-of-life:cell}{cel} wordt tot \qty{4}{\celsius} afgekoeld. Voorspel met redenen de gevolgen
+voor: de membraanvloeibaarheid, de enkelvoudige diffusie van $\mathrm{O_2}$, de
+pomp, de ionengradiënten over uren, de \omterm{def:b1:membranes-transport:potential}{membraanpotentiaal}, en het volume van de
+\omterm{def:b1:cell-unit-of-life:cell}{cel}. (Houd er rekening mee dat de eiwitten van de \omterm{def:b1:cell-unit-of-life:cell}{cel} een osmotische zuiging
+uitoefenen die de natriumgradiënt normaal in evenwicht houdt.)
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:11}
+De versmolten \omterm{def:b1:cell-unit-of-life:cell}{cellen} van Frye en Edidin toonden volledige menging van de
+oppervlakte-eiwitten bij \qty{37}{\celsius} in \qty{40}{min}, geen menging bij
+\qty{4}{\celsius}, en geen menging bij \qty{37}{\celsius} wanneer de ATP-synthese
+was geblokkeerd --- van dat laatste resultaat is later gebleken dat het onjuist
+was. Zeg wat elk resultaat over het mengmechanisme zou betekenen, en waarom de
+juiste versie (menging heeft geen ATP nodig) van belang is voor het
+\omterm{def:b1:membranes-transport:membrane}{vloeibaar-mozaïekmodel}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:12}
+``De \omterm{def:b1:membranes-transport:potential}{membraanpotentiaal} is een bijproduct van de ionengradiënten en niet iets dat
+de \omterm{def:b1:cell-unit-of-life:cell}{cel} rechtstreeks opbouwt.'' Bespreek dat in een alinea, met de
+\omterm{thm:b1:membranes-transport:nernst}{nernstvergelijking}, de pomp, en het aantal ionen dat werkelijk nodig is om de
+membraan op te laden (een capaciteit van \qty{1}{\micro F/cm^2}).
+\end{exercise}
+
+\section{Vraagstuk: de enterocyt}
+
+\begin{problem}[{Weekendvraagstuk --- de cel die glucose uit de darm trekt: pomp,
+symporter, carrier en de nernstvergelijking, eindigend op de grootste
+glucoseverhouding die de cel kan opbouwen}]
+\label{pb:b1:membranes-transport:1}
+Een epitheelcel van de darm (enterocyt) is \qty{25}{\micro m} hoog en
+\qty{5}{\micro m} breed; haar apicale membraan kijkt naar het lumen, haar
+basolaterale membraan naar het bloed. Haar \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} bevat \qty{12}{mmol/L}
+$\mathrm{Na^+}$ en \qty{140}{mmol/L} $\mathrm{K^+}$; het lumen en het bloed
+bevatten \qty{145}{mmol/L} $\mathrm{Na^+}$ en \qty{5}{mmol/L} $\mathrm{K^+}$. De
+\omterm{def:b1:membranes-transport:potential}{membraanpotentiaal} is \qty{-60}{mV}. Neem $T = \qty{310}{K}$,
+$R = \qty{8.314}{J.mol^{-1}.K^{-1}}$, $F = \qty{96500}{C/mol}$,
+$RT/F = \qty{26.7}{mV}$, en $\Delta G_{\text{ATP}} = \qty{-50}{kJ/mol}$ in de \omterm{def:b1:cell-unit-of-life:cell}{cel}.
+
+\medskip
+\noindent\textbf{Deel I --- De gradiënten.}
+\begin{enumerate}
+  \item Bereken de nernstpotentialen van $\mathrm{Na^+}$ en
+        $\mathrm{K^+}$.
+  \item Welk ion zit bij \qty{-60}{mV} het dichtst bij evenwicht? Wat zegt
+        dat over de doorlaatbaarheden in rust?
+  \item Bereken de verandering in vrije energie voor één mol
+        $\mathrm{Na^+}$ dat de \omterm{def:b1:cell-unit-of-life:cell}{cel} binnenkomt, en voor één mol
+        $\mathrm{K^+}$ dat vertrekt.
+  \item Bereken de vrije-energiekosten van één pompcyclus
+        ($3\,\mathrm{Na^+}$ uit, $2\,\mathrm{K^+}$ in) en vergelijk die
+        met de energie van één ATP. Hoe groot is het rendement?
+  \item De pomp zit alleen op de basolaterale membraan. Leg uit waarom die
+        plaatsing nodig is opdat de \omterm{def:b1:cell-unit-of-life:cell}{cel} glucose van lumen naar bloed
+        verplaatst.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel II --- Glucose bergop.}
+De apicale membraan draagt een \omterm{prop:b1:membranes-transport:secondary}{symporter} die één glucose met twee
+$\mathrm{Na^+}$ opneemt; de basolaterale membraan draagt een glucosecarrier
+(\omterm{def:b1:membranes-transport:transporters}{gefaciliteerde diffusie}).
+\begin{enumerate}[resume]
+  \item Bereken de vrije energie die twee $\mathrm{Na^+}$ leveren wanneer
+        zij de \omterm{def:b1:cell-unit-of-life:cell}{cel} binnenkomen.
+  \item Schrijf op hoeveel vrije energie er nodig is om één glucose van het
+        lumen (concentratie $c_L$) naar het \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} ($c_C$) te brengen.
+  \item Aan de grens van de \omterm{prop:b1:membranes-transport:secondary}{symporter} zijn de twee gelijk. Bereken de
+        grootste verhouding $c_C/c_L$.
+  \item Als het lumen laat in de opname tot \qty{0.1}{mmol/L} glucose
+        daalt, welke cytosolische concentratie kan de \omterm{prop:b1:membranes-transport:secondary}{symporter} dan nog
+        volhouden?
+  \item De bloedglucose is \qty{5}{mmol/L}. Leg uit hoe glucose de \omterm{def:b1:cell-unit-of-life:cell}{cel}
+        zonder verdere energie richting het bloed verlaat.
+  \item Waarom zit de \omterm{prop:b1:membranes-transport:secondary}{symporter} op de apicale en de \omterm{def:b1:membranes-transport:transporters}{carrier} op de
+        basolaterale membraan, en niet andersom?
+  \item Orale rehydratieoplossingen voor cholera bevatten glucose en zout.
+        Leg met de \omterm{prop:b1:membranes-transport:secondary}{symporter} uit waarom de glucose ervoor zorgt dat het
+        zout --- en het water --- wordt opgenomen.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel III --- Het verkeer tellen.}
+De \omterm{def:b1:cell-unit-of-life:cell}{cel} neemt \qty{2e-15}{mol} glucose per seconde op.
+\begin{enumerate}[resume]
+  \item Bereken het $\mathrm{Na^+}$ dat per seconde via de \omterm{prop:b1:membranes-transport:secondary}{symporters}
+        binnenkomt, en het aantal pompcycli per seconde dat nodig is om het
+        weer uit te voeren.
+  \item Bereken het ATP dat per seconde aan die uitvoer wordt besteed, en
+        het deel van de opgenomen glucose dat zou moeten worden verademd om
+        die te betalen (ongeveer 30 ATP per glucose).
+  \item Elke \omterm{prop:b1:membranes-transport:secondary}{symporter} draait \qty{50}{} keer per seconde rond. Hoeveel
+        \omterm{prop:b1:membranes-transport:secondary}{symporters} heeft de apicale membraan nodig? De apicale membraan is
+        \qty{25}{\micro m^2} en microvilli vermenigvuldigen haar met
+        \qty{20}{}: bereken de symporterdichtheid per vierkante micrometer.
+  \item Het $\mathrm{Na^+}$ dat binnenkomt brengt door \omterm{def:b1:membranes-transport:osmosis}{osmose} water mee.
+        Twee $\mathrm{Na^+}$ en één glucose, met het bijbehorende
+        $\mathrm{Cl^-}$, zijn vier osmol; de \omterm{def:b1:cell-unit-of-life:cell}{cel} houdt haar osmolariteit op
+        \qty{0.3}{osmol/L}. Bereken het watervolume dat de opgeloste
+        stoffen per seconde moet volgen, en de tijd waarin het volume van de
+        \omterm{def:b1:cell-unit-of-life:cell}{cel} zou verdubbelen als het water niet via de basolaterale membraan
+        vertrok.
+  \item Bereken het aantal watermoleculen dat per glucosemolecuul wordt
+        opgenomen (\qty{18}{g/mol}, dichtheid \qty{1}{g/mL}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel IV --- De membraan opladen.}
+De membraan is een condensator van \qty{1}{\micro F/cm^2}.
+\begin{enumerate}[resume]
+  \item Bereken het membraanoppervlak van de \omterm{def:b1:cell-unit-of-life:cell}{cel} (neem een balk van
+        \qty{25}{\micro m} bij \qty{5}{\micro m} bij \qty{5}{\micro m}
+        zonder microvilli) en haar capaciteit.
+  \item Bereken de lading die nodig is om \qty{-60}{mV} vast te houden en
+        het aantal eenwaardige ionen dat dat voorstelt.
+  \item Bereken het aantal overtollige ionen per vierkante micrometer
+        membraan dat dat voorstelt.
+  \item Bereken het aantal $\mathrm{K^+}$-ionen in de \omterm{def:b1:cell-unit-of-life:cell}{cel}, en het deel
+        daarvan dat moet vertrekken om de membraan op te laden.
+        Becommentarieer dat.
+  \item De pomp verplaatst per cyclus netto één lading naar buiten. Bereken
+        met vraag 13 de stroom die zij draagt en de potentiaalverandering
+        die zij in één seconde zou opleveren als er verder niets bewoog.
+        Waarom loopt de potentiaal in werkelijkheid niet weg?
+  \item Een geneesmiddel blokkeert de pomp. Voorspel achtereenvolgens de
+        veranderingen in de natriumgradiënt, de glucoseopname, de
+        \omterm{def:b1:membranes-transport:potential}{membraanpotentiaal} en het celvolume.
+  \item Een geneesmiddel blokkeert in plaats daarvan de kaliumkanalen.
+        Voorspel de verandering in de rustpotentiaal.
+  \item Geef het resultaat: de grootste glucoseconcentratieverhouding die
+        de enterocyt kan opbouwen, en de twee \omterm{def:b1:membranes-transport:membrane}{membraaneiwitten} die haar
+        mogelijk maken.
+\end{enumerate}
+\end{problem}

@@ -92,6 +92,19 @@ check_year_lang() {
   dup=$(grep -rho 'label{[^}]*}' "$tdir" "$tsdir" 2>/dev/null | sort | uniq -d)
   [ -z "$dup" ] || bad "duplicate labels" "$(echo "$dup" | head -3 | tr '\n' ' ')"
 
+  # A line-broken \index{} key. TeX collapses the newline to a space, so the
+  # key is RIGHT and the build is green -- but the entry splits in two the
+  # moment the same term is also written unbroken somewhere, and NOTHING else
+  # in this project compares index-key contents: the index census counts
+  # entries, harvest.py collapses whitespace, and no prose gate reduces a key
+  # to visible text. The English canon of Book 3 carried 18 of these and the
+  # Spanish edition 2; the French agent found its own four only by an ad-hoc
+  # scan. Wrapping a translated line is exactly what creates them, so this is
+  # a translation-time class, not a canon-only one.
+  nbi=$(grep -rc '\\index{[^}]*$' "$tdir" "$tsdir" 2>/dev/null | awk -F: '{s+=$NF} END{print s+0}')
+  [ "$nbi" = 0 ] || bad "line-broken \\index{} key ($nbi)" \
+    "$(grep -rln '\\index{[^}]*$' "$tdir" "$tsdir" 2>/dev/null | head -3 | tr '\n' ' ')"
+
   # ---- 6. Encoding: UTF-8, and no TeX accent escapes (\'e, \`a).
   #         Books 1/2 mixed the two and it cost their term configs a double
   #         spelling of every accented word. Do not repeat it here.
@@ -140,6 +153,19 @@ check_year_lang() {
   #          exactly why no other gate here objects to it.
   python3 tools/check_orphan_lines.py --quiet "$tdir" "$tsdir" \
     || bad "orphan English line" "$year/$lang"
+
+  # ---- 11. The weekend problem's answers must be numbered 1..k for k
+  #          questions. That numbering is PROSE: gate 3 compares
+  #          \begin{solution}{key} sequences and an answer paragraph has no
+  #          key, id_apply compares a translation against its twin so a defect
+  #          in BOTH is invisible, and every prose gate asks whether words are
+  #          foreign, never whether a run of integers is complete. Book 3's
+  #          ENGLISH canon shipped 25 questions with 24 answers and three
+  #          translators found it by reading. Proposed by the French Book 3
+  #          agent, 2026-09-06. It cannot see a permutation -- see the
+  #          script's docstring, which says so explicitly.
+  python3 tools/check_problem_numbering.py --quiet "$tdir" \
+    || bad "weekend-problem answer numbering" "$year/$lang"
 }
 
 if [ $# -eq 2 ]; then

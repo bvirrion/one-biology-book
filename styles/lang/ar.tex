@@ -94,8 +94,16 @@
 % inside Arabic prose -- 12 and 5 such sites in the shipped Book 2 Arabic
 % edition. Like the cleveref block, و is a bound prefix, written attached to
 % the word after it: space before, none after.
-\sisetup{range-phrase={ إلى }, list-pair-separator={ و},
-         list-final-separator={ و}}
+% siunitx typesets range phrases and list separators in MATH MODE, where a
+% bare string loses its spaces (\qtyrange inside $...$ printed "1a100") and a
+% non-ASCII character is worse: "a" expands to \`a, which LaTeX reports as
+% "Command \` invalid in math mode" and drops from the page. siunitx's own
+% defaults are wrapped in \text{} for exactly this reason; these overrides
+% must be too. Found on Biology Book 3 fr, 2026-09-05, where the book's 56
+% \qtyrange sites made it visible; it was latent in every language edition of
+% every book in this repo.
+\sisetup{range-phrase={\text{ إلى }}, list-pair-separator={\text{ و}},
+         list-final-separator={\text{ و}}}
 
 % LaTeX's own structural names. babel is loaded for Arabic (it provides the
 % bidi engine), but \babelprovide's imported captions are not guaranteed to

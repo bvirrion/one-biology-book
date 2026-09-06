@@ -173,6 +173,15 @@ ALLOWED_IDENTICAL = {
     # pair, which would swallow "Simple sugars" and "Natural selection".
     "sapiens", "habilis", "erectus", "afarensis", "coli", "aureus",
     "victoria",
+    # Book 3 (University Year 1) adds these five: Paris japonica,
+    # Paramecium aurelia, Quercus robur, Felis catus, Canis lupus.
+    # "lupus" was first added per-language by the Indonesian agent, which
+    # noted in its own comment that it belonged here instead -- correctly: a
+    # binomial epithet is identical in EVERY Latin-script target, which is the
+    # criterion for this global set. Moved. Its three companions (domain,
+    # genus, monomer) stay per-language, because French says domaine, genre
+    # and monomere.
+    "japonica", "aurelia", "robur", "catus", "lupus",
 }
 
 # A fragment of a single word is reported in a SEPARATE, lower-confidence
@@ -229,7 +238,73 @@ def _fragments(text):
     return out
 
 
-def _has_lowercase_word(s):
+# Per-LANGUAGE allow-lists. The global set above is for words identical in
+# EVERY target; these are for words identical in ONE of them, which a global
+# entry would blind the other six to. Amino-acid names are the clearest case:
+# Dutch and French keep the English -ine forms (alanine, glycine), but Spanish
+# and Portuguese say alanina and glicina, so listing them globally would hide a
+# genuine Spanish defect.
+#
+# EVERY entry here is evidence: it comes from an agent reporting that the gate
+# made it reword CORRECT prose. That report is a gate bug, not a workaround --
+# a gate that drives the translation is worse than no gate (the Book 2 Dutch
+# `Crossing-over` incident). Add to this list rather than letting the next
+# agent reword around it, and say which edition supplied the evidence.
+ALLOWED_BY_LANG = {
+    # Reported by the Dutch Book 3 agent, 2026-09-06: 11 multi-word fragments
+    # failed the BLOCKING tier although every one is correct Dutch.
+    "nl": {
+        # Latin anatomical nomenclature, unchanged in Dutch.
+        "muscularis", "mucosae", "propria", "lamina", "serosa", "submucosa",
+        # Amino acids and sugars keep the English -ine/-ose form in Dutch.
+        "alanine", "serine", "glycine", "valine", "leucine", "proline",
+        "lysine", "cysteine", "histidine", "arginine", "glutamine",
+        "asparagine", "threonine", "methionine", "tyrosine", "fructose",
+        "glucose", "sucrose", "lactose", "ribose", "gyrase",
+        # Second round, reported by the same agent after the first fix: four
+        # fragments still blocked, each for ONE word, each in a family already
+        # here. -ose sugars beside ribose/glucose/lactose; an -ase enzyme
+        # beside gyrase; and "carrier", which is the loanword Dutch membrane
+        # physiology actually uses -- this edition's term config deliberately
+        # keeps "carrier" (the transporter) linked and distinct from "drager"
+        # (the NAD carrier). Adding them cleared gate 9 with NO change to the
+        # text, which is the whole point.
+        "galactose", "deoxyribose", "hexokinase", "carrier",
+        # "per" is an ordinary Dutch preposition (4 H+ per ATP).
+        "per",
+    },
+    # French keeps the same -ine forms; accented ones (sérine) differ and are
+    # deliberately absent, because there the identical spelling WOULD be a
+    # defect.
+    "fr": {"muscularis", "mucosae", "propria", "lamina", "alanine", "glycine",
+           "valine", "leucine", "proline", "lysine", "arginine", "glutamine",
+           "asparagine", "gyrase", "fructose", "glucose", "lactose", "ribose"},
+    # Indonesian absorbs Latin anatomical nomenclature verbatim.
+    "id": {"muscularis", "mucosae", "propria", "lamina", "serosa", "submucosa",
+           # Reported by the Indonesian Book 3 agent, 2026-09-06: three
+           # multi-word fragments blocked although each is correct Indonesian.
+           # "domain" and "genus" are the Indonesian rank names themselves
+           # (the figure translates the ranks around them: filum, kelas, ordo,
+           # famili), and "monomer" is the Indonesian word for a monomer. The
+           # fourth fragment the agent found, "kingdom Animalia", WAS a real
+           # defect and was translated to "kerajaan Animalia" instead of being
+           # exempted here.
+           "domain", "genus", "monomer",
+           },
+}
+
+
+def _allowed(lang):
+    return ALLOWED_IDENTICAL | ALLOWED_BY_LANG.get(lang or "", set())
+
+
+def _lang_of(path):
+    """parts/<year>[/solutions]/<lang>/NN-slug.tex -> <lang>."""
+    m = re.search(r"/([a-z]{2})/[^/]*$", str(path).replace("\\", "/"))
+    return m.group(1) if m else None
+
+
+def _has_lowercase_word(s, lang=None):
     """A lowercase word that is not an allowed internationalism."""
     # Strip math and macros first: [$\arcsin$] and [Gram--Schmidt] must not fire.
     s = re.sub(r"\$[^$]*\$", " ", s)
@@ -245,14 +320,41 @@ def _has_lowercase_word(s):
     s = re.sub(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}", " ", s)
     s = re.sub(r"\\omimg\s*\{[^{}]*\}", " ", s)
     s = re.sub(r"\\[A-Za-z@]+", " ", s)
-    return any(w not in ALLOWED_IDENTICAL for w in LOWER_WORD.findall(s))
+    return any(w not in _allowed(lang) for w in LOWER_WORD.findall(s))
+
+
+CAP_WORD = re.compile(r"(?<![A-Za-z])[A-Z][a-z]{2,}(?![a-z])")
+
+
+def _capitalised_only(s):
+    """Capitalised word(s) and no lowercase word at all.
+
+    _has_lowercase_word() decides whether a fragment is reported AT ALL, so a
+    fragment made only of capitalised words was invisible in BOTH tiers. The
+    English canon of Biology Book 3 has 42 \begin{proof}[Evidence] titles and
+    ~30 one-word capitalised definition titles; every one of them could ship
+    untranslated behind a green gate. The Spanish Book 3 agent found its 42 by
+    writing an independent title census after this gate stayed silent, which is
+    the gate failing at its one job.
+
+    Reported in the LOW-CONFIDENCE tier only, never blocking: a capitalised
+    one-word title is very often a true cognate (Mitosis, Virus, Turgor,
+    Plasmid) or a proper noun (Michaelis--Menten, Hardy--Weinberg), and a gate
+    that blocks on those would drive the translation instead of checking it --
+    exactly the failure the hyphenated-compound bug caused on Book 2.
+    """
+    s = re.sub(r"\$[^$]*\$", " ", s)
+    s = re.sub(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}", " ", s)
+    s = re.sub(r"\\omimg\s*\{[^{}]*\}", " ", s)
+    s = re.sub(r"\\[A-Za-z@]+", " ", s)
+    return bool(CAP_WORD.search(s)) and not LOWER_WORD.search(s)
 
 
 def _line_of(text, offset):
     return text.count("\n", 0, offset) + 1
 
 
-def check_duplicated_lines(path, body, en_body, findings):
+def check_duplicated_lines(path, body, en_body, findings, lang=None):
     """An English line kept AND translated: the twin's line sits verbatim in
     the translation, adjacent to a line that is not in the twin at all."""
     en_lines = {ln.strip() for ln in en_body.split("\n") if len(ln.strip()) > 40}
@@ -271,7 +373,7 @@ def check_duplicated_lines(path, body, en_body, findings):
             continue
         if len(s) <= 40 or s not in en_lines:
             continue
-        if not _has_lowercase_word(s) or _word_count(s) < 4:
+        if not _has_lowercase_word(s, lang) or _word_count(s) < 4:
             continue
         # Prose only: drawing code and math are copied verbatim by design.
         if re.search(r"\\(?:draw|fill|path|node|addplot|foreach|coordinate|"
@@ -291,6 +393,7 @@ def check_file(path, findings):
     twin = pathlib.Path(re.sub(r"/[a-z]{2}/(?=[^/]*$)", "/", str(path)))
     if not twin.is_file() or twin == path:
         return
+    lang = _lang_of(path)
     body = strip_comments(path.read_text(encoding="utf-8"))
     en_body = strip_comments(twin.read_text(encoding="utf-8"))
 
@@ -308,12 +411,21 @@ def check_file(path, findings):
             # A structural divergence; check_translation.sh owns it.
             continue
         for (s, off), (e, _) in zip(items, en_items):
-            if s.strip() == e.strip() and _has_lowercase_word(s):
+            if s.strip() != e.strip():
+                continue
+            if _has_lowercase_word(s, lang):
                 tier = cls if _word_count(s) >= 2 else cls + "-1word"
-                findings.append((str(path), _line_of(body, off), tier,
-                                 f"identical to English ({cls}): {s.strip()[:70]!r}"))
+            elif _capitalised_only(s):
+                # No lowercase word: always the low-confidence tier. See
+                # _capitalised_only() -- without this branch the fragment was
+                # reported in NEITHER tier.
+                tier = cls + "-1word"
+            else:
+                continue
+            findings.append((str(path), _line_of(body, off), tier,
+                             f"identical to English ({cls}): {s.strip()[:70]!r}"))
 
-    check_duplicated_lines(path, body, en_body, findings)
+    check_duplicated_lines(path, body, en_body, findings, lang)
 
 
 def main():

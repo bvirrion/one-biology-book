@@ -1,0 +1,644 @@
+\chapter{Membranas y transporte de membrana}\label{ch:b1:membranes-transport}
+
+Échese un glóbulo rojo en agua pura y se hinchará y reventará en un segundo;
+échese en una salmuera fuerte y se arrugará. Devuélvase al \omterm{def:b1:mammal-organization:compartments}{plasma} y
+conservará su forma bicóncava durante cuatro meses, bombeando sodio hacia
+fuera y potasio hacia dentro cada segundo de ese tiempo. La membrana que
+hace esto tiene cinco nanómetros de espesor --- una película de lípidos de
+dos moléculas de profundidad, atravesada por proteínas --- y es la frontera
+a través de la cual ocurre finalmente cada uno de los intercambios del
+\cref{ch:b1:organism-environment}. Este capítulo describe la estructura de
+la membrana, la física de lo que la atraviesa sin ayuda, las proteínas que
+transportan, bombean y encauzan el resto, el potencial eléctrico que produce
+ese tráfico y las vesículas que mueven lo que ninguna proteína puede.
+
+\section{El mosaico fluido}
+
+\begin{definition}[La membrana plasmática]\label{def:b1:membranes-transport:membrane}
+La \emph{membrana plasmática}\index{membrana plasmática} --- y toda membrana
+de la \omterm{def:b1:cell-unit-of-life:cell}{célula} --- es una \emph{bicapa lipídica}\index{bicapa lipídica} de
+unos \qty{5}{nm} de espesor: dos láminas de fosfolípidos
+(\cref{ch:b1:lipids}) con sus colas hidrófobas enfrentadas y sus cabezas
+polares mirando a los dos lados acuosos, con colesterol entre las colas, y
+\emph{proteínas de membrana}\index{proteína de membrana} embebidas en ella o
+adosadas. En el modelo del \emph{mosaico fluido}\index{modelo del mosaico fluido} (Singer y Nicolson, 1972) la bicapa es un fluido bidimensional en
+el que lípidos y proteínas difunden lateralmente, y las proteínas son un
+mosaico de unidades independientes, no un recubrimiento continuo. Las dos
+caras difieren: los azúcares unidos a lípidos y proteínas miran solo hacia
+fuera (el \emph{glucocáliz}) y algunos fosfolípidos quedan confinados en una
+sola monocapa.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, line cap=round]
+  % bilayer: heads as circles, tails as lines
+  \foreach \i in {0,...,21} {
+    \pgfmathsetmacro{\x}{0.42*\i}
+    \fill[omDef!60] (\x,1.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,1.2) -- (\x-0.07,0.55) (\x+0.07,1.2) -- (\x+0.07,0.55);
+    \fill[omDef!60] (\x,-0.35) circle (0.16);
+    \draw[omDef!70!black, thick] (\x-0.07,-0.2) -- (\x-0.07,0.45) (\x+0.07,-0.2) -- (\x+0.07,0.45);
+  }
+  % cholesterol
+  \foreach \x in {1.9,6.1,8.2} { \draw[omProp, very thick] (\x,1.1) -- (\x,0.6); \fill[omProp] (\x,1.15) circle (0.08); }
+  % integral protein spanning (channel)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.0,-0.7) rectangle (3.55,1.7);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=3pt] (3.85,-0.7) rectangle (4.4,1.7);
+  \fill[white] (3.55,-0.6) rectangle (3.85,1.6);
+  % integral protein (carrier)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (6.8,-0.75) rectangle (7.7,1.75);
+  % peripheral protein
+  \draw[thick, omExo!80!black, fill=omExo!30] (5.3,1.75) ellipse (0.5 and 0.28);
+  % glycocalyx sugar chains on outer face
+  \foreach \x in {0.5,1.3,2.5,4.15,7.25,8.4} { \draw[omProp!80!black, thick] (\x,1.5) .. controls (\x+0.15,1.85) and (\x-0.15,2.1) .. (\x+0.1,2.4); \fill[omProp!70] (\x+0.1,2.45) circle (0.07); }
+  % labels
+  \node[anchor=east] at (-0.3,1.35) {cabezas polares};
+  \node[anchor=east] at (-0.3,0.5) {colas hidrófobas};
+  \node[anchor=east] at (-0.3,-0.35) {cabezas polares};
+  \node[anchor=west, align=left] at (9.2,2.2) {azúcares: solo fuera};
+  \node[anchor=west, align=left] at (9.2,0.5) {\qty{5}{nm}};
+  \node[anchor=north] at (3.7,-0.95) {proteína canal};
+  \node[anchor=north] at (7.25,-0.95) {proteína transportadora};
+  \node[anchor=south] at (5.3,2.6) {proteína periférica};
+  \node[anchor=north, omProp] at (1.5,-1.0) {colesterol};
+  \node[anchor=south east, gray] at (-0.3,2.4) {exterior};
+  \node[anchor=north east, gray] at (-0.3,-0.95) {citosol};
+  \draw[<->, gray] (9.05,1.35+0.16) -- (9.05,-0.35-0.16);
+\end{tikzpicture}
+
+{\small El \omterm{def:b1:membranes-transport:membrane}{mosaico fluido}. Dos monocapas de fosfolípidos, con las colas
+hacia dentro y colesterol entre ellas; \omterm{def:b1:membranes-transport:proteins}{proteínas integrales} que atraviesan
+la bicapa (un \omterm{def:b1:membranes-transport:transporters}{canal} con su poro, una transportadora), una proteína
+periférica en una cara y cadenas de azúcares solo en la cara externa.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book3/red-cells-nci.jpg}
+
+{\small Un glóbulo rojo, una plaqueta y un linfocito al \omterm{prop:b1:cell-unit-of-life:microscopes}{microscopio
+electrónico} de barrido (coloreado). La forma bicóncava del glóbulo rojo la
+mantiene una malla proteica situada bajo su membrana; sobrevive cuatro meses
+apretujándose por capilares más estrechos que él. Imagen: National Cancer
+Institute, dominio público.}
+\end{omfigure}
+
+\begin{proposition}[Las membranas son bicapas y son fluidas]\label{prop:b1:membranes-transport:evidence}
+La \omterm{def:b1:membranes-transport:membrane}{membrana plasmática} tiene exactamente el espesor de dos moléculas de
+lípido, y sus componentes se desplazan dentro de su plano.
+\end{proposition}
+\begin{proof}[Evidencia]
+Gorter y Grendel (1925) extrajeron los lípidos de un número conocido de
+glóbulos rojos y los extendieron como monocapa sobre agua: el área era el
+doble de la superficie total de las \omterm{def:b1:cell-unit-of-life:cell}{células}, luego la membrana es una
+bicapa. La microscopía electrónica muestra toda membrana como dos líneas
+oscuras (las cabezas teñidas) en torno a un núcleo pálido (las colas),
+\qty{5}{nm} en total. Frye y Edidin (1970) fusionaron una \omterm{def:b1:cell-unit-of-life:cell}{célula} de ratón
+con una \omterm{def:b1:cell-unit-of-life:cell}{célula} humana cuyas proteínas de superficie se habían marcado con
+colorantes de dos colores: al cabo de cuarenta minutos a \qty{37}{\celsius}
+los dos colores estaban por completo entremezclados sobre la \omterm{def:b1:cell-unit-of-life:cell}{célula} híbrida,
+y no a \qty{4}{\celsius}, donde el lípido está casi sólido. Blanquear con un
+láser una mancha de una \omterm{def:b1:membranes-transport:membrane}{proteína de membrana} fluorescente y observar cómo
+vuelve la fluorescencia a medida que difunden hacia ella moléculas sin
+blanquear (FRAP) mide la difusión lateral: $\qty{1}{\micro m^2}$ en unos
+segundos para los lípidos, más despacio para las proteínas y cero para las
+proteínas ancladas al \omterm{def:b1:eukaryotic-cell:cytoskeleton}{citoesqueleto}.
+\end{proof}
+
+\begin{definition}[Proteínas de membrana]\label{def:b1:membranes-transport:proteins}
+Las \omterm{def:b1:membranes-transport:membrane}{proteínas de membrana} \emph{integrales}\index{proteína integral}
+atraviesan la bicapa con una o varias hélices hidrófobas y solo pueden
+extraerse con detergentes; las \emph{periféricas} están unidas a una de las
+caras. Por su función: \emph{transportadoras} (\omterm{def:b1:membranes-transport:transporters}{canales}, \omterm{def:b1:membranes-transport:transporters}{transportadores},
+\omterm{def:b1:membranes-transport:transporters}{bombas}), \emph{receptoras}, que fijan una señal fuera y actúan dentro,
+\emph{enzimas}, \emph{anclajes} que unen el \omterm{def:b1:eukaryotic-cell:cytoskeleton}{citoesqueleto} a la \omterm{def:b1:body-plans-tissues:connective}{matriz
+extracelular} y proteínas de \emph{reconocimiento}, portadoras de los
+azúcares con que las \omterm{def:b1:cell-unit-of-life:cell}{células} se identifican entre sí. Las proteínas son la
+mitad de la masa de una membrana típica y casi toda su función.
+\end{definition}
+
+\section{Atravesar la membrana sin ayuda}
+
+\begin{proposition}[Permeabilidad de la bicapa]\label{prop:b1:membranes-transport:permeability}
+\index{permeabilidad}
+Una \omterm{def:b1:membranes-transport:membrane}{bicapa lipídica} pura es libremente permeable a las moléculas apolares
+pequeñas ($\mathrm{O_2}$, $\mathrm{CO_2}$, $\mathrm{N_2}$, esteroides),
+bastante permeable a las moléculas polares pequeñas sin carga (agua, urea,
+etanol), poco permeable a las moléculas polares mayores (glucosa,
+aminoácidos) y prácticamente impermeable a los iones ($\mathrm{Na^+}$,
+$\mathrm{K^+}$, $\mathrm{Cl^-}$, $\mathrm{H^+}$) y a las macromoléculas. La
+permeabilidad abarca doce órdenes de magnitud, desde $\qty{e-2}{cm/s}$ para
+el agua hasta $\qty{e-14}{cm/s}$ para el $\mathrm{Na^+}$: un núcleo hidrófobo
+de \qty{3}{nm} de espesor deja pasar lo que se disuelve en aceite y detiene
+lo que lleva carga.
+\end{proposition}
+
+\begin{theorem}[Ley de difusión de Fick]\label{thm:b1:membranes-transport:fick}
+\index{ley de Fick}\index{difusión}
+El flujo neto $J$ de un soluto a través de una membrana de área $S$ (moles
+por segundo) es proporcional a la diferencia de concentración entre sus dos
+lados:
+\[
+J = P\,S\,(c_{\text{ext}} - c_{\text{int}}),
+\]
+donde el \emph{coeficiente de permeabilidad} $P$ (en \unit{m/s}) engloba el
+coeficiente de difusión del soluto en la membrana, su solubilidad en el
+lípido y el espesor de la membrana ($P = DK/\ell$). La difusión no necesita
+energía y siempre va a favor del gradiente; es \emph{transporte
+pasivo}\index{transporte pasivo}.
+\end{theorem}
+\begin{proof}
+Dentro de la membrana el soluto difunde siguiendo un perfil lineal de
+concentración desde $Kc_{\text{ext}}$ hasta $Kc_{\text{int}}$ ($K$ es el
+coeficiente de reparto entre el lípido y el agua); la primera \omterm{thm:b1:membranes-transport:fick}{ley de Fick} en
+el seno del medio, $J/S = -D\,\dd c/\dd x$, da
+$J/S = DK(c_{\text{ext}} -
+c_{\text{int}})/\ell$.
+\end{proof}
+
+\begin{definition}[Ósmosis, potencial hídrico]\label{def:b1:membranes-transport:osmosis}
+La \emph{ósmosis}\index{ósmosis} es la difusión neta de agua a través de una
+membrana que deja pasar el agua pero no los solutos, desde la disolución en
+que el agua está más concentrada (menos solutos) hacia aquella en que lo
+está menos. Se describe mediante el \emph{potencial
+hídrico}\index{potencial hídrico} $\Psi$, el potencial químico del agua
+expresado como una presión, nulo para el agua pura a presión atmosférica:
+\[
+\Psi = \Psi_s + \Psi_p, \qquad \Psi_s = -RTc_s ,
+\]
+donde $\Psi_s$, el \emph{potencial osmótico}\index{potencial osmótico}, cae
+con la concentración total de solutos $c_s$ (en osmoles por litro, la ley de
+van 't Hoff) y $\Psi_p$, el \emph{potencial de
+presión}\index{potencial de presión}, es la presión hidrostática por encima
+de la atmosférica. El agua se desplaza de un $\Psi$ mayor a uno menor. A
+\qty{25}{\celsius}, $RT = \qty{2.48}{MPa.L/mol}$: una disolución de
+\qty{0.3}{osmol/L} tiene $\Psi_s = \qty{-0.74}{MPa}$. Una disolución es
+\emph{isotónica}\index{isotónica} respecto de una \omterm{def:b1:cell-unit-of-life:cell}{célula} cuando no hay flujo
+neto de agua, \emph{hipotónica} cuando entra agua e \emph{hipertónica}
+cuando sale.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.78\linewidth]{images/book3/ai/b3-07-red-cells-osmosis.png}
+
+{\small Glóbulos rojos en una disolución \omterm{def:b1:membranes-transport:osmosis}{isotónica} (discos bicóncavos), en
+una hipotónica (hinchados hasta ser esferas, a punto de reventar) y en una
+hipertónica (encogidos y crenados). El agua sigue su potencial; la \omterm{def:b1:cell-unit-of-life:cell}{célula} no
+tiene pared que lo resista.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book3/ai/b3-07-plasmolysis.png}
+
+{\small Plasmólisis: \omterm{def:b1:flowering-plant-organization:tissues}{epidermis} de cebolla en una disolución salina fuerte.
+El protoplasto de cada \omterm{def:b1:cell-unit-of-life:cell}{célula} ha perdido agua y se ha separado de la pared
+rígida, que conserva su forma. En agua, el protoplasto volvería a hincharse
+contra la pared y se detendría, turgente.}
+\end{omfigure}
+
+\begin{example}[Un glóbulo rojo en tres disoluciones]\label{ex:b1:membranes-transport:redcell}
+El \omterm{def:b1:mammal-organization:compartments}{plasma} es de \qty{0.3}{osmol/L}: $\Psi_s = \qty{-0.74}{MPa}$ a ambos
+lados, sin flujo neto. En agua pura ($\Psi = 0$) la \omterm{def:b1:cell-unit-of-life:cell}{célula}, a
+\qty{-0.74}{MPa} en su interior, capta agua hasta que su membrana, que solo
+puede estirarse un pequeño porcentaje, se rompe. En una sal de
+\qty{0.6}{osmol/L} pierde agua hasta que su interior está igual de
+concentrado, con la mitad de su volumen. Una \omterm{def:b1:cell-unit-of-life:cell}{célula} vegetal en agua pura no
+revienta: a medida que entra agua, la pared se estira y $\Psi_p$ sube hasta
+que $\Psi_p = -\Psi_s$, el \omterm{def:b1:membranes-transport:osmosis}{potencial hídrico} interior es nulo y el flujo
+cesa con la \omterm{def:b1:cell-unit-of-life:cell}{célula} turgente a \qty{0.74}{MPa}.
+\end{example}
+
+\begin{method}[Contabilidad del potencial hídrico]\label{met:b1:membranes-transport:psi}
+\begin{enumerate}
+  \item Conviértase toda concentración de soluto a osmoles (una sal que se
+        disocia en dos iones cuenta el doble) y calcúlese
+        $\Psi_s =
+        -RTc_s$.
+  \item Añádase el término de presión: $\Psi_p = 0$ para una disolución en
+        un recipiente abierto o para una \omterm{def:b1:cell-unit-of-life:cell}{célula} animal, positivo para una
+        \omterm{def:b1:cell-unit-of-life:cell}{célula} vegetal turgente, negativo para el agua bajo tensión en un
+        vaso del \omterm{def:b1:flowering-plant-organization:tissues}{xilema}.
+  \item El agua fluye hacia el $\Psi$ menor. El equilibrio se alcanza
+        cuando los dos $\Psi$ son iguales: por dilución del contenido
+        celular (\omterm{def:b1:cell-unit-of-life:cell}{célula} animal) o por una subida de la presión (\omterm{def:b1:cell-unit-of-life:cell}{célula}
+        vegetal).
+  \item Léase el signo del resultado como el sentido del flujo, y su
+        magnitud como la fuerza impulsora; el caudal depende además de la
+        permeabilidad al agua de la membrana, multiplicada por cien por los
+        \omterm{def:b1:membranes-transport:transporters}{canales} de \omterm{def:b1:membranes-transport:transporters}{acuaporina}.
+\end{enumerate}
+\end{method}
+
+\section{Proteínas de transporte}
+
+\begin{definition}[Canales, transportadores, bombas]\label{def:b1:membranes-transport:transporters}
+Los \emph{canales}\index{canal} son \omterm{def:b1:membranes-transport:proteins}{proteínas integrales} con un poro lleno
+de agua por el que un ion o una molécula pequeña concretos difunden a favor
+de su gradiente a razón de hasta $10^8$ por segundo; muchos están
+\emph{controlados por compuerta} y se abren en respuesta a un voltaje, a un
+ligando o a una fuerza mecánica. Las \emph{acuaporinas}\index{acuaporina}
+son canales de agua. Los \emph{transportadores}\index{transportador} fijan
+su soluto en una cara, cambian de conformación y lo liberan en la otra, mil
+veces por segundo como mucho; el transportador de glucosa del glóbulo rojo
+es uno de ellos. Los canales y los transportadores que trabajan a favor de
+un gradiente realizan una \emph{difusión facilitada}\index{difusión facilitada}, pasiva pero selectiva y saturable. Las
+\emph{bombas}\index{bomba} son transportadores que acoplan el transporte de
+un soluto en contra de su gradiente a la hidrólisis de ATP: el
+\emph{transporte activo primario}\index{transporte activo}. La \emph{bomba
+de sodio y potasio}\index{bomba de sodio y potasio} de las \omterm{def:b1:cell-unit-of-life:cell}{células} animales
+exporta tres $\mathrm{Na^+}$ e importa dos $\mathrm{K^+}$ por cada ATP; la
+\emph{bomba de protones} de las membranas vegetales, fúngicas y bacterianas
+exporta $\mathrm{H^+}$.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % membrane band
+  \fill[omDef!15] (0,0) rectangle (13.1,1.2);
+  \draw[omDef!60!black] (0,0) -- (13.1,0) (0,1.2) -- (13.1,1.2);
+  \node[anchor=east, gray, align=right] at (-0.15,1.5) {exterior\\ ($\mathrm{Na^+}$ alto, $\mathrm{K^+}$ bajo)};
+  \node[anchor=east, gray, align=right] at (-0.15,-0.3) {citosol\\ ($\mathrm{Na^+}$ bajo, $\mathrm{K^+}$ alto)};
+  % simple diffusion
+  \draw[->, thick, omProp] (1.0,2.0) -- (1.0,-0.8);
+  \node[anchor=south, align=center] at (1.0,2.1) {difusión simple\\ $\mathrm{O_2}$, $\mathrm{CO_2}$};
+  % channel
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (2.6,-0.2) rectangle (3.0,1.4);
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=2pt] (3.3,-0.2) rectangle (3.7,1.4);
+  \draw[->, thick, omProp] (3.15,2.0) -- (3.15,-0.8);
+  \node[anchor=south, align=center] at (3.15,2.1) {canal\\ $\mathrm{K^+}$, agua};
+  % carrier (facilitated)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (5.0,-0.3) rectangle (6.0,1.5);
+  \draw[->, thick, omProp] (5.5,2.0) -- (5.5,1.55);
+  \draw[->, thick, omProp] (5.5,-0.35) -- (5.5,-0.8);
+  \node[anchor=south, align=center] at (5.5,2.1) {transportador\\ glucosa};
+  \node[align=center, font=\scriptsize] at (5.5,0.6) {fija,\\ voltea};
+  % pump
+  \draw[thick, omExo!80!black, fill=omExo!30, rounded corners=5pt] (7.5,-0.3) rectangle (8.7,1.5);
+  \draw[->, very thick, omExo!80!black] (7.8,-0.8) -- (7.8,2.0);
+  \draw[->, very thick, omExo!80!black] (8.4,2.0) -- (8.4,-0.8);
+  \node[anchor=south, align=center] at (8.1,2.1) {bomba\\ $3\,\mathrm{Na^+}$ fuera, $2\,\mathrm{K^+}$ dentro};
+  \node[anchor=north, align=center, font=\scriptsize] at (8.1,-0.85) {ATP $\to$ ADP};
+  % secondary active (symport)
+  \draw[thick, omThm!80!black, fill=omThm!30, rounded corners=5pt] (11.0,-0.3) rectangle (12.2,1.5);
+  \draw[->, very thick, omProp] (11.3,2.0) -- (11.3,-0.8);
+  \draw[->, very thick, omExo!80!black] (11.9,2.0) -- (11.9,-0.8);
+  \node[anchor=south, align=center] at (11.6,2.1) {simporte\\ baja $\mathrm{Na^+}$,\\ sube glucosa};
+  \node[anchor=north, align=center, font=\scriptsize] at (11.6,-0.85) {activo secundario};
+  \node[anchor=north west, align=left, gray, font=\scriptsize] at (0,-1.5) {flechas naranjas: a favor del gradiente (pasivo); verdes: en contra (activo)};
+\end{tikzpicture}
+
+{\small Cinco maneras de atravesarla. Difusión simple por el lípido; un
+\omterm{def:b1:membranes-transport:transporters}{canal} y un \omterm{def:b1:membranes-transport:transporters}{transportador} (\omterm{def:b1:membranes-transport:transporters}{difusión facilitada}, a favor del gradiente); la
+\omterm{def:b1:membranes-transport:transporters}{bomba de sodio y potasio} (\omterm{def:b1:membranes-transport:transporters}{transporte activo primario}, pagado en ATP); un
+\omterm{prop:b1:membranes-transport:secondary}{simportador} que usa el gradiente de sodio construido por la \omterm{def:b1:membranes-transport:transporters}{bomba} para
+arrastrar glucosa cuesta arriba (\omterm{prop:b1:membranes-transport:secondary}{transporte activo secundario}).}
+\end{omfigure}
+
+\begin{proposition}[Transporte activo secundario]\label{prop:b1:membranes-transport:secondary}
+\index{transporte activo secundario}
+Un gradiente construido por una \omterm{def:b1:membranes-transport:transporters}{bomba} es una reserva de energía que otros
+\omterm{def:b1:membranes-transport:transporters}{transportadores} gastan: un \emph{simportador}\index{simportador} mueve un
+soluto cuesta arriba acoplándolo a un ion que baja en el mismo sentido (el
+\omterm{def:b1:membranes-transport:transporters}{transportador} de sodio y glucosa del intestino y del riñón; el \omterm{def:b1:membranes-transport:transporters}{transportador}
+de protones y sacarosa del floema), y un
+\emph{antiportador}\index{antiportador} lo acopla a un ion que se mueve en
+sentido contrario (el intercambiador de sodio y calcio). En las \omterm{def:b1:cell-unit-of-life:cell}{células}
+animales la moneda es el gradiente de $\mathrm{Na^+}$; en plantas, hongos y
+bacterias, el gradiente de $\mathrm{H^+}$.
+\end{proposition}
+
+\begin{example}[La cinética delata el mecanismo]\label{ex:b1:membranes-transport:kinetics}
+El flujo de glucosa hacia el interior de un glóbulo rojo sube con la
+concentración exterior y luego se estabiliza en un máximo, como una enzima
+(\cref{ch:b1:enzymes}): es un \omterm{def:b1:membranes-transport:transporters}{transportador}, saturable, con una $K_m$ de
+aproximadamente \qty{1.5}{mmol/L}; un azúcar parecido, la manosa, compite
+por él. El flujo de urea sube proporcionalmente a su concentración sin
+límite: difusión simple. El flujo de glucosa hacia una \omterm{def:b1:cell-unit-of-life:cell}{célula} intestinal se
+detiene al retirar el sodio de la luz, o al envenenar la \omterm{def:b1:membranes-transport:transporters}{bomba} con
+ouabaína: \omterm{prop:b1:membranes-transport:secondary}{transporte activo secundario}.
+\end{example}
+
+\section{El potencial de membrana}
+
+\begin{definition}[Potencial de membrana]\label{def:b1:membranes-transport:potential}
+Toda \omterm{def:b1:cell-unit-of-life:cell}{célula} viva mantiene una diferencia de potencial eléctrico a través de
+su \omterm{def:b1:membranes-transport:membrane}{membrana plasmática}, el \emph{potencial de membrana}\index{potencial de membrana} $V_m = V_{\text{int}} - V_{\text{ext}}$, negativo por dentro:
+\qty{-70}{mV} en una \omterm{def:b1:body-plans-tissues:nervous}{neurona}, \qty{-90}{mV} en una fibra muscular,
+\qty{-120}{mV} o más en una \omterm{def:b1:cell-unit-of-life:cell}{célula} vegetal. Surge porque la membrana es
+selectivamente permeable a iones cuyas concentraciones difieren a uno y otro
+lado.
+\end{definition}
+
+\begin{theorem}[La ecuación de Nernst]\label{thm:b1:membranes-transport:nernst}
+\index{ecuación de Nernst}\index{potencial de equilibrio}
+Un ion de carga $z$ a las concentraciones $c_{\text{ext}}$ y
+$c_{\text{int}}$ está en equilibrio a través de la membrana --- sin flujo
+neto, aunque la membrana sea permeable a él --- cuando el potencial es igual
+a su \emph{\omterm{thm:b1:membranes-transport:nernst}{potencial de equilibrio}}
+\[
+E_{\text{ion}} = \frac{RT}{zF}\,\ln\frac{c_{\text{ext}}}{c_{\text{int}}}
+= \frac{\qty{61.5}{mV}}{z}\,\log_{10}\frac{c_{\text{ext}}}{c_{\text{int}}}
+\quad (\qty{37}{\celsius}).
+\]
+Para el $\mathrm{K^+}$ a \qty{5}{mmol/L} fuera y \qty{140}{mmol/L} dentro,
+$E_K = 61.5\log(5/140) = \qty{-89}{mV}$; para el $\mathrm{Na^+}$ a
+\qty{145}{} fuera y \qty{12}{} dentro, $E_{Na} = \qty{+67}{mV}$.
+\end{theorem}
+\begin{proof}
+Mover un mol del ion desde fuera hacia dentro cambia la energía libre en la
+suma de un término de concentración y otro eléctrico:
+\[
+\Delta G = RT\ln\frac{c_{\text{int}}}{c_{\text{ext}}} + zFV_m .
+\]
+En el equilibrio $\Delta G = 0$, lo que da $V_m = (RT/zF)\ln(c_{\text{ext}}/c_{\text{int}})$.
+Pasando a logaritmos decimales e introduciendo $R = \qty{8.314}{J.mol^{-1}.K^{-1}}$,
+$T = \qty{310}{K}$ y $F = \qty{96485}{C/mol}$ se obtiene la forma numérica.
+\end{proof}
+
+\begin{proposition}[Origen del potencial de reposo]\label{prop:b1:membranes-transport:resting}
+La membrana en reposo es mucho más permeable al $\mathrm{K^+}$ (por los
+\omterm{def:b1:membranes-transport:transporters}{canales} de potasio abiertos) que al $\mathrm{Na^+}$; el $\mathrm{K^+}$ se
+escapa a favor de su gradiente de concentración y deja el interior negativo,
+hasta que la atracción eléctrica de vuelta casi compensa la fuga. El
+potencial de reposo queda por tanto cerca de $E_K$, algo desplazado hacia
+$E_{Na}$ por la pequeña fuga de sodio (la ecuación de Goldman pondera el
+término de Nernst de cada ion por su permeabilidad). La \omterm{def:b1:membranes-transport:transporters}{bomba} sostiene los
+gradientes que las fugas disiparían; además contribuye directamente unos
+pocos milivoltios, ya que saca tres cargas por cada dos que mete.
+\end{proposition}
+\begin{proof}[Evidencia]
+En un axón de calamar el potencial de reposo sigue a $E_K$ cuando se hace
+variar el potasio exterior en un amplio intervalo (una recta de pendiente
+\qty{58}{mV} por década a concentraciones altas), y se aparta de él a
+concentraciones bajas exactamente como predice una pequeña permeabilidad al
+sodio. Bloquear la \omterm{def:b1:membranes-transport:transporters}{bomba} con ouabaína deja el potencial casi inalterado
+durante minutos y luego lo deja decaer a lo largo de horas conforme se
+agotan los gradientes: el potencial es un potencial de difusión, y la \omterm{def:b1:membranes-transport:transporters}{bomba}
+es su sostén a largo plazo.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogxaxis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0.8, xmax=200, ymin=-135, ymax=10,
+  xlabel={$\mathrm{K^+}$ exterior (\unit{mmol/L})}, ylabel={potencial de membrana (\unit{mV})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1,10,100}, log ticks with fixed point, ytick={-120,-100,-80,-60,-40,-20,0},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[thick, dashed, omDef, domain=0.8:200, samples=40] {58*log10(x/140)};
+\addlegendentry{Nernst $E_K$ (pendiente \qty{58}{mV} por década)}
+\addplot[very thick, omThm, domain=0.8:200, samples=60] {58*log10((x+0.01*145)/(140+0.01*12))};
+\addlegendentry{medido: $\mathrm{K^+}$ más una pequeña fuga de $\mathrm{Na^+}$}
+\draw[dashed, gray] (axis cs:5,-135) -- (axis cs:5,-82);
+\node[font=\scriptsize, anchor=west] at (axis cs:5.5,-120) {\qty{5}{mmol/L} fisiológicos};
+\end{semilogxaxis}
+\end{tikzpicture}
+
+{\small Potencial de reposo frente al potasio exterior. Con potasio alto la
+membrana se comporta como un electrodo de potasio y sigue la recta de
+Nernst; con potasio bajo, la pequeña fuga de sodio lo eleva por encima de
+$E_K$.}
+\end{omfigure}
+
+\begin{example}[A dónde va la energía de la bomba]\label{ex:b1:membranes-transport:pumpcost}
+Bombear un $\mathrm{Na^+}$ hacia fuera desde \qty{12}{} hasta
+\qty{145}{mmol/L} y contra \qty{-70}{mV} cuesta
+$RT\ln(145/12) + F\times 0.070 = 6.4 + 6.8 =
+\qty{13.2}{kJ/mol}$; tres de
+ellos, \qty{40}{kJ}, más dos $\mathrm{K^+}$ hacia dentro a
+$RT\ln(140/5) - F\times 0.070 = 8.6 - 6.8 =
+\qty{1.8}{kJ/mol}$ cada uno:
+\qty{43}{kJ} por ciclo frente a los \qty{50}{kJ} de un ATP en condiciones
+celulares. La \omterm{def:b1:membranes-transport:transporters}{bomba} funciona cerca de su límite termodinámico, y consume un
+tercio del ATP de un animal en reposo, dos tercios en el encéfalo.
+\end{example}
+
+\section{Transporte en masa}
+
+\begin{proposition}[Transporte vesicular]\label{prop:b1:membranes-transport:vesicles}
+Las macromoléculas y las partículas atraviesan la \omterm{def:b1:membranes-transport:membrane}{membrana plasmática} sin
+pasar por ella: por \emph{exocitosis}, una vesícula se fusiona con la
+membrana y se vacía hacia fuera; por \emph{\omterm{def:b1:eukaryotic-cell:endocytosis}{endocitosis}}, la membrana engulle
+material en una vesícula (\cref{ch:b1:eukaryotic-cell}). Ambas requieren
+ATP, ambas mueven membrana además de contenido y ambas conservan la
+orientación de la membrana. Las tres vías de atravesar una membrana --- por
+el lípido, por una proteína, dentro de una vesícula --- son selectivas de
+tres maneras: por solubilidad, por reconocimiento molecular y por la
+elección de lo que se engulle.
+\end{proposition}
+
+\begin{example}[La entrega del colesterol]\label{ex:b1:membranes-transport:ldl}
+El colesterol viaja por la sangre dentro de partículas recubiertas de
+proteína, demasiado grandes para cualquier \omterm{def:b1:membranes-transport:transporters}{transportador}. Una \omterm{def:b1:cell-unit-of-life:cell}{célula} que
+necesita colesterol expone receptores para la partícula; partícula y
+receptor se reúnen en una fosita revestida, que se estrangula, y la vesícula
+lleva la partícula a un \omterm{def:b1:eukaryotic-cell:endomembrane}{lisosoma} donde el colesterol queda libre. Una
+persona con los receptores defectuosos no puede depurar las partículas: el
+colesterol de la sangre se duplica y las arterias se obstruyen ya en la edad
+adulta temprana. Una \omterm{def:b1:membranes-transport:membrane}{proteína de membrana}, una enfermedad.
+\end{example}
+
+\section{Ejercicios}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:1}
+Descríbase el \omterm{def:b1:membranes-transport:membrane}{modelo del mosaico fluido} en cuatro frases: los lípidos, las
+proteínas, la fluidez y la asimetría.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:2}
+Ordénense el $\mathrm{O_2}$, la glucosa, el $\mathrm{Na^+}$, el agua y el
+etanol por su permeabilidad a través de una \omterm{def:b1:membranes-transport:membrane}{bicapa lipídica} pura, y
+explíquese el orden.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:3}
+Calcúlense el \omterm{def:b1:membranes-transport:osmosis}{potencial osmótico} de una disolución de sacarosa
+\qty{0.1}{mol/L} y el de una disolución de NaCl \qty{0.1}{mol/L} a
+\qty{25}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:membranes-transport:4}
+Calcúlese el potencial de Nernst del $\mathrm{Cl^-}$ a \qty{120}{mmol/L}
+fuera y \qty{4}{mmol/L} dentro, a \qty{37}{\celsius}. ¿Está el cloruro en
+equilibrio en una \omterm{def:b1:cell-unit-of-life:cell}{célula} a \qty{-89}{mV}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:5}
+Gorter y Grendel emplearon $\num{4.7e9}$ glóbulos rojos de
+\qty{100}{\micro m^2} de superficie cada uno y obtuvieron una monocapa
+lipídica de \qty{0.92}{m^2}. Calcúlese el cociente entre el área de la
+monocapa y la superficie celular, y conclúyase.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:6}
+Una \omterm{def:b1:cell-unit-of-life:cell}{célula} vegetal tiene un \omterm{def:b1:membranes-transport:osmosis}{potencial osmótico} de \qty{-0.9}{MPa} y un
+\omterm{def:b1:membranes-transport:osmosis}{potencial de presión} de \qty{0.5}{MPa}. Se coloca en una disolución de
+\omterm{def:b1:membranes-transport:osmosis}{potencial osmótico} \qty{-0.6}{MPa} en un recipiente abierto. ¿En qué sentido
+se desplaza el agua, y cuál es el \omterm{def:b1:membranes-transport:osmosis}{potencial de presión} de la \omterm{def:b1:cell-unit-of-life:cell}{célula} en el
+equilibrio (supóngase que su \omterm{def:b1:membranes-transport:osmosis}{potencial osmótico} no cambia)?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:7}
+Se mide la captación de glucosa por una \omterm{def:b1:cell-unit-of-life:cell}{célula} a concentraciones exteriores
+crecientes: \qtylist{1;2;5;10;20}{mmol/L} dan
+\qtylist{0.4;0.67;1.0;1.25;1.43}{\micro mol/min}. Muéstrese que la captación
+se satura, estímense la velocidad máxima y la concentración que da la mitad
+de ella, y nómbrese el mecanismo.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:8}
+Explíquese por qué el potencial de reposo de una \omterm{def:b1:cell-unit-of-life:cell}{célula} está cerca de $E_K$
+y no de $E_{Na}$, y qué le ocurriría si se abrieran de pronto los \omterm{def:b1:membranes-transport:transporters}{canales} de
+sodio.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:membranes-transport:9}
+El \omterm{prop:b1:membranes-transport:secondary}{simportador} de sodio y glucosa lleva dos $\mathrm{Na^+}$ por cada
+glucosa. Con el $\mathrm{Na^+}$ a \qty{145}{mmol/L} fuera y \qty{12}{}
+dentro y $V_m = \qty{-60}{mV}$, calcúlense la energía libre disponible de
+los dos iones sodio y el cociente máximo de concentraciones de glucosa
+(dentro/fuera) que el \omterm{prop:b1:membranes-transport:secondary}{simportador} puede construir a \qty{37}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:10}
+Se enfría una \omterm{def:b1:cell-unit-of-life:cell}{célula} a \qty{4}{\celsius}. Predíganse, con razones, los
+efectos sobre la fluidez de la membrana, la difusión simple del
+$\mathrm{O_2}$, la \omterm{def:b1:membranes-transport:transporters}{bomba}, los gradientes iónicos al cabo de horas, el
+\omterm{def:b1:membranes-transport:potential}{potencial de membrana} y el volumen de la \omterm{def:b1:cell-unit-of-life:cell}{célula}. (Téngase en cuenta que las
+proteínas de la \omterm{def:b1:cell-unit-of-life:cell}{célula} ejercen una atracción osmótica que el gradiente de
+sodio compensa normalmente.)
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:11}
+Las \omterm{def:b1:cell-unit-of-life:cell}{células} fusionadas de Frye y Edidin mostraron una mezcla completa de las
+proteínas de superficie a \qty{37}{\celsius} en \qty{40}{min}, ninguna a
+\qty{4}{\celsius} y ninguna a \qty{37}{\celsius} cuando se bloqueaba la
+síntesis de ATP --- este último resultado se demostró después erróneo.
+Dígase qué implicaría cada resultado sobre el mecanismo de la mezcla, y por
+qué la versión correcta (la mezcla no necesita ATP) importa para el \omterm{def:b1:membranes-transport:membrane}{modelo
+del mosaico fluido}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:membranes-transport:12}
+``El \omterm{def:b1:membranes-transport:potential}{potencial de membrana} es un subproducto de los gradientes iónicos, no
+algo que la \omterm{def:b1:cell-unit-of-life:cell}{célula} construya directamente.'' Discútase en un párrafo, con la
+\omterm{thm:b1:membranes-transport:nernst}{ecuación de Nernst}, la \omterm{def:b1:membranes-transport:transporters}{bomba} y el número de iones realmente necesarios para
+cargar la membrana (una capacidad de \qty{1}{\micro F/cm^2}).
+\end{exercise}
+
+\section{Problema: el enterocito}
+
+\begin{problem}[{Problema de fin de semana --- la célula que extrae la
+glucosa del intestino: bomba, simportador, transportador y la ecuación de
+Nernst, hasta llegar al mayor cociente de glucosa que la célula puede
+construir}]
+\label{pb:b1:membranes-transport:1}
+Una \omterm{def:b1:cell-unit-of-life:cell}{célula} epitelial intestinal (enterocito) mide \qty{25}{\micro m} de alto
+y \qty{5}{\micro m} de ancho; su membrana apical da a la luz y su membrana
+basolateral, a la sangre. Su \omterm{def:b1:eukaryotic-cell:organelle}{citosol} contiene \qty{12}{mmol/L} de
+$\mathrm{Na^+}$ y \qty{140}{mmol/L} de $\mathrm{K^+}$; la luz y la sangre
+contienen \qty{145}{mmol/L} de $\mathrm{Na^+}$ y \qty{5}{mmol/L} de
+$\mathrm{K^+}$. El \omterm{def:b1:membranes-transport:potential}{potencial de membrana} es de \qty{-60}{mV}. Tómense
+$T = \qty{310}{K}$, $R = \qty{8.314}{J.mol^{-1}.K^{-1}}$,
+$F = \qty{96500}{C/mol}$, $RT/F = \qty{26.7}{mV}$ y
+$\Delta G_{\text{ATP}} = \qty{-50}{kJ/mol}$ en la \omterm{def:b1:cell-unit-of-life:cell}{célula}.
+
+\medskip
+\noindent\textbf{Parte I --- Los gradientes.}
+\begin{enumerate}
+  \item Calcúlense los potenciales de Nernst del $\mathrm{Na^+}$ y del
+        $\mathrm{K^+}$.
+  \item ¿Qué ion está más cerca del equilibrio a \qty{-60}{mV}? ¿Qué dice
+        esto sobre las permeabilidades en reposo?
+  \item Calcúlese la variación de energía libre para un mol de
+        $\mathrm{Na^+}$ que entra en la \omterm{def:b1:cell-unit-of-life:cell}{célula}, y para un mol de
+        $\mathrm{K^+}$ que sale.
+  \item Calcúlese el coste en energía libre de un ciclo de la \omterm{def:b1:membranes-transport:transporters}{bomba}
+        ($3\,\mathrm{Na^+}$ fuera, $2\,\mathrm{K^+}$ dentro) y compárese
+        con la energía de un ATP. ¿Cuál es el rendimiento?
+  \item La \omterm{def:b1:membranes-transport:transporters}{bomba} está únicamente en la membrana basolateral. Explíquese por
+        qué esa localización es necesaria para que la \omterm{def:b1:cell-unit-of-life:cell}{célula} lleve la
+        glucosa de la luz a la sangre.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte II --- Glucosa cuesta arriba.}
+La membrana apical lleva un \omterm{prop:b1:membranes-transport:secondary}{simportador} que introduce una glucosa junto con
+dos $\mathrm{Na^+}$; la membrana basolateral lleva un \omterm{def:b1:membranes-transport:transporters}{transportador} de
+glucosa (\omterm{def:b1:membranes-transport:transporters}{difusión facilitada}).
+\begin{enumerate}[resume]
+  \item Calcúlese la energía libre liberada por dos $\mathrm{Na^+}$ que
+        entran en la \omterm{def:b1:cell-unit-of-life:cell}{célula}.
+  \item Escríbase la energía libre necesaria para llevar una glucosa desde
+        la luz (concentración $c_L$) al \omterm{def:b1:eukaryotic-cell:organelle}{citosol} ($c_C$).
+  \item En el límite del \omterm{prop:b1:membranes-transport:secondary}{simportador} ambas son iguales. Calcúlese el
+        cociente máximo $c_C/c_L$.
+  \item Si la luz baja a \qty{0.1}{mmol/L} de glucosa al final de la
+        absorción, ¿qué concentración citosólica puede seguir manteniendo
+        el \omterm{prop:b1:membranes-transport:secondary}{simportador}?
+  \item La glucosa de la sangre está a \qty{5}{mmol/L}. Explíquese cómo
+        sale la glucosa de la \omterm{def:b1:cell-unit-of-life:cell}{célula} hacia la sangre sin más energía.
+  \item ¿Por qué está el \omterm{prop:b1:membranes-transport:secondary}{simportador} en la membrana apical y el
+        \omterm{def:b1:membranes-transport:transporters}{transportador} en la basolateral, y no al revés?
+  \item Las soluciones de rehidratación oral para el cólera contienen
+        glucosa y sal. Explíquese, a partir del \omterm{prop:b1:membranes-transport:secondary}{simportador}, por qué la
+        glucosa hace que se absorban la sal y el agua.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte III --- Contar el tráfico.}
+La \omterm{def:b1:cell-unit-of-life:cell}{célula} absorbe \qty{2e-15}{mol} de glucosa por segundo.
+\begin{enumerate}[resume]
+  \item Calcúlense el $\mathrm{Na^+}$ que entra por segundo por los
+        \omterm{prop:b1:membranes-transport:secondary}{simportadores} y el número de ciclos de \omterm{def:b1:membranes-transport:transporters}{bomba} por segundo
+        necesarios para exportarlo.
+  \item Calcúlense el ATP gastado por segundo en esa exportación y la
+        fracción de la glucosa absorbida que habría que respirar para
+        pagarla (unos 30 ATP por glucosa).
+  \item Cada \omterm{prop:b1:membranes-transport:secondary}{simportador} realiza \qty{50}{} ciclos por segundo. ¿Cuántos
+        \omterm{prop:b1:membranes-transport:secondary}{simportadores} necesita la membrana apical? La membrana apical mide
+        \qty{25}{\micro m^2} y las microvellosidades la multiplican por
+        \qty{20}{}: calcúlese la densidad de \omterm{prop:b1:membranes-transport:secondary}{simportadores} por micrómetro
+        cuadrado.
+  \item El $\mathrm{Na^+}$ que entra arrastra agua por \omterm{def:b1:membranes-transport:osmosis}{ósmosis}. Dos
+        $\mathrm{Na^+}$ y una glucosa, con el $\mathrm{Cl^-}$ que los
+        acompaña, son cuatro osmoles; la \omterm{def:b1:cell-unit-of-life:cell}{célula} mantiene su osmolaridad en
+        \qty{0.3}{osmol/L}. Calcúlense el volumen de agua que debe seguir a
+        los solutos por segundo y el tiempo que tardaría en duplicarse el
+        volumen de la \omterm{def:b1:cell-unit-of-life:cell}{célula} si el agua no saliera por la membrana
+        basolateral.
+  \item Calcúlese el número de moléculas de agua absorbidas por cada
+        molécula de glucosa (\qty{18}{g/mol}, densidad \qty{1}{g/mL}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte IV --- Cargar la membrana.}
+La membrana es un condensador de \qty{1}{\micro F/cm^2}.
+\begin{enumerate}[resume]
+  \item Calcúlense el área de membrana de la \omterm{def:b1:cell-unit-of-life:cell}{célula} (tómese una caja de
+        \qty{25}{\micro m} por \qty{5}{\micro m} por \qty{5}{\micro m} sin
+        microvellosidades) y su capacidad.
+  \item Calcúlense la carga necesaria para mantener \qty{-60}{mV} y el
+        número de iones monovalentes que representa.
+  \item Calcúlese el número de iones en exceso por micrómetro cuadrado de
+        membrana que eso supone.
+  \item Calcúlense el número de iones $\mathrm{K^+}$ de la \omterm{def:b1:cell-unit-of-life:cell}{célula} y la
+        fracción que debe salir para cargar la membrana. Coméntese.
+  \item La \omterm{def:b1:membranes-transport:transporters}{bomba} saca una carga neta en cada ciclo. Con la pregunta 13,
+        calcúlense la corriente que transporta y la variación de potencial
+        que produciría en un segundo si nada más se moviera. ¿Por qué no se
+        dispara en realidad el potencial?
+  \item Un fármaco bloquea la \omterm{def:b1:membranes-transport:transporters}{bomba}. Predíganse, por orden, los cambios en
+        el gradiente de sodio, en la absorción de glucosa, en el \omterm{def:b1:membranes-transport:potential}{potencial
+        de membrana} y en el volumen celular.
+  \item Otro fármaco bloquea en cambio los \omterm{def:b1:membranes-transport:transporters}{canales} de potasio. Predígase el
+        cambio del potencial de reposo.
+  \item Enúnciese el resultado: el cociente máximo de concentraciones de
+        glucosa que el enterocito puede construir y las dos \omterm{def:b1:membranes-transport:membrane}{proteínas de
+        membrana} que lo hacen posible.
+\end{enumerate}
+\end{problem}

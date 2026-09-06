@@ -304,6 +304,36 @@ ENGLISH_CONTENT = {
     # a physics figure label actually uses are listed by hand.
     "boiling", "melting", "freezing", "cooling", "heating", "converging",
     "diverging", "falling", "sliding", "rolling", "charged", "closed-loop",
+    # ---- university biology (Book 3) ---------------------------------------
+    # Harvested from the English bodies of parts/bachelor-1 and validated
+    # against 1.6 MB of the SHIPPED Indonesian prose of Books 1-2 (214 files,
+    # reduced with visible_text): every word below occurs there exactly zero
+    # times, and its Indonesian is a different string -- glukosa, spesies,
+    # enzim, manusia, xilem, floem, asam, untai, pertukaran, karbon, gula,
+    # heliks, tumbuhan, aliran, ikatan, fosfat, ekson, glikogen, oksigen,
+    # piruvat, promotor, cahaya, sekunder, primer, liter, genom, polimerase,
+    # faktor, relung, pohon ek, asal, kadal, zona, bukti, anggaran, kontrol,
+    # aktif, metabolik, pati, sukrosa, selulosa, nukleotida, kodon, ribosom,
+    # organel, substrat, gradien, membran, vakuola, lisosom, kloroplas,
+    # mitokondria, karbohidrat, kromatin, nukleoid, tilakoid, telomer,
+    # sentromer, histon, katalis, reseptor, difusi, glikolisis, biomassa,
+    # bioma. The ones Indonesian DOES spell identically (lipid, intron,
+    # amino, plasmid, operon, ...) are in NOT_GATED instead -- "lipid" was on
+    # this list until it fired 46 times on correct shipped grade-10 prose.
+    "glucose", "species", "enzyme", "human", "xylem", "phloem", "acid",
+    "acids", "strand", "strands", "exchange", "carbon", "sugar", "sugars",
+    "helix", "plant", "plants", "flow", "bond", "bonds", "phosphate",
+    "exon", "exons", "glycogen", "oxygen", "pyruvate", "promoter", "light",
+    "secondary", "primary", "lipids", "fatty", "fat", "litre", "genome",
+    "polymerase", "factors", "niche", "oak", "origin", "hairs", "lizard",
+    "digestive", "zone", "evidence", "budget", "control", "active",
+    "metabolic", "starch", "sucrose", "cellulose", "nucleotide",
+    "nucleotides", "codon", "codons", "ribosome", "ribosomes",
+    "organelles", "substrates", "gradients", "membranes", "vacuoles",
+    "lysosomes", "chloroplasts", "mitochondrion", "carbohydrate",
+    "carbohydrates", "chromatin", "nucleoid", "thylakoid", "telomere",
+    "centromere", "histone", "catalyst", "receptor", "gradient",
+    "diffusion", "glycolysis", "biomass", "biome",
 }
 
 ENGLISH_WORDS = ENGLISH_FUNCTION | ENGLISH_CONTENT
@@ -410,6 +440,25 @@ NOT_GATED = {
     # already in this set for the same reason; "minimal" was simply missed.
     "minimal",
     "impuls", "fluks", "entropi", "entalpi", "adiabatik", "isotermal",
+    # ---- university biology (Book 3), 2026-09-05 ---------------------------
+    # KBBI spells each of these exactly as English does, so gating any of them
+    # fires on correct Indonesian prose. "lipid" is not hypothetical: it was in
+    # ENGLISH_CONTENT above until it hit 46 times in the shipped grade-10 and
+    # grade-11 chapters ("karbohidrat, lipid, protein, asam nukleat"). The rest
+    # are listed so the next agent does not re-add them: check here first.
+    # "kation" is ordinary Indonesian (KBBI) for the cation, and it ends in
+    # -tion, so ENGLISH_SUFFIX gated it. There is no English homograph to
+    # miss: English spells it "cation", with a c. Its partner "anion" was
+    # never gated only because -on is not a listed suffix -- an accident, not
+    # a decision. Reported by the Indonesian Biology Book 3 agent, 2026-09-06,
+    # which had written "ion positif"/"ion negatif" to get past the gate;
+    # kation/anion is the pair a lecture uses.
+    "kation", "anion",
+    "lipid", "intron", "amino", "basal", "plasmid", "operon", "steroid",
+    "monomer", "dimer", "isomer", "inhibitor", "osmosis", "mitosis",
+    "meiosis", "stroma", "grana", "optimum", "optimal", "nonpolar",
+    "kodon", "genom", "organel", "substrat", "gradien", "ribosom",
+    "nukleotida", "sitoskeleton", "vakuola", "lisosom", "tilakoid",
     "isobarik", "isokorik", "kapasitas", "resistansi", "impedansi",
     "induktansi", "kapasitansi", "reaktansi", "amplitudo", "fase",
     "harmonik", "osilator", "osilasi", "resonansi", "difraksi", "refleksi",
@@ -418,6 +467,21 @@ NOT_GATED = {
 
 # Brand, markup names and unit symbols that legitimately stay Latin.
 ALLOWED = {
+    # A PROPER NAME that ends in an English suffix. "Lawrence Berkeley
+    # Laboratory" is the institution credited for the Melvin Calvin
+    # photograph, kept verbatim by all four wave-1 editions because a credit
+    # line names a real body -- but "Lawrence" ends in -ence, so
+    # ENGLISH_SUFFIX_CAP flagged it. Note the deliberate NON-entry beside it:
+    # "Foundation" (in "Nobel Foundation") fires on the same rule and is NOT
+    # exempted, because there translation IS correct -- wave 1 wrote
+    # Fondation / Fundacion / Nobelstichting, and Indonesian writes "Yayasan
+    # Nobel". The distinction is a name component versus a common noun, and it
+    # cannot be drawn by suffix, only by listing. Reported by the Indonesian
+    # Biology Book 3 agent, 2026-09-06.
+    # ("lawrence" lived here briefly and was WITHDRAWN in favour of an
+    # ATTRIBUTION entry for the whole phrase "Lawrence Berkeley Laboratory":
+    # an ALLOWED token passes everywhere in the book, an ATTRIBUTION phrase
+    # only where the institution is actually named.)
     "one", "course", "com", "www", "http", "https", "math", "book",
     "tex", "latex", "pdf", "html", "github", "md",
     "si", "iso", "cm", "mm", "km", "kg", "mg", "ml", "hz", "rad",
@@ -481,7 +545,23 @@ NUMBER_ABBREV = re.compile(r"\b[Nn]o\.\s*\d")
 # not write its grade-9 Jenner credit at all.
 ATTRIBUTION = re.compile(
     r"Wikimedia\s+Commons|Wellcome\s+Collection|Creative\s+Commons"
-    r"|\bCC[~\s]?(?:BY(?:[~\s-](?:SA|NC|ND))*(?:[~\s]?\d+(?:\.\d+)?)?|0)")
+    r"|\bCC[~\s]?(?:BY(?:[~\s-](?:SA|NC|ND))*(?:[~\s]?\d+(?:\.\d+)?)?|0)"
+    # INSTITUTION NAMES in a photo credit. These are proper names of real
+    # bodies, kept byte-identical by every edition (checked: all four wave-1
+    # editions of Book 3 carry "National Human Genome Research Institute"
+    # verbatim, with the phrase WRAPPED ACROSS LINES in fr and pt -- so
+    # normalise whitespace before looking for it, or you will conclude it is
+    # absent). They belong here rather than in ALLOWED because ATTRIBUTION
+    # blanks the PHRASE in context, leaving the surrounding credit prose fully
+    # gated, whereas an ALLOWED token would pass anywhere in the book,
+    # including inside a genuinely untranslated English sentence.
+    #
+    # "Human" and "Genome" are in ENGLISH_CONTENT and must stay there: their
+    # Indonesian is manusia and genom. It is only this three-word name that is
+    # exempt. Reported by the Indonesian Biology Book 3 agent, 2026-09-06,
+    # which also proposed the ATTRIBUTION-over-ALLOWED reasoning.
+    r"|National\s+Human\s+Genome\s+Research\s+Institute"
+    r"|Lawrence\s+Berkeley\s+Laboratory")
 
 # The twenty standard THREE-LETTER AMINO-ACID SYMBOLS. These are international
 # chemical symbols, identical in every language, and a genetic-code table has

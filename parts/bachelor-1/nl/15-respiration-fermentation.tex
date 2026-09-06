@@ -1,0 +1,582 @@
+\chapter{Celademhaling en gisting}\label{ch:b1:respiration-fermentation}
+
+Een kolf gist in suikeroplossing waaruit de lucht is geweerd borrelt
+koolstofdioxide en zet de suiker om in alcohol; laat er lucht bij en het borrelen
+vertraagt, de alcohol houdt op, en de gist groeit op dezelfde suiker tien keer
+sneller. Pasteur zag dat in 1861 en kon het niet verklaren; de verklaring kostte
+een eeuw en loopt door dit hele hoofdstuk. Zuurstof laat een \omterm{def:b1:cell-unit-of-life:cell}{cel} uit glucose
+vijftien keer de energie halen die zij er zonder zuurstof uit kan krijgen, en zij
+doet dat door de elektronen van de suiker langs een keten van dragers naar
+zuurstof te leiden, terwijl zij bij hun val protonen over een membraan pompt, en de
+protonen door een turbine terug te laten stromen die \omterm{def:b1:water-small-molecules:atp}{ATP} maakt. Dit hoofdstuk
+beschrijft de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse}, de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}, de \omterm{def:b1:respiration-fermentation:chain}{ademhalingsketen} en haar chemiosmotische
+koppeling, de \omterm{def:b1:respiration-fermentation:fermentation}{gistingen} die het zonder zuurstof stellen, en het verbranden van
+\omterm{def:b1:lipids:triglyceride}{vetten} en \omterm{def:b1:proteins:peptide}{eiwitten} door dezelfde machinerie.
+
+\section{De oxidatie van glucose}
+
+\begin{proposition}[De totaalreactie en haar fasen]\label{prop:b1:respiration-fermentation:overview}
+\index{celademhaling}
+De volledige oxidatie van glucose,
+\[
+\mathrm{C_6H_{12}O_6} + 6\,\mathrm{O_2} \to 6\,\mathrm{CO_2} + 6\,\mathrm{H_2O},
+\qquad \Delta G^{\circ\prime} = \qty{-2870}{kJ/mol},
+\]
+verloopt in drie fasen die de elektronen de zuurstof nooit rechtstreeks laten
+ontmoeten. De \emph{\omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse}}, in het \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}, splitst glucose in twee pyruvaat
+en levert 2 \omterm{def:b1:water-small-molecules:atp}{ATP} en 2 NADH. De \emph{oxidatie van pyruvaat en de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}}, in
+de \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondriale matrix}, oxideren het pyruvaat tot $\mathrm{CO_2}$, waarbij de
+elektronen op 8 NADH en 2 $\mathrm{FADH_2}$ worden geladen en 2 GTP wordt gemaakt.
+De \emph{oxidatieve fosforylering}, in het binnenmembraan van het \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion},
+geeft die elektronen aan zuurstof door via een keten dragers die protonen pompt, en
+de protonengradiënt drijft de synthese van ongeveer 26 \omterm{def:b1:water-small-molecules:atp}{ATP} aan. In totaal zo'n 30
+\omterm{def:b1:water-small-molecules:atp}{ATP} per glucose: ongeveer de helft van de vrije verbrandingsenergie vastgelegd, de
+rest als warmte afgegeven.
+\end{proposition}
+
+\begin{definition}[Elektronendragers]\label{def:b1:respiration-fermentation:carriers}
+\index{NAD}\index{FAD}
+\emph{$\mathrm{NAD^+}$} (nicotinamide-adenine-dinucleotide) neemt van een \omterm{def:b1:enzymes:enzyme}{substraat}
+twee elektronen en één proton op en wordt NADH; \emph{FAD} neemt twee elektronen en
+twee protonen op en wordt $\mathrm{FADH_2}$. Beide zijn \omterm{def:b1:enzymes:enzyme}{co-enzymen} van
+dehydrogenasen, en beide worden hergebruikt: door het katabolisme gereduceerd, door
+de \omterm{def:b1:respiration-fermentation:chain}{ademhalingsketen} weer geoxideerd. Een \omterm{def:b1:cell-unit-of-life:cell}{cel} bevat er maar micromollen van, die per
+uur duizenden keren worden omgezet. Hun redoxpotentialen,
+$E'_0 = \qty{-0.32}{V}$ voor $\mathrm{NAD^+}/\mathrm{NADH}$, plaatsen hen ver onder
+zuurstof ($\qty{+0.82}{V}$): elk paar elektronen dat NADH aan zuurstof afgeeft komt
+vrij met $\Delta G^{\circ\prime} = -2F\Delta E =
+\qty{-220}{kJ/mol}$, genoeg voor meer dan vier \omterm{def:b1:water-small-molecules:atp}{ATP}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  st/.style={draw, thick, rounded corners=4pt, minimum height=9mm, text width=30mm, align=center, fill=white}]
+  \node[st, fill=omDef!12] (gly) at (0,0) {\textbf{glycolyse}\\ cytosol\\ glucose $\to$ 2 pyruvaat};
+  \node[st, fill=omProp!12] (krebs) at (5.4,0) {\textbf{pyruvaatoxidatie}\\ \textbf{+ krebscyclus}\\ matrix; 2 pyruvaat $\to$ 6 $\mathrm{CO_2}$};
+  \node[st, fill=omThm!12] (ox) at (10.8,0) {\textbf{oxidatieve}\\ \textbf{fosforylering}\\ binnenmembraan; $\mathrm{O_2} \to \mathrm{H_2O}$};
+  \draw[->, very thick] (gly) -- (krebs) node[midway, above, font=\scriptsize] {2 pyruvaat};
+  \draw[->, very thick] (krebs) -- (ox) node[midway, above, align=center, font=\scriptsize] {8 NADH\\ 2 $\mathrm{FADH_2}$};
+  \draw[->, very thick] (gly.north) .. controls (0,1.8) and (10.8,1.8) .. (ox.north) node[pos=0.5, above] {2 NADH};
+  \node[anchor=north, omExo!70!black] at (gly.south) {2 ATP};
+  \node[anchor=north, omExo!70!black] at (krebs.south) {2 GTP};
+  \node[anchor=north, omExo!70!black] at (ox.south) {$\approx$ 26 ATP};
+  \node[anchor=north, align=center, gray] at (5.4,-1.75) {samen $\approx$ 30 ATP per glucose, ongeveer de helft van de \qty{2870}{kJ/mol}};
+\end{tikzpicture}
+
+{\small De drie fasen van de ademhaling. De \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} en de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus} halen de
+elektronen van glucose af en laden ze op NADH en $\mathrm{FADH_2}$; de oxidatieve
+fosforylering verzilvert ze.}
+\end{omfigure}
+
+\section{Glycolyse}
+
+\begin{definition}[Glycolyse]\label{def:b1:respiration-fermentation:glycolysis}
+\index{glycolyse}
+De \emph{glycolyse} is een reeks van tien enzymreacties in het \omterm{def:b1:eukaryotic-cell:organelle}{cytosol} die één
+glucose (C6) omzet in twee \emph{pyruvaat} (C3). In de \emph{investeringsfase}
+worden twee \omterm{def:b1:water-small-molecules:atp}{ATP} uitgegeven om de suiker te fosforyleren (hexokinase, daarna
+\emph{fosfofructokinase}, PFK) en wordt het difosfaat met zes koolstoffen in twee
+fosfaten met drie koolstoffen gesplitst. In de \emph{opbrengstfase} wordt elke
+triose door $\mathrm{NAD^+}$ geoxideerd (de enige oxidatie van de glycolyse) en
+worden haar fosfaten door \emph{substraatfosforylering}\index{substraatfosforylering}
+aan ADP overgedragen --- een fosfaat dat rechtstreeks van een energierijk
+tussenproduct aan ADP wordt doorgegeven, zonder membraan of zuurstof. De balans:
+\[
+\text{glucose} + 2\,\mathrm{NAD^+} + 2\,\mathrm{ADP} + 2\,\mathrm{P_i}
+\to 2\,\text{pyruvaat} + 2\,\mathrm{NADH} + 2\,\mathrm{H^+} + 2\,\mathrm{ATP} + 2\,\mathrm{H_2O} .
+\]
+Zij heeft geen zuurstof nodig; zij is de oudste en meest algemene route van de
+stofwisseling.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round,
+  m/.style={draw, thick, rounded corners=3pt, minimum height=7mm, align=center, fill=omDef!10, inner sep=3pt},
+  lab/.style={font=\scriptsize}]
+  \node[m] (glc) at (0,0) {glucose};
+  \node[m] (g6p) at (3.4,0) {glucose-6-P};
+  \node[m] (f6p) at (7.0,0) {fructose-6-P};
+  \node[m] (fbp) at (10.8,0) {fructose-1,6-bisP};
+  \node[m, fill=omProp!12] (g3p) at (10.8,-2.2) {2 glyceraldehyde-3-P};
+  \node[m, fill=omProp!12] (bpg) at (5.6,-2.2) {2 1,3-bisfosfoglyceraat};
+  \node[m, fill=omProp!12] (pep) at (5.6,-4.2) {2 fosfo-enolpyruvaat};
+  \node[m, fill=omProp!12] (pyr) at (1.0,-4.2) {2 pyruvaat};
+  \draw[->, thick] (glc) -- (g6p) node[midway, above=3pt, omThm, font=\scriptsize] {ATP} node[midway, below=3pt, lab] {hexokinase};
+  \draw[->, thick] (g6p) -- (f6p);
+  \draw[->, thick] (f6p) -- (fbp) node[midway, above=3pt, omThm, font=\scriptsize] {ATP};
+  \node[lab, anchor=north] at (8.9,-0.42) {PFK (geregeld)};
+  \draw[->, thick] (fbp) -- (g3p) node[midway, right, lab] {gesplitst in twee triosen};
+  \draw[->, thick] (g3p) -- (bpg);
+  \node[lab, anchor=south, omExo!70!black] at (8.6,-1.78) {2 $\mathrm{NAD^+} \to$ 2 NADH};
+  \node[lab, anchor=north] at (8.6,-2.62) {oxidatie};
+  \draw[->, thick] (bpg) -- (pep) node[midway, right, omExo!70!black] {2 ATP};
+  \draw[->, thick] (pep) -- (pyr) node[midway, above, omExo!70!black] {2 ATP};
+  \node[anchor=north west, align=left, gray] at (-0.6,-5.0) {investering: $-2$ ATP (blauwe vakken)\\ opbrengst: $+4$ ATP, $+2$ NADH (oranje vakken)\\ netto: $+2$ ATP, $+2$ NADH};
+\end{tikzpicture}
+
+{\small De \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} in grote lijnen. Twee \omterm{def:b1:water-small-molecules:atp}{ATP} worden uitgegeven om een difosfaat
+met zes koolstoffen te bouwen, dat in twee triosen splitst; hun oxidatie en twee
+\omterm{def:b1:respiration-fermentation:glycolysis}{substraatfosforyleringen} leveren samen vier \omterm{def:b1:water-small-molecules:atp}{ATP} en twee NADH terug.
+Fosfofructokinase is de regelkraan van de route.}
+\end{omfigure}
+
+\begin{proposition}[Regeling bij fosfofructokinase]\label{prop:b1:respiration-fermentation:pfk}
+PFK, de eerste onomkeerbare stap die aan de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} is toegewijd, is een
+\omterm{def:b1:enzymes:allosteric}{allosterisch enzym} (\cref{ch:b1:enzymes}) dat door \omterm{def:b1:water-small-molecules:atp}{ATP} en door citraat wordt geremd
+--- de signalen dat energie en brandstof voor de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus} overvloedig zijn ---
+en door AMP en ADP wordt geactiveerd, de signalen dat zij dat niet zijn. Wanneer
+het \omterm{def:b1:water-small-molecules:atp}{ATP} hoog is, daalt de stroom door de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} binnen seconden; wanneer de \omterm{def:b1:cell-unit-of-life:cell}{cel}
+\omterm{def:b1:water-small-molecules:atp}{ATP} uitgeeft, stijgt AMP steil (via adenylaatkinase,
+$2\,\mathrm{ADP} \rightleftharpoons \mathrm{ATP} + \mathrm{AMP}$), en gaat PFK
+open. De \emph{energielading} van de \omterm{def:b1:cell-unit-of-life:cell}{cel} regelt de route die haar vult.
+\end{proposition}
+
+\section{Pyruvaatoxidatie en de krebscyclus}
+
+\begin{definition}[Pyruvaatdehydrogenase, acetyl-CoA]\label{def:b1:respiration-fermentation:pdh}
+Pyruvaat gaat het \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} binnen en wordt door het complex
+\emph{pyruvaatdehydrogenase} geoxideerd tot \emph{acetyl-CoA}\index{acetyl-CoA}
+--- een acetylgroep met twee koolstoffen, gedragen door \omterm{def:b1:enzymes:enzyme}{co-enzym} A
+(\cref{ch:b1:nucleic-acids}) aan een energierijke thio-esterbinding --- waarbij één
+$\mathrm{CO_2}$ en één NADH vrijkomen. Acetyl-CoA is de gemeenschappelijke ingang
+van alle brandstoffen in de cyclus: koolhydraten via pyruvaat, \omterm{def:b1:lipids:triglyceride}{vetten} via
+$\beta$-oxidatie, veel \omterm{def:b1:proteins:aminoacid}{aminozuren} rechtstreeks.
+\end{definition}
+
+\begin{definition}[De krebscyclus]\label{def:b1:respiration-fermentation:krebs}
+\index{krebscyclus}\index{citroenzuurcyclus}
+De \emph{krebscyclus} (citroenzuurcyclus) in de \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondriale matrix} condenseert
+\omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} (C2) met oxaalacetaat (C4) tot citraat (C6) en oxideert in acht stappen
+de twee koolstoffen tot $\mathrm{CO_2}$ terwijl hij het oxaalacetaat herstelt. Per
+acetylgroep: 3 NADH, 1 $\mathrm{FADH_2}$, 1 GTP (door \omterm{def:b1:respiration-fermentation:glycolysis}{substraatfosforylering}) en 2
+$\mathrm{CO_2}$. Per glucose (twee acetylgroepen): 6 NADH, 2 $\mathrm{FADH_2}$, 2
+GTP, 4 $\mathrm{CO_2}$ --- wat met de 2 $\mathrm{CO_2}$ van het
+pyruvaatdehydrogenase de zes van de totaalvergelijking oplevert. In de cyclus zelf
+wordt geen zuurstof verbruikt; hij loopt alleen zolang de \omterm{def:b1:respiration-fermentation:chain}{ademhalingsketen} zijn
+NADH weer oxideert. Hij is ook \emph{amfibool}: zijn tussenproducten worden voor de
+opbouw afgetapt (\cref{ch:b1:biosyntheses-integration}) en uit \omterm{def:b1:proteins:aminoacid}{aminozuren} en
+pyruvaat aangevuld.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  \def\R{2.6}
+  \foreach \a/\n/\c in {90/citraat (C6)/omDef, 45/isocitraat (C6)/omDef, 0/$\alpha$-ketoglutaraat (C5)/omDef, -45/succinyl-CoA (C4)/omDef, -90/succinaat (C4)/omDef, -135/fumaraat (C4)/omDef, 180/malaat (C4)/omDef, 135/oxaalacetaat (C4)/omProp} {
+    \node[draw, thick, rounded corners=3pt, fill=\c!12, inner sep=2.5pt, font=\scriptsize] (n\a) at (\a:\R) {\n};
+  }
+  \foreach \a/\b in {90/45, 45/0, 0/-45, -45/-90, -90/-135, -135/180, 180/135, 135/90} {
+    \draw[->, thick] (n\a) to[bend right=25] (n\b);
+  }
+  % outputs
+  \node[omExo!70!black, anchor=west, align=left] at (3.5,1.9) {NADH, $\mathrm{CO_2}$};
+  \node[omExo!70!black, anchor=west, align=left] at (3.5,-1.6) {NADH, $\mathrm{CO_2}$};
+  \node[omExo!70!black, anchor=north, align=center] at (0,-3.3) {GTP};
+  \node[omExo!70!black, anchor=east, align=right] at (-3.4,-1.7) {$\mathrm{FADH_2}$};
+  \node[omExo!70!black, anchor=east, align=right] at (-3.4,1.7) {NADH};
+  % input
+  \node[draw, thick, rounded corners=3pt, fill=omThm!15, inner sep=2.5pt, font=\scriptsize] (ac) at (0,4.3) {acetyl-CoA (C2)};
+  \draw[->, thick, omThm] (ac) -- (n90);
+  \node[anchor=west, align=left, gray] at (3.3,4.0) {per ronde: 3 NADH, 1 $\mathrm{FADH_2}$,\\ 1 GTP, 2 $\mathrm{CO_2}$};
+\end{tikzpicture}
+
+{\small De \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}. Een acetylgroep komt binnen door met oxaalacetaat te
+condenseren; twee koolstoffen vertrekken als $\mathrm{CO_2}$ bij de twee
+decarboxyleringen; de vier oxidaties laden drie NADH en één $\mathrm{FADH_2}$; het
+oxaalacetaat wordt hersteld voor de volgende ronde.}
+\end{omfigure}
+
+\begin{example}[De koolstoffen volgen]\label{ex:b1:respiration-fermentation:carbons}
+Geef een \omterm{def:b1:cell-unit-of-life:cell}{cel} glucose die op koolstof 1 met $\mathrm{^{14}C}$ is gemerkt: het merk
+verschijnt in de methylkoolstof van pyruvaat, daarna in die van \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, komt in
+citraat terecht, en vertrekt pas in de tweede of derde ronde van de cyclus als
+$\mathrm{CO_2}$ --- de twee koolstoffen die in een gegeven ronde vrijkomen horen
+bij het oxaalacetaat van de vorige. Krebs (1937) leidde de cyclus af uit de
+waarneming dat katalytische hoeveelheden van elk van zijn zuren de oxidatie van
+veel meer pyruvaat aanwakkerden dan zij zelf konden verklaren: zij werden telkens
+hersteld.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.26\linewidth]{images/book3/krebs.jpg}
+
+{\small Hans Krebs (1900--1981), die de cyclus in 1937 uitwerkte uit de snelheden
+waarmee gemalen duivenspier zijn zuren oxideerde. Foto: Nobelstichting, publiek
+domein.}
+\end{omfigure}
+
+\section{Oxidatieve fosforylering}
+
+\begin{definition}[De ademhalingsketen]\label{def:b1:respiration-fermentation:chain}
+\index{ademhalingsketen}\index{elektronentransportketen}
+De \emph{ademhalingsketen} bestaat uit vier eiwitcomplexen van het binnenmembraan
+van het \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} en twee beweeglijke dragers. NADH geeft zijn elektronen aan
+\emph{complex I}, $\mathrm{FADH_2}$ (via succinaatdehydrogenase, \emph{complex II})
+de zijne; beide reduceren \emph{ubichinon} (Q), een vetoplosbaar chinon dat in de
+membraan diffundeert; Q geeft ze door aan \emph{complex III}, dat ze overhandigt
+aan \emph{cytochroom $c$}, een klein \omterm{def:b1:proteins:peptide}{eiwit} aan de buitenzijde; en \emph{complex IV}
+(cytochroomoxidase) levert ze, vier tegelijk, aan $\mathrm{O_2}$, waarbij water
+ontstaat. Bij elk van de complexen I, III en IV dalen de elektronen in potentiaal
+en pompt de energie protonen uit de matrix naar de intermembraanruimte: ongeveer 4,
+4 en 2 per paar elektronen, tien per NADH, zes per $\mathrm{FADH_2}$ (dat onder
+complex I binnenkomt).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % membrane band
+  \fill[omDef!15] (0,0) rectangle (13.0,1.4);
+  \draw[omDef!60!black] (0,0) -- (13.0,0) (0,1.4) -- (13.0,1.4);
+  \node[anchor=east, gray, align=right] at (-0.15,1.25) {intermembraanruimte\\ (veel $\mathrm{H^+}$, pH 7)};
+  \node[anchor=east, gray, align=right] at (-0.15,0.15) {matrix\\ (weinig $\mathrm{H^+}$, pH 8)};
+  % complexes
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c1) at (1.5,0.7) {I};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=12mm, minimum width=10mm, align=center] (c2) at (3.6,0.5) {II};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c3) at (6.2,0.7) {III};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, minimum height=18mm, minimum width=13mm, align=center] (c4) at (8.9,0.7) {IV};
+  \node[draw, thick, fill=omExo!25, rounded corners=6pt, minimum height=16mm, minimum width=12mm, align=center] (atp) at (11.6,0.5) {ATP-\\ synthase};
+  \node[circle, draw, thick, fill=omProp!30, inner sep=1.5pt, font=\scriptsize] (q) at (4.9,0.55) {Q};
+  \node[circle, draw, thick, fill=omProp!30, inner sep=1.5pt, font=\scriptsize] (cyt) at (7.55,1.25) {cyt $c$};
+  % electron flow
+  \draw[->, thick, omProp] (c1) -- (q); \draw[->, thick, omProp] (c2) -- (q); \draw[->, thick, omProp] (q) -- (c3); \draw[->, thick, omProp] (c3) -- (cyt); \draw[->, thick, omProp] (cyt) -- (c4);
+  % inputs
+  \node[anchor=north, align=center] at (1.5,-0.5) {NADH $\to$ $\mathrm{NAD^+}$};
+  \node[anchor=north, align=center] at (3.6,-0.5) {$\mathrm{FADH_2}$\\ (succinaat)};
+  \node[anchor=north, align=center, font=\scriptsize] at (8.6,-0.5) {$\tfrac12\,\mathrm{O_2} + 2\,\mathrm{H^+} \to \mathrm{H_2O}$};
+  % proton pumping arrows
+  \foreach \x/\n in {1.5/4 $\mathrm{H^+}$, 6.2/4 $\mathrm{H^+}$, 8.9/2 $\mathrm{H^+}$} {
+    \draw[->, very thick, omExo!80!black] (\x+0.5,-0.05) -- (\x+0.5,1.9) node[above, font=\scriptsize] {\n};
+  }
+  \draw[->, very thick, omExo!80!black] (11.6,2.1) -- (11.6,1.35);
+  \draw[->, very thick, omExo!80!black] (11.6,-0.35) -- (11.6,-0.75);
+  \node[anchor=south, font=\scriptsize] at (11.6,2.15) {$\approx 4\,\mathrm{H^+}$ per ATP};
+  \node[anchor=north, align=center, font=\scriptsize] at (11.6,-0.8) {ADP $+ \mathrm{P_i} \to$ ATP};
+\end{tikzpicture}
+
+{\small Het binnenmembraan van het \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion}. Elektronen (oranje) vallen van
+NADH of $\mathrm{FADH_2}$ door de complexen naar zuurstof; de complexen I, III en
+IV pompen protonen naar buiten (groen); het \omterm{thm:b1:photosynthesis:chemiosmosis}{ATP-synthase} laat ze weer binnen en
+maakt \omterm{def:b1:water-small-molecules:atp}{ATP}.}
+\end{omfigure}
+
+\begin{theorem}[Chemiosmotische koppeling]\label{thm:b1:respiration-fermentation:chemiosmosis}
+\index{chemiosmotische theorie}\index{protonmotorische kracht}
+De protonengradiënt die de keten opbouwt --- ongeveer \qty{0.16}{V}
+\omterm{def:b1:membranes-transport:potential}{membraanpotentiaal} (de matrix negatief) plus één pH-eenheid, een
+\emph{\omterm{thm:b1:respiration-fermentation:chemiosmosis}{protonmotorische kracht}} van ongeveer \qty{0.22}{V}, oftewel \qty{21}{kJ} per
+mol protonen --- is de enige schakel tussen het elektronentransport en de
+ATP-synthese. Het \omterm{thm:b1:photosynthesis:chemiosmosis}{ATP-synthase}, een draaimotor van het binnenmembraan, laat er per
+gemaakte \omterm{def:b1:water-small-molecules:atp}{ATP} ongeveer \qty{3}{H^+} door, en er wordt er nog één uitgegeven aan het
+invoeren van het fosfaat en het uitvoeren van het \omterm{def:b1:water-small-molecules:atp}{ATP}: 4 per \omterm{def:b1:water-small-molecules:atp}{ATP}. Vandaar de
+\emph{P/O-verhouding}\index{P/O-verhouding}: $10/4 = 2.5$ \omterm{def:b1:water-small-molecules:atp}{ATP} per NADH en
+$6/4 = 1.5$ per $\mathrm{FADH_2}$.
+\end{theorem}
+\begin{proof}[Bewijsmateriaal]
+\omterm{def:b1:eukaryotic-cell:mitochondrion}{Mitochondriën} maken alleen \omterm{def:b1:water-small-molecules:atp}{ATP} wanneer hun binnenmembraan heel en gesloten is;
+fragmenten die wel elektronen vervoeren maar geen gradiënt kunnen vasthouden maken
+er geen. Ontkoppelaars zoals dinitrofenol, die protonen over de membraan heen en
+weer dragen, heffen de ATP-synthese op terwijl het zuurstofverbruik doorgaat en
+zelfs versnelt, waarbij de energie als warmte vertrekt --- bruin \omterm{def:b1:lipids:triglyceride}{vet} doet dat
+opzettelijk met zijn eigen ontkoppelend \omterm{def:b1:proteins:peptide}{eiwit}
+(\cref{ch:b1:mammal-organization}), en dinitrofenol werd ooit als afslankmiddel
+verkocht dat door oververhitting doodde. \omterm{def:b1:enzymes:inhibitors}{Remmers} van de keten (cyanide op complex
+IV) stoppen beide; \omterm{def:b1:enzymes:inhibitors}{remmers} van het synthase (oligomycine) stoppen de ATP-synthese
+en, doordat de gradiënt zich niet kan ontladen, ook de ademhaling, die een
+ontkoppelaar dan weer herstelt. Een kunstmatige pH-gradiënt die in het donker aan
+\omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondriën} wordt opgelegd, drijft de ATP-synthese aan, net als bij
+\omterm{def:b1:eukaryotic-cell:plastid}{chloroplasten} (\cref{ch:b1:photosynthesis}).
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+  \node[anchor=south west, inner sep=0] (img) at (0,0)
+    {\includegraphics[width=0.54\linewidth]{images/book3/ai/fig-mitochondrion-cutaway.png}};
+  \begin{scope}[x={(img.south east)}, y={(img.north west)},
+      every node/.style={font=\small}]
+    \draw[omDef, thick] (0.10,0.55) -- (-0.03,0.70) node[left] {buitenmembraan};
+    \draw[omDef, thick] (0.45,0.72) -- (0.45,1.08) node[above, align=center] {binnenmembraan tot cristae gevouwen:\\ de ademhalingsketen en het ATP-synthase};
+    \draw[omDef, thick] (0.55,0.35) -- (1.03,0.24) node[right, align=left] {matrix: krebscyclus,\\ DNA, ribosomen};
+    \draw[omDef, thick] (0.16,0.40) -- (-0.03,0.26) node[left] {intermembraanruimte};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Een opengesneden \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion}. De plooien van het binnenmembraan
+vermenigvuldigen het oppervlak dat voor de keten en het synthase beschikbaar is; de
+matrix daarbinnen bevat de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}.}
+\end{omfigure}
+
+\begin{method}[De ATP-balans van één glucose]\label{met:b1:respiration-fermentation:balance}
+\begin{enumerate}
+  \item \omterm{def:b1:respiration-fermentation:glycolysis}{Glycolyse}: $+2$ \omterm{def:b1:water-small-molecules:atp}{ATP} (netto), $+2$ NADH in het \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}.
+  \item Pyruvaatdehydrogenase: $+2$ NADH. \omterm{def:b1:respiration-fermentation:krebs}{Krebscyclus}: $+6$ NADH, $+2$
+        $\mathrm{FADH_2}$, $+2$ GTP ($=$ \omterm{def:b1:water-small-molecules:atp}{ATP}).
+  \item Oxidatieve fosforylering: $2.5$ \omterm{def:b1:water-small-molecules:atp}{ATP} per mitochondriale NADH
+        (8: 20 \omterm{def:b1:water-small-molecules:atp}{ATP}), $1.5$ per $\mathrm{FADH_2}$ (2: 3 \omterm{def:b1:water-small-molecules:atp}{ATP}).
+  \item Cytosolisch NADH kan het binnenmembraan niet passeren; zijn
+        elektronen komen binnen via een pendel die ze aan $\mathrm{FAD}$
+        aflevert (1,5 elk, in spier en hersenen) of aan $\mathrm{NAD^+}$
+        (2,5 elk, in lever en hart): 3 of 5 \omterm{def:b1:water-small-molecules:atp}{ATP}.
+  \item Samen: $2 + 2 + 20 + 3 + 3 = 30$, of $32$ met de betere pendel.
+        Rendement: $30\times 50/2870 \approx \qty{52}{\%}$ onder cellulaire
+        omstandigheden.
+\end{enumerate}
+\end{method}
+
+\section{Gisting}
+
+\begin{definition}[Gisting]\label{def:b1:respiration-fermentation:fermentation}
+\index{gisting}
+Zonder zuurstof staat de \omterm{def:b1:respiration-fermentation:chain}{ademhalingsketen} stil, kan NADH niet weer worden
+geoxideerd, en zou de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} binnen seconden stoppen bij gebrek aan
+$\mathrm{NAD^+}$. De \emph{gisting} herstelt het door pyruvaat zelf als
+elektronenontvanger te gebruiken: bij de \emph{melkzuurgisting} (spier, rode
+\omterm{def:b1:cell-unit-of-life:cell}{cellen}, melkzuurbacteriën) wordt pyruvaat tot lactaat gereduceerd; bij de
+\emph{alcoholgisting} (gist, sommige planten) wordt het gedecarboxyleerd tot
+aceetaldehyde, dat tot ethanol wordt gereduceerd, waarbij $\mathrm{CO_2}$ vrijkomt.
+De opbrengst is die van de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} zelf: 2 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose, een vijftiende van
+die van de ademhaling; de koolstof is nauwelijks geoxideerd en de producten bevatten
+nog vrijwel alle energie van de brandstof. De \emph{anaerobe ademhaling} --- een
+\omterm{def:b1:respiration-fermentation:chain}{elektronentransportketen} die op nitraat, sulfaat of carbonaat eindigt in plaats van
+op zuurstof, bij veel bacteriën --- is iets anders, en komt aan bod in het deel van
+jaar 2.
+\end{definition}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.44\linewidth}\centering
+\includegraphics[width=0.9\linewidth]{images/book3/ai/b3-15-yeast-budding.png}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.52\linewidth}\centering
+\includegraphics[width=0.96\linewidth]{images/book3/ai/b3-15-bread-dough-risen.png}
+\end{minipage}
+
+{\small Links: bakkersgist, aan het knoppen. Rechts: wat haar \omterm{def:b1:respiration-fermentation:fermentation}{gisting} met deeg
+doet: het $\mathrm{CO_2}$ van twee \omterm{def:b1:water-small-molecules:atp}{ATP} aan \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} per glucose, gevangen in
+gluten. De ethanol bakt eruit.}
+\end{omfigure}
+
+\begin{proposition}[Het pasteureffect]\label{prop:b1:respiration-fermentation:pasteur}
+\index{pasteureffect}
+Een \omterm{def:b1:cell-unit-of-life:cell}{cel} die kan ademen verbruikt veel sneller glucose wanneer haar zuurstof wordt
+onthouden dan wanneer zij die krijgt, en zij groeit er veel minder op.
+\end{proposition}
+\begin{proof}[Bewijsmateriaal]
+Pasteur (1861) vond dat gist in een belucht vat traag suiker verbruikte en zich
+vermenigvuldigde, terwijl zij in een afgesloten vat tien keer sneller suiker
+verbruikte, zich weinig vermenigvuldigde en alcohol maakte. De verklaring is de
+ATP-opbrengst: om uit 2 per glucose evenveel \omterm{def:b1:water-small-molecules:atp}{ATP} te halen als uit 30, moet de \omterm{def:b1:cell-unit-of-life:cell}{cel}
+de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} vijftien keer sneller laten lopen, en PFK, verlost van de remming
+door \omterm{def:b1:water-small-molecules:atp}{ATP} en citraat die de ademhaling in stand houdt, laat haar dat doen. Een
+sprintende spier vertoont hetzelfde effect binnen seconden: haar \omterm{def:b1:carbohydrates:polysaccharide}{glycogeen} daalt
+twintig keer sneller dan in rust, en het lactaat stijgt.
+\end{proof}
+
+\begin{definition}[Respiratoir quotiënt]\label{def:b1:respiration-fermentation:rq}
+\index{respiratoir quotiënt}
+Het \emph{respiratoir quotiënt} RQ is de verhouding van geproduceerde
+$\mathrm{CO_2}$ tot verbruikte $\mathrm{O_2}$, in mol. \omterm{def:b1:carbohydrates:monosaccharide}{Koolhydraat} geeft 1,0 (zes
+van elk per glucose); \omterm{def:b1:lipids:triglyceride}{vet} ongeveer 0,7 (palmitaat:
+$\mathrm{C_{16}H_{32}O_2} + 23\,\mathrm{O_2} \to 16\,\mathrm{CO_2} +
+16\,\mathrm{H_2O}$, $16/23 = 0.70$), omdat zijn koolstoffen sterker gereduceerd
+zijn en per $\mathrm{CO_2}$ meer zuurstof vragen; \omterm{def:b1:proteins:peptide}{eiwit} ongeveer 0,8. Een gistende
+kweek geeft $\mathrm{CO_2}$ af zonder zuurstof op te nemen: haar RQ is oneindig, en
+een RQ boven 1 bij een gemengde kweek meet het aandeel van de \omterm{def:b1:respiration-fermentation:fermentation}{gisting}. Bij een heel
+dier met gasanalyse gemeten vertelt het RQ welke brandstof het verbrandt.
+\end{definition}
+
+\begin{example}[Een RQ lezen]\label{ex:b1:respiration-fermentation:readrq}
+Een mens in rust na een koolhydraatmaaltijd: RQ 0,95, glucoseverbranding.
+Dezelfde persoon na een nacht vasten: 0,75, \omterm{def:b1:lipids:triglyceride}{vet}. Een marathonloper op de dertigste
+kilometer, met het \omterm{def:b1:carbohydrates:polysaccharide}{glycogeen} op: 0,72. Een kolf gist op glucose met een beetje
+lucht: RQ 4 --- drie kwart van haar glucose wordt vergist.
+\end{example}
+
+\section{Andere brandstoffen en de regeling van het geheel}
+
+\begin{proposition}[Vetten en eiwitten komen in dezelfde machinerie]\label{prop:b1:respiration-fermentation:otherfuels}
+\index{beta-oxidation@$\beta$-oxidatie}
+\omterm{def:b1:lipids:fattyacid}{Vetzuren} worden tot acyl-CoA geactiveerd en in de \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondriale matrix} telkens
+twee koolstoffen tegelijk ingekort door de \emph{$\beta$-oxidatie}, waarbij elke
+ronde één \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, één NADH en één $\mathrm{FADH_2}$ oplevert: palmitaat (C16)
+geeft 8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 NADH en 7 $\mathrm{FADH_2}$ --- ongeveer 106 \omterm{def:b1:water-small-molecules:atp}{ATP}, oftewel
+\qty{6.6}{} \omterm{def:b1:water-small-molecules:atp}{ATP} per koolstof tegen de 5 van glucose. \omterm{def:b1:proteins:aminoacid}{Aminozuren} verliezen hun
+stikstof als ammoniak (in de lever tot ureum omgezet) en hun koolstofskeletten
+komen binnen als pyruvaat, \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} of tussenproducten van de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}. Elke
+brandstof komt samen bij \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA} en de keten; de \omterm{def:b1:cell-unit-of-life:cell}{cel} kiest ertussen aan de hand
+van hormonen en van de toestand van haar \omterm{def:b1:water-small-molecules:atp}{ATP}, zoals
+\cref{ch:b1:biosyntheses-integration} beschrijft.
+\end{proposition}
+
+\begin{example}[Een gram van elk]\label{ex:b1:respiration-fermentation:gramofeach}
+Eén gram glucose (\qty{5.6}{mmol}) levert ongeveer \qty{170}{mmol} \omterm{def:b1:water-small-molecules:atp}{ATP}; één gram
+palmitaat (\qty{3.9}{mmol}) ongeveer \qty{410}{mmol} --- de \qty{38}{kJ/g} tegen
+\qty{17}{kJ/g} van \cref{ch:b1:lipids}, in munt omgezet. Het \omterm{def:b1:lipids:triglyceride}{vet} kost per \omterm{def:b1:water-small-molecules:atp}{ATP} meer
+zuurstof, en daarom verbrandt de spier van een sprinter, die door zuurstof wordt
+begrensd, \omterm{def:b1:carbohydrates:polysaccharide}{glycogeen}, en verbrandt een trekvogel, die zuurstof genoeg heeft maar
+door massa wordt begrensd, \omterm{def:b1:lipids:triglyceride}{vet}.
+\end{example}
+
+\section{Opgaven}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:1}
+Noem de drie fasen van de ademhaling, hun plaats, en wat elk oplevert.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:2}
+Schrijf de balans van de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} op en leg ``\omterm{def:b1:respiration-fermentation:glycolysis}{substraatfosforylering}'' uit.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:3}
+Noem aan de hand van de figuur van de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus} op volgorde de producten die in
+één ronde vrijkomen, en zeg waar de twee $\mathrm{CO_2}$ vandaan komen.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:respiration-fermentation:4}
+Wat bereikt de \omterm{def:b1:respiration-fermentation:fermentation}{gisting} voor een \omterm{def:b1:cell-unit-of-life:cell}{cel} zonder zuurstof, en wat bereikt zij niet?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:5}
+Bereken $\Delta G^{\circ\prime}$ voor de overdracht van twee elektronen van NADH
+($E'_0 = \qty{-0.32}{V}$) naar zuurstof (\qty{+0.82}{V}), en naar ubichinon
+(\qty{+0.05}{V}). Voor hoeveel \omterm{def:b1:water-small-molecules:atp}{ATP} zou elke stap in beginsel kunnen betalen?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:6}
+Stel de ATP-balans op van één glucose in een spiercel (glycerolfosfaatpendel) en in
+een levercel (malaatpendel), met \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O-verhoudingen} van 2,5 en 1,5.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:7}
+Een kweek verbruikt per uur \qty{1.0}{mmol} $\mathrm{O_2}$ en geeft
+\qty{2.2}{mmol} $\mathrm{CO_2}$ af op glucose. Bereken het RQ, en de delen van de
+glucose die worden verademd en vergist.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:8}
+Leg uit wat er met het zuurstofverbruik, de ATP-synthese en de warmteproductie
+gebeurt wanneer er dinitrofenol aan ademende \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondriën} wordt toegevoegd, en
+waarom het middel dodelijk was.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:respiration-fermentation:9}
+Cyanide blokkeert complex IV. Voorspel het effect ervan op de \omterm{def:b1:respiration-fermentation:chain}{ademhalingsketen}, op
+de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus} en op de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse} in een \omterm{def:b1:cell-unit-of-life:cell}{cel}, en leg uit waarom er lactaat in het
+bloed van de vergiftigde ophoopt.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:10}
+Bereken de ATP-opbrengst van palmitaat (8 \omterm{def:b1:respiration-fermentation:pdh}{acetyl-CoA}, 7 NADH, 7
+$\mathrm{FADH_2}$, min 2 \omterm{def:b1:water-small-molecules:atp}{ATP} voor de activering) en de opbrengst per koolstof;
+bereken de zuurstof die per \omterm{def:b1:water-small-molecules:atp}{ATP} wordt verbruikt voor palmitaat en voor glucose.
+Welke brandstof zou een duikende zeehond verkiezen, en welke een kolibrie?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:11}
+Een spiervezel bevat \qty{5}{mmol/L} \omterm{def:b1:water-small-molecules:atp}{ATP} en gebruikt er in een sprint
+\qty{3}{mmol/L} per seconde van. Hoe lang zou haar \omterm{def:b1:water-small-molecules:atp}{ATP} alleen volstaan? Haar
+fosfocreatine (\qty{25}{mmol/L}) herstelt \omterm{def:b1:water-small-molecules:atp}{ATP} één op één; haar \omterm{def:b1:carbohydrates:polysaccharide}{glycogeen} geeft via
+\omterm{def:b1:respiration-fermentation:fermentation}{gisting} 3 \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose-eenheid, tot \qty{2}{mmol/L} glucose-eenheden per
+seconde. Bereken hoe lang elke voorraad de sprint kan volhouden, en leg uit waarom
+een race over 100 m vrijwel geheel zonder zuurstof wordt gelopen.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:respiration-fermentation:12}
+``Het \omterm{def:b1:eukaryotic-cell:mitochondrion}{mitochondrion} is een batterij die door elektronen wordt opgeladen en door een
+turbine wordt ontladen.'' Bespreek dat in een alinea: wat de gradiënt opslaat, wat
+het synthase doet, waar de vergelijking precies klopt en waar zij los zit.
+\end{exercise}
+
+\section{Vraagstuk: gist met en zonder lucht}
+
+\begin{problem}[{Weekendvraagstuk --- de kolven van Pasteur opnieuw bekeken: ATP
+geteld, glucose verbruikt, biomassa gekweekt en gassen gemeten, eindigend op de
+verhouding van de ATP-opbrengsten en de P/O-verhouding}]
+\label{pb:b1:respiration-fermentation:1}
+Gist wordt op glucose gekweekt in twee identieke kolven, één belucht en één
+afgesloten. Gebruik \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O-verhoudingen} van 2,5 (NADH) en 1,5 ($\mathrm{FADH_2}$), de
+$\mathrm{FADH_2}$-pendel voor cytosolisch NADH, een groeiopbrengst van
+\qty{10.5}{g} droge biomassa per mol \omterm{def:b1:water-small-molecules:atp}{ATP}, en glucose op \qty{180}{g/mol}.
+
+\medskip
+\noindent\textbf{Deel I --- \omterm{def:b1:water-small-molecules:atp}{ATP} geteld.}
+\begin{enumerate}
+  \item Noem het \omterm{def:b1:water-small-molecules:atp}{ATP}, GTP, NADH en $\mathrm{FADH_2}$ dat uit één glucose
+        wordt gevormd door de \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse}, het pyruvaatdehydrogenase en de
+        \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus}.
+  \item Bereken de protonen die de keten per glucose pompt (10 per
+        mitochondriale NADH, 6 per $\mathrm{FADH_2}$; cytosolisch NADH komt
+        als $\mathrm{FADH_2}$ binnen).
+  \item Bereken het \omterm{def:b1:water-small-molecules:atp}{ATP} dat het synthase bij \qty{4}{H^+} per \omterm{def:b1:water-small-molecules:atp}{ATP} maakt, en
+        het totale \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose met lucht.
+  \item Bereken het \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose zonder lucht.
+  \item Bereken de verhouding van de twee opbrengsten.
+  \item Bereken de met lucht vastgelegde \omterm{prop:b1:water-small-molecules:gibbs}{vrije energie} ($\Delta G_{\text{ATP}}
+        = \qty{-50}{kJ/mol}$) als deel van de \qty{2870}{kJ}, en zonder
+        lucht als deel van diezelfde \qty{2870}{kJ} en van de energie die
+        de \omterm{def:b1:respiration-fermentation:fermentation}{gisting} werkelijk vrijmaakt (glucose tot twee ethanol en twee
+        $\mathrm{CO_2}$: \qty{-235}{kJ/mol}).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel II --- Glucose verbruikt, biomassa gekweekt.}
+De afgesloten kolf moet even snel \omterm{def:b1:water-small-molecules:atp}{ATP} maken als de beluchte om haar \omterm{def:b1:cell-unit-of-life:cell}{cellen} in stand
+te houden: \qty{30}{mmol} \omterm{def:b1:water-small-molecules:atp}{ATP} per uur.
+\begin{enumerate}[resume]
+  \item Bereken de glucose die per uur in elke kolf wordt verbruikt.
+  \item Bereken de ethanol en de $\mathrm{CO_2}$ die per uur in de
+        afgesloten kolf worden gevormd, en de $\mathrm{CO_2}$ en
+        $\mathrm{O_2}$ die in de beluchte worden uitgewisseld.
+  \item Bereken de biomassa die de afgesloten kolf per mol glucose kan
+        bouwen, en per gram glucose.
+  \item De beluchte kolf bouwt \qty{0.5}{g} biomassa per gram glucose.
+        Bereken hoeveel \omterm{def:b1:water-small-molecules:atp}{ATP} dat bij \qty{10.5}{g/mol} zou voorstellen, en
+        vergelijk dat met de 30 beschikbare \omterm{def:b1:water-small-molecules:atp}{ATP}. Wat begrenst de aerobe
+        opbrengst?
+  \item Verklaar het \omterm{prop:b1:respiration-fermentation:pasteur}{pasteureffect} uit de vragen 7 en 9, en noem het \omterm{def:b1:enzymes:enzyme}{enzym}
+        waarvan de regeling het tot stand brengt.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel III --- Gassen gemeten.}
+Een derde kolf, slecht belucht, geeft per uur \qty{44}{mg} $\mathrm{CO_2}$ af en
+verbruikt \qty{20}{mg} $\mathrm{O_2}$.
+\begin{enumerate}[resume]
+  \item Reken beide om naar millimol en bereken het RQ.
+  \item Laat $x$ de per uur verademde glucose zijn en $y$ de vergiste.
+        Schrijf de balansen voor $\mathrm{O_2}$ en $\mathrm{CO_2}$ op en
+        los $x$ en $y$ op.
+  \item Welk deel van de glucose wordt vergist? Welk deel van het \omterm{def:b1:water-small-molecules:atp}{ATP} komt
+        uit de \omterm{def:b1:respiration-fermentation:fermentation}{gisting}?
+  \item Dezelfde kolf op palmitaat in plaats van glucose (aeroob): bereken
+        het RQ.
+  \item Een student meet bij een rustend dier na een nacht vasten een RQ
+        van 0,7 en na een maaltijd 1,0. Duid dat.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel IV --- De turbine.}
+\begin{enumerate}[resume]
+  \item Bereken de \omterm{prop:b1:water-small-molecules:gibbs}{vrije energie} van één mol protonen die een
+        \omterm{thm:b1:respiration-fermentation:chemiosmosis}{protonmotorische kracht} van \qty{0.22}{V} passeert.
+  \item Bereken de energie van \qty{4}{H^+} en het rendement van het
+        synthase bij \qty{50}{kJ} per \omterm{def:b1:water-small-molecules:atp}{ATP}.
+  \item Bereken de \omterm{prop:b1:water-small-molecules:gibbs}{vrije energie} die vrijkomt wanneer twee elektronen van
+        NADH naar $\mathrm{O_2}$ vallen (\qty{1.14}{V}), de energie die in
+        de tien gepompte protonen wordt opgeslagen, en het rendement van de
+        keten.
+  \item Combineer de twee rendementen en vergelijk dat met 2,5 \omterm{def:b1:water-small-molecules:atp}{ATP}
+        $\times$ \qty{50}{kJ} gedeeld door \qty{220}{kJ}.
+  \item Er wordt een ontkoppelaar aan de beluchte kolf toegevoegd.
+        Voorspel de veranderingen in het zuurstofverbruik, de
+        ATP-opbrengst, het glucoseverbruik, de warmteafgifte en de groei.
+  \item In plaats daarvan wordt oligomycine toegevoegd, dat het synthase
+        blokkeert. Voorspel de veranderingen, en wat er gebeurt als er dan
+        ook nog een ontkoppelaar bij komt.
+  \item Een mutante gist mist complex I; haar NADH komt de keten binnen via
+        een ander \omterm{def:b1:enzymes:enzyme}{enzym} dat geen protonen pompt. Bereken haar
+        \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O-verhouding} voor NADH en haar \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose.
+  \item Leg uit waarom de \omterm{def:b1:cell-unit-of-life:cell}{cel} de mitochondriale NADH-voorraad vrijwel
+        volledig gereduceerd houdt wanneer er geen zuurstof is, en wat dat
+        met de \omterm{def:b1:respiration-fermentation:krebs}{krebscyclus} doet.
+  \item Geef het resultaat: het \omterm{def:b1:water-small-molecules:atp}{ATP} per glucose met en zonder lucht, hun
+        verhouding, en de \omterm{thm:b1:respiration-fermentation:chemiosmosis}{P/O-verhoudingen} van NADH en $\mathrm{FADH_2}$.
+\end{enumerate}
+\end{problem}

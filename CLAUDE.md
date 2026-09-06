@@ -19,8 +19,9 @@ of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
 **Current state: Books 1, 2 and 3 written in English (2026-08-28,
-2026-09-02 and 2026-09-04); Books 1 and 2 also ship in all seven target
-languages (2026-09-04 and 2026-09-05); Books 4–5 are titled placeholders**
+2026-09-02 and 2026-09-04); Books 1, 2 and 3 all ship in the seven target
+languages (2026-09-04, 2026-09-05 and 2026-09-06); Books 4–5 are titled
+placeholders**
 (chapter architecture in place, no chapter written).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
@@ -79,6 +80,8 @@ languages (2026-09-04 and 2026-09-05); Books 4–5 are titled placeholders**
   character — STOP for "substrate", EXTRA plurals). Math level guard:
   derivatives, exp/ln, first-order ODEs, log axes; no partial
   differential equations, no matrices, no statistics beyond a mean.
+  **Translated into all seven target languages on 2026-09-06**, in two waves,
+  each edition self-scored 96/100.
 
 `CONTRIBUTING.md` holds the authoritative style/structure conventions;
 `THEME.md` documents the One Course cover brand. Read both before writing
@@ -128,10 +131,14 @@ grep -c 'Overfull' $L           # overfull boxes — keep at 0
 
 ## Language editions
 
-**Books 1 and 2 ship in eight languages** — English plus `fr`, `nl`, `es`,
-`pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04 and Book 2 on
-2026-09-05, one agent per edition, **every one self-scored 96/100** under the
-native-academic bar. Books 3–5 are English only.
+**Books 1, 2 and 3 ship in eight languages** — English plus `fr`, `nl`, `es`,
+`pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04, Book 2 on 2026-09-05
+and Book 3 on 2026-09-06, one agent per edition, **every one self-scored
+96/100** under the native-academic bar. Books 4–5 are English only.
+
+Book 3 went out in **two waves** (`fr`/`nl`/`es`/`pt`, then `hi`/`ar`/`id`),
+which is now the standing rule: wave 1's findings reached wave 2, and wave 2
+inherited a corrected canon.
 
 Per-edition figures, all from forced (`-g`) builds so they are comparable.
 **Book 1** (142 files, `nullfont` 20, `\index` 331 in all eight):
@@ -161,7 +168,24 @@ and `\index` 182 in all eight):
 | `ar` | 344 | 4,831 | 103 |
 | `id` | 401 | 6,264 | 105 |
 
-Every edition of both books: 0 errors, 0 undefined, 0 overfull, the file count
+**Book 3** (58 files, `nullfont` **0**, `\index` 568 and `\qty` 2,978 in all
+eight):
+
+| | pages | `\omterm` links | distinct targets |
+|---|------:|-----:|-----:|
+| `en` | 339 | 5,495 | 179 |
+| `fr` | 356 | 5,459 | 179 |
+| `es` | 353 | 5,441 | 181 |
+| `pt` | 351 | 5,352 | 181 |
+| `nl` | 350 | 5,040 | 188 |
+| `hi` | 325 | 5,404 | 186 |
+| `ar` | 305 | 5,036 | 186 |
+| `id` | 361 | 5,827 | 185 |
+
+Every Book 3 edition reaches **every English target**; `fr` matches English's
+target count exactly. All seven pass `check_translation.sh` gates **1–11**.
+
+Every edition of all three books: 0 errors, 0 undefined, 0 overfull, the file count
 in the `.fls` equal to the files on disk, and `check_translation.sh` green for
 every year.
 
@@ -199,6 +223,42 @@ year — the gate driving the translation instead of checking it; and
 for English (*specieses*) but wrong for an ENCLITIC tail, now opt-in via
 `TAIL_AFTER_S` (set only in `lang_id.py`, worth ~110 links per Indonesian
 volume).
+
+**Book 3's run found EIGHT canon defects and eight tooling bugs** (2026-09-06),
+and the shape of them is the lesson: **three of the eight were found by an agent
+reading an answer against its question, not by any gate.** The canon defects: a
+weekend problem with 25 questions and 24 answers (the answer labelled 13 was
+question 12's; question 13's was missing — found independently by `es`, `nl` and
+`pt`); a **three-cycle permutation** of ch25's answers 16/17/18, each
+individually correct and attached to the wrong question; `\omterm` wrapped
+inside four `\qty{}` unit arguments (pre-`protect.py`-fix damage); English nouns
+(`years`, `days`, `million`) inside unit arguments, now `yr`/`d`; 18
+line-broken `\index{}` keys; a ratio stated as "five times" that is 300× by
+oxygen and 21× by mass; two stale cross-references citing a question one too
+low; and a **sign error** in a Lotka–Volterra answer ($-50/+0.44$ instead of
+$-50/-0.44$) that also made its own QUESTION wrong — fixed by correcting the
+datum ($\alpha$ 1.6 → 1.4), because the question and the answer agreed with
+each other and only the number disagreed with both.
+
+The tooling bugs, all from agents reporting rather than working around: siunitx
+`range-phrase` overridden with a bare string in all seven `styles/lang/*.tex`
+(math mode ate the spaces and an accent became `Command \` invalid in math
+mode`); `check_latin_prose.py` unable to see a capitalised one-word fragment in
+EITHER tier (42 `[Evidence]` titles per edition); the same gate BLOCKING correct
+Dutch (fixed with `ALLOWED_BY_LANG`); three false positives in
+`check_indonesian_prose.py` (`kation`, `Lawrence`, `National Human Genome
+Research Institute` — the last two now in `ATTRIBUTION`, which exempts a phrase
+in context rather than a token everywhere); six in `check_hindi_prose.py`,
+including a spacing control sequence that WELDED two words (`kcal\,m` →
+`kcalm`); and gate 11 miscounting when handed a solutions directory.
+**`check_indonesian_prose.py` imports its reduction from `check_hindi_prose.py`,
+so a change to one silently changes the other — re-run both sets of controls.**
+
+**`STOP` does not stop a homograph; only `DROP` does** — measured on Book 3
+(`laju` kept 38 links after `STOP`). But verify per target before "fixing" it:
+`book3_en.py` STOPs `substrate`, and the fall-through is exactly what makes its
+48 links correct, all in the enzymes chapter where that sense is the only one.
+`DROP` would delete them. See the comment in that file.
 
 **The capitalised-harvest class has now appeared four times** — `Sorting`
 (Book 1), `Fermentation` and `Testosterone` (Book 2 English), `Xilem`/`Floem`
@@ -244,8 +304,20 @@ math and physics runs paid for.
   subject-specific and was re-tuned for biology**, since `organ`, `protein`,
   `virus`, `vitamin`, `habitat`, `predator` and `larva` are ordinary
   Indonesian), gate 9 `check_latin_prose.py` (is this fragment byte-identical
-  to its English twin?) and gate 10 `check_orphan_lines.py` (an English line
-  the translation absorbed and left behind).
+  to its English twin?), gate 10 `check_orphan_lines.py` (an English line
+  the translation absorbed and left behind) and **gate 11
+  `check_problem_numbering.py`** (a weekend problem's answers must be numbered
+  1..k for k questions — that numbering is PROSE, so gate 3 cannot see it, the
+  `id_apply` censuses cannot see it because a defect in BOTH twins is invisible
+  by construction, and no prose gate asks whether a run of integers is
+  complete). Gate 11 **cannot see a permutation**: answers present, in order
+  and individually correct but attached to the wrong questions leave a complete
+  1..k run. That was tested, not assumed.
+- **Gate 9 has a per-language allow-list, `ALLOWED_BY_LANG`.** Use it, and
+  never reword correct prose to satisfy the gate: **an agent reporting that it
+  reworded around a gate is a gate bug report.** Dutch keeps *alanine* and
+  *glycine* where Spanish says *alanina* and *glicina*, which is exactly why
+  the list is per-language and not global.
 - **Term links are per language**: `tools/term_config/book1_<lang>.py` is
   **curated**, never a translation of `book1_en.py`, and never seeded from
   another book — a seeded `EXTRA` points at the other book's labels and ships

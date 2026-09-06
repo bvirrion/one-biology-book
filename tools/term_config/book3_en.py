@@ -13,6 +13,23 @@ definitions or prose with:
 STOP = {
     # enzyme substrate in its chapter; the rock substrate of a succession
     # and the substrate of a reaction elsewhere
+    #
+    # KEEP THIS AS `STOP`, NOT `DROP`, AND DO NOT "FIX" IT. STOP does not do
+    # what its name suggests: harvest.py drops a stop-listed term from the
+    # global `terms` table but still feeds it to the per-chapter `local` map,
+    # so it keeps its links in every chapter that pins exactly one sense.
+    # Measured here 2026-09-06: "substrate" carries 48 links, ALL of them in
+    # 13-enzymes.tex and all to def:b1:enzymes:enzyme -- which is precisely the
+    # chapter where the enzyme sense is the only one, and precisely the
+    # behaviour the comment above wanted. The succession and reaction senses in
+    # other chapters get none. Moving these to DROP would delete all 48 correct
+    # links to make the mechanism match its name.
+    #
+    # The fall-through was measured by the Indonesian Book 3 agent (its "laju"
+    # kept 38 links after STOP, where they were WRONG) and the consequence for
+    # English was spotted by the Portuguese agent. Same mechanism, opposite
+    # verdict -- which is exactly why translation_instruction.md says to verify
+    # STOP per target rather than trusting either outcome.
     "substrate", "substrates",
 }
 
@@ -22,6 +39,23 @@ EXTRA = {
     # plurals (and a few lower-case forms) the harvest folded away, all
     # single-sense in this volume
     "Okazaki fragments": "def:b1:replication-mitosis:fork",
+    # ---- terms the harvest missed, found by the wave-1 translators -------
+    # The index key is the two-word "Golgi apparatus", which occurs 6 times;
+    # the bare organelle name occurs 39 and linked NOTHING. All 39 were read:
+    # every one is the organelle (the Golgi stack, its cis face, ER-to-Golgi
+    # transit), never Camillo Golgi the person, so this cannot mint a
+    # wrong-sense link. Found by the Dutch agent, whose own edition welds
+    # "golgi-apparaat" into one key and so reached the target 67 times.
+    "Golgi": "def:b1:eukaryotic-cell:endomembrane",
+    # Four targets that carried ZERO links while their phrases occur in the
+    # prose; found by the Portuguese agent, which links all of them. Each
+    # count was checked against the occurrences before being added.
+    "Chargaff": "prop:b1:nucleic-acids:chargaff",
+    "checkpoint": "prop:b1:replication-mitosis:checkpoints",
+    "checkpoints": "prop:b1:replication-mitosis:checkpoints",
+    # ("cell culture" was tried and removed: the phrase occurs ONLY in its own
+    # definition title and marker, nowhere else in the volume, so the target is
+    # legitimately unlinkable and the entry was a no-op.)
     "aldoses": "def:b1:carbohydrates:monosaccharide",
     "allosteric enzymes": "def:b1:enzymes:allosteric",
     "alveoli": "def:b1:gas-exchange:lung",

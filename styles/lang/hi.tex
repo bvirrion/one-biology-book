@@ -81,8 +81,16 @@
 % in the middle of Devanagari prose -- 19 such sites in the shipped Book 2
 % Hindi edition, invisible to every structural gate because they are produced
 % by the macros, not written in the sources.
-\sisetup{range-phrase={ से }, list-pair-separator={ और },
-         list-final-separator={ और }}
+% siunitx typesets range phrases and list separators in MATH MODE, where a
+% bare string loses its spaces (\qtyrange inside $...$ printed "1a100") and a
+% non-ASCII character is worse: "a" expands to \`a, which LaTeX reports as
+% "Command \` invalid in math mode" and drops from the page. siunitx's own
+% defaults are wrapped in \text{} for exactly this reason; these overrides
+% must be too. Found on Biology Book 3 fr, 2026-09-05, where the book's 56
+% \qtyrange sites made it visible; it was latent in every language edition of
+% every book in this repo.
+\sisetup{range-phrase={\text{ से }}, list-pair-separator={\text{ और }},
+         list-final-separator={\text{ और }}}
 % Deferred to the END of begindocument: cleveref creates these macros inside
 % its own \AtBeginDocument, so a \renewcommand at package-load time fails with
 % "Command \crefpairconjunction undefined", and a plain \AtBeginDocument only

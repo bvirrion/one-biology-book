@@ -84,6 +84,49 @@ ALLOWED_WORDS |= {
 # These two words are only ever the title of that book in this edition.
 ALLOWED_WORDS |= {"anatomy", "physiology"}
 
+# --- appended 2026-09-06 by the Biology Book 3 `hi` agent ---------------------
+# REASON: the block above says outright to grep the English bodies again when a
+# later book adds species, and Book 3 (university year 1) adds these. Every one
+# is a genus or species epithet the canon prints in italic Latin, which a
+# Devanagari edition keeps in Latin exactly as the Latin-script editions do:
+# international nomenclature, not residual English. Enumerated from the canon,
+# word by word (the gate tokenises), and only the ones it actually uses:
+#   Escherichia coli, Paramecium aurelia, Paris japonica, Quercus robur,
+#   Felis catus, Canis lupus (abbreviated F.~catus / C.~lupus), Dryas,
+#   Mytilus, Pisaster, Rhizobium, Trypanosoma, Lynx (as a genus in ch. 25).
+ALLOWED_WORDS |= {
+    "aurelia", "japonica", "robur", "catus", "lupus",
+    "paramecium", "paris", "quercus", "felis", "canis", "dryas",
+    "mytilus", "pisaster", "rhizobium", "trypanosoma",
+    "caudatum", "bursaria",
+    # ch. 29 prints the type binomial of our own species, \emph{Homo sapiens},
+    # in the same italic Latin as every other binomial in the book.
+    "homo", "sapiens",
+    # `lac` and `trp` are OPERON/GENE symbols, printed lowercase italic Latin in
+    # every edition of every language -- the same case `sry` was whitelisted for
+    # by the Book 2 agent. Their three lowercase letters defeat the <= 4-letter
+    # UPPERCASE acronym escape. 12 sites in ch. 20 and its solutions.
+    "lac", "trp", "laci", "lacz", "lacy", "laca",
+    # `RuBisCO` and `cyt` are international abbreviations printed the same
+    # way in every edition: the enzyme ribulose-bisphosphate
+    # carboxylase/oxygenase, and the standard short form of cytochrome
+    # (cyt $b_6f$, cyt $c$). Wave 1 of this run ruled explicitly that `cyt`
+    # is not an English residue. Their mixed case defeats both the
+    # uppercase-acronym escape and CHEM_FORMULA.
+    "rubisco", "cyt",
+    # `Alu` is the name of the human repeat element (after the AluI site),
+    # a Latin-script symbol in every edition; mixed case, three letters.
+    "alu",
+    # `X-gal` is the trade name of the chromogenic galactoside used as the
+    # lacZ reporter; the same string in every edition.
+    "x-gal",
+    # Two Latin quotations the canon prints as such: Virchow's dictum
+    # `omnis cellula e cellula` (ch. 5) and the title of Hooke's
+    # *Micrographia* (ch. 5). A title and a quotation are reproduced, not
+    # translated, in every edition.
+    "omnis", "cellula", "micrographia",
+}
+
 # Unit and symbol strings that may appear bare in a table cell or node.
 ALLOWED_UNITS = {
     "m", "s", "kg", "g", "mg", "km", "cm", "mm", "nm", "um",
@@ -124,6 +167,15 @@ TECHNICAL_MACROS = {
     "documentclass": 1, "bibliography": 1, "bibliographystyle": 1,
     "ominput": 2, "ominputsol": 2, "omsollink": 1,
     "qty": 2, "unit": 1, "num": 1, "ang": 1, "SI": 2, "si": 1,
+    # 2026-09-06, biology Book 3 `hi`: the siunitx FAMILY, not just \qty.
+    # \qtylist{1;2;5;10;20}{mmol/L} left "mmol" in visible text and was
+    # reported as residual English -- a defect no translator can remove,
+    # because the unit argument is mathematics in every language. Invisible
+    # until now because the gate fires on the English canon anyway. The
+    # whole family takes fixed argument counts: qtyrange/SIrange 3,
+    # qtylist/numrange 2, numlist 1.
+    "qtyrange": 3, "qtylist": 2, "numlist": 1, "numrange": 2,
+    "SIrange": 3, "SIlist": 2, "unitlist": 1,
     "newcommand": 2, "renewcommand": 2, "providecommand": 2,
     "color": 1, "textcolor": 1, "definecolor": 3, "pgfplotsset": 1,
     "hypersetup": 1, "setlength": 2, "addtolength": 2, "url": 1,
@@ -195,6 +247,13 @@ AMINO_CHAIN = re.compile(r"[A-Z][a-z]{2}(?:-+[A-Z][a-z]{2})+")
 
 
 SINGLE_RESIDUE = re.compile(r"[A-Z][a-z]{2}")
+
+# A bond drawn between element symbols in running prose: H--O--H, C--C,
+# Ca--O, N--H. Deliberately narrow -- every part must be a bare element
+# symbol (a capital, optionally one lower-case letter), there must be at
+# least two parts and at most four, so no English hyphenated compound can
+# hide behind it. 2026-09-06, biology Book 3 `hi`.
+ELEMENT_CHAIN = re.compile(r"[A-Z][a-z]?(?:-{1,2}[A-Z][a-z]?){1,3}")
 
 
 def is_biochemical_token(word: str) -> bool:
@@ -448,6 +507,17 @@ def visible_text(text: str, findings: list, path: str, depth: int = 0) -> str:
 
         m = re.match(r"\\([A-Za-z@]+)\*?", text[i:])
         if not m:
+            # A non-alphabetic control sequence. The SPACING ones -- \, \; \:
+            # \! \<space> \/ and \\ -- separate two words on the page, so
+            # deleting them WELDS the words together and the welded token is
+            # then reported as residual English: `\num{8800} kcal\,m$^{-2}$`
+            # in a tikz node became the single word "kcalm" and fired the
+            # `english` rule on a unit no translator may touch (Hindi Book 3,
+            # 2026-09-06). Emit a space for them; every other escape
+            # (\%, \&, \_, \$, \#) is a literal character and is dropped
+            # as before.
+            if i + 1 < n and text[i + 1] in ",;:! /\\":
+                out.append(" ")
             i += 2 if i + 1 < n else 1
             continue
         name = m.group(1)
@@ -518,8 +588,15 @@ def visible_text(text: str, findings: list, path: str, depth: int = 0) -> str:
         if name == "index":
             inner, j = match_group(text, skip_ws(text, j), "{", "}")
             if inner:
-                out.append(" " + nested_text(
-                    inner.replace("!", " ").replace("@", " "), depth) + " ")
+                # `key@display` is makeindex's SORT KEY followed by what is
+                # actually printed. The sort key is deliberately ASCII -- it is
+                # how a non-Latin or accent-initial entry is filed in the right
+                # place -- and no reader ever sees it, so reading it as visible
+                # text reports the canon's own `\index{pKa@p$K_a$}` as residual
+                # English. Keep the display half of every `!` level.
+                # 2026-09-06, biology Book 3 `hi`.
+                levels = [lvl.split("@", 1)[-1] for lvl in inner.split("!")]
+                out.append(" " + nested_text(" ".join(levels), depth) + " ")
             i = j
             continue
 
@@ -592,6 +669,16 @@ def check_file(path: pathlib.Path, findings: list) -> None:
     # 1. residual English in visible text
     for m in LATIN_WORD.finditer(seen):
         word = m.group(0)
+        # LATIN_WORD accepts an apostrophe inside a token so that English
+        # possessives ("Gauss's") are still caught -- but the sources quote with
+        # LaTeX's ``...'' , and the closing pair welds itself to the last word
+        # ("the pH of a cell''"). Strip only the OUTER apostrophes, so an
+        # internal one is still tested. 2026-09-06, biology Book 3 `hi`.
+        # The OUTER hyphens go the same way, and for the same reason: the
+        # sources write `$5'$-ACGT-$3'$` and `DNA--protein`, where blanking the
+        # math leaves the token `ACGT-` / `DNA--`. An internal hyphen is kept,
+        # so `Well-Being` is still reported.
+        word = word.strip("-'") or m.group(0)
         low = word.lower()
         if low in ALLOWED_WORDS or low in ALLOWED_UNITS:
             continue
@@ -607,6 +694,12 @@ def check_file(path: pathlib.Path, findings: list) -> None:
         if is_biochemical_token(word):
             continue        # 5'-ATGGCTTAC-3', Met--Lys--Gly--Trp: see the
                             # note beside is_biochemical_token above
+        if ELEMENT_CHAIN.fullmatch(word):
+            continue        # H--O--H, C--C, Ca--O: a bond drawn between element
+                            # symbols. Identical in every edition, and the
+                            # <= 4-character uppercase escape above already
+                            # passes the two-symbol forms (O--H, S--S), so
+                            # only the longer chains were being reported.
         if len(word) < 3:
             continue        # stray single symbols
         findings.append((rel, _locate(body, word, _occ),

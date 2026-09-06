@@ -1,0 +1,619 @@
+\chapter{Aminoácidos y proteínas}\label{ch:b1:proteins}
+
+Cuézase un huevo y la clara transparente se vuelve opaca y firme; no se le
+ha añadido ni quitado nada, pero todas y cada una de sus moléculas de
+\omterm{def:b1:proteins:peptide}{proteína} se han desplegado y se han enredado con sus vecinas. Enfríese y
+seguirá cocido. Y sin embargo, una enzima pequeña desplegada con suavidad en
+un tubo de ensayo y dejada después en un \omterm{def:b1:water-small-molecules:buffer}{tampón} sin más se repliega en unos
+minutos hasta su forma funcional exacta, sin ayuda de nada: la forma estaba
+escrita en la cadena. Las \omterm{def:b1:proteins:peptide}{proteínas} son las moléculas que trabajan en la
+\omterm{def:b1:cell-unit-of-life:cell}{célula} --- sus enzimas, \omterm{def:b1:membranes-transport:transporters}{bombas}, motores, andamios, anticuerpos, hormonas ---
+y cada una de ellas es una cadena de \omterm{def:b1:proteins:aminoacid}{aminoácidos} plegada en una forma que su
+secuencia dicta. Este capítulo describe los veinte \omterm{def:b1:proteins:aminoacid}{aminoácidos}, el enlace
+que los une, los cuatro niveles de estructura de las \omterm{def:b1:proteins:peptide}{proteínas}, el
+plegamiento que convierte una cadena en una máquina, el comportamiento
+cooperativo de las \omterm{def:b1:proteins:peptide}{proteínas} de varias subunidades y los métodos con que las
+\omterm{def:b1:proteins:peptide}{proteínas} se separan y se ven.
+
+\section{Aminoácidos}
+
+\begin{definition}[Aminoácido]\label{def:b1:proteins:aminoacid}
+Un \emph{aminoácido}\index{aminoácido} tiene un \emph{carbono $\alpha$}
+central que lleva un grupo amino ($-\mathrm{NH_2}$), un grupo carboxilo
+($-\mathrm{COOH}$), un hidrógeno y una \emph{cadena
+lateral}\index{cadena lateral} $R$ que distingue a los veinte aminoácidos
+estándar de las \omterm{def:b1:proteins:peptide}{proteínas}. Al pH de la \omterm{def:b1:cell-unit-of-life:cell}{célula} el grupo amino está protonado
+y el carboxilo ionizado: la molécula es un
+\emph{zwitterión}\index{zwitterión}, $\mathrm{^+H_3N{-}CHR{-}COO^-}$, sin
+carga neta. El carbono $\alpha$ es quiral en todos salvo en la glicina, y
+los seres vivos usan únicamente el enantiómero L. Las cadenas laterales se
+agrupan por su química:
+\begin{center}
+\footnotesize
+\begin{tabular}{lll}
+\hline
+clase & aminoácidos (códigos de tres y una letras) & cadena lateral \\
+\hline
+apolares, alifáticos & Gly G, Ala A, Val V, Leu L, Ile I, Met M, Pro P & hidrocarburo; Pro, un anillo \\
+aromáticos & Phe F, Tyr Y, Trp W & anillos; Tyr y Trp absorben el UV \\
+\omterm{def:b1:water-small-molecules:water}{polares} sin carga & Ser S, Thr T, Cys C, Asn N, Gln Q & $-$OH, $-$SH, amida \\
+con carga positiva & Lys K, Arg R, His H & bases; His, p$K_a$ 6,0 \\
+con carga negativa & Asp D, Glu E & carboxilatos, p$K_a$ 4 \\
+\hline
+\end{tabular}
+\end{center}
+Nueve de ellos (His, Ile, Leu, Lys, Met, Phe, Thr, Trp, Val) son
+\emph{esenciales} para el ser humano: no podemos fabricarlos y debemos
+comerlos.
+\end{definition}
+
+\begin{proposition}[Ionización]\label{prop:b1:proteins:ionisation}
+Cada grupo ionizable de un \omterm{def:b1:proteins:aminoacid}{aminoácido} tiene su propia p$K_a$: alrededor de 2
+para el carboxilo $\alpha$, 9,5 para el amino $\alpha$, y para las \omterm{def:b1:proteins:aminoacid}{cadenas
+laterales} 3,9 (Asp), 4,1 (Glu), 6,0 (His), 8,3 (Cys), 10,1 (Tyr), 10,5
+(Lys) y 12,5 (Arg). El \emph{punto isoeléctrico}\index{punto isoeléctrico}
+p$I$ es el pH al que la carga neta es nula --- la media de las dos p$K_a$
+que enmarcan la forma neutra ---; el p$I$ de una \omterm{def:b1:proteins:peptide}{proteína} lo fija su
+contenido en \omterm{def:b1:proteins:aminoacid}{cadenas laterales} cargadas, y a ese pH es menos soluble y no se
+desplaza en un campo eléctrico. La histidina, con una p$K_a$ cercana a 7, es
+el residuo que cambia de carga dentro del intervalo fisiológico, y se
+encuentra en los centros activos de muchas enzimas.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=2.1, ymin=0, ymax=13,
+  xlabel={equivalentes de $\mathrm{OH^-}$ añadidos}, ylabel={pH},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.5,1,1.5,2}, ytick={0,2,4,6,8,10,12},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.02:0.98, samples=80] {2.34 + log10(x/(1-x))};
+\addplot[very thick, omDef, domain=1.02:1.98, samples=80] {9.6 + log10((x-1)/(2-x))};
+\addplot[very thick, omDef, domain=0.98:1.02, samples=10] {5.97 + (x-1)*250};
+\draw[dashed, gray] (axis cs:0,2.34) -- (axis cs:0.5,2.34); \node[font=\scriptsize, anchor=west] at (axis cs:0.02,3.4) {p$K_1 = 2.34$: $\mathrm{COOH}/\mathrm{COO^-}$};
+\draw[dashed, gray] (axis cs:0,9.6) -- (axis cs:1.5,9.6); \node[font=\scriptsize, anchor=north west] at (axis cs:1.52,9.3) {p$K_2 = 9.6$: $\mathrm{NH_3^+}/\mathrm{NH_2}$};
+\draw[dashed, gray] (axis cs:0,5.97) -- (axis cs:1,5.97); \node[font=\scriptsize, anchor=south east] at (axis cs:0.98,6.1) {p$I = 5.97$: zwitterión};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.42,0.9) {$\mathrm{^+H_3N{-}CH_2{-}COOH}$};
+\node[font=\scriptsize, anchor=east] at (axis cs:0.93,8.5) {$\mathrm{^+H_3N{-}CH_2{-}COO^-}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:1.75,12.0) {$\mathrm{H_2N{-}CH_2{-}COO^-}$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Valoración de la glicina. Dos mesetas tamponantes, en la p$K_a$ del
+carboxilo y en la del grupo amino; entre ellas, en el \omterm{prop:b1:proteins:ionisation}{punto isoeléctrico}, el
+\omterm{def:b1:proteins:aminoacid}{zwitterión} no lleva carga neta.}
+\end{omfigure}
+
+\section{El enlace peptídico}
+
+\begin{definition}[Enlace peptídico, polipéptido]\label{def:b1:proteins:peptide}
+El \emph{enlace peptídico}\index{enlace peptídico} une el carboxilo de un
+\omterm{def:b1:proteins:aminoacid}{aminoácido} con el grupo amino del siguiente por \omterm{prop:b1:water-small-molecules:families}{condensación} (un enlace
+amida, $\mathrm{-CO{-}NH-}$). Una cadena de \omterm{def:b1:proteins:aminoacid}{aminoácidos} así unidos es un
+\emph{polipéptido}\index{polipéptido}: un \emph{esqueleto} de unidades
+$\mathrm{N{-}C_\alpha{-}C}$ repetidas del que sobresalen las \omterm{def:b1:proteins:aminoacid}{cadenas
+laterales}, con un \emph{extremo N} (grupo amino libre) y un \emph{extremo C}
+(carboxilo libre). Las secuencias se escriben de N a C, el orden de síntesis
+(\cref{ch:b1:gene-expression}). Una \emph{proteína}\index{proteína} es uno o
+varios polipéptidos plegados en una forma definida; las cadenas típicas
+tienen de \qtyrange{100}{1000}{} residuos de masa media \qty{110}{Da}, de
+modo que una proteína de \qty{300}{} residuos son \qty{33}{kDa}.
+\end{definition}
+
+\begin{proposition}[Geometría del enlace peptídico]\label{prop:b1:proteins:geometry}
+El enlace C--N de un péptido tiene carácter parcial de doble enlace (la
+resonancia de la amida): es corto, no puede girar y mantiene en un mismo
+plano los seis átomos $\mathrm{C_\alpha{-}C(=O){-}N(H){-}C_\alpha}$, casi
+siempre con los dos carbonos $\alpha$ en \emph{trans}. El esqueleto es por
+tanto una cadena de planos rígidos articulados en los carbonos $\alpha$,
+cada articulación con dos giros, $\phi$ (en torno a
+N--$\mathrm{C_\alpha}$) y $\psi$ (en torno a $\mathrm{C_\alpha}$--C), y los
+choques estéricos entre las \omterm{def:b1:proteins:aminoacid}{cadenas laterales} y el esqueleto prohíben casi
+todas las combinaciones de $\phi$ y $\psi$. La conformación de una \omterm{def:b1:proteins:peptide}{proteína}
+es, en esencia, la lista de sus ángulos $\phi$ y $\psi$.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, line cap=round]
+  % two peptide planes
+  \fill[omDef!12, rounded corners=3pt] (0.3,-0.9) rectangle (3.3,0.9);
+  \fill[omDef!12, rounded corners=3pt] (3.9,-0.9) rectangle (6.9,0.9);
+  % atoms
+  \node (ca1) at (0,0) {$\mathrm{C_\alpha}$};
+  \node (c1) at (1.2,0.4) {C};
+  \node (o1) at (1.2,1.3) {O};
+  \node (n1) at (2.4,-0.4) {N};
+  \node (h1) at (2.4,-1.3) {H};
+  \node (ca2) at (3.6,0) {$\mathrm{C_\alpha}$};
+  \node (c2) at (4.8,0.4) {C};
+  \node (o2) at (4.8,1.3) {O};
+  \node (n2) at (6.0,-0.4) {N};
+  \node (h2) at (6.0,-1.3) {H};
+  \node (ca3) at (7.2,0) {$\mathrm{C_\alpha}$};
+  \draw[thick] (ca1) -- (c1); \draw[thick, double] (c1) -- (o1); \draw[very thick, omThm] (c1) -- (n1); \draw[thick] (n1) -- (h1); \draw[thick] (n1) -- (ca2);
+  \draw[thick] (ca2) -- (c2); \draw[thick, double] (c2) -- (o2); \draw[very thick, omThm] (c2) -- (n2); \draw[thick] (n2) -- (h2); \draw[thick] (n2) -- (ca3);
+  % side chains
+  \draw[thick] (ca1) -- ++(-0.5,-0.8) node[below] {$R_1$};
+  \draw[thick] (ca2) -- ++(0,-1.0) node[below] {$R_2$};
+  \draw[thick] (ca3) -- ++(0.5,-0.8) node[below] {$R_3$};
+  % rotation arrows phi/psi at ca2
+  \draw[->, omProp, thick] (2.9,-0.55) arc (200:340:0.35); \node[omProp, font=\scriptsize] at (3.05,-0.95) {$\phi$};
+  \draw[->, omProp, thick] (3.85,0.55) arc (160:20:0.35); \node[omProp, font=\scriptsize] at (4.2,1.0) {$\psi$};
+  \node[anchor=west, align=left] at (7.9,0.6) {\textcolor{omThm}{rojo}: el enlace peptídico, plano,\\ sin giro (doble enlace parcial)};
+  \node[anchor=west, align=left] at (7.9,-0.5) {\textcolor{omProp}{naranja}: los dos giros libres\\ $\phi$ y $\psi$ en cada carbono $\alpha$};
+\end{tikzpicture}
+
+{\small Dos \omterm{def:b1:proteins:peptide}{enlaces peptídicos}. Cada plano sombreado sujeta rígidamente seis
+átomos; la cadena solo se dobla en los carbonos $\alpha$, mediante los
+ángulos $\phi$ y $\psi$.}
+\end{omfigure}
+
+\section{Estructura secundaria}
+
+\begin{definition}[Estructura secundaria]\label{def:b1:proteins:secondary}
+La \emph{estructura secundaria}\index{estructura secundaria} de una \omterm{def:b1:proteins:peptide}{proteína}
+es el plegamiento local y regular de su esqueleto, sostenido por \omterm{def:b1:water-small-molecules:water}{enlaces de
+hidrógeno} entre los grupos C=O y N--H del esqueleto. Dominan dos patrones.
+La \emph{hélice $\alpha$}\index{alpha helix@hélice $\alpha$}: una espiral
+dextrógira de 3,6 residuos por vuelta, que asciende \qty{0.15}{nm} por
+residuo (\qty{0.54}{nm} por vuelta), con cada C=O unido al N--H situado
+cuatro residuos por delante y con las \omterm{def:b1:proteins:aminoacid}{cadenas laterales} hacia fuera. La
+\emph{lámina $\beta$}\index{beta sheet@lámina $\beta$}: cadenas estiradas
+casi por completo (\qty{0.35}{nm} por residuo) y dispuestas lado a lado,
+paralelas o antiparalelas, unidas entre hebras vecinas y con las \omterm{def:b1:proteins:aminoacid}{cadenas
+laterales} alternando por encima y por debajo de la lámina. Entre ambas, los
+\emph{giros} y los bucles invierten el sentido de la cadena. La prolina,
+cuyo anillo bloquea $\phi$, rompe las hélices; la glicina, sin \omterm{def:b1:proteins:aminoacid}{cadena
+lateral}, permite giros que ningún otro residuo puede hacer.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.62\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=-180, xmax=180, ymin=-180, ymax=180,
+  xlabel={$\phi$ (grados)}, ylabel={$\psi$ (grados)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={-180,-90,0,90,180}, ytick={-180,-90,0,90,180},
+  clip=false,
+]
+\fill[omDef!35] (axis cs:-160,90) rectangle (axis cs:-50,180);
+\fill[omDef!35] (axis cs:-160,-180) rectangle (axis cs:-50,-150);
+\fill[omThm!35] (axis cs:-150,-70) rectangle (axis cs:-45,-10);
+\fill[omExo!35] (axis cs:40,10) rectangle (axis cs:80,70);
+\node[font=\scriptsize] at (axis cs:-105,140) {lámina $\beta$};
+\node[font=\scriptsize] at (axis cs:-97,-40) {hélice $\alpha$ dextrógira};
+\node[font=\scriptsize, align=center] at (axis cs:60,100) {hélice levógira\\ (solo glicina)};
+\node[font=\scriptsize, gray, align=center] at (axis cs:80,-100) {en blanco: prohibido por\\ choques estéricos};
+\draw[gray] (axis cs:-180,0) -- (axis cs:180,0); \draw[gray] (axis cs:0,-180) -- (axis cs:0,180);
+\end{axis}
+\end{tikzpicture}
+
+{\small El diagrama de Ramachandran: las combinaciones de $\phi$ y $\psi$
+que puede adoptar un residuo. Dos grandes regiones permitidas corresponden a
+la lámina $\beta$ y a la hélice $\alpha$ dextrógira; casi todo el plano está
+prohibido por colisiones entre átomos.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.26\linewidth]{images/book3/pauling.jpg}
+
+{\small Linus Pauling (1901--1994), que dedujo la hélice $\alpha$ y la
+lámina $\beta$ en 1951 a partir de la planaridad del \omterm{def:b1:proteins:peptide}{enlace peptídico} y de
+la geometría de los \omterm{def:b1:water-small-molecules:water}{enlaces de hidrógeno}, antes de que ninguna de las dos se
+hubiera visto en una \omterm{def:b1:proteins:peptide}{proteína}. Fotografía: Fundación Nobel, 1962, dominio
+público.}
+\end{omfigure}
+
+\begin{example}[Hélice y lámina en cifras]\label{ex:b1:proteins:numbers}
+Una hélice $\alpha$ que atraviese una membrana debe cruzar \qty{3}{nm} de
+núcleo hidrófobo: $3/0.15 = 20$ residuos, y en efecto los segmentos
+transmembranarios del \cref{ch:b1:membranes-transport} son tramos de unos
+veinte residuos hidrófobos. Una hebra $\beta$ de la misma longitud abarca
+\qty{7}{nm}: la fibroína de la seda son láminas antiparalelas apiladas de
+glicina y alanina, y un hilo de seda es más resistente que un acero del
+mismo peso porque los esqueletos covalentes discurren a lo largo de la
+fibra.
+\end{example}
+
+\section{Estructura terciaria y cuaternaria}
+
+\begin{definition}[Estructura terciaria y cuaternaria]\label{def:b1:proteins:tertiary}
+La \emph{estructura terciaria}\index{estructura terciaria} es la disposición
+tridimensional completa de un \omterm{def:b1:proteins:peptide}{polipéptido}: sus hélices, sus láminas y sus
+bucles empaquetados juntos, a menudo en varios \emph{dominios} compactos que
+se pliegan de forma independiente. La sostienen fuerzas no covalentes --- el
+\emph{\omterm{prop:b1:water-small-molecules:properties}{efecto hidrófobo}}, que entierra las \omterm{def:b1:proteins:aminoacid}{cadenas laterales} apolares en un
+núcleo alejado del agua, los \omterm{def:b1:water-small-molecules:water}{enlaces de hidrógeno}, los puentes salinos entre
+\omterm{def:b1:proteins:aminoacid}{cadenas laterales} cargadas y el empaquetamiento de \omterm{def:b1:water-small-molecules:bonds}{van der Waals} --- y a
+veces \emph{puentes disulfuro}\index{puente disulfuro}, \omterm{def:b1:water-small-molecules:bonds}{enlaces covalentes}
+S--S entre dos cisteínas, en las \omterm{def:b1:proteins:peptide}{proteínas} secretadas al exterior oxidante.
+La \emph{estructura cuaternaria}\index{estructura cuaternaria} es el
+ensamblaje de varios \omterm{def:b1:proteins:peptide}{polipéptidos} (subunidades) en una sola \omterm{def:b1:proteins:peptide}{proteína}: la
+hemoglobina son dos cadenas $\alpha$ y dos $\beta$. Las \omterm{def:b1:proteins:peptide}{proteínas}
+\emph{globulares} son compactas e hidrosolubles (enzimas, \omterm{def:b1:membranes-transport:transporters}{transportadores});
+las \emph{fibrosas} son alargadas e insolubles (la triple hélice del
+\omterm{def:b1:body-plans-tissues:connective}{colágeno}, las hélices superenrolladas de la queratina y la miosina, la
+seda).
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.42\linewidth]{images/book3/ai/fig-hemoglobin-ribbon.png}
+
+{\small Hemoglobina: cuatro subunidades, dos $\alpha$ (azul) y dos $\beta$
+(rojo), cada una un haz de hélices $\alpha$ en torno a un grupo hemo
+(oscuro) cuyo hierro fija un $\mathrm{O_2}$. Los cuatro sitios no actúan de
+forma independiente.}
+\end{omfigure}
+
+\begin{theorem}[La secuencia determina el plegamiento]\label{thm:b1:proteins:anfinsen}
+\index{plegamiento de proteínas}
+La estructura tridimensional de una \omterm{def:b1:proteins:peptide}{proteína} la determina su secuencia de
+\omterm{def:b1:proteins:aminoacid}{aminoácidos}: el plegamiento nativo es la conformación de menor \omterm{prop:b1:water-small-molecules:gibbs}{energía libre}
+que la cadena puede alcanzar en su entorno celular, y la información
+necesaria para llegar a ella está contenida en la propia cadena.
+\end{theorem}
+\begin{proof}[Evidencia]
+Anfinsen (1961) desplegó la ribonucleasa A, una enzima de \qty{124}{}
+residuos con cuatro \omterm{def:b1:proteins:tertiary}{puentes disulfuro}, en urea concentrada con un agente
+reductor que rompía los puentes: la cadena perdió toda su actividad. Al
+retirar la urea y dejar que las cisteínas se reoxidasen despacio al aire,
+recuperó la enzima plenamente activa, con sus cuatro puentes rehechos entre
+las mismas ocho cisteínas de los \qty{105}{} apareamientos posibles: la
+cadena había encontrado su propio plegamiento. Reoxidada aún en urea, formó
+puentes al azar y siguió inactiva; una traza del agente reductor le permitió
+después barajarlos hasta alcanzar el conjunto nativo, el más estable. Desde
+entonces se han plegado en el tubo de ensayo miles de secuencias partiendo
+de cero, y hoy el plegamiento de una secuencia nueva puede calcularse a
+partir de ella.
+\end{proof}
+
+\begin{proposition}[Desnaturalización]\label{prop:b1:proteins:denaturation}
+\index{desnaturalización (proteína)}
+El calor, los pH extremos, la urea, los detergentes o los disolventes
+orgánicos despliegan las \omterm{def:b1:proteins:peptide}{proteínas} al vencer los enlaces débiles que
+sostienen el plegamiento: la cadena pierde su forma y su función, expone su
+núcleo hidrófobo y se agrega con sus vecinas. Las \omterm{def:b1:proteins:peptide}{proteínas} pequeñas se
+repliegan al retirar el desnaturalizante; las grandes, y las que están en
+una \omterm{def:b1:cell-unit-of-life:cell}{célula} abarrotada, a menudo no pueden, y la \omterm{def:b1:cell-unit-of-life:cell}{célula} mantiene
+\emph{chaperonas}\index{chaperona} --- \omterm{def:b1:proteins:peptide}{proteínas} que fijan cadenas
+desplegadas, protegen sus superficies hidrófobas y les dan repetidas
+oportunidades de plegarse bien --- y destruye lo que queda mal plegado. Unas
+décimas de fiebre, y los \qty{42}{\celsius} a los que empiezan a desplegarse
+las \omterm{def:b1:proteins:peptide}{proteínas} del encéfalo, marcan el estrecho margen de estabilidad: un
+plegamiento típico es solo entre \qtyrange{20}{60}{kJ/mol} más estable que
+la cadena desplegada, lo que valen unos pocos \omterm{def:b1:water-small-molecules:water}{enlaces de hidrógeno}.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-12-egg-white-cooked.png}
+
+{\small Clara de huevo cruda y cocida: las mismas \omterm{def:b1:proteins:peptide}{proteínas}, plegadas y
+solubles a la izquierda, desplegadas y agregadas en un sólido opaco a la
+derecha. No se añadió nada más que calor.}
+\end{omfigure}
+
+\begin{example}[El colágeno]\label{ex:b1:proteins:collagen}
+La cuarta parte de la \omterm{def:b1:proteins:peptide}{proteína} de un mamífero es \omterm{def:b1:body-plans-tissues:connective}{colágeno}: tres cadenas,
+cada una una hélice levógira de mil residuos con glicina en cada tercera
+posición (Gly--X--Y, siendo Y a menudo hidroxiprolina), enrolladas entre sí
+en una triple hélice dextrógira de \qty{300}{nm} de largo, y empaquetadas
+después lado a lado en fibrillas entrecruzadas por \omterm{def:b1:water-small-molecules:bonds}{enlaces covalentes}. La
+ausencia de \omterm{def:b1:proteins:aminoacid}{cadena lateral} en la glicina es lo que permite a las tres
+cadenas empaquetarse en el eje; una sola sustitución de una glicina por
+cualquier otro residuo acoda la hélice y da huesos quebradizos. La vitamina
+C es necesaria para hidroxilar las prolinas; sin ella la hélice es inestable
+y las fibrillas fallan: el escorbuto.
+\end{example}
+
+\section{Alosterismo: la hemoglobina}
+
+\begin{definition}[Alosterismo, cooperatividad]\label{def:b1:proteins:allostery}
+Una \omterm{def:b1:proteins:peptide}{proteína} es \emph{alostérica}\index{alosterismo} cuando la unión de un
+ligando en un sitio cambia la conformación de la \omterm{def:b1:proteins:peptide}{proteína} y, con ella, su
+afinidad en otro sitio. Cuando los sitios son iguales y el cambio eleva la
+afinidad de los demás, la unión es
+\emph{cooperativa}\index{cooperatividad}: la curva de saturación es sigmoide
+en vez de hiperbólica, y la \omterm{def:b1:proteins:peptide}{proteína} pasa de casi vacía a casi llena en un
+intervalo estrecho de concentración de ligando. La \emph{ecuación de
+Hill}\index{ecuación de Hill} lo describe:
+\[
+Y = \frac{P^n}{P_{50}^n + P^n},
+\]
+donde $Y$ es la fracción de sitios ocupados, $P$ la concentración (o presión
+parcial) del ligando, $P_{50}$ el valor de semisaturación y $n$ el
+coeficiente de Hill: 1 para sitios independientes, y hasta el número de
+sitios para una cooperatividad perfecta.
+\end{definition}
+
+\begin{proposition}[Hemoglobina y mioglobina]\label{prop:b1:proteins:hemoglobin}
+La mioglobina, una cadena con un hemo, fija el $\mathrm{O_2}$ siguiendo una
+hipérbola ($n = 1$, $P_{50} = \qty{0.37}{kPa}$): está saturada a cualquier
+presión que ofrezcan los \omterm{def:b1:body-plans-tissues:tissue}{tejidos} y sirve de reserva en el músculo. La
+hemoglobina, de cuatro subunidades, se une de forma \omterm{def:b1:proteins:allostery}{cooperativa}
+($n \approx 2.8$, $P_{50} = \qty{3.5}{kPa}$): el primer $\mathrm{O_2}$
+fijado desplaza el tetrámero de un \emph{estado T} de baja afinidad hacia un
+\emph{estado R} de alta afinidad, de modo que se carga casi por completo a
+los \qty{13}{kPa} del pulmón y descarga una fracción grande a los
+\qty{5}{kPa} de los \omterm{def:b1:body-plans-tissues:tissue}{tejidos}. Su afinidad la rebajan aún más, y favorecen la
+descarga, la acidez y el $\mathrm{CO_2}$ (el \emph{efecto Bohr}) y el
+2,3-bisfosfoglicerato (BPG), que se une al estado T: en un músculo que
+trabaja, o en altitud, se libera más oxígeno para la misma presión. El feto
+fabrica una hemoglobina que fija débilmente el BPG, de modo que su sangre
+extrae oxígeno de la de la madre a través de la placenta.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=14, ymin=0, ymax=1.08,
+  xlabel={presión parcial de $\mathrm{O_2}$ (\unit{kPa})}, ylabel={fracción de sitios ocupados $Y$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10,12,14}, ytick={0,0.25,0.5,0.75,1},
+  legend style={font=\small, at={(0.97,0.35)}, anchor=north east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.01:14, samples=120] {x/(0.37+x)};
+\addlegendentry{mioglobina, $n=1$, $P_{50} = \qty{0.37}{kPa}$}
+\addplot[very thick, omThm, domain=0.01:14, samples=120] {x^2.8/(3.5^2.8+x^2.8)};
+\addlegendentry{hemoglobina, $n=2.8$, $P_{50} = \qty{3.5}{kPa}$}
+\addplot[very thick, omProp, dashed, domain=0.01:14, samples=120] {x^2.8/(4.5^2.8+x^2.8)};
+\addlegendentry{hemoglobina en medio ácido, $P_{50} = \qty{4.5}{kPa}$ (Bohr)}
+\draw[dashed, gray] (axis cs:13.3,0) -- (axis cs:13.3,1.0); \node[font=\scriptsize, anchor=south] at (axis cs:13.3,1.01) {pulmones};
+\draw[dashed, gray] (axis cs:5.3,0) -- (axis cs:5.3,0.76); \node[font=\scriptsize, anchor=west] at (axis cs:5.45,0.07) {tejidos};
+\end{axis}
+\end{tikzpicture}
+
+{\small Fijación de oxígeno por la mioglobina (hiperbólica) y por la
+hemoglobina (sigmoide). Entre los pulmones y los \omterm{def:b1:body-plans-tissues:tissue}{tejidos} la mioglobina no
+libera casi nada; la hemoglobina libera la quinta parte de su carga, y más
+cuando el \omterm{def:b1:body-plans-tissues:tissue}{tejido} está acidificado.}
+\end{omfigure}
+
+\begin{method}[Uso de la ecuación de Hill]\label{met:b1:proteins:hill}
+\begin{enumerate}
+  \item Léase $P_{50}$ en la curva para $Y = 0.5$; estímese $n$ a partir de
+        la pendiente de $\log[Y/(1-Y)]$ frente a $\log P$ (el diagrama de
+        Hill), que es una recta de pendiente $n$ cerca de $P_{50}$.
+  \item Calcúlese $Y$ a la presión de carga (pulmones) y a la de descarga
+        (\omterm{def:b1:body-plans-tissues:tissue}{tejidos}); la diferencia es la fracción de la capacidad de
+        transporte que se entrega.
+  \item Multiplíquese por la capacidad: la sangre contiene \qty{150}{g/L}
+        de hemoglobina, y cada gramo fija \qty{1.34}{mL} de
+        $\mathrm{O_2}$, es decir, \qty{200}{mL} de $\mathrm{O_2}$ por litro
+        cuando está saturada.
+  \item Para incluir el efecto Bohr o el BPG, úsese la $P_{50}$ desplazada
+        solo en los \omterm{def:b1:body-plans-tissues:tissue}{tejidos}, que es donde está el ácido.
+\end{enumerate}
+\end{method}
+
+\section{Ver y separar proteínas}
+
+\begin{method}[Separación de proteínas]\label{met:b1:proteins:methods}
+\begin{enumerate}
+  \item \emph{Electroforesis en SDS}: el detergente recubre cada cadena de
+        carga negativa en proporción a su longitud, de modo que las cadenas
+        migran por un gel de poliacrilamida solo según su tamaño; una
+        escalera de masas conocidas calibra el gel, y la posición de una
+        banda teñida da la masa con un error de pocos por ciento.
+  \item \emph{Cromatografía}: a través de una columna de bolitas que
+        retardan las \omterm{def:b1:proteins:peptide}{proteínas} por tamaño (filtración en gel: las grandes
+        salen primero), por carga (intercambio iónico) o por unión
+        específica (afinidad: un ligando inmovilizado retiene una \omterm{def:b1:proteins:peptide}{proteína}
+        y deja pasar el resto). Una purificación se sigue por el aumento de
+        la actividad específica (\cref{ch:b1:cell-unit-of-life}).
+  \item \emph{Secuenciación}: la secuencia del gen, traducida; o la propia
+        \omterm{def:b1:proteins:peptide}{proteína}, cortada en péptidos y leída por espectrometría de masas.
+  \item \emph{Estructura}: la difracción de rayos X de un cristal, o la
+        microscopía electrónica de partículas aisladas congeladas, da la
+        posición de cada átomo; los dibujos de cintas de este capítulo son
+        sus resúmenes.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book3/ai/b3-12-protein-gel.png}
+
+{\small Un gel de SDS y poliacrilamida teñido. Cada calle es una muestra;
+cada banda, una \omterm{def:b1:proteins:peptide}{proteína} de un tamaño; la calle de la izquierda, una
+escalera de marcadores de masa conocida. Las \omterm{def:b1:proteins:peptide}{proteínas} pequeñas corren más
+lejos.}
+\end{omfigure}
+
+\begin{example}[Leer un gel]\label{ex:b1:proteins:gel}
+Un extracto bruto muestra decenas de bandas; tras una cromatografía de
+afinidad queda una sola banda en la posición del marcador de \qty{33}{kDa}.
+Corrida sin SDS y sin agente reductor, esa misma \omterm{def:b1:proteins:peptide}{proteína} migra como una
+especie de \qty{66}{kDa}: es un dímero de dos cadenas idénticas unidas por
+un \omterm{def:b1:proteins:tertiary}{puente disulfuro}, que el agente reductor rompe y el detergente separa.
+Dos geles, un razonamiento, y la \omterm{def:b1:proteins:tertiary}{estructura cuaternaria} queda establecida.
+\end{example}
+
+\section{Ejercicios}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:1}
+Dibújese o descríbase la estructura general de un \omterm{def:b1:proteins:aminoacid}{aminoácido} a pH 7, y
+clasifíquense Leu, Ser, Lys, Glu y Phe por su \omterm{def:b1:proteins:aminoacid}{cadena lateral}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:2}
+Defínanse los cuatro niveles de estructura de una \omterm{def:b1:proteins:peptide}{proteína} y los enlaces que
+sostienen cada uno.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:3}
+Una \omterm{def:b1:proteins:peptide}{proteína} tiene \qty{450}{} residuos. Estímese su masa. Si fuera una
+única hélice $\alpha$, ¿qué longitud tendría? ¿Y como una sola hebra
+$\beta$?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:proteins:4}
+A partir de la figura de la fijación de oxígeno, léanse la saturación de la
+hemoglobina a \qty{13.3}{kPa} y a \qty{5.3}{kPa}, y la fracción entregada.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:5}
+Calcúlese la carga neta del péptido Lys--Gly--Asp--Ala a pH 7, a pH 2 y a
+pH 12, con los valores de p$K_a$ del capítulo, y estímese su \omterm{prop:b1:proteins:ionisation}{punto
+isoeléctrico}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:6}
+Explíquese por qué la prolina rara vez se encuentra dentro de las hélices
+$\alpha$ y por qué la glicina aparece en los giros cerrados, a partir de la
+geometría del esqueleto.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:7}
+En el experimento de Anfinsen, ¿qué fracción de las reoxidaciones al azar
+daría el conjunto nativo de cuatro disulfuros? (Cuéntense las maneras de
+aparear ocho cisteínas.) ¿Qué demostró la recuperación real de toda la
+actividad?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:8}
+Con la \omterm{def:b1:proteins:allostery}{ecuación de Hill} con $n = 2.8$ y $P_{50} = \qty{3.5}{kPa}$,
+calcúlese $Y$ a \qty{2}{kPa}, \qty{3.5}{kPa} y \qty{8}{kPa}. Repítase con
+$n = 1$. ¿Qué \omterm{def:b1:proteins:peptide}{proteína} entrega más entre \qty{8}{} y \qty{2}{kPa}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:proteins:9}
+Una \omterm{def:b1:proteins:peptide}{proteína} corre como una sola banda de \qty{50}{kDa} en un gel de SDS y
+sale de una columna de filtración en gel a \qty{200}{kDa}. Dese su
+\omterm{def:b1:proteins:tertiary}{estructura cuaternaria} y dígase cómo se comprobaría si hay \omterm{def:b1:proteins:tertiary}{puentes disulfuro}
+entre las subunidades.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:10}
+La hemoglobina falciforme tiene valina en vez de glutamato en la posición 6
+de la cadena $\beta$, en la superficie. Explíquese, a partir de la química
+de las dos \omterm{def:b1:proteins:aminoacid}{cadenas laterales}, por qué la \omterm{def:b1:proteins:peptide}{proteína} mutante polimeriza cuando
+se desoxigena, y por qué la enfermedad se manifiesta en los \omterm{def:b1:body-plans-tissues:tissue}{tejidos} y no en
+los pulmones.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:11}
+Un plegamiento es estable solo por \qty{40}{kJ/mol}. Calcúlense la fracción
+de moléculas desplegadas en el equilibrio a \qty{37}{\celsius}
+($K = e^{-\Delta G/RT}$) y a \qty{45}{\celsius} si $\Delta G$ ha caído a
+\qty{10}{kJ/mol}. ¿Por qué le resulta útil a una \omterm{def:b1:cell-unit-of-life:cell}{célula} una estabilidad tan
+ajustada?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:proteins:12}
+``Una \omterm{def:b1:proteins:peptide}{proteína} es una secuencia que se pliega en una forma, y la forma es la
+función.'' Discútase en un párrafo con Anfinsen, las \omterm{prop:b1:proteins:denaturation}{chaperonas}, la anemia
+falciforme y el \omterm{def:b1:proteins:allostery}{alosterismo}: dónde se sostiene la frase y dónde debe
+intervenir la \omterm{def:b1:cell-unit-of-life:cell}{célula}.
+\end{exercise}
+
+\section{Problema: la hemoglobina en acción}
+
+\begin{problem}[{Problema de fin de semana --- el oxígeno transportado del
+pulmón al músculo, en reposo, en un esprint, en la montaña y antes de nacer,
+hasta llegar al oxígeno entregado por litro de sangre}]
+\label{pb:b1:proteins:1}
+La sangre contiene \qty{150}{g/L} de hemoglobina; \qty{1}{g} fija
+\qty{1.34}{mL} de $\mathrm{O_2}$. La hemoglobina obedece a la \omterm{def:b1:proteins:allostery}{ecuación de
+Hill} con $n = 2.8$ y $P_{50} = \qty{3.5}{kPa}$ a pH 7,4; la mioglobina tiene
+$n = 1$ y $P_{50} = \qty{0.37}{kPa}$. Presiones parciales de
+$\mathrm{O_2}$: \qty{13.3}{kPa} en los pulmones a nivel del mar y
+\qty{5.3}{kPa} en los \omterm{def:b1:body-plans-tissues:tissue}{tejidos} en reposo. Tómense $2.8\ln 3.5 = 3.51$,
+$2.8\ln 5.3 = 4.67$, $2.8\ln 13.3 = 7.25$, $2.8\ln 2.7 = 2.78$,
+$2.8\ln 4.5 = 4.21$, $2.8\ln 7 = 5.45$, $2.8\ln 4 = 3.88$,
+$2.8\ln 2.6 = 2.68$.
+
+\medskip
+\noindent\textbf{Parte I --- En reposo.}
+\begin{enumerate}
+  \item Calcúlese la capacidad de oxígeno de un litro de sangre.
+  \item Calcúlese $P^{2.8}$ para $P = 3.5$, $5.3$ y $13.3$ kPa (como
+        $e^{2.8\ln P}$).
+  \item Calcúlese la saturación $Y$ de la hemoglobina en los pulmones y en
+        los \omterm{def:b1:body-plans-tissues:tissue}{tejidos}.
+  \item Calcúlense la fracción de la carga entregada y el oxígeno entregado
+        por litro de sangre, en mililitros.
+  \item Un ser humano en reposo consume \qty{250}{mL} de $\mathrm{O_2}$ por
+        minuto. ¿Qué gasto cardíaco exige esa entrega?
+  \item Calcúlense la saturación de la mioglobina a esas dos mismas
+        presiones y el oxígeno que entregaría por litro si sustituyera a la
+        hemoglobina. Conclúyase.
+  \item Explíquese en una frase qué aporta la \omterm{def:b1:proteins:allostery}{cooperatividad}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte II --- Un esprint.}
+En un músculo que esprinta el pH cae a 7,2 y la presión local de
+$\mathrm{O_2}$ a \qty{2.7}{kPa}; el efecto Bohr eleva allí la $P_{50}$ a
+\qty{4.5}{kPa}.
+\begin{enumerate}[resume]
+  \item Calcúlese $Y$ a \qty{2.7}{kPa} con $P_{50} = \qty{3.5}{kPa}$ (sin
+        efecto Bohr).
+  \item Calcúlese $Y$ a \qty{2.7}{kPa} con $P_{50} = \qty{4.5}{kPa}$.
+  \item Calcúlense el oxígeno entregado por litro en ambos casos (con la
+        carga en los pulmones sin cambios) y la ganancia debida al efecto
+        Bohr.
+  \item La mioglobina del músculo está a $P = \qty{2.7}{kPa}$. ¿Cuál es su
+        saturación, y qué le ocurre si la presión cae a \qty{0.5}{kPa}
+        durante una contracción?
+  \item Explíquese por qué el efecto Bohr es una forma de \omterm{def:b1:proteins:allostery}{alosterismo} y
+        dónde actúan los protones.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte III --- La montaña.}
+A \qty{4000}{m} la presión de $\mathrm{O_2}$ en los pulmones es de
+\qty{7}{kPa}. En unos días los glóbulos rojos elevan su BPG y desplazan la
+$P_{50}$ a \qty{4.0}{kPa}; en unas semanas la médula ósea eleva la
+hemoglobina a \qty{180}{g/L}.
+\begin{enumerate}[resume]
+  \item Calcúlense la saturación en los pulmones a \qty{7}{kPa} con
+        $P_{50} = \qty{3.5}{kPa}$ y la entrega por litro (\omterm{def:b1:body-plans-tissues:tissue}{tejidos} a
+        \qty{5.3}{kPa}). Compárese con el nivel del mar.
+  \item Calcúlense las saturaciones en pulmón y \omterm{def:b1:body-plans-tissues:tissue}{tejido} con
+        $P_{50} = \qty{4.0}{kPa}$, y la entrega.
+  \item Explíquese por qué rebajar la afinidad ayuda, aunque disminuya la
+        carga en los pulmones.
+  \item Calcúlese la entrega por litro con $P_{50} = \qty{4.0}{kPa}$ y
+        \qty{180}{g/L} de hemoglobina.
+  \item ¿Ayudaría una afinidad todavía menor ($P_{50} = \qty{6}{kPa}$) a
+        \qty{7}{kPa}? Calcúlense las dos saturaciones y decídase.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Parte IV --- Antes de nacer.}
+La hemoglobina fetal tiene $P_{50} = \qty{2.6}{kPa}$; en la placenta la
+presión de $\mathrm{O_2}$ es de \qty{4}{kPa} a ambos lados.
+\begin{enumerate}[resume]
+  \item Calcúlese la saturación de la hemoglobina materna a \qty{4}{kPa}.
+  \item Calcúlese la saturación de la hemoglobina fetal a \qty{4}{kPa}.
+  \item Explíquese cómo pasa el oxígeno de la madre al feto aunque la
+        presión sea la misma a ambos lados.
+  \item La hemoglobina fetal tiene cadenas $\gamma$ en vez de $\beta$, que
+        fijan débilmente el BPG. Explíquese cómo produce eso la $P_{50}$
+        más baja.
+  \item Al nacer, la sangre fetal debe descargar en \omterm{def:b1:body-plans-tissues:tissue}{tejidos} a
+        \qty{5.3}{kPa}. Calcúlese la entrega fetal por litro desde unos
+        pulmones a \qty{13.3}{kPa}, y dígase por qué es útil el cambio a
+        hemoglobina adulta a lo largo de los primeros meses.
+  \item Una mutación eleva la $P_{50}$ adulta a \qty{5}{kPa}. Predíganse la
+        saturación arterial de esa persona a nivel del mar y la
+        consecuencia para la entrega.
+  \item Explíquese por qué un \omterm{def:b1:membranes-transport:transporters}{transportador} con $P_{50} = \qty{3.5}{kPa}$ y
+        sin \omterm{def:b1:proteins:allostery}{cooperatividad} ($n = 1$) sería un mal \omterm{def:b1:membranes-transport:transporters}{transportador} de oxígeno:
+        calcúlese su entrega.
+  \item Enúnciese el resultado: el oxígeno entregado por litro de sangre en
+        reposo y en un músculo que esprinta, y las dos propiedades de la
+        hemoglobina que marcan la diferencia.
+\end{enumerate}
+\end{problem}

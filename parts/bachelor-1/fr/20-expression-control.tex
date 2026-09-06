@@ -1,0 +1,556 @@
+\chapter{Le contrôle de l'expression génétique}\label{ch:b1:expression-control}
+
+Une bactérie qui pousse sur glucose porte cinq molécules de l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui
+digère le lactose~; donnez-lui du lactose et, en quelques minutes, elle
+en porte cinq mille. Une \omterm{def:b1:cell-unit-of-life:cell}{cellule} hépatique et un \omterm{def:b1:body-plans-tissues:nervous}{neurone} portent les
+mêmes vingt mille \omterm{def:b1:genomes:gene}{gènes} et fabriquent des jeux de \omterm{def:b1:proteins:peptide}{protéines} presque
+entièrement différents, et jamais l'un ne fabriquera ceux de l'autre.
+Rien dans le \cref{ch:b1:gene-expression} n'explique cela~: la
+machinerie de l'expression est la même pour tous les \omterm{def:b1:genomes:gene}{gènes}. Ce qui
+diffère, c'est qu'un \omterm{def:b1:genomes:gene}{gène} soit lu ou non, à quelle fréquence et pendant
+combien de temps --- décisions prises au promoteur par des \omterm{def:b1:proteins:peptide}{protéines} qui
+se lient à l'\omterm{def:b1:nucleic-acids:chain}{ADN}, et après lui par le sort du messager et de la
+\omterm{def:b1:proteins:peptide}{protéine}. Ce chapitre décrit comment les bactéries allument et éteignent
+leurs \omterm{def:b1:genomes:gene}{gènes} selon leur nourriture, comment les eucaryotes commandent les
+leurs par la chromatine, des \omterm{def:b1:expression-control:enhancer}{amplificateurs} lointains et des
+combinaisons de facteurs, et comment le même contrôle, appliqué à des
+\omterm{def:b1:genomes:gene}{gènes} différents dans des \omterm{def:b1:cell-unit-of-life:cell}{cellules} différentes, fait un corps à partir
+d'un seul \omterm{def:b1:genomes:genome}{génome}.
+
+\section{Pourquoi et où les gènes sont commandés}
+
+\begin{proposition}[L'expression est régulée, à tous les niveaux]\label{prop:b1:expression-control:levels}
+\index{regulation genique@régulation génique}\index{gene constitutif@gène constitutif}
+Certains \omterm{def:b1:genomes:gene}{gènes} sont \emph{constitutifs} --- exprimés toujours, à un
+niveau constant, parce que leurs produits sont toujours nécessaires (les
+\omterm{def:b1:proteins:peptide}{protéines} du \omterm{def:b1:gene-expression:ribosome}{ribosome}, les \omterm{def:b1:enzymes:enzyme}{enzymes} de la \omterm{def:b1:respiration-fermentation:glycolysis}{glycolyse}). La plupart sont
+\emph{régulés}~: exprimés seulement dans certaines conditions, dans
+certaines \omterm{def:b1:cell-unit-of-life:cell}{cellules}, à certains moments. Le contrôle agit à chaque étape
+du flux --- surtout au démarrage de la transcription, l'endroit le moins
+coûteux pour décider, mais aussi à la maturation, à l'exportation, à la
+stabilité et à la traduction du messager, et à la modification et à la
+dégradation de la \omterm{def:b1:proteins:peptide}{protéine} --- et les temps de réponse vont de la
+seconde (une \omterm{def:b1:proteins:peptide}{protéine} modifiée) à la minute (un \omterm{def:b1:genomes:gene}{gène} bactérien allumé)
+et au jour (un état de la chromatine changé).
+\end{proposition}
+
+\begin{example}[Ne fabriquer les enzymes qu'en cas de besoin]\label{ex:b1:expression-control:economy}
+La $\beta$-galactosidase, qui scinde le lactose, est un tétramère de
+quatre chaînes de \qty{1024}{} résidus~: cinq mille copies font
+\qty{3}{\%} des \omterm{def:b1:proteins:peptide}{protéines} d'une \omterm{def:b1:cell-unit-of-life:cell}{cellule} et coûtent \qty{8e7}{} \omterm{def:b1:water-small-molecules:atp}{ATP} par
+génération. Une bactérie qui les fabriquerait sans lactose à digérer
+croîtrait environ un pour cent moins vite qu'une concurrente qui ne le
+ferait pas, et en quelques centaines de générations serait submergée. La
+régulation est sélectionnée parce que l'expression coûte cher.
+\end{example}
+
+\section{L'opéron lactose}
+
+\begin{definition}[Opéron, répresseur, opérateur]\label{def:b1:expression-control:operon}
+\index{operon@opéron}\index{represseur@répresseur}\index{operateur@opérateur}\index{operon lactose@opéron lactose}
+Un \emph{opéron} est un groupe de \omterm{def:b1:genomes:gene}{gènes} bactériens transcrits ensemble à
+partir d'un seul promoteur en un seul messager, et donc commandés
+ensemble. L'\emph{opéron lactose} d'\emph{E. coli} comprend trois \omterm{def:b1:genomes:gene}{gènes}
+pour l'usage du lactose --- \emph{lacZ} ($\beta$-galactosidase),
+\emph{lacY} (la perméase du lactose, qui l'importe) et \emph{lacA} ---
+derrière un promoteur et un \emph{opérateur}, courte séquence qui
+chevauche le promoteur. Un \omterm{def:b1:genomes:gene}{gène} à part, \emph{lacI}, fabrique le
+\emph{répresseur lac}, \omterm{def:b1:proteins:peptide}{protéine} qui se lie à l'opérateur et bloque la
+polymérase. Le lactose, converti dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule} en allolactose, est
+l'\emph{inducteur}~: il se lie au répresseur, en change la forme, et lui
+fait lâcher l'opérateur. L'opéron est donc éteint sauf en présence de
+lactose --- un \emph{contrôle négatif} levé par \emph{induction}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % state 1: no lactose
+  \begin{scope}
+    \draw[very thick, gray] (0,0) -- (11,0);
+    \fill[omExo!50] (0.2,-0.2) rectangle (1.6,0.2); \node[anchor=south, font=\scriptsize] at (0.9,0.25) {\emph{lacI}};
+    \fill[omProp!50] (2.4,-0.2) rectangle (3.6,0.2); \node[anchor=north, font=\scriptsize] at (3.0,-0.25) {promoteur};
+    \fill[omThm!50] (3.6,-0.2) rectangle (4.4,0.2); \node[anchor=south, font=\scriptsize] at (4.0,0.25) {opérateur};
+    \fill[omDef!60] (4.5,-0.2) rectangle (7.2,0.2); \node[anchor=south, font=\scriptsize] at (5.85,0.25) {\emph{lacZ}};
+    \fill[omDef!60] (7.3,-0.2) rectangle (9.0,0.2); \node[anchor=south, font=\scriptsize] at (8.15,0.25) {\emph{lacY}};
+    \fill[omDef!60] (9.1,-0.2) rectangle (10.3,0.2); \node[anchor=south, font=\scriptsize] at (9.7,0.25) {\emph{lacA}};
+    \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt] (rep) at (4.0,-0.95) {répresseur};
+    \draw[->, thick] (0.9,-0.25) -- (0.9,-0.95) -- (3.3,-0.95);
+    \draw[thick] (rep) -- (4.0,-0.22);
+    \node[draw, thick, fill=omProp!25, rounded corners=3pt, inner sep=2pt] at (2.2,0.9) {ARN polymérase};
+    \node[font=\scriptsize, anchor=west] at (3.45,0.9) {bloquée};
+    \node[anchor=east, align=right] at (-0.2,0) {sans lactose~:\\ opéron ÉTEINT};
+  \end{scope}
+  % state 2: lactose present
+  \begin{scope}[yshift=-3.0cm]
+    \draw[very thick, gray] (0,0) -- (11,0);
+    \fill[omExo!50] (0.2,-0.2) rectangle (1.6,0.2);
+    \fill[omProp!50] (2.4,-0.2) rectangle (3.6,0.2);
+    \fill[omThm!50] (3.6,-0.2) rectangle (4.4,0.2);
+    \fill[omDef!60] (4.5,-0.2) rectangle (7.2,0.2); \fill[omDef!60] (7.3,-0.2) rectangle (9.0,0.2); \fill[omDef!60] (9.1,-0.2) rectangle (10.3,0.2);
+    \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt] (rep2) at (4.0,-1.0) {répresseur + inducteur};
+    \node[font=\scriptsize, anchor=west] at (5.6,-1.0) {détaché de l'opérateur};
+    \node[draw, thick, fill=omProp!25, rounded corners=3pt, inner sep=2pt] at (3.0,0.85) {ARN polymérase};
+    \draw[->, very thick, omProp!80!black] (4.0,0.85) -- (10.3,0.85) node[midway, above, font=\scriptsize] {un seul messager pour les trois gènes};
+    \node[anchor=east, align=right] at (-0.2,0) {lactose présent~:\\ opéron ALLUMÉ};
+  \end{scope}
+\end{tikzpicture}
+
+{\small L'\omterm{def:b1:expression-control:operon}{opéron lactose}. Sans lactose, le \omterm{def:b1:expression-control:operon}{répresseur} occupe
+l'\omterm{def:b1:expression-control:operon}{opérateur} et la polymérase ne peut pas démarrer~; avec du lactose,
+l'inducteur détache le \omterm{def:b1:expression-control:operon}{répresseur} et les trois \omterm{def:b1:genomes:gene}{gènes} sont transcrits en
+un seul messager.}
+\end{omfigure}
+
+\begin{proposition}[Le modèle de l'opéron]\label{prop:b1:expression-control:jacobmonod}
+Les \omterm{def:b1:genomes:gene}{gènes} lac sont commandés par un \omterm{def:b1:expression-control:operon}{répresseur} diffusible agissant sur
+un site voisin des \omterm{def:b1:genomes:gene}{gènes}~: le contrôle est négatif, le \omterm{def:b1:expression-control:operon}{répresseur} agit
+en \emph{trans} (depuis n'importe où dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule}), et l'\omterm{def:b1:expression-control:operon}{opérateur}
+agit en \emph{cis} (seulement sur les \omterm{def:b1:genomes:gene}{gènes} qui le jouxtent).
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Jacob et Monod (1959--1961) raisonnèrent à partir de mutants. Des
+souches mutées dans \emph{lacI} ($I^-$) faisaient l'\omterm{def:b1:enzymes:enzyme}{enzyme} avec ou sans
+lactose (de façon \emph{constitutive})~; un \omterm{def:b1:genomes:gene}{gène} \emph{lacI} normal
+introduit sur une seconde copie de la région rétablissait la
+régulation~: le produit du \omterm{def:b1:genomes:gene}{gène} est donc un \omterm{def:b1:expression-control:operon}{répresseur} diffusible dont
+un mutant est privé. Des souches mutées dans l'\omterm{def:b1:expression-control:operon}{opérateur} ($O^c$) étaient
+elles aussi constitutives, mais un second \omterm{def:b1:expression-control:operon}{opérateur} normal sur une autre
+copie ne rétablissait pas la régulation --- l'\omterm{def:b1:expression-control:operon}{opérateur} ne commande que
+les \omterm{def:b1:genomes:gene}{gènes} qui lui sont physiquement attachés~: c'est donc un site, non
+un produit. Une troisième classe ($I^s$) ne pouvait pas être induite du
+tout, et était dominante~: un \omterm{def:b1:expression-control:operon}{répresseur} qui ne fixe plus l'inducteur.
+Dans l'expérience PaJaMo (1959), un \omterm{def:b1:genomes:gene}{gène} \emph{lacI} normal transféré
+par conjugaison dans une \omterm{def:b1:cell-unit-of-life:cell}{cellule} $I^-$ éteignit la synthèse de l'\omterm{def:b1:enzymes:enzyme}{enzyme}
+en quelques minutes~: le \omterm{def:b1:expression-control:operon}{répresseur} agit vite, et sur la transcription
+--- on montra plus tard que le messager a une demi-vie de quelques
+minutes.
+\end{proof}
+
+\begin{definition}[Contrôle positif~: CAP et AMPc]\label{def:b1:expression-control:cap}
+\index{repression catabolique@répression catabolique}\index{diauxie}
+Le promoteur lac est faible~: même sans \omterm{def:b1:expression-control:operon}{répresseur}, la polymérase ne
+démarre que rarement à moins qu'une seconde \omterm{def:b1:proteins:peptide}{protéine}, la \emph{CAP}
+(\omterm{def:b1:proteins:peptide}{protéine} activatrice par les catabolites), ne soit fixée juste en amont
+de lui, où elle courbe l'\omterm{def:b1:nucleic-acids:chain}{ADN} et maintient la polymérase en place. La CAP
+ne se lie à l'\omterm{def:b1:nucleic-acids:chain}{ADN} que si elle porte de l'\emph{AMP cyclique}, dont le
+taux dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule} baisse quand le glucose abonde. L'\omterm{def:b1:expression-control:operon}{opéron} n'est donc
+pleinement allumé que si le lactose est présent \emph{et} le glucose
+absent~: deux signaux, l'un négatif, l'autre positif, sont intégrés à un
+seul promoteur. Avec les deux sucres, \emph{E. coli} mange d'abord le
+glucose, marque une pause pendant que l'AMPc monte et que les \omterm{def:b1:enzymes:enzyme}{enzymes}
+lac sont fabriquées, puis mange le lactose --- c'est la courbe de
+croissance à deux phases appelée \emph{diauxie}, que Monod décrivit en
+1941 et qui le mit sur la route de l'\omterm{def:b1:expression-control:operon}{opéron}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=6, ymin=1e7, ymax=3e9,
+  xlabel={temps (h)}, ylabel={cellules par mL},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2,3,4,5,6},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:2, samples=30] {1e7*2^(x/0.333)};
+\addplot[very thick, omDef, domain=2:2.6, samples=5] {6.4e8};
+\addplot[very thick, omDef, domain=2.6:4.0, samples=30] {6.4e8*2^((x-2.6)/0.5)};
+\addplot[very thick, omDef, domain=4.0:6, samples=5] {6.4e8*2^(1.4/0.5)};
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:0.15,8e8) {phase 1~: glucose\\ (doublement \qty{20}{min})};
+\node[font=\scriptsize, anchor=south, align=center] at (axis cs:2.3,7e8) {latence~: l'AMPc monte,\\ les enzymes lac sont faites};
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:3.0,9e8) {phase 2~: lactose\\ (doublement \qty{30}{min})};
+\node[font=\scriptsize, anchor=south west] at (axis cs:4.1,4.4e9) {};
+\end{semilogyaxis}
+\end{tikzpicture}
+
+{\small Croissance diauxique d'\emph{E. coli} sur glucose plus lactose.
+La culture croît sur le glucose seul, s'arrête quand il est épuisé, et
+repart sur le lactose après la demi-heure qu'il faut pour induire
+l'\omterm{def:b1:expression-control:operon}{opéron lactose}.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book3/ai/b3-20-xgal-plate.png}
+
+{\small L'\omterm{def:b1:expression-control:operon}{opéron lactose} rendu visible~: des colonies sur une boîte
+contenant du X-gal, substrat incolore que la $\beta$-galactosidase fait
+virer au bleu. Les colonies bleues expriment \emph{lacZ}~; les blanches
+portent un \omterm{def:b1:genomes:gene}{gène} cassé --- le rapporteur employé dans mille expériences.}
+\end{omfigure}
+
+\begin{method}[Prédire un phénotype lac]\label{met:b1:expression-control:lacphenotype}
+\begin{enumerate}
+  \item Écrire le génotype de chaque copie de la région~: $I$, $P$, $O$,
+        $Z$ ($^+$ normal, $^-$ inactif, $O^c$ \omterm{def:b1:expression-control:operon}{opérateur} constitutif,
+        $I^s$ \omterm{def:b1:expression-control:operon}{super-répresseur}).
+  \item Le \omterm{def:b1:expression-control:operon}{répresseur} agit en trans~: un seul $I^+$ où qu'il soit
+        réprime tout \omterm{def:b1:expression-control:operon}{opérateur} normal~; $I^s$ réprime quel que soit
+        l'inducteur.
+  \item L'\omterm{def:b1:expression-control:operon}{opérateur} et le promoteur agissent en cis~: un $O^c$ ne
+        libère que le $Z$ de son propre \omterm{def:b1:nucleic-acids:chain}{ADN}~; un $P^-$ n'éteint que ses
+        propres \omterm{def:b1:genomes:gene}{gènes}.
+  \item Se demander, avec et sans inducteur, si chaque \omterm{def:b1:genomes:gene}{gène} $Z^+$ est
+        transcrit~; le phénotype est inductible, constitutif ou non
+        inductible selon le cas. Ajouter ensuite du glucose~: sans le
+        couple AMPc--CAP, la transcription est faible quoi que fasse le
+        \omterm{def:b1:expression-control:operon}{répresseur}.
+\end{enumerate}
+\end{method}
+
+\begin{example}[Deux diploïdes partiels]\label{ex:b1:expression-control:diploids}
+$I^-\,O^+\,Z^+ / I^+\,O^+\,Z^-$~: la copie $I^+$ fabrique un \omterm{def:b1:expression-control:operon}{répresseur}
+qui se lie à l'$O^+$ voisin de $Z^+$~; inductible --- la mutation est
+complémentée. $I^+\,O^c\,Z^+ / I^+\,O^+\,Z^-$~: le seul $Z$ en état de
+marche se trouve derrière un \omterm{def:b1:expression-control:operon}{opérateur} que le \omterm{def:b1:expression-control:operon}{répresseur} ne peut pas
+lier~; constitutif --- l'\omterm{def:b1:expression-control:operon}{opérateur} normal de l'autre copie ne peut rien,
+puisqu'il ne commande que le $Z$ cassé.
+\end{example}
+
+\section{Autres stratégies bactériennes}
+
+\begin{proposition}[Répression, atténuation et facteurs sigma]\label{prop:b1:expression-control:trp}
+\index{operon tryptophane@opéron tryptophane}\index{attenuation@atténuation}\index{facteur sigma}
+Les \omterm{def:b1:expression-control:operon}{opérons} de biosynthèse sont commandés en sens inverse~: l'\emph{\omterm{prop:b1:expression-control:trp}{opéron
+tryptophane}}, cinq \omterm{def:b1:genomes:gene}{gènes} pour fabriquer le tryptophane, est transcrit
+sauf en présence de tryptophane --- l'\omterm{def:b1:proteins:aminoacid}{acide aminé} se lie au \omterm{def:b1:expression-control:operon}{répresseur}
+trp et lui \emph{permet} de se lier à l'\omterm{def:b1:expression-control:operon}{opérateur} (c'est un
+corépresseur). Un second contrôle, plus fin, l'\emph{atténuation},
+exploite le couplage de la transcription et de la traduction chez les
+bactéries~: le début du messager code un court peptide portant deux
+tryptophanes à la suite~; si l'ARNt chargé en tryptophane abonde, un
+\omterm{def:b1:gene-expression:ribosome}{ribosome} le traduit vite et l'\omterm{def:b1:nucleic-acids:chain}{ARN} qui suit se replie en épingle
+terminatrice qui arrête la polymérase avant les \omterm{def:b1:genomes:gene}{gènes}~; si le
+tryptophane est rare, le \omterm{def:b1:gene-expression:ribosome}{ribosome} cale sur les \omterm{def:b1:gene-expression:code}{codons} du tryptophane et
+l'\omterm{def:b1:nucleic-acids:chain}{ARN} se replie autrement, ce qui laisse la transcription continuer. Les
+bactéries commutent aussi des jeux entiers de \omterm{def:b1:genomes:gene}{gènes} en changeant la
+sous-unité $\sigma$ de leur polymérase~: un $\sigma$ de choc thermique
+la dirige vers les promoteurs des \omterm{def:b1:genomes:gene}{gènes} de \omterm{prop:b1:proteins:denaturation}{chaperons}~; un $\sigma$ de
+sporulation vers ceux de la formation des spores.
+\end{proposition}
+
+\section{Le contrôle chez les eucaryotes}
+
+\begin{definition}[Facteurs de transcription, amplificateurs]\label{def:b1:expression-control:enhancer}
+\index{facteur de transcription}\index{amplificateur}
+Chez les eucaryotes, la polymérase ne démarre jamais seule~: les
+facteurs généraux du promoteur (\cref{ch:b1:gene-expression}) la
+recrutent, et le débit est fixé par des \emph{facteurs de transcription}
+liés à des \emph{séquences régulatrices} --- certaines près du
+promoteur, beaucoup dans des \emph{amplificateurs} qui peuvent se
+trouver à des milliers de \omterm{thm:b1:nucleic-acids:helix}{paires de bases}, en amont, en aval ou dans un
+\omterm{def:b1:genomes:gene}{intron}, dans l'une ou l'autre orientation, et qui agissent en faisant
+\emph{boucler} l'\omterm{def:b1:nucleic-acids:chain}{ADN} pour que les facteurs qui y sont liés touchent le
+complexe du promoteur par l'intermédiaire de \omterm{def:b1:proteins:peptide}{protéines} médiatrices. Un
+facteur de transcription est modulaire~: un \emph{domaine de liaison à
+l'\omterm{def:b1:nucleic-acids:chain}{ADN}} qui reconnaît une courte séquence (familles hélice-tour-hélice,
+doigt de zinc, glissière à leucines) et un domaine d'\emph{activation}
+ou de \emph{répression} qui recrute ou bloque la machinerie. Un \omterm{def:b1:genomes:gene}{gène} est
+lu quand la bonne \emph{combinaison} de facteurs est présente~: quelques
+centaines de facteurs, en combinaisons, commandent vingt mille \omterm{def:b1:genomes:gene}{gènes}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[font=\footnotesize, >=Stealth, line cap=round]
+  % DNA with enhancer far upstream, looped to promoter
+  \draw[very thick, gray] (0,0) -- (2.2,0) .. controls (3.2,0) and (3.4,2.6) .. (5.0,2.6) .. controls (6.6,2.6) and (6.8,0) .. (7.8,0) -- (12.5,0);
+  \fill[omExo!60] (0.4,-0.2) rectangle (2.0,0.2); \node[anchor=north, font=\scriptsize] at (1.2,-0.25) {amplificateur (à \qtyrange{1}{100}{kb})};
+  \fill[omProp!50] (8.0,-0.2) rectangle (9.4,0.2); \node[anchor=north, font=\scriptsize] at (8.7,-0.25) {promoteur};
+  \fill[omDef!60] (9.5,-0.2) rectangle (12.3,0.2); \node[anchor=north, font=\scriptsize] at (10.9,-0.25) {gène};
+  % looped enhancer brought near promoter: draw factors at the loop apex near promoter? Simplify: activators on enhancer, mediator bridging
+  \node[draw, thick, fill=omExo!30, rounded corners=3pt, inner sep=2pt] (act) at (1.2,0.75) {activateurs};
+  \node[draw, thick, fill=omThm!25, rounded corners=3pt, inner sep=2pt, align=center] (med) at (5.0,1.5) {médiateur};
+  \node[draw, thick, fill=omProp!30, rounded corners=3pt, inner sep=2pt, align=center] (pol) at (8.7,0.85) {facteurs généraux\\ + polymérase};
+  \draw[thick, omExo!80!black] (act) -- (2.4,1.2) -- (med);
+  \draw[thick, omThm] (med) -- (pol);
+  \node[anchor=north, align=center, gray] at (6.2,-1.0) {l'ADN boucle pour que des facteurs liés au loin touchent le complexe du promoteur~;\\ un gène est lu quand la bonne combinaison de facteurs est liée};
+\end{tikzpicture}
+
+{\small L'action d'un \omterm{def:b1:expression-control:enhancer}{amplificateur}. Les activateurs liés à un
+\omterm{def:b1:expression-control:enhancer}{amplificateur} lointain sont amenés au promoteur par le bouclage de
+l'\omterm{def:b1:nucleic-acids:chain}{ADN}, et un complexe médiateur relaie leur signal à la polymérase.}
+\end{omfigure}
+
+\begin{proposition}[La chromatine fait partie du contrôle]\label{prop:b1:expression-control:chromatin}
+\index{acetylation des histones@acétylation des histones}\index{methylation de l'ADN@méthylation de l'ADN}
+Un \omterm{def:b1:genomes:gene}{gène} emballé dans des \omterm{def:b1:genomes:nucleosome}{nucléosomes} tassés en hétérochromatine ne peut
+pas être lu~: les facteurs ne l'atteignent pas. Les activateurs
+recrutent des \omterm{def:b1:enzymes:enzyme}{enzymes} qui \emph{acétylent} les \omterm{def:b1:genomes:nucleosome}{histones}, ce qui desserre
+leur prise sur l'\omterm{def:b1:nucleic-acids:chain}{ADN} et marque la région comme ouverte~; les \omterm{def:b1:expression-control:operon}{répresseurs}
+recrutent des \omterm{def:b1:enzymes:enzyme}{enzymes} qui retirent les groupes acétyle et ajoutent des
+marques qui compactent la chromatine. Des groupes méthyle ajoutés aux
+cytosines d'un promoteur l'éteignent durablement, et les marques sont
+copiées à la réplication, de sorte que la configuration des \omterm{def:b1:genomes:gene}{gènes}
+ouverts et fermés d'une \omterm{def:b1:cell-unit-of-life:cell}{cellule} est héritée par ses filles --- la
+mémoire par laquelle les filles d'une \omterm{def:b1:cell-unit-of-life:cell}{cellule} hépatique restent des
+\omterm{def:b1:cell-unit-of-life:cell}{cellules} hépatiques (le volume de troisième année traite en profondeur
+ces mécanismes \emph{épigénétiques}).
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Dans les \omterm{def:b1:genomes:genome}{chromosomes} polytènes géants des larves de drosophile (mille
+copies de chaque \omterm{def:b1:genomes:genome}{chromosome} côte à côte, striées), les \omterm{def:b1:genomes:gene}{gènes} en cours de
+transcription apparaissent en \emph{puffs} là où la chromatine s'est
+déployée~; l'ecdysone, l'hormone qui déclenche la mue, fait apparaître
+un jeu précis de puffs en quelques minutes et d'autres quelques heures
+plus tard, dans un ordre fixe --- la transcription vue directement, et
+commutée par un signal. Des \omterm{def:b1:genomes:gene}{gènes} déplacés par un remaniement
+chromosomique auprès de l'hétérochromatine sont éteints dans certaines
+\omterm{def:b1:cell-unit-of-life:cell}{cellules} et pas dans d'autres, et l'état est hérité par leurs filles.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book3/ai/b3-20-polytene-chromosome.png}
+
+{\small Un \omterm{def:b1:genomes:genome}{chromosome} polytène d'une glande salivaire de drosophile~:
+strié, avec deux puffs là où la chromatine s'est ouverte pour la
+transcription. Les puffs apparaissent et disparaissent à mesure que des
+\omterm{def:b1:genomes:gene}{gènes} sont allumés et éteints.}
+\end{omfigure}
+
+\begin{example}[Un signal devient un profil d'expression]\label{ex:b1:expression-control:steroid}
+Le cortisol entre dans une \omterm{def:b1:cell-unit-of-life:cell}{cellule} hépatique et se lie à son récepteur,
+\omterm{def:b1:expression-control:enhancer}{facteur de transcription} maintenu inactif dans le \omterm{def:b1:eukaryotic-cell:organelle}{cytosol}~; le complexe
+gagne le noyau, se lie à une séquence de quinze bases présente auprès
+d'une centaine de \omterm{def:b1:genomes:gene}{gènes} --- dont ceux de la \omterm{def:b1:biosyntheses-integration:gluconeogenesis}{néoglucogenèse}
+(\cref{ch:b1:biosyntheses-integration}) --- et recrute des acétylases et
+le médiateur~: en une heure, les \omterm{def:b1:enzymes:enzyme}{enzymes} de la synthèse du glucose sont
+en fabrication. La même hormone dans un lymphocyte, dont la chromatine
+ouverte expose un autre jeu de ces séquences, allume des \omterm{def:b1:genomes:gene}{gènes} qui tuent
+la \omterm{def:b1:cell-unit-of-life:cell}{cellule}. Un signal, un récepteur, deux réponses~: la différence est
+dans les \omterm{def:b1:genomes:gene}{gènes} qui étaient accessibles.
+\end{example}
+
+\section{Après la transcription, et la fabrication d'un corps}
+
+\begin{proposition}[Le contrôle au-delà du promoteur]\label{prop:b1:expression-control:posttranscriptional}
+\index{stabilite des ARNm@stabilité des ARNm}
+Une \omterm{def:b1:cell-unit-of-life:prokeuk}{cellule eucaryote} décide aussi comment un transcrit est épissé
+(l'épissage alternatif donne à un muscle et à un cerveau des \omterm{def:b1:proteins:peptide}{protéines}
+différentes à partir d'un seul \omterm{def:b1:genomes:gene}{gène}), s'il est exporté, combien de temps
+il dure (des demi-vies allant de la minute pour les messages des
+\omterm{def:b1:proteins:peptide}{protéines} régulatrices au jour pour celui de l'hémoglobine, fixées par
+des séquences des régions non traduites qui lient des \omterm{def:b1:proteins:peptide}{protéines} et de
+petits \omterm{def:b1:nucleic-acids:chain}{ARN} régulateurs), et s'il est traduit (les \omterm{def:b1:cell-unit-of-life:cell}{cellules} carencées en
+fer bloquent la traduction du message de la ferritine par une \omterm{def:b1:proteins:peptide}{protéine}
+fixée à son extrémité $5'$, et la libèrent quand le fer est présent). La
+\omterm{def:b1:proteins:peptide}{protéine}, une fois faite, est commandée par sa modification et par sa
+dégradation (\cref{ch:b1:enzymes}). Chaque niveau plus tardif est plus
+rapide et plus local que le précédent, et plus coûteux~: la
+transcription décide de ce que la \omterm{def:b1:cell-unit-of-life:cell}{cellule} peut faire, les niveaux
+ultérieurs de ce qu'elle fait maintenant.
+\end{proposition}
+
+\begin{proposition}[L'expression différentielle fait un corps]\label{prop:b1:expression-control:differentiation}
+\index{differenciation@différenciation}
+Chaque \omterm{def:b1:cell-unit-of-life:cell}{cellule} d'un \omterm{def:b1:organism-environment:organism}{organisme} pluricellulaire porte le même \omterm{def:b1:genomes:genome}{génome}~; les
+\omterm{def:b1:cell-unit-of-life:cell}{cellules} diffèrent parce qu'elles en expriment des sous-ensembles
+différents. Les \omterm{def:b1:genomes:gene}{gènes} de \emph{ménage} --- quelques milliers pour le
+métabolisme, le \omterm{def:b1:gene-expression:ribosome}{ribosome}, le \omterm{def:b1:eukaryotic-cell:cytoskeleton}{cytosquelette} --- sont allumés dans toute
+\omterm{def:b1:cell-unit-of-life:cell}{cellule}~; les autres sont allumés dans certaines \omterm{def:b1:cell-unit-of-life:cell}{cellules} et éteints
+dans d'autres selon les combinaisons de \omterm{def:b1:expression-control:enhancer}{facteurs de transcription} que
+chaque \omterm{def:b1:cell-unit-of-life:cell}{cellule} porte et les états de chromatine dont elle a hérité. Le
+précurseur d'un globule rouge allume la globine et éteint presque tout
+le reste~; un \omterm{def:b1:body-plans-tissues:nervous}{neurone} allume ses canaux et ne se divise plus jamais. La
+\emph{différenciation} est l'acquisition d'un profil d'expression
+stable, et le \emph{développement} (volume de deuxième année) est le
+processus par lequel des signaux entre \omterm{def:b1:cell-unit-of-life:cell}{cellules} établissent ces profils
+aux bons endroits.
+\end{proposition}
+\begin{proof}[Faits expérimentaux]
+Un noyau prélevé sur une \omterm{def:b1:cell-unit-of-life:cell}{cellule} différenciée de grenouille et placé
+dans un ovule dont le noyau propre a été retiré peut diriger le
+développement d'un têtard entier (Gurdon, 1962~; rappel du volume du
+lycée)~: la \omterm{def:b1:cell-unit-of-life:cell}{cellule} différenciée n'avait perdu aucun \omterm{def:b1:genomes:gene}{gène}, elle les
+avait seulement éteints, et le \omterm{def:b1:cell-unit-of-life:cell}{cytoplasme} de l'ovule a réarmé les
+interrupteurs. Les \omterm{def:b1:proteins:peptide}{protéines} d'un type cellulaire, séparées sur gel,
+diffèrent de celles d'un autre type~; ses messagers, une fois séquencés,
+forment un sous-ensemble du \omterm{def:b1:genomes:genome}{génome} qui lui est propre~; et une poignée
+de \omterm{def:b1:expression-control:enhancer}{facteurs de transcription} introduits dans une \omterm{def:b1:cell-unit-of-life:cell}{cellule} de peau peuvent
+la reprogrammer en \omterm{def:b1:cell-unit-of-life:cell}{cellule} souche ou en \omterm{def:b1:body-plans-tissues:nervous}{neurone}.
+\end{proof}
+
+\begin{example}[Un gène lu dans deux organes]\label{ex:b1:expression-control:twoorgans}
+Le \omterm{def:b1:genomes:gene}{gène} de l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui fabrique du glucose à partir du
+glucose-6-phosphate est exprimé dans le foie et dans le rein et dans
+aucun autre \omterm{def:b1:body-plans-tissues:tissue}{tissu}~: son promoteur porte des sites pour des facteurs
+présents là seulement, et dans les autres \omterm{def:b1:cell-unit-of-life:cell}{cellules} ce promoteur est
+méthylé et sa chromatine fermée. Un muscle, qui porte le \omterm{def:b1:genomes:gene}{gène} intact, ne
+peut pas libérer de glucose dans le sang
+(\cref{ch:b1:biosyntheses-integration}) --- non faute du \omterm{def:b1:genomes:gene}{gène}, mais
+parce que le \omterm{def:b1:genomes:gene}{gène} n'est pas lu. Le \omterm{def:b1:genomes:genome}{génome} est le même~; l'expression
+fait l'\omterm{def:b1:mammal-organization:organ}{organe}.
+\end{example}
+
+\section{Exercices}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:1}
+Nommer les éléments de l'\omterm{def:b1:expression-control:operon}{opéron lactose} et donner l'état de l'\omterm{def:b1:expression-control:operon}{opéron}
+avec et sans lactose, avec et sans glucose.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:2}
+Expliquer la différence entre un produit de \omterm{def:b1:genomes:gene}{gène} qui agit en trans et un
+site qui agit en cis, avec un exemple de chacun tiré de l'\omterm{def:b1:expression-control:operon}{opéron}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:3}
+D'après la figure de la \omterm{def:b1:expression-control:cap}{diauxie}, lire la durée de la latence et les
+temps de doublement sur chaque sucre.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:expression-control:4}
+Définir \omterm{def:b1:expression-control:enhancer}{amplificateur}, \omterm{def:b1:expression-control:enhancer}{facteur de transcription} et \omterm{def:b1:genomes:gene}{gène} de ménage.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:5}
+Donner le phénotype (inductible, constitutif, non inductible) de~: $I^-$~;
+$O^c$~; $I^s$~; $I^-\,O^+\,Z^+ / I^+\,O^+\,Z^+$~; $I^s\,O^+\,Z^+ /
+I^+\,O^+\,Z^+$~; $I^+\,O^c\,Z^- / I^+\,O^+\,Z^+$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:6}
+Comparer les \omterm{def:b1:expression-control:operon}{opérons lactose} et tryptophane~: ce que la petite molécule
+fait au \omterm{def:b1:expression-control:operon}{répresseur} dans chacun, et pourquoi la logique est inverse.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:7}
+Un mutant ne sait pas fabriquer d'AMPc. Prédire sa croissance sur
+glucose, sur lactose seul et sur les deux, ainsi que le taux de
+$\beta$-galactosidase dans chaque cas.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:8}
+Expliquer pourquoi l'atténuation est impossible chez les eucaryotes, à
+partir de l'architecture de la \omterm{def:b1:cell-unit-of-life:prokeuk}{cellule eucaryote}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:expression-control:9}
+Un \omterm{def:b1:expression-control:enhancer}{amplificateur} est déplacé de \qty{5}{kb} en amont de son \omterm{def:b1:genomes:gene}{gène} à
+\qty{5}{kb} en aval et retourné~; le \omterm{def:b1:genomes:gene}{gène} est toujours exprimé.
+Expliquer ce que cela montre du fonctionnement des \omterm{def:b1:expression-control:enhancer}{amplificateurs}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:10}
+Cinq mille tétramères de $\beta$-galactosidase de \qty{4096}{} résidus
+coûtent combien d'\omterm{def:b1:water-small-molecules:atp}{ATP} (quatre par résidu)~? Le budget d'une \omterm{def:b1:cell-unit-of-life:cell}{cellule} par
+génération est d'environ \qty{1e10}{} \omterm{def:b1:water-small-molecules:atp}{ATP}. Calculer le désavantage de
+croissance d'un mutant constitutif, et le nombre de générations pour que
+sa part d'une population mixte passe de la moitié au centième.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:11}
+On compare une \omterm{def:b1:cell-unit-of-life:cell}{cellule} hépatique et un \omterm{def:b1:body-plans-tissues:nervous}{neurone} d'une même personne~:
+même \omterm{def:b1:genomes:genome}{génome}, \omterm{def:b1:proteins:peptide}{protéines} différentes, et chaque division de la \omterm{def:b1:cell-unit-of-life:cell}{cellule}
+hépatique donne des \omterm{def:b1:cell-unit-of-life:cell}{cellules} hépatiques. Expliquer, à l'aide de la
+chromatine, des facteurs et de l'hérédité des marques, comment la
+différence est faite et comment elle est maintenue.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:expression-control:12}
+«~Une bactérie lit son environnement~; une \omterm{def:b1:cell-unit-of-life:cell}{cellule} d'un corps lit son
+histoire.~» Discuter en un paragraphe les deux sortes de contrôle, leurs
+signaux, leurs échelles de temps et leur réversibilité.
+\end{exercise}
+
+\section{Problème~: la diauxie}
+
+\begin{problem}[{Problème du week-end --- la courbe de croissance à deux
+phases de Monod reconstruite cellule par cellule~: glucose épuisé,
+lactose induit, enzymes comptées, mutants prédits et coût de la
+régulation évalué, jusqu'au facteur d'induction de la
+$\beta$-galactosidase}]
+\label{pb:b1:expression-control:1}
+Une culture d'\emph{E. coli} part de $10^7$ \omterm{def:b1:cell-unit-of-life:cell}{cellules} par millilitre dans
+un milieu contenant \qty{0.5}{mmol/L} de glucose et \qty{1.0}{mmol/L} de
+lactose. Sur glucose, les \omterm{def:b1:cell-unit-of-life:cell}{cellules} doublent toutes les \qty{20}{min},
+sur lactose toutes les \qty{30}{min}~; une \omterm{def:b1:cell-unit-of-life:cell}{cellule} a besoin de
+\qty{1.5e-12}{g} de sucre par division (\qty{180}{g/mol} pour le
+glucose~; le lactose, \qty{342}{g/mol}, compte pour deux glucoses). Les
+\omterm{def:b1:cell-unit-of-life:cell}{cellules} non induites contiennent 5 molécules de
+$\beta$-galactosidase~; pleinement induites, \num{5000}. L'induction
+prend \qty{30}{min}. L'\omterm{def:b1:enzymes:enzyme}{enzyme} est un tétramère de $4\times 1024$
+résidus~; chaque résidu coûte 4 \omterm{def:b1:water-small-molecules:atp}{ATP}~; le budget \omterm{def:b1:water-small-molecules:atp}{ATP} d'une \omterm{def:b1:cell-unit-of-life:cell}{cellule} est de
+$10^{10}$ par division et ses \omterm{def:b1:proteins:peptide}{protéines} pèsent $\qty{1.5e-13}{g}$
+(\qty{110}{Da} par résidu).
+
+\medskip
+\noindent\textbf{Partie I --- La phase glucose.}
+\begin{enumerate}
+  \item Calculer le glucose disponible par millilitre, en grammes.
+  \item Combien de divisions par millilitre peut-il soutenir~?
+  \item En partant de $10^7$ \omterm{def:b1:cell-unit-of-life:cell}{cellules}, combien y a-t-il de \omterm{def:b1:cell-unit-of-life:cell}{cellules}
+        quand le glucose est épuisé~? (Une division fait une \omterm{def:b1:cell-unit-of-life:cell}{cellule} de
+        plus.)
+  \item Combien cela fait-il de doublements, et combien de temps dure la
+        phase glucose~?
+  \item Pendant cette phase, quel est l'état de l'\omterm{def:b1:expression-control:operon}{opéron lactose}, et
+        pourquoi, en termes moléculaires (\omterm{def:b1:expression-control:operon}{répresseur} et CAP)~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie II --- Le basculement.}
+\begin{enumerate}[resume]
+  \item Quand le glucose est épuisé, qu'est-ce qui monte à l'intérieur
+        des \omterm{def:b1:cell-unit-of-life:cell}{cellules} et à quoi cela se lie-t-il~?
+  \item Le lactose était présent depuis le début. Pourquoi l'\omterm{def:b1:expression-control:operon}{opéron}
+        était-il néanmoins presque éteint pendant la phase glucose~?
+  \item Pendant les \qty{30}{min} de latence, chaque \omterm{def:b1:cell-unit-of-life:cell}{cellule} fabrique
+        ses \num{5000} \omterm{def:b1:enzymes:enzyme}{enzymes}. Calculer le nombre de molécules d'\omterm{def:b1:enzymes:enzyme}{enzyme}
+        faites par seconde et par \omterm{def:b1:cell-unit-of-life:cell}{cellule}, ainsi que le nombre de
+        résidus par seconde.
+  \item Une \omterm{def:b1:cell-unit-of-life:cell}{cellule} contient \num{20000} \omterm{def:b1:gene-expression:ribosome}{ribosomes} à \qty{20}{} résidus
+        par seconde. Quelle fraction de sa traduction est consacrée à la
+        $\beta$-galactosidase pendant la latence~?
+  \item Calculer la masse de \num{5000} tétramères et la fraction des
+        \omterm{def:b1:proteins:peptide}{protéines} de la \omterm{def:b1:cell-unit-of-life:cell}{cellule} qu'ils représentent.
+  \item Calculer le facteur d'induction.
+  \item Pourquoi la perméase (\emph{lacY}) est-elle aussi nécessaire que
+        l'\omterm{def:b1:enzymes:enzyme}{enzyme} pour croître sur lactose, et qu'advient-il d'un mutant
+        \emph{lacY}$^-$ mis en présence de lactose~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie III --- La phase lactose.}
+\begin{enumerate}[resume]
+  \item Calculer le lactose disponible par millilitre en équivalents
+        glucose, en grammes.
+  \item Combien de divisions supplémentaires cela soutient-il, et quel
+        est le nombre final de \omterm{def:b1:cell-unit-of-life:cell}{cellules}~?
+  \item Combien de temps dure la phase lactose~?
+  \item Dresser la chronologie~: phase glucose, latence, phase lactose,
+        total.
+  \item Expliquer pourquoi le temps de doublement est plus long sur
+        lactose (deux raisons~: l'une tenant à l'étape enzymatique,
+        l'autre à la perméase).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie IV --- Mutants et coûts.}
+\begin{enumerate}[resume]
+  \item Un mutant $I^-$~: décrire sa courbe de croissance sur le même
+        milieu et son taux d'\omterm{def:b1:enzymes:enzyme}{enzyme} tout du long.
+  \item Un mutant CAP$^-$~: décrire sa courbe et son taux d'\omterm{def:b1:enzymes:enzyme}{enzyme}.
+  \item Un mutant $O^c$ dans un milieu à lactose seul~: une différence
+        avec le type sauvage~? Et dans un milieu à glucose seul~?
+  \item Calculer le coût en \omterm{def:b1:water-small-molecules:atp}{ATP}, par génération, de la fabrication de
+        \num{5000} tétramères, et la fraction du budget de la \omterm{def:b1:cell-unit-of-life:cell}{cellule}.
+  \item Si cette fraction allonge le temps de génération de la même
+        fraction, de combien le taux de croissance du mutant $I^-$
+        reste-t-il en retard sur celui du type sauvage sur glucose~?
+  \item En partant d'effectifs égaux, au bout de combien de générations
+        sur glucose le mutant ne fait-il plus que le dixième de la
+        population~? ($r^n =
+        0.1/0.9$ avec $r$ le rapport des taux de croissance par
+        génération, soit $2^{-\delta}$ pour un retard $\delta$ en
+        doublements.)
+  \item Expliquer pourquoi, malgré tout, les mutants $I^-$ sont
+        fréquents dans les souches de laboratoire cultivées sur lactose.
+  \item Énoncer le résultat~: le facteur d'induction de la
+        $\beta$-galactosidase, le coût de sa fabrication inutile en
+        fraction du budget \omterm{def:b1:water-small-molecules:atp}{ATP}, et la durée totale de l'expérience de
+        \omterm{def:b1:expression-control:cap}{diauxie}.
+        diauxic experiment.
+\end{enumerate}
+\end{problem}

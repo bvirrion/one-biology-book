@@ -1,0 +1,585 @@
+\chapter{Enzymen en biochemische katalyse}\label{ch:b1:enzymes}
+
+Giet waterstofperoxide op een doorgesneden aardappel en het schuimt: één enkel
+molecuul katalase in de \omterm{def:b1:cell-unit-of-life:cell}{cellen} van de aardappel splitst elke seconde veertig
+miljoen moleculen peroxide, een reactie die aan zichzelf overgelaten jaren zou
+duren. Het peroxide zou toch al uiteenvallen --- de reactie gaat bergaf --- maar
+niet in een bruikbare tijd. Elke reactie van de \omterm{def:b1:cell-unit-of-life:cell}{cel} is zo: de thermodynamica zegt
+welke kant zij op kan, en een \emph{\omterm{def:b1:enzymes:enzyme}{enzym}} zegt of zij nu gebeurt. Dit hoofdstuk
+beschrijft wat een \omterm{def:b1:enzymes:enzyme}{enzym} met een reactie doet, de kinetiek waarmee \omterm{def:b1:enzymes:enzyme}{enzymen} worden
+gemeten en vergeleken, de manieren waarop zij worden geremd, en de manieren
+waarop de \omterm{def:b1:cell-unit-of-life:cell}{cel} ze aan- en uitzet.
+
+\section{Katalyse}
+
+\begin{definition}[Enzym, substraat, actieve plaats]\label{def:b1:enzymes:enzyme}
+Een \emph{enzym}\index{enzym} is een \omterm{def:b1:proteins:peptide}{eiwit} (zelden een \omterm{def:b1:nucleic-acids:chain}{RNA}) dat een reactie
+\emph{katalyseert}: het verhoogt de snelheid zonder zelf te worden verbruikt en
+zonder het evenwicht te verschuiven. De moleculen waarop het inwerkt zijn zijn
+\emph{substraten}\index{substraat}; die binden in de \emph{actieve
+plaats}\index{actieve plaats}, een spleet die door enkele residuen wordt bekleed
+en waar de chemie gebeurt. Enzymen zijn \emph{specifiek} --- voor één substraat of
+een familie, voor één binding, voor één stereo-isomeer --- en zij worden genoemd
+naar hun substraat en reactie met het achtervoegsel \emph{-ase} (lactase,
+DNA-polymerase, succinaatdehydrogenase), in zes klassen: oxidoreductasen,
+transferasen, hydrolasen, lyasen, isomerasen, ligasen. Vele hebben een
+niet-eiwitachtige \emph{cofactor}\index{cofactor} nodig: een metaalion (Zn, Mg,
+Fe), of een organisch \emph{co-enzym}\index{co-enzym} --- $\mathrm{NAD^+}$, FAD,
+co-enzym A, die vrijwel allemaal uit vitaminen worden gemaakt, en daar dienen
+vitaminen voor.
+\end{definition}
+
+\begin{proposition}[Wat een enzym verandert en wat niet]\label{prop:b1:enzymes:whatitdoes}
+\index{activeringsenergie}\index{overgangstoestand}
+Een reactie gaat door een \emph{\omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand}}, een gespannen rangschikking
+van de atomen die in \omterm{prop:b1:water-small-molecules:gibbs}{vrije energie} hoger ligt dan de reactanten of de producten,
+met het verschil de \emph{\omterm{prop:b1:enzymes:whatitdoes}{activeringsenergie}} $E_a$; alleen de moleculen die de
+thermische beweging over deze barrière tilt reageren, in een aandeel dat evenredig
+is met $e^{-E_a/RT}$. Een \omterm{def:b1:enzymes:enzyme}{enzym} bindt de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand} steviger dan het
+\omterm{def:b1:enzymes:enzyme}{substraat} --- zijn \omterm{def:b1:enzymes:enzyme}{actieve plaats} is complementair aan de gespannen vorm --- en
+verlaagt zo $E_a$: haar bij \qty{37}{\celsius} met \qty{34}{kJ/mol} verlagen (de
+waarde van enkele \omterm{def:b1:water-small-molecules:water}{waterstofbruggen}) vermenigvuldigt de snelheid met
+$e^{34\,000/2580} \approx
+10^6$. Het verandert $\Delta G$ of de evenwichtsconstante niet, die alleen van de
+reactanten en producten afhangen: een \omterm{def:b1:enzymes:enzyme}{enzym} versnelt de voorwaartse en de
+achterwaartse reactie evenveel en brengt het systeem sneller naar hetzelfde
+evenwicht.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=10,
+  xlabel={reactiecoördinaat}, ylabel={vrije energie $G$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.08)}, anchor=north},
+  ylabel style={font=\small},
+  xtick=\empty, ytick=\empty,
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100, smooth] {5 + 4*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\addplot[very thick, omThm, domain=0:10, samples=100, smooth] {5 + 1.6*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\draw[<->, thick, omDef] (axis cs:5.6,5.0) -- (axis cs:5.6,8.95); \node[font=\scriptsize, omDef, anchor=west] at (axis cs:5.7,7.6) {$E_a$ zonder enzym};
+\draw[<->, thick, omThm] (axis cs:4.4,5.0) -- (axis cs:4.4,6.55); \node[font=\scriptsize, omThm, anchor=east] at (axis cs:4.3,4.4) {$E_a$ met enzym};
+\draw[<->, thick] (axis cs:9.3,2.5) -- (axis cs:9.3,5.0); \node[font=\scriptsize, anchor=west] at (axis cs:9.4,3.75) {$\Delta G$: onveranderd};
+\node[font=\scriptsize, anchor=north] at (axis cs:1.0,4.8) {substraat};
+\node[font=\scriptsize, anchor=north] at (axis cs:9.0,2.3) {product};
+\node[font=\scriptsize, anchor=south] at (axis cs:5,9.05) {overgangstoestand};
+\draw[dashed, gray] (axis cs:0,5) -- (axis cs:9.3,5);
+\end{axis}
+\end{tikzpicture}
+
+{\small De \omterm{prop:b1:water-small-molecules:gibbs}{vrije energie} langs een reactie. Het \omterm{def:b1:enzymes:enzyme}{enzym} (rood) verlaagt de barrière
+van de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand} en laat het verschil tussen \omterm{def:b1:enzymes:enzyme}{substraat} en product --- en
+daarmee het evenwicht --- onaangeroerd.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-catalase-potato.png}
+
+{\small Waterstofperoxide op een doorgesneden aardappel: katalase in de \omterm{def:b1:cell-unit-of-life:cell}{cellen}
+splitst het per enzymmolecuul veertig miljoen keer per seconde in water en
+zuurstof, en de zuurstof schuimt eruit.}
+\end{omfigure}
+
+\begin{proposition}[Hoe de actieve plaats werkt]\label{prop:b1:enzymes:mechanisms}
+Een \omterm{def:b1:enzymes:enzyme}{actieve plaats} versnelt haar reactie op verscheidene manieren tegelijk: zij
+\emph{bindt en richt} de \omterm{def:b1:enzymes:enzyme}{substraten} zodat de reagerende groepen elkaar in de juiste
+meetkunde ontmoeten, waarmee een zeldzame botsing door een zekere wordt vervangen;
+zij \emph{spant} het \omterm{def:b1:enzymes:enzyme}{substraat} naar de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand} toe (\emph{induced
+fit}\index{induced fit}: het \omterm{def:b1:enzymes:enzyme}{enzym} sluit zich om het \omterm{def:b1:enzymes:enzyme}{substraat}, en de pasvorm is
+het best voor de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand}); haar \omterm{def:b1:proteins:aminoacid}{zijketens} werken als \emph{zuren en
+basen} en geven op het juiste moment protonen aan het \omterm{def:b1:enzymes:enzyme}{substraat} en nemen ze weer
+op (histidine, met haar p$K_a$ dicht bij 7, doet dat in veel \omterm{def:b1:enzymes:enzyme}{enzymen}); sommige
+vormen een tijdelijke \emph{\omterm{def:b1:water-small-molecules:bonds}{covalente binding}} met het \omterm{def:b1:enzymes:enzyme}{substraat} (serineproteasen);
+en haar metaalionen polariseren bindingen en stabiliseren ladingen. Water wordt
+grotendeels uit de plaats geweerd, zodat ladingen en \omterm{def:b1:water-small-molecules:water}{waterstofbruggen} op volle
+sterkte werken.
+\end{proposition}
+
+\begin{example}[Drie enzymen]\label{ex:b1:enzymes:three}
+Lysozym, in tranen en \omterm{def:b1:proteins:peptide}{eiwit}, spant een suikerring van de bacteriewand tot de vorm
+van de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand} en knipt de keten: een versnelling met een factor $10^8$.
+Koolzuuranhydrase, in rode \omterm{def:b1:cell-unit-of-life:cell}{cellen}, houdt een zinkion vast dat water omzet in een
+hydroxide dat klaarstaat om $\mathrm{CO_2}$ aan te vallen: een miljoen moleculen
+per seconde, het snelste \omterm{def:b1:enzymes:enzyme}{enzym} na katalase. Chymotrypsine, in het
+alvleeskliersap, gebruikt een serine die door een histidine reactief is gemaakt om
+\omterm{def:b1:proteins:peptide}{eiwitten} na aromatische residuen te knippen: honderd per seconde, met een covalent
+tussenproduct.
+\end{example}
+
+\section{Enzymkinetiek}
+
+\begin{definition}[Beginsnelheid, verzadiging]\label{def:b1:enzymes:rate}
+De \emph{snelheid}\index{reactiesnelheid} $v$ van een enzymreactie is de
+hoeveelheid product die per tijdseenheid wordt gevormd (\unit{mol/s}, of
+enzymeenheden: \qty{1}{\micro mol/min}). Zij wordt gemeten als de
+\emph{beginsnelheid} $v_0$, voordat het \omterm{def:b1:enzymes:enzyme}{substraat} op raakt of het product zich
+ophoopt. Bij een vaste enzymconcentratie stijgt $v_0$ met de substraatconcentratie
+$[S]$ en \emph{verzadigt} zij dan bij een maximum $V_{\max}$: het \omterm{def:b1:enzymes:enzyme}{enzym} is volledig
+bezet en kan niet sneller.
+\end{definition}
+
+\begin{theorem}[Michaelis--Menten]\label{thm:b1:enzymes:mm}
+\index{michaelis-mentenvergelijking}\index{michaelisconstante}
+Voor een \omterm{def:b1:enzymes:enzyme}{enzym} $E$ dat zijn \omterm{def:b1:enzymes:enzyme}{substraat} omkeerbaar bindt en omzet,
+\[
+E + S \underset{k_{-1}}{\overset{k_1}{\rightleftharpoons}} ES
+\overset{k_{\text{cat}}}{\longrightarrow} E + P ,
+\]
+de beginsnelheid bij substraatconcentratie $[S]$ is
+\[
+v_0 = \frac{V_{\max}\,[S]}{K_m + [S]}, \qquad V_{\max} = k_{\text{cat}}\,[E]_{\text{tot}},
+\qquad K_m = \frac{k_{-1} + k_{\text{cat}}}{k_1} .
+\]
+$K_m$, de \emph{\omterm{thm:b1:enzymes:mm}{michaelisconstante}}, is de substraatconcentratie waarbij de
+snelheid de helft van haar maximum is, en meet hoeveel \omterm{def:b1:enzymes:enzyme}{substraat} het \omterm{def:b1:enzymes:enzyme}{enzym} nodig
+heeft; $k_{\text{cat}}$, het \emph{omzetgetal}\index{omzetgetal}, is het aantal
+substraatmoleculen dat één \omterm{def:b1:enzymes:enzyme}{enzym} per seconde omzet wanneer het verzadigd is; de
+verhouding $k_{\text{cat}}/K_m$ is de \emph{katalytische efficiëntie}, de
+snelheidsconstante bij weinig \omterm{def:b1:enzymes:enzyme}{substraat}, van boven begrensd door de snelheid
+waarmee \omterm{def:b1:enzymes:enzyme}{substraat} het \omterm{def:b1:enzymes:enzyme}{enzym} door diffusie kan bereiken, ongeveer
+$10^8$--$10^9$ \unit{L.mol^{-1}.s^{-1}}.
+\end{theorem}
+\begin{proof}
+Neem een \emph{stationaire toestand} aan waarin $ES$ even snel wordt gevormd als
+het verdwijnt (geldig na de eerste milliseconden, zolang $[S] \gg [E]$):
+$k_1[E][S] = (k_{-1} + k_{\text{cat}})[ES]$, dus $[E][S] = K_m[ES]$ met $K_m$ zoals
+gedefinieerd. Behoud geeft $[E] = [E]_{\text{tot}} -
+[ES]$; invullen geeft $([E]_{\text{tot}} - [ES])[S] = K_m[ES]$, dus
+$[ES] = [E]_{\text{tot}}[S]/(K_m + [S])$. De snelheid is
+$v_0 = k_{\text{cat}}[ES]$, wat de formule geeft; bij $[S] \gg K_m$ is
+$v_0 \to k_{\text{cat}}[E]_{\text{tot}} = V_{\max}$, en bij $[S] = K_m$ is
+$v_0 = V_{\max}/2$.
+\end{proof}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.52\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=22, ymin=0, ymax=1.12,
+  xlabel={$[S]$ (\unit{mmol/L})}, ylabel={$v_0$ (\unit{\micro mol/min})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:22, samples=100] {x/(2+x)};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(0.5,0.2) (1,0.333) (2,0.5) (5,0.714) (10,0.833) (20,0.909)};
+\draw[dashed, gray] (axis cs:0,1) -- (axis cs:22,1); \node[font=\scriptsize, anchor=south east] at (axis cs:22,1.0) {$V_{\max}$};
+\draw[dashed, gray] (axis cs:0,0.5) -- (axis cs:2,0.5) -- (axis cs:2,0); \node[font=\scriptsize, anchor=north] at (axis cs:2,-0.02) {$K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.46\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.7, xmax=2.2, ymin=0, ymax=5.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={1,3,5},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(2,5) (1,3) (0.5,2) (0.2,1.4) (0.1,1.2) (0.05,1.1)};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:0.05,4.6) {helling $K_m/V_{\max}$};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.05,0.55) {$1/V_{\max}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:-0.5,0.1) {$-1/K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+{\small Links: de michaelis-mentenhyperbool voor $K_m = \qty{2}{mmol/L}$ en
+$V_{\max} = \qty{1}{\micro mol/min}$, met de zes gemeten punten van het
+weekendvraagstuk. Rechts: dezelfde gegevens als lineweaver-burkplot, $1/v_0$ tegen
+$1/[S]$: een rechte lijn waarvan de snijpunten $V_{\max}$ en $K_m$ geven.}
+\end{omfigure}
+
+\begin{method}[$K_m$ en $V_{\max}$ meten]\label{met:b1:enzymes:lb}
+\begin{enumerate}
+  \item Maak een reeks substraatconcentraties van $K_m/4$ tot $10K_m$, met
+        telkens dezelfde enzymconcentratie; volg het product (kleur,
+        absorptie, gas) de eerste minuut en neem de helling als $v_0$.
+  \item Zet $v_0$ uit tegen $[S]$: de hyperbool geeft een \omterm{def:b1:eukaryotic-cell:endomembrane}{ruwe} $V_{\max}$
+        (het plateau) en $K_m$ (de concentratie bij de helft daarvan).
+  \item Keer voor meer precisie om: $1/v_0 = (K_m/V_{\max})(1/[S]) +
+        1/V_{\max}$ (\emph{Lineweaver--Burk}). Het snijpunt van de lijn met
+        de $y$-as is $1/V_{\max}$, dat met de $x$-as $-1/K_m$, en de helling
+        is $K_m/V_{\max}$.
+  \item Deel $V_{\max}$ door de enzymconcentratie om $k_{\text{cat}}$ te
+        krijgen; deel door $K_m$ voor de efficiëntie. Herhaal met een \omterm{def:b1:enzymes:inhibitors}{remmer}
+        om te zien welke parameter die verandert.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-spectrophotometer-cuvette.png}
+
+{\small Een enzymbepaling: het product neemt licht op, en de
+spectrofotometer registreert het verschijnen ervan seconde na seconde; de
+beginhelling is $v_0$.}
+\end{omfigure}
+
+\begin{example}[Enzymen vergeleken]\label{ex:b1:enzymes:compare}
+\begin{center}
+\small
+\begin{tabular}{lccc}
+\hline
+\omterm{def:b1:enzymes:enzyme}{enzym} & $K_m$ (\unit{mol/L}) & $k_{\text{cat}}$ (\unit{s^{-1}}) & $k_{\text{cat}}/K_m$ (\unit{L.mol^{-1}.s^{-1}}) \\
+\hline
+katalase & \num{2.5e-2} & \num{4e7} & \num{1.6e9} \\
+koolzuuranhydrase & \num{1.2e-2} & \num{1e6} & \num{8e7} \\
+chymotrypsine & \num{1.5e-2} & 100 & \num{7e3} \\
+lysozym & \num{6e-6} & 0.5 & \num{8e4} \\
+DNA-polymerase & \num{1e-5} & 15 & \num{1.5e6} \\
+\hline
+\end{tabular}
+\end{center}
+Katalase en koolzuuranhydrase werken op de diffusiegrens: elke botsing met
+\omterm{def:b1:enzymes:enzyme}{substraat} is vruchtbaar. Chymotrypsine is traag, maar dat moet ook --- het knipt
+een \omterm{def:b1:proteins:peptide}{peptidebinding} door, een veel zwaardere klus dan peroxide splitsen.
+\end{example}
+
+\section{Remming}
+
+\begin{definition}[Remmers]\label{def:b1:enzymes:inhibitors}
+Een \emph{remmer}\index{enzymremmer} verlaagt de snelheid van een \omterm{def:b1:enzymes:enzyme}{enzym}.
+\emph{Onomkeerbare} remmers binden covalent en vernietigen de activiteit van het
+\omterm{def:b1:enzymes:enzyme}{enzym} voorgoed (zenuwgassen op acetylcholinesterase, penicilline op het \omterm{def:b1:enzymes:enzyme}{enzym} dat
+de bacteriewand dwarsverbindt, aspirine op het \omterm{def:b1:enzymes:enzyme}{enzym} dat prostaglandinen maakt).
+\emph{Omkeerbare} remmers binden met zwakke bindingen en kunnen worden
+weggewassen; naar de plaats waar zij binden:
+\begin{itemize}
+  \item \emph{competitief}\index{competitieve remming}: de remmer lijkt op
+        het \omterm{def:b1:enzymes:enzyme}{substraat} en bezet de \omterm{def:b1:enzymes:enzyme}{actieve plaats}; hij verhoogt de
+        schijnbare $K_m$ (met de factor $1 + [I]/K_i$) en laat $V_{\max}$
+        ongemoeid --- genoeg \omterm{def:b1:enzymes:enzyme}{substraat} verdringt hem;
+  \item \emph{niet-competitief}: de remmer bindt elders en bederft de
+        katalyse, of er nu \omterm{def:b1:enzymes:enzyme}{substraat} is gebonden of niet; hij verlaagt
+        $V_{\max}$ en laat $K_m$ ongemoeid --- geen hoeveelheid \omterm{def:b1:enzymes:enzyme}{substraat}
+        overwint hem;
+  \item \emph{ancompetitief}: de remmer bindt alleen het $ES$-complex;
+        zowel $V_{\max}$ als $K_m$ dalen.
+\end{itemize}
+$K_i$, de dissociatieconstante van de remmer, meet zijn kracht: hoe lager, hoe
+sterker.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6.0cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.8, xmax=2.2, ymin=0, ymax=10.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={2,4,6,8,10},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addlegendentry{zonder remmer}
+\addplot[very thick, omThm, domain=-0.25:2.1, samples=10] {1 + 4*x};
+\addlegendentry{competitief: dezelfde $1/V_{\max}$, steiler}
+\addplot[very thick, omProp, domain=-0.5:2.1, samples=10] {2 + 4*x};
+\addlegendentry{niet-competitief: dezelfde $-1/K_m$, hoger}
+\end{axis}
+\end{tikzpicture}
+
+{\small Lineweaver-burkplots met de twee gebruikelijke \omterm{def:b1:enzymes:inhibitors}{remmers}. Een competitieve
+\omterm{def:b1:enzymes:inhibitors}{remmer} draait de lijn om het snijpunt met de $y$-as ($V_{\max}$ onveranderd,
+$K_m$ verhoogd); een niet-competitieve draait haar om het snijpunt met de $x$-as
+($K_m$ onveranderd, $V_{\max}$ verlaagd).}
+\end{omfigure}
+
+\begin{example}[Concurrentie als geneesmiddel]\label{ex:b1:enzymes:medicine}
+Methanol is onschadelijk tot het alcoholdehydrogenase van de lever het in
+formaldehyde en mierenzuur omzet, die blind maken en doden. De behandeling is
+ethanol: een concurrerend \omterm{def:b1:enzymes:enzyme}{substraat} met een lagere $K_m$, dat het \omterm{def:b1:enzymes:enzyme}{enzym} bezig houdt
+terwijl het methanol onveranderd wordt uitgescheiden. Statinen zijn competitieve
+\omterm{def:b1:enzymes:inhibitors}{remmers}, die op de \omterm{prop:b1:enzymes:whatitdoes}{overgangstoestand} lijken, van het \omterm{def:b1:enzymes:enzyme}{enzym} dat koolstof aan
+\omterm{def:b1:lipids:amphiphilic}{cholesterol} vastlegt; sulfonamiden lijken op het \omterm{def:b1:enzymes:enzyme}{substraat} van een bacterieel \omterm{def:b1:enzymes:enzyme}{enzym}
+dat folaat maakt, dat de mens niet maakt en dus ook niet mist.
+\end{example}
+
+\section{Regeling}
+
+\begin{definition}[Allosterische enzymen]\label{def:b1:enzymes:allosteric}
+Een \emph{allosterisch enzym}\index{allosterisch enzym} heeft verscheidene
+subeenheden en, naast zijn actieve plaatsen, \emph{regelplaatsen} waar effectoren
+binden: \emph{activatoren} verschuiven het naar zijn actieve conformatie,
+\emph{\omterm{def:b1:enzymes:inhibitors}{remmers}} naar de inactieve. Zijn snelheid tegen $[S]$ is sigmoïde en niet
+hyperbolisch (\omterm{def:b1:proteins:allostery}{coöperativiteit} tussen de actieve plaatsen, zoals bij hemoglobine,
+\cref{ch:b1:proteins}), zodat een kleine verandering van het \omterm{def:b1:enzymes:enzyme}{substraat} dicht bij
+het steile deel de snelheid sterk verandert; effectoren verschuiven de curve
+zijwaarts (waarmee de benodigde substraatconcentratie verandert) of omhoog en
+omlaag (waarmee de maximale snelheid verandert). Allosterische \omterm{def:b1:enzymes:enzyme}{enzymen} staan op de
+vertakkingspunten van de stofwisseling, en de effectoren zijn de eigen producten
+van de route en de energiesignalen van de \omterm{def:b1:cell-unit-of-life:cell}{cel} (\omterm{def:b1:water-small-molecules:atp}{ATP}, ADP, AMP).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=1.1,
+  xlabel={$[S]$ (relatief)}, ylabel={$v_0/V_{\max}$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10}, ytick={0,0.5,1},
+  legend style={font=\small, at={(0.5,-0.22)}, anchor=north, draw=none, legend columns=2, /tikz/every even column/.append style={column sep=0.4cm}},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100] {x^3/(3^3+x^3)};
+\addlegendentry{allosterisch enzym alleen ($n = 3$)}
+\addplot[very thick, omExo, domain=0:10, samples=100] {x^3/(1.8^3+x^3)};
+\addlegendentry{met een activator: de curve schuift naar links}
+\addplot[very thick, omThm, domain=0:10, samples=100] {x^3/(5.5^3+x^3)};
+\addlegendentry{met een remmer: de curve schuift naar rechts}
+\addplot[thick, dashed, gray, domain=0:10, samples=100] {x/(3+x)};
+\addlegendentry{Michaelis--Menten, ter vergelijking}
+\draw[dashed, gray] (axis cs:3,0) -- (axis cs:3,0.5);
+\end{axis}
+\end{tikzpicture}
+
+{\small Een \omterm{def:b1:enzymes:allosteric}{allosterisch enzym}. De sigmoïde curve maakt de snelheid rond het
+middelpunt gevoelig voor het \omterm{def:b1:enzymes:enzyme}{substraat}; een activator schuift haar naar links
+(actiever bij een gegeven $[S]$), een \omterm{def:b1:enzymes:inhibitors}{remmer} naar rechts. Rond $[S] = 3$ kan de
+snelheid van een tiende tot negen tiende van het maximum uitslaan.}
+\end{omfigure}
+
+\begin{proposition}[Vier manieren waarop de cel een enzym regelt]\label{prop:b1:enzymes:control}
+\begin{enumerate}
+  \item \emph{Feedbackremming}\index{feedbackremming}: het eindproduct van
+        een route is een allosterische \omterm{def:b1:enzymes:inhibitors}{remmer} van het eerste vastleggende
+        \omterm{def:b1:enzymes:enzyme}{enzym} ervan, zodat de route niet sneller loopt dan het product
+        wordt verbruikt (isoleucine op threoninedeaminase; \omterm{def:b1:water-small-molecules:atp}{ATP} op
+        fosfofructokinase, \cref{ch:b1:respiration-fermentation}).
+        Reactietijd: milliseconden.
+  \item \emph{Covalente modificatie}\index{covalente modificatie}: een
+        kinase hangt een fosfaat aan een serine, threonine of tyrosine van
+        het \omterm{def:b1:enzymes:enzyme}{enzym}, een fosfatase haalt het eraf, en de twee vormen
+        verschillen in activiteit (glycogeenfosforylase wordt door
+        fosforylering aangezet, glycogeensynthase uitgezet, door hetzelfde
+        hormonale signaal). Seconden tot minuten; omkeerbaar; in cascades
+        te versterken.
+  \item \emph{Proteolytische activering}: sommige \omterm{def:b1:enzymes:enzyme}{enzymen} worden als
+        inactieve voorlopers gemaakt (\emph{zymogenen}: trypsinogeen,
+        pepsinogeen, de stollingsfactoren) en aangezet door er een peptide
+        af te knippen, eens en voorgoed, waar en wanneer zij gewenst zijn.
+  \item \emph{Hoeveelheid}: de \omterm{def:b1:cell-unit-of-life:cell}{cel} maakt meer of minder van het \omterm{def:b1:enzymes:enzyme}{enzym} door
+        zijn gen te sturen (\cref{ch:b1:expression-control}) en breekt het
+        sneller of trager af. Minuten tot uren.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}[Iso-enzymen]\label{ex:b1:enzymes:isoenzymes}
+Lactaatdehydrogenase bestaat in vijf vormen, tetrameren van twee typen
+subeenheid in alle combinaties; de vorm van het hart heeft een lage $K_m$ voor
+lactaat en wordt door pyruvaat geremd (zij oxideert lactaat om de krebscyclus te
+voeden), die van de spier heeft een hoge $V_{\max}$ en verdraagt pyruvaat (zij
+maakt lactaat tijdens een sprint). Het patroon van de vormen in het bloed verraadt
+welk \omterm{def:b1:mammal-organization:organ}{orgaan} beschadigd is --- bij een hartinfarct komt die van het hart vrij.
+\end{example}
+
+\section{Temperatuur en pH}
+
+\begin{proposition}[Enzymen en hun omgeving]\label{prop:b1:enzymes:environment}
+De snelheid van een enzymreactie verdubbelt ruwweg per \qty{10}{\celsius}
+($Q_{10} \approx 2$) naarmate de thermische energie meer moleculen over de
+barrière tilt, tot het \omterm{def:b1:enzymes:enzyme}{enzym} begint te ontvouwen (\qtyrange{40}{60}{\celsius} bij
+de meeste; \qty{100}{\celsius} bij de \omterm{def:b1:enzymes:enzyme}{enzymen} van bacteriën uit hete bronnen) en
+de snelheid instort. Elk \omterm{def:b1:enzymes:enzyme}{enzym} heeft een \emph{pH-optimum}, waar de ionisatie van
+zijn katalytische residuen en van zijn \omterm{def:b1:enzymes:enzyme}{substraat} juist goed is: pepsine, in de
+maag, rond pH 2; trypsine, in de darm, rond 8; de meeste \omterm{def:b1:enzymes:enzyme}{enzymen} binnen de \omterm{def:b1:cell-unit-of-life:cell}{cel}
+rond 7. Weg van het optimum daalt de snelheid, en ver ervandaan denatureert het
+\omterm{def:b1:proteins:peptide}{eiwit}. Temperatuur en pH werken op het \omterm{def:b1:proteins:peptide}{eiwit} in; de \omterm{def:b1:cell-unit-of-life:cell}{cel} houdt beide binnen het
+gebied waarin haar duizend \omterm{def:b1:enzymes:enzyme}{enzymen} alle werken.
+\end{proposition}
+
+\begin{example}[Koorts en een hete bron]\label{ex:b1:enzymes:fever}
+Koorts van \qty{40}{\celsius} versnelt elke reactie van het lichaam met een kwart
+en begint de kwetsbaarste \omterm{def:b1:proteins:peptide}{eiwitten} te ontvouwen; bij \qty{42}{\celsius} begeven
+die van de hersenen het. Het DNA-polymerase van een bacterie uit een bron van
+\qty{75}{\celsius} overleeft \qty{95}{\celsius}, en daarom kan het duizenden keren
+door het smelten van \omterm{def:b1:nucleic-acids:chain}{DNA} heen worden gecycled en werd het het \omterm{def:b1:enzymes:enzyme}{enzym} van de
+polymerasekettingreactie (het deel van jaar 3): thermostabiliteit is een
+eigenschap van de sequentie, niet van de gekatalyseerde chemie.
+\end{example}
+
+\section{Opgaven}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:1}
+Wat verandert een \omterm{def:b1:enzymes:enzyme}{enzym} aan een reactie, en wat laat het ongemoeid? Illustreer dat
+met het energieprofiel.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:2}
+Definieer $K_m$, $V_{\max}$, $k_{\text{cat}}$ en $k_{\text{cat}}/K_m$, met
+eenheden.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:3}
+Lees uit de lineweaver-burkfiguur van de \omterm{def:b1:enzymes:inhibitors}{remmers} $V_{\max}$ en $K_m$ af voor het
+ongeremde \omterm{def:b1:enzymes:enzyme}{enzym} en voor elke \omterm{def:b1:enzymes:inhibitors}{remmer}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:4}
+Noem de vier manieren waarop een \omterm{def:b1:cell-unit-of-life:cell}{cel} de activiteit van een \omterm{def:b1:enzymes:enzyme}{enzym} regelt en geef de
+tijdschaal van elk.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:5}
+Een \omterm{def:b1:enzymes:enzyme}{enzym} heeft $K_m = \qty{0.1}{mmol/L}$ en $V_{\max} =
+\qty{50}{\micro mol/min}$. Bereken $v_0$ bij $[S] = 0.02$, $0.1$, $1$ en
+\qty{10}{mmol/L}. Bij welke $[S]$ is $v_0 = 0.9\,V_{\max}$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:6}
+Met welke factor vermenigvuldigt het verlagen van $E_a$ met \qty{20}{kJ/mol} bij
+\qty{37}{\celsius} de snelheid? Met hoeveel moet $E_a$ dalen om een factor
+$10^{10}$ te winnen?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:7}
+$\qty{2}{pmol}$ koolzuuranhydrase in \qty{1}{mL} geeft
+$V_{\max} = \qty{120}{mmol/L}$ per minuut. Bereken $k_{\text{cat}}$ en, met
+$K_m = \qty{12}{mmol/L}$, de efficiëntie. Vergelijk dat met de diffusiegrens.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:8}
+Een competitieve \omterm{def:b1:enzymes:inhibitors}{remmer} bij \qty{2}{mmol/L} verdubbelt de schijnbare $K_m$.
+Bereken $K_i$. Welke substraatconcentratie herstelt de snelheid tot \qty{90}{\%}
+van $V_{\max}$ met en zonder de \omterm{def:b1:enzymes:inhibitors}{remmer}, als $K_m = \qty{1}{mmol/L}$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:9}
+Leg uit waarom feedbackremming op de eerste vastleggende stap van een route
+aangrijpt en niet op de laatste, en waarom de \omterm{def:b1:enzymes:inhibitors}{remmer} gewoonlijk het eindproduct is
+en geen tussenproduct.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:10}
+Trypsinogeen wordt in de darm geactiveerd en niet in de alvleesklier die het
+maakt; wordt er te vroeg een klein deel geactiveerd, dan vernietigt dat de
+alvleesklier. Leg de logica van zymogenen uit, de rol van het \omterm{def:b1:enzymes:enzyme}{enzym} dat
+trypsinogeen activeert, en waarom de alvleesklier ook een trypsineremmer maakt.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:11}
+Een \omterm{def:b1:enzymes:allosteric}{allosterisch enzym} met $n = 3$ en halve verzadiging bij $[S]_{0.5}
+= 3$ krijgt zijn curve door een \omterm{def:b1:enzymes:inhibitors}{remmer} verschoven naar $[S]_{0.5} = 5.5$. Bereken
+de snelheid bij $[S] = 3$ met en zonder de \omterm{def:b1:enzymes:inhibitors}{remmer}, en vergelijk dat met de
+verandering die een competitieve \omterm{def:b1:enzymes:inhibitors}{remmer} met dezelfde $K_m$-verschuiving bij een
+michaelis-mentenenzym zou geven. Wat voegt \omterm{def:b1:proteins:allostery}{coöperativiteit} aan de regeling toe?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:12}
+``Een \omterm{def:b1:enzymes:enzyme}{enzym} is een katalysator die te horen heeft gekregen wat hij moet doen.''
+Bespreek dat in een alinea: katalyse tegenover specificiteit, regeling als de
+toegevoegde informatie, en de kosten van een geregeld \omterm{def:b1:enzymes:enzyme}{enzym} vergeleken met een
+kale katalysator.
+\end{exercise}
+
+\section{Vraagstuk: een enzym gemeten}
+
+\begin{problem}[{Weekendvraagstuk --- een esterase gemeten bij zes
+substraatconcentraties, alleen en met twee \omterm{def:b1:enzymes:inhibitors}{remmers}, zijn constanten eruit gehaald
+en zijn gedrag in de \omterm{def:b1:cell-unit-of-life:cell}{cel} voorspeld, eindigend op zijn $K_m$, $V_{\max}$ en $K_i$}]
+\label{pb:b1:enzymes:1}
+Een esterase wordt gemeten in \qty{1.0}{mL} bij \qty{25}{\celsius}, pH 7.5, met
+\qty{10}{nmol/L} \omterm{def:b1:enzymes:enzyme}{enzym}. De beginsnelheden (\unit{\micro mol/min}) bij zes
+substraatconcentraties, alleen en in aanwezigheid van \qty{1.0}{mmol/L} \omterm{def:b1:enzymes:inhibitors}{remmer} I
+of \qty{1.0}{mmol/L} \omterm{def:b1:enzymes:inhibitors}{remmer} J:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+\hline
+$[S]$ (\unit{mmol/L}) & 0.5 & 1 & 2 & 5 & 10 & 20 \\
+\hline
+$v_0$, zonder \omterm{def:b1:enzymes:inhibitors}{remmer} & 0.200 & 0.333 & 0.500 & 0.714 & 0.833 & 0.909 \\
+$v_0$, met I & 0.111 & 0.200 & 0.333 & 0.556 & 0.714 & 0.833 \\
+$v_0$, met J & 0.100 & 0.167 & 0.250 & 0.357 & 0.417 & 0.455 \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Deel I --- Het \omterm{def:b1:enzymes:enzyme}{enzym} alleen.}
+\begin{enumerate}
+  \item Bereken $1/[S]$ en $1/v_0$ voor de zes punten zonder \omterm{def:b1:enzymes:inhibitors}{remmer}.
+  \item Toon aan dat de punten op een rechte lijn liggen en bepaal de
+        helling en het snijpunt ervan.
+  \item Leid $V_{\max}$ en $K_m$ af.
+  \item Controleer dat met de \omterm{thm:b1:enzymes:mm}{michaelis-mentenvergelijking} bij $[S] =
+        \qty{5}{mmol/L}$.
+  \item Bereken de hoeveelheid \omterm{def:b1:enzymes:enzyme}{enzym} in de bepaling (mol) en
+        $k_{\text{cat}}$ in \unit{s^{-1}}.
+  \item Bereken $k_{\text{cat}}/K_m$ en vergelijk dat met de diffusiegrens.
+  \item Bij welke substraatconcentratie werkt het \omterm{def:b1:enzymes:enzyme}{enzym} op \qty{95}{\%} van
+        $V_{\max}$?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel II --- \omterm{def:b1:enzymes:inhibitors}{Remmer} I.}
+\begin{enumerate}[resume]
+  \item Bereken $1/v_0$ voor de zes punten met I en bepaal de helling en
+        het snijpunt van hun lijn.
+  \item Leid de schijnbare $V_{\max}$ en $K_m$ met I af.
+  \item Welke parameter is veranderd? Deel de \omterm{def:b1:enzymes:inhibitors}{remmer} in.
+  \item Bereken $K_i$ uit $K_m^{\text{app}} = K_m(1 + [I]/K_i)$.
+  \item Welke concentratie I halveert bij $[S] = \qty{2}{mmol/L}$ de
+        snelheid? En bij $[S] = \qty{20}{mmol/L}$?
+  \item Stel voor wat I qua bouw zou kunnen zijn, en waar hij bindt.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel III --- \omterm{def:b1:enzymes:inhibitors}{Remmer} J.}
+\begin{enumerate}[resume]
+  \item Bereken de helling en het snijpunt van de lijn met J en leid de
+        schijnbare $V_{\max}$ en $K_m$ af.
+  \item Deel J in en bereken zijn $K_i$ uit $V_{\max}^{\text{app}} =
+        V_{\max}/(1 + [J]/K_i)$.
+  \item Leg uit waarom meer \omterm{def:b1:enzymes:enzyme}{substraat} J niet kan overwinnen.
+  \item Wat doet het verdubbelen van de enzymconcentratie in aanwezigheid
+        van J met de snelheid? En in aanwezigheid van I?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Deel IV --- In de \omterm{def:b1:cell-unit-of-life:cell}{cel}.}
+De \omterm{def:b1:cell-unit-of-life:cell}{cel} houdt het \omterm{def:b1:enzymes:enzyme}{substraat} op \qty{0.5}{mmol/L} en het \omterm{def:b1:enzymes:enzyme}{enzym} op \qty{10}{nmol/L}
+in een volume van \qty{1000}{\micro m^3}, bij \qty{37}{\celsius}, met
+$Q_{10} = 2$.
+\begin{enumerate}[resume]
+  \item Bereken de snelheid in de \omterm{def:b1:cell-unit-of-life:cell}{cel} (productmoleculen per seconde in de
+        hele \omterm{def:b1:cell-unit-of-life:cell}{cel}).
+  \item Het product is nodig met \qty{3e6}{} moleculen per seconde. Met
+        welke factor moet de \omterm{def:b1:cell-unit-of-life:cell}{cel} de snelheid verhogen, en noem twee
+        manieren waarop zij dat zou kunnen.
+  \item Het product is een competitieve \omterm{def:b1:enzymes:inhibitors}{remmer} van het \omterm{def:b1:enzymes:enzyme}{enzym} met
+        $K_i = \qty{0.2}{mmol/L}$, en hoopt zich op tot \qty{0.4}{mmol/L}.
+        Bereken dan de snelheid, en becommentarieer wat dat bereikt.
+  \item Het \omterm{def:b1:enzymes:enzyme}{enzym} wordt door een kinase gefosforyleerd, wat zijn $K_m$ tot
+        \qty{0.4}{mmol/L} verlaagt. Bereken de snelheid bij
+        \qty{0.5}{mmol/L} \omterm{def:b1:enzymes:enzyme}{substraat} vóór en na.
+  \item Het pH-optimum van het \omterm{def:b1:enzymes:enzyme}{enzym} is 7.5 en zijn activiteit halveert bij
+        pH 6.5. Een \omterm{def:b1:eukaryotic-cell:endomembrane}{lysosoom} zit op pH 5. Voorspel zijn activiteit daar in
+        grote lijnen en verklaar dat aan de hand van ioniseerbare residuen.
+  \item Een mutatie vervangt de histidine van de \omterm{def:b1:enzymes:enzyme}{actieve plaats} door
+        alanine. Voorspel het effect op $K_m$ en op $k_{\text{cat}}$, met
+        van elk een reden.
+  \item Leg uit waarom de \omterm{def:b1:cell-unit-of-life:cell}{cel} het \omterm{def:b1:enzymes:enzyme}{substraat} dicht bij $K_m$ houdt in plaats
+        van er ver boven.
+  \item Geef het resultaat: $K_m$, $V_{\max}$ en $k_{\text{cat}}$ van het
+        esterase, en het type en de $K_i$ van elke \omterm{def:b1:enzymes:inhibitors}{remmer}.
+\end{enumerate}
+\end{problem}

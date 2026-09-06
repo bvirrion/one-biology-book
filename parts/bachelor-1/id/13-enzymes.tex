@@ -1,0 +1,626 @@
+\chapter{Enzim dan Katalisis Biokimia}\label{ch:b1:enzymes}
+
+Tuangkan hidrogen peroksida pada sebutir kentang yang terpotong dan ia
+berbuih: satu molekul katalase dalam \omterm{def:b1:cell-unit-of-life:cell}{sel} kentang itu membelah empat
+puluh juta molekul peroksida tiap sekon, sebuah reaksi yang, bila
+dibiarkan sendiri, akan memakan waktu bertahun-tahun. Peroksida itu
+memang akan terurai --- reaksinya menurun --- tetapi tidak dalam waktu
+yang berguna. Tiap reaksi \omterm{def:b1:cell-unit-of-life:cell}{sel} seperti ini: termodinamika menyatakan ke
+arah mana ia dapat berjalan, dan sebuah \emph{\omterm{def:b1:enzymes:enzyme}{enzim}} menyatakan apakah
+ia berjalan sekarang. Bab ini memerikan apa yang dilakukan sebuah \omterm{def:b1:enzymes:enzyme}{enzim}
+pada sebuah reaksi, kinetika yang dipakai untuk mengukur dan
+membandingkan \omterm{def:b1:enzymes:enzyme}{enzim}, cara \omterm{def:b1:enzymes:enzyme}{enzim} dihambat, dan cara \omterm{def:b1:cell-unit-of-life:cell}{sel} menyalakan serta
+memadamkannya.
+
+\section{Katalisis}
+
+\begin{definition}[Enzim, substrat, sisi aktif]\label{def:b1:enzymes:enzyme}
+Yang disebut \emph{enzim}\index{enzim} adalah sebuah \omterm{def:b1:proteins:peptide}{protein} (jarang
+sebuah \omterm{def:b1:nucleic-acids:chain}{RNA}) yang \emph{mengatalisis} sebuah reaksi: ia menaikkan
+lajunya tanpa habis terpakai dan tanpa mengubah kesetimbangannya.
+Molekul yang dikenainya adalah \emph{substrat}\index{substrat}-nya;
+molekul itu mengikat pada \emph{sisi aktif}\index{sisi aktif}, yaitu
+sebuah celah yang dilapisi beberapa residu, tempat kimianya
+berlangsung. Enzim bersifat \emph{khas} --- bagi satu substrat atau satu
+keluarga, bagi satu ikatan, bagi satu stereoisomer --- dan dinamai
+menurut substrat serta reaksinya dengan akhiran \emph{-ase} (laktase,
+\omterm{def:b1:nucleic-acids:chain}{DNA} polimerase, suksinat dehidrogenase), dalam enam golongan:
+oksidoreduktase, transferase, hidrolase, liase, isomerase, ligase.
+Banyak di antaranya memerlukan sebuah \emph{kofaktor}\index{kofaktor}
+bukan \omterm{def:b1:proteins:peptide}{protein}: sebuah ion logam (Zn, Mg, Fe), atau sebuah
+\emph{koenzim}\index{koenzim} organik --- $\mathrm{NAD^+}$, FAD,
+koenzim A, yang sebagian besarnya dibuat dari vitamin, dan itulah guna
+vitamin.
+\end{definition}
+
+\begin{proposition}[Apa yang diubah sebuah enzim dan apa yang tidak]\label{prop:b1:enzymes:whatitdoes}
+\index{energi pengaktifan}\index{keadaan transisi}
+Sebuah reaksi melewati sebuah \emph{\omterm{prop:b1:enzymes:whatitdoes}{keadaan transisi}}, yaitu susunan
+atom yang tegang dan berenergi bebas lebih tinggi daripada pereaksi
+maupun hasilnya sebesar \emph{\omterm{prop:b1:enzymes:whatitdoes}{energi pengaktifan}} $E_a$; hanya molekul
+yang dibawa guncangan termal melewati penghalang ini yang bereaksi,
+dalam fraksi yang sebanding dengan $e^{-E_a/RT}$. Sebuah \omterm{def:b1:enzymes:enzyme}{enzim} mengikat
+\omterm{prop:b1:enzymes:whatitdoes}{keadaan transisi} itu lebih erat daripada \omterm{def:b1:enzymes:enzyme}{substratnya} --- \omterm{def:b1:enzymes:enzyme}{sisi aktifnya}
+melengkapi bentuk yang tegang itu --- sehingga menurunkan $E_a$:
+menurunkannya sebesar \qty{34}{kJ/mol} (senilai beberapa \omterm{def:b1:water-small-molecules:water}{ikatan
+hidrogen}) pada \qty{37}{\celsius} melipatgandakan lajunya
+$e^{34\,000/2580} \approx
+10^6$ kali. Ia tidak mengubah $\Delta G$ maupun tetapan
+kesetimbangannya, yang hanya bergantung pada pereaksi dan hasilnya:
+sebuah \omterm{def:b1:enzymes:enzyme}{enzim} mempercepat reaksi maju dan mundurnya sama besar lalu
+membawa sistemnya ke kesetimbangan yang sama lebih cepat.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=10,
+  xlabel={koordinat reaksi}, ylabel={energi bebas $G$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.08)}, anchor=north},
+  ylabel style={font=\small},
+  xtick=\empty, ytick=\empty,
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100, smooth] {5 + 4*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\addplot[very thick, omThm, domain=0:10, samples=100, smooth] {5 + 1.6*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\draw[<->, thick, omDef] (axis cs:5.6,5.0) -- (axis cs:5.6,8.95); \node[font=\scriptsize, omDef, anchor=west] at (axis cs:5.7,7.6) {$E_a$ tanpa enzim};
+\draw[<->, thick, omThm] (axis cs:4.4,5.0) -- (axis cs:4.4,6.55); \node[font=\scriptsize, omThm, anchor=east] at (axis cs:4.3,4.4) {$E_a$ dengan enzim};
+\draw[<->, thick] (axis cs:9.3,2.5) -- (axis cs:9.3,5.0); \node[font=\scriptsize, anchor=west] at (axis cs:9.4,3.75) {$\Delta G$: tak berubah};
+\node[font=\scriptsize, anchor=north] at (axis cs:1.0,4.8) {substrat};
+\node[font=\scriptsize, anchor=north] at (axis cs:9.0,2.3) {hasil};
+\node[font=\scriptsize, anchor=south] at (axis cs:5,9.05) {keadaan transisi};
+\draw[dashed, gray] (axis cs:0,5) -- (axis cs:9.3,5);
+\end{axis}
+\end{tikzpicture}
+
+{\small \omterm{prop:b1:water-small-molecules:gibbs}{Energi bebas} sepanjang sebuah reaksi. \omterm{def:b1:enzymes:enzyme}{Enzimnya} (merah)
+menurunkan penghalang \omterm{prop:b1:enzymes:whatitdoes}{keadaan transisinya} dan membiarkan selisih antara
+\omterm{def:b1:enzymes:enzyme}{substrat} dan hasilnya --- dan dengan itu kesetimbangannya --- tak
+tersentuh.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-catalase-potato.png}
+
+{\small Hidrogen peroksida pada sebutir kentang yang terpotong:
+katalase dalam \omterm{def:b1:cell-unit-of-life:cell}{selnya} membelahnya menjadi air dan oksigen empat puluh
+juta kali tiap sekon tiap molekul \omterm{def:b1:enzymes:enzyme}{enzim}, dan oksigennya berbuih keluar.}
+\end{omfigure}
+
+\begin{proposition}[Cara kerja sisi aktifnya]\label{prop:b1:enzymes:mechanisms}
+Sebuah \omterm{def:b1:enzymes:enzyme}{sisi aktif} mempercepat reaksinya lewat beberapa cara sekaligus:
+ia \emph{mengikat dan mengarahkan} \omterm{def:b1:enzymes:enzyme}{substratnya} sehingga gugus yang
+bereaksi bertemu dalam geometri yang tepat, sehingga tumbukan yang
+langka digantikan tumbukan yang pasti; ia \emph{menegangkan} \omterm{def:b1:enzymes:enzyme}{substratnya}
+ke arah \omterm{prop:b1:enzymes:whatitdoes}{keadaan transisi} (\emph{kecocokan terinduksi}\index{kecocokan terinduksi}
+: \omterm{def:b1:enzymes:enzyme}{enzimnya} mengatup mengelilingi \omterm{def:b1:enzymes:enzyme}{substratnya}, dan
+kecocokannya terbaik bagi \omterm{prop:b1:enzymes:whatitdoes}{keadaan transisinya}); \omterm{def:b1:proteins:aminoacid}{rantai sampingnya}
+berlaku sebagai \emph{asam dan basa}, yang menyerahkan proton ke dan
+dari \omterm{def:b1:enzymes:enzyme}{substratnya} pada saat yang tepat (histidina, dengan p$K_a$-nya
+dekat 7, melakukan hal ini pada banyak \omterm{def:b1:enzymes:enzyme}{enzim}); sebagian membentuk
+\emph{\omterm{def:b1:water-small-molecules:bonds}{ikatan kovalen}} sementara dengan \omterm{def:b1:enzymes:enzyme}{substratnya} (protease serina);
+dan ion logamnya mengutubkan ikatan serta memantapkan muatan. Air
+sebagian besar dikucilkan dari sisinya, sehingga muatan dan \omterm{def:b1:water-small-molecules:water}{ikatan
+hidrogennya} bekerja pada kekuatan penuh.
+\end{proposition}
+
+\begin{example}[Tiga enzim]\label{ex:b1:enzymes:three}
+Lisozim, dalam air mata dan putih telur, menegangkan sebuah cincin gula
+dinding bakteri menjadi bentuk \omterm{prop:b1:enzymes:whatitdoes}{keadaan transisinya} lalu memotong
+rantainya: percepatan $10^8$ kali. Karbonat anhidrase, dalam \omterm{def:b1:cell-unit-of-life:cell}{sel} merah,
+memegang sebuah ion seng yang mengubah air menjadi hidroksida yang siap
+menyerang $\mathrm{CO_2}$: sejuta molekul tiap sekon, \omterm{def:b1:enzymes:enzyme}{enzim} tercepat
+sesudah katalase. Kimotripsin, dalam getah pankreas, memakai sebuah
+serina yang dibuat reaktif oleh sebuah histidina untuk memotong \omterm{def:b1:proteins:peptide}{protein}
+sesudah residu aromatik: seratus tiap sekon, dengan sebuah zat antara
+kovalen.
+\end{example}
+
+\section{Kinetika enzim}
+
+\begin{definition}[Laju awal, penjenuhan]\label{def:b1:enzymes:rate}
+Yang disebut \emph{laju}\index{laju reaksi} $v$ sebuah reaksi \omterm{def:b1:enzymes:enzyme}{enzim}
+adalah banyaknya hasil yang terbentuk tiap satuan waktu (\unit{mol/s},
+atau satuan \omterm{def:b1:enzymes:enzyme}{enzim}: \qty{1}{\micro mol/min}). Ia diukur sebagai
+\emph{laju awal} $v_0$, sebelum \omterm{def:b1:enzymes:enzyme}{substratnya} terkuras atau hasilnya
+menumpuk. Pada kepekatan \omterm{def:b1:enzymes:enzyme}{enzim} yang tetap $v_0$ naik bersama kepekatan
+\omterm{def:b1:enzymes:enzyme}{substrat} $[S]$ lalu \emph{menjenuh} pada sebuah nilai maksimum
+$V_{\max}$: \omterm{def:b1:enzymes:enzyme}{enzimnya} terisi penuh dan tak sanggup lebih cepat lagi.
+\end{definition}
+
+\begin{theorem}[Michaelis--Menten]\label{thm:b1:enzymes:mm}
+\index{persamaan Michaelis--Menten}\index{tetapan Michaelis}
+Bagi sebuah \omterm{def:b1:enzymes:enzyme}{enzim} $E$ yang mengikat \omterm{def:b1:enzymes:enzyme}{substratnya} secara berbalikan lalu
+mengubahnya,
+\[
+E + S \underset{k_{-1}}{\overset{k_1}{\rightleftharpoons}} ES
+\overset{k_{\text{cat}}}{\longrightarrow} E + P ,
+\]
+laju awalnya pada kepekatan \omterm{def:b1:enzymes:enzyme}{substrat} $[S]$ adalah
+\[
+v_0 = \frac{V_{\max}\,[S]}{K_m + [S]}, \qquad V_{\max} = k_{\text{cat}}\,[E]_{\text{tot}},
+\qquad K_m = \frac{k_{-1} + k_{\text{cat}}}{k_1} .
+\]
+$K_m$, \emph{\omterm{thm:b1:enzymes:mm}{tetapan Michaelis}}, adalah kepekatan \omterm{def:b1:enzymes:enzyme}{substrat} ketika
+lajunya setengah nilai maksimumnya, dan mengukur berapa banyak \omterm{def:b1:enzymes:enzyme}{substrat}
+yang dibutuhkan \omterm{def:b1:enzymes:enzyme}{enzimnya}; $k_{\text{cat}}$, \emph{bilangan
+putaran}\index{bilangan putaran}, adalah banyaknya molekul \omterm{def:b1:enzymes:enzyme}{substrat} yang
+diubah satu \omterm{def:b1:enzymes:enzyme}{enzim} tiap sekon ketika \omterm{def:b1:lipids:fattyacid}{jenuh}; rasio $k_{\text{cat}}/K_m$
+adalah \emph{efisiensi katalitiknya}, yaitu tetapan laju pada \omterm{def:b1:enzymes:enzyme}{substrat}
+yang rendah, yang dibatasi di atas oleh laju \omterm{def:b1:enzymes:enzyme}{substrat} dapat mencapai
+\omterm{def:b1:enzymes:enzyme}{enzimnya} lewat difusi, sekitar
+$10^8$--$10^9$ \unit{L.mol^{-1}.s^{-1}}.
+\end{theorem}
+\begin{proof}
+Andaikan sebuah \emph{keadaan tunak} yang $ES$-nya terbentuk secepat ia
+lenyap (berlaku sesudah beberapa milisekon pertama, selama
+$[S] \gg [E]$): $k_1[E][S] = (k_{-1} + k_{\text{cat}})[ES]$, sehingga
+$[E][S] = K_m[ES]$ dengan $K_m$ seperti yang ditetapkan tadi.
+Kekekalannya memberikan $[E] = [E]_{\text{tot}} -
+[ES]$; dengan mensubstitusikannya, $([E]_{\text{tot}} - [ES])[S] = K_m[ES]$,
+sehingga $[ES] = [E]_{\text{tot}}[S]/(K_m + [S])$. Lajunya adalah
+$v_0 = k_{\text{cat}}[ES]$, yang memberikan rumus tadi; pada
+$[S] \gg K_m$, $v_0 \to k_{\text{cat}}[E]_{\text{tot}} = V_{\max}$, dan
+pada $[S] = K_m$,
+$v_0 = V_{\max}/2$.
+\end{proof}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.52\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=22, ymin=0, ymax=1.12,
+  xlabel={$[S]$ (\unit{mmol/L})}, ylabel={$v_0$ (\unit{\micro mol/min})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:22, samples=100] {x/(2+x)};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(0.5,0.2) (1,0.333) (2,0.5) (5,0.714) (10,0.833) (20,0.909)};
+\draw[dashed, gray] (axis cs:0,1) -- (axis cs:22,1); \node[font=\scriptsize, anchor=south east] at (axis cs:22,1.0) {$V_{\max}$};
+\draw[dashed, gray] (axis cs:0,0.5) -- (axis cs:2,0.5) -- (axis cs:2,0); \node[font=\scriptsize, anchor=north] at (axis cs:2,-0.02) {$K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.46\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.7, xmax=2.2, ymin=0, ymax=5.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={1,3,5},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(2,5) (1,3) (0.5,2) (0.2,1.4) (0.1,1.2) (0.05,1.1)};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:0.05,4.6) {kemiringan $K_m/V_{\max}$};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.05,0.55) {$1/V_{\max}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:-0.5,0.1) {$-1/K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+{\small Kiri: hiperbola Michaelis--Menten bagi $K_m = \qty{2}{mmol/L}$
+dan $V_{\max} = \qty{1}{\micro mol/min}$, dengan keenam titik terukur
+soal akhir pekannya. Kanan: data yang sama sebagai plot
+Lineweaver--Burk, $1/v_0$ terhadap $1/[S]$: sebuah garis lurus yang
+perpotongannya memberikan $V_{\max}$ dan $K_m$.}
+\end{omfigure}
+
+\begin{method}[Mengukur $K_m$ dan $V_{\max}$]\label{met:b1:enzymes:lb}
+\begin{enumerate}
+  \item Siapkan sederet kepekatan \omterm{def:b1:enzymes:enzyme}{substrat} yang membentang dari
+        $K_m/4$ sampai $10K_m$, dengan kepekatan \omterm{def:b1:enzymes:enzyme}{enzim} yang sama;
+        ikutilah hasilnya (warna, serapan, gas) selama menit pertamanya
+        lalu ambil kemiringannya sebagai $v_0$.
+  \item Plot $v_0$ terhadap $[S]$: hiperbolanya memberikan $V_{\max}$
+        secara kasar (dataran puncaknya) dan $K_m$ (kepekatan pada
+        setengahnya).
+  \item Untuk ketelitiannya, baliklah: $1/v_0 = (K_m/V_{\max})(1/[S]) +
+        1/V_{\max}$ (\emph{Lineweaver--Burk}). Perpotongan garisnya
+        pada sumbu $y$ adalah $1/V_{\max}$, pada sumbu $x$ adalah
+        $-1/K_m$, dan kemiringannya $K_m/V_{\max}$.
+  \item Bagilah $V_{\max}$ dengan kepekatan \omterm{def:b1:enzymes:enzyme}{enzimnya} untuk memperoleh
+        $k_{\text{cat}}$; bagilah dengan $K_m$ untuk efisiensinya.
+        Ulangi dengan sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat} untuk melihat parameter mana
+        yang diubahnya.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-spectrophotometer-cuvette.png}
+
+{\small Sebuah pengujian \omterm{def:b1:enzymes:enzyme}{enzim}: hasilnya menyerap cahaya, dan
+spektrofotometernya merekam kemunculannya sekon demi sekon;
+kemiringan awalnya adalah $v_0$.}
+\end{omfigure}
+
+\begin{example}[Enzim dibandingkan]\label{ex:b1:enzymes:compare}
+\begin{center}
+\small
+\begin{tabular}{lccc}
+\hline
+\omterm{def:b1:enzymes:enzyme}{enzim} & $K_m$ (\unit{mol/L}) & $k_{\text{cat}}$ (\unit{s^{-1}}) & $k_{\text{cat}}/K_m$ (\unit{L.mol^{-1}.s^{-1}}) \\
+\hline
+katalase & \num{2.5e-2} & \num{4e7} & \num{1.6e9} \\
+karbonat anhidrase & \num{1.2e-2} & \num{1e6} & \num{8e7} \\
+kimotripsin & \num{1.5e-2} & 100 & \num{7e3} \\
+lisozim & \num{6e-6} & 0.5 & \num{8e4} \\
+\omterm{def:b1:nucleic-acids:chain}{DNA} polimerase & \num{1e-5} & 15 & \num{1.5e6} \\
+\hline
+\end{tabular}
+\end{center}
+Katalase dan karbonat anhidrase bekerja pada batas difusinya: tiap
+tumbukan dengan \omterm{def:b1:enzymes:enzyme}{substratnya} menghasilkan. Kimotripsin lambat tetapi
+memang harus demikian --- ia memotong sebuah \omterm{def:b1:proteins:peptide}{ikatan peptida}, tugas yang
+jauh lebih sukar daripada membelah peroksida.
+\end{example}
+
+\section{Penghambatan}
+
+\begin{definition}[Penghambat]\label{def:b1:enzymes:inhibitors}
+Sebuah \emph{penghambat}\index{penghambat enzim} menurunkan laju sebuah
+\omterm{def:b1:enzymes:enzyme}{enzim}. Penghambat \emph{tak berbalik} mengikat secara kovalen dan
+memusnahkan keaktifan \omterm{def:b1:enzymes:enzyme}{enzimnya} untuk selamanya (zat saraf pada
+asetilkolinesterase, penisilin pada \omterm{def:b1:enzymes:enzyme}{enzim} yang menyilang ikat dinding
+bakteri, aspirin pada \omterm{def:b1:enzymes:enzyme}{enzim} yang membuat prostaglandin). Penghambat
+\emph{berbalik} mengikat lewat ikatan lemah dan dapat dibilas pergi;
+menurut tempatnya mengikat:
+\begin{itemize}
+  \item \emph{bersaing}\index{penghambatan bersaing}: penghambatnya
+        mirip \omterm{def:b1:enzymes:enzyme}{substratnya} dan menempati \omterm{def:b1:enzymes:enzyme}{sisi aktifnya}; ia menaikkan
+        $K_m$ tampaknya (sebesar faktor $1 + [I]/K_i$) dan membiarkan
+        $V_{\max}$ tak berubah --- \omterm{def:b1:enzymes:enzyme}{substrat} yang cukup banyak
+        menyingkirkannya;
+  \item \emph{tak bersaing}: penghambatnya mengikat di tempat lain dan
+        merusak katalisisnya baik \omterm{def:b1:enzymes:enzyme}{substratnya} terikat maupun tidak; ia
+        menurunkan $V_{\max}$ dan membiarkan $K_m$ tak berubah ---
+        berapa pun banyak \omterm{def:b1:enzymes:enzyme}{substratnya} tidak mengatasinya;
+  \item \emph{antibersaing}: penghambatnya hanya mengikat kompleks
+        $ES$; $V_{\max}$ maupun $K_m$ sama-sama turun.
+\end{itemize}
+$K_i$, tetapan penguraian penghambatnya, mengukur kekuatannya: makin
+rendah, makin kuat.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6.0cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.8, xmax=2.2, ymin=0, ymax=10.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={2,4,6,8,10},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addlegendentry{tanpa penghambat}
+\addplot[very thick, omThm, domain=-0.25:2.1, samples=10] {1 + 4*x};
+\addlegendentry{bersaing: $1/V_{\max}$ sama, lebih curam}
+\addplot[very thick, omProp, domain=-0.5:2.1, samples=10] {2 + 4*x};
+\addlegendentry{tak bersaing: $-1/K_m$ sama, lebih tinggi}
+\end{axis}
+\end{tikzpicture}
+
+{\small Plot Lineweaver--Burk dengan kedua \omterm{def:b1:enzymes:inhibitors}{penghambat} yang lazim.
+Sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat} bersaing memutar garisnya pada perpotongan $y$-nya
+($V_{\max}$ tak berubah, $K_m$ naik); \omterm{def:b1:enzymes:inhibitors}{penghambat} tak bersaing memutarnya
+pada perpotongan $x$-nya ($K_m$ tak berubah, $V_{\max}$ turun).}
+\end{omfigure}
+
+\begin{example}[Persaingan sebagai obat]\label{ex:b1:enzymes:medicine}
+Metanol tak berbahaya sampai alkohol dehidrogenase hati mengubahnya
+menjadi formaldehida dan asam format, yang membutakan dan membunuh.
+Pengobatannya adalah etanol: sebuah \omterm{def:b1:enzymes:enzyme}{substrat} penyaing dengan $K_m$
+lebih rendah, yang menyibukkan \omterm{def:b1:enzymes:enzyme}{enzimnya} sementara metanolnya
+diekskresikan tanpa berubah. Statin adalah \omterm{def:b1:enzymes:inhibitors}{penghambat} bersaing, yang
+mirip \omterm{prop:b1:enzymes:whatitdoes}{keadaan transisi}, bagi \omterm{def:b1:enzymes:enzyme}{enzim} yang menyerahkan karbon ke
+\omterm{def:b1:lipids:amphiphilic}{kolesterol}; sulfonamida mirip \omterm{def:b1:enzymes:enzyme}{substrat} sebuah \omterm{def:b1:enzymes:enzyme}{enzim} bakteri yang
+membuat folat, yang tidak dibuat manusia sehingga tidak dirindukannya.
+\end{example}
+
+\section{Pengaturan}
+
+\begin{definition}[Enzim alosterik]\label{def:b1:enzymes:allosteric}
+Sebuah \emph{enzim alosterik}\index{enzim alosterik} memiliki beberapa
+subunit dan, di samping \omterm{def:b1:enzymes:enzyme}{sisi aktifnya}, \emph{sisi pengatur} tempat
+efektor mengikat: \emph{pengaktif} menggesernya ke arah konformasi
+aktifnya, \emph{\omterm{def:b1:enzymes:inhibitors}{penghambat}} ke arah yang tidak aktif. Lajunya terhadap
+$[S]$ berbentuk sigmoid, bukan hiperbolik (\omterm{def:b1:proteins:allostery}{kerja sama} di antara \omterm{def:b1:enzymes:enzyme}{sisi
+aktifnya}, seperti pada hemoglobin, \cref{ch:b1:proteins}), sehingga
+perubahan kecil \omterm{def:b1:enzymes:enzyme}{substrat} dekat bagian curamnya mengubah lajunya besar
+sekali; efektornya menggeser kurvanya ke samping (mengubah kepekatan
+\omterm{def:b1:enzymes:enzyme}{substrat} yang dibutuhkan) atau naik turun (mengubah laju maksimumnya).
+\omterm{def:b1:enzymes:enzyme}{Enzim} \omterm{def:b1:proteins:allostery}{alosterik} berdiri pada titik cabang metabolisme, dan efektornya
+adalah hasil lintasan itu sendiri serta isyarat energi \omterm{def:b1:cell-unit-of-life:cell}{sel} (\omterm{def:b1:water-small-molecules:atp}{ATP}, ADP,
+AMP).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=1.1,
+  xlabel={$[S]$ (nisbi)}, ylabel={$v_0/V_{\max}$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10}, ytick={0,0.5,1},
+  legend style={font=\small, at={(0.5,-0.22)}, anchor=north, draw=none, legend columns=2, /tikz/every even column/.append style={column sep=0.4cm}},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100] {x^3/(3^3+x^3)};
+\addlegendentry{enzim alosterik sendirian ($n = 3$)}
+\addplot[very thick, omExo, domain=0:10, samples=100] {x^3/(1.8^3+x^3)};
+\addlegendentry{dengan pengaktif: bergeser ke kiri}
+\addplot[very thick, omThm, domain=0:10, samples=100] {x^3/(5.5^3+x^3)};
+\addlegendentry{dengan penghambat: bergeser ke kanan}
+\addplot[thick, dashed, gray, domain=0:10, samples=100] {x/(3+x)};
+\addlegendentry{Michaelis--Menten (pembanding)}
+\draw[dashed, gray] (axis cs:3,0) -- (axis cs:3,0.5);
+\end{axis}
+\end{tikzpicture}
+
+{\small Sebuah \omterm{def:b1:enzymes:allosteric}{enzim alosterik}. Kurva sigmoidnya membuat lajunya peka
+terhadap \omterm{def:b1:enzymes:enzyme}{substrat} dekat titik tengahnya; sebuah pengaktif menggesernya
+ke kiri (lebih aktif pada $[S]$ tertentu), sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat} ke kanan.
+Dekat $[S] = 3$ lajunya dapat berayun dari sepersepuluh sampai sembilan
+persepuluh maksimumnya.}
+\end{omfigure}
+
+\begin{proposition}[Empat cara sel mengendalikan sebuah enzim]\label{prop:b1:enzymes:control}
+\begin{enumerate}
+  \item \emph{Penghambatan umpan balik}\index{penghambatan umpan balik}:
+        hasil akhir sebuah lintasan menjadi \omterm{def:b1:enzymes:inhibitors}{penghambat} \omterm{def:b1:proteins:allostery}{alosterik} bagi
+        \omterm{def:b1:enzymes:enzyme}{enzim} pertamanya yang menentukan, sehingga lintasannya berjalan
+        hanya secepat hasilnya dipakai (isoleusina pada treonina
+        deaminase; \omterm{def:b1:water-small-molecules:atp}{ATP} pada fosfofruktokinase,
+        \cref{ch:b1:respiration-fermentation}). Waktu tanggapnya:
+        milisekon.
+  \item \emph{Perubahan kovalen}\index{perubahan kovalen}: sebuah
+        kinase memautkan sebuah fosfat pada sebuah serina, treonina
+        atau tirosina \omterm{def:b1:enzymes:enzyme}{enzimnya}, sebuah fosfatase menyingkirkannya, dan
+        kedua bentuknya berbeda keaktifannya (\omterm{def:b1:carbohydrates:polysaccharide}{glikogen} fosforilase
+        dinyalakan lewat fosforilasi, \omterm{def:b1:carbohydrates:polysaccharide}{glikogen} sintase dipadamkan, oleh
+        isyarat hormon yang sama). Sekon sampai menit; berbalikan; dapat
+        diperkuat dalam untaian.
+  \item \emph{Pengaktifan proteolitik}: sebagian \omterm{def:b1:enzymes:enzyme}{enzim} dibuat sebagai
+        prazat tak aktif (\emph{zimogen}: tripsinogen, pepsinogen,
+        faktor pembekuan) lalu dinyalakan dengan memotong sebuah
+        peptida, sekali untuk selamanya, di tempat dan saat ia
+        diinginkan.
+  \item \emph{Jumlah}: \omterm{def:b1:cell-unit-of-life:cell}{sel} membuat \omterm{def:b1:enzymes:enzyme}{enzimnya} lebih banyak atau lebih
+        sedikit dengan mengendalikan gennya
+        (\cref{ch:b1:expression-control}) dan menguraikannya lebih cepat
+        atau lebih lambat. Menit sampai jam.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}[Isoenzim]\label{ex:b1:enzymes:isoenzymes}
+Laktat dehidrogenase hadir dalam lima bentuk, tetramer dua jenis subunit
+dalam segala gabungannya; bentuk jantungnya ber-$K_m$ rendah bagi
+laktat dan dihambat piruvat (ia mengoksidasi laktat untuk memberi makan
+daur Krebs), bentuk ototnya ber-$V_{\max}$ tinggi dan tahan piruvat (ia
+membuat laktat dalam sebuah lari cepat). Pola bentuknya dalam darah
+menyingkapkan \omterm{def:b1:mammal-organization:organ}{organ} mana yang telah rusak --- sebuah serangan jantung
+melepas bentuk jantungnya.
+\end{example}
+
+\section{Suhu dan pH}
+
+\begin{proposition}[Enzim dan lingkungannya]\label{prop:b1:enzymes:environment}
+Laju sebuah reaksi \omterm{def:b1:enzymes:enzyme}{enzim} kira-kira berlipat dua tiap
+\qty{10}{\celsius} ($Q_{10} \approx 2$) seiring energi termal membawa
+lebih banyak molekul melewati penghalangnya, sampai \omterm{def:b1:enzymes:enzyme}{enzimnya} mulai
+terbuka lipatannya (\qtyrange{40}{60}{\celsius} bagi sebagian besar;
+\qty{100}{\celsius} bagi \omterm{def:b1:enzymes:enzyme}{enzim} bakteri mata air panas) dan lajunya
+runtuh. Tiap \omterm{def:b1:enzymes:enzyme}{enzim} memiliki sebuah \emph{pH optimum}, ketika pengionan
+residu katalitiknya dan \omterm{def:b1:enzymes:enzyme}{substratnya} tepat: pepsin, di lambung, dekat pH
+2; tripsin, di usus, dekat 8; sebagian besar \omterm{def:b1:enzymes:enzyme}{enzim} intrasel dekat 7.
+Jauh dari optimumnya lajunya turun, dan jauh sekali darinya \omterm{def:b1:proteins:peptide}{proteinnya}
+terdenaturasi. Suhu dan pH bekerja pada \omterm{def:b1:proteins:peptide}{proteinnya}; \omterm{def:b1:cell-unit-of-life:cell}{sel} menjaga keduanya
+dalam rentang yang membuat seribu \omterm{def:b1:enzymes:enzyme}{enzimnya} semua bekerja.
+\end{proposition}
+
+\begin{example}[Sebuah demam dan sebuah mata air panas]\label{ex:b1:enzymes:fever}
+Demam \qty{40}{\celsius} mempercepat tiap reaksi tubuh seperempat kali
+dan mulai membuka lipatan \omterm{def:b1:proteins:peptide}{protein} yang paling rapuh; pada
+\qty{42}{\celsius} \omterm{def:b1:proteins:peptide}{protein} otak gagal. \omterm{def:b1:nucleic-acids:chain}{DNA} polimerase sebuah bakteri
+dari mata air \qty{75}{\celsius} selamat pada \qty{95}{\celsius}, dan
+itulah sebabnya ia dapat didaurkan lewat peleburan \omterm{def:b1:nucleic-acids:chain}{DNA} ribuan kali dan
+menjadi \omterm{def:b1:enzymes:enzyme}{enzim} reaksi berantai polimerase (jilid Tahun ke-3):
+ketahanan panas adalah sifat urutannya, bukan sifat kimia yang
+dikatalisisnya.
+\end{example}
+
+\section{Latihan}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:1}
+Apa yang diubah sebuah \omterm{def:b1:enzymes:enzyme}{enzim} dalam sebuah reaksi, dan apa yang
+dibiarkannya tak berubah? Peragakan dengan profil energinya.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:2}
+Definisikan $K_m$, $V_{\max}$, $k_{\text{cat}}$ dan
+$k_{\text{cat}}/K_m$, beserta satuannya.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:3}
+Dari gambar Lineweaver--Burk \omterm{def:b1:enzymes:inhibitors}{penghambatnya}, bacalah $V_{\max}$ dan
+$K_m$ bagi \omterm{def:b1:enzymes:enzyme}{enzim} tanpa \omterm{def:b1:enzymes:inhibitors}{penghambat} dan bagi tiap \omterm{def:b1:enzymes:inhibitors}{penghambatnya}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:4}
+Sebutkan keempat cara \omterm{def:b1:cell-unit-of-life:cell}{sel} mengatur keaktifan sebuah \omterm{def:b1:enzymes:enzyme}{enzim} dan berikan
+skala waktu masing-masing.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:5}
+Sebuah \omterm{def:b1:enzymes:enzyme}{enzim} ber-$K_m = \qty{0.1}{mmol/L}$ dan $V_{\max} =
+\qty{50}{\micro mol/min}$. Hitunglah $v_0$ pada $[S] = 0.02$, $0.1$,
+$1$ dan \qty{10}{mmol/L}. Pada $[S]$ berapa $v_0 = 0.9\,V_{\max}$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:6}
+Menurunkan $E_a$ sebesar \qty{20}{kJ/mol} pada \qty{37}{\celsius}
+melipatgandakan lajunya berapa kali? Berapa besar $E_a$ harus turun
+untuk memperoleh faktor
+$10^{10}$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:7}
+$\qty{2}{pmol}$ karbonat anhidrase dalam \qty{1}{mL} memberikan
+$V_{\max} = \qty{120}{mmol/L}$ tiap menit. Hitunglah $k_{\text{cat}}$
+dan, dengan $K_m = \qty{12}{mmol/L}$, efisiensinya. Bandingkan dengan
+batas difusinya.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:8}
+Sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat} bersaing pada \qty{2}{mmol/L} melipatduakan $K_m$
+tampaknya. Hitunglah $K_i$. Kepekatan \omterm{def:b1:enzymes:enzyme}{substrat} berapa yang memulihkan
+lajunya ke \qty{90}{\%} $V_{\max}$ dengan dan tanpa \omterm{def:b1:enzymes:inhibitors}{penghambatnya}, bila
+$K_m = \qty{1}{mmol/L}$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:9}
+Jelaskan mengapa \omterm{prop:b1:enzymes:control}{penghambatan umpan balik} bekerja pada langkah pertama
+sebuah lintasan yang menentukan alih-alih pada langkah terakhirnya, dan
+mengapa \omterm{def:b1:enzymes:inhibitors}{penghambatnya} biasanya hasil akhirnya alih-alih sebuah zat
+antara.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:10}
+Tripsinogen diaktifkan di usus, bukan di pankreas yang membuatnya;
+sebagian kecil yang teraktifkan terlalu dini memusnahkan pankreasnya.
+Jelaskan logika zimogennya, peran \omterm{def:b1:enzymes:enzyme}{enzim} yang mengaktifkan tripsinogen,
+dan mengapa pankreas juga membuat sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat} tripsin.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:11}
+Sebuah \omterm{def:b1:enzymes:allosteric}{enzim alosterik} dengan $n = 3$ dan setengah kejenuhannya pada
+$[S]_{0.5}
+= 3$ kurvanya digeser ke $[S]_{0.5} = 5.5$ oleh sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat}.
+Hitunglah lajunya pada $[S] = 3$ dengan dan tanpa \omterm{def:b1:enzymes:inhibitors}{penghambatnya}, lalu
+bandingkan dengan perubahan yang akan dihasilkan sebuah \omterm{def:b1:enzymes:inhibitors}{penghambat}
+bersaing dengan geseran $K_m$ yang sama pada sebuah \omterm{def:b1:enzymes:enzyme}{enzim}
+Michaelis--Menten. Apa yang ditambahkan \omterm{def:b1:proteins:allostery}{kerja sama} pada pengaturannya?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:12}
+``Sebuah \omterm{def:b1:enzymes:enzyme}{enzim} adalah katalis yang telah diberi tahu apa yang harus
+dikerjakannya.'' Bahaslah dalam satu paragraf: katalisis berhadapan
+dengan kekhasan, pengaturan sebagai informasi tambahannya, dan biaya
+sebuah \omterm{def:b1:enzymes:enzyme}{enzim} yang diatur dibandingkan sebuah katalis telanjang.
+\end{exercise}
+
+\section{Soal: Sebuah Enzim yang Diukur}
+
+\begin{problem}[{Soal akhir pekan --- sebuah esterase yang diuji pada
+enam kepekatan \omterm{def:b1:enzymes:enzyme}{substrat}, sendirian dan dengan dua \omterm{def:b1:enzymes:inhibitors}{penghambat},
+tetapannya yang disarikan dan perilakunya dalam \omterm{def:b1:cell-unit-of-life:cell}{sel} yang diramalkan,
+berakhir pada $K_m$, $V_{\max}$ dan $K_i$-nya}]
+\label{pb:b1:enzymes:1}
+Sebuah esterase diuji dalam \qty{1.0}{mL} pada \qty{25}{\celsius}, pH
+7.5, dengan \qty{10}{nmol/L} \omterm{def:b1:enzymes:enzyme}{enzim}. Laju awalnya (\unit{\micro mol/min})
+pada enam kepekatan \omterm{def:b1:enzymes:enzyme}{substrat}, sendirian dan dengan hadirnya
+\qty{1.0}{mmol/L} \omterm{def:b1:enzymes:inhibitors}{penghambat} I atau \qty{1.0}{mmol/L} \omterm{def:b1:enzymes:inhibitors}{penghambat} J:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+\hline
+$[S]$ (\unit{mmol/L}) & 0.5 & 1 & 2 & 5 & 10 & 20 \\
+\hline
+$v_0$, tanpa \omterm{def:b1:enzymes:inhibitors}{penghambat} & 0.200 & 0.333 & 0.500 & 0.714 & 0.833 & 0.909 \\
+$v_0$, dengan I & 0.111 & 0.200 & 0.333 & 0.556 & 0.714 & 0.833 \\
+$v_0$, dengan J & 0.100 & 0.167 & 0.250 & 0.357 & 0.417 & 0.455 \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Bagian I --- \omterm{def:b1:enzymes:enzyme}{Enzimnya} sendirian.}
+\begin{enumerate}
+  \item Hitunglah $1/[S]$ dan $1/v_0$ bagi keenam titik tanpa
+        \omterm{def:b1:enzymes:inhibitors}{penghambatnya}.
+  \item Tunjukkan bahwa titiknya terletak pada sebuah garis lurus lalu
+        carilah kemiringan dan perpotongannya.
+  \item Simpulkan $V_{\max}$ dan $K_m$.
+  \item Periksalah dengan \omterm{thm:b1:enzymes:mm}{persamaan Michaelis--Menten} pada $[S] =
+        \qty{5}{mmol/L}$.
+  \item Hitunglah banyaknya \omterm{def:b1:enzymes:enzyme}{enzim} dalam pengujiannya (mol) dan
+        $k_{\text{cat}}$ dalam \unit{s^{-1}}.
+  \item Hitunglah $k_{\text{cat}}/K_m$ lalu bandingkan dengan batas
+        difusinya.
+  \item Pada kepekatan \omterm{def:b1:enzymes:enzyme}{substrat} berapa \omterm{def:b1:enzymes:enzyme}{enzimnya} bekerja pada
+        \qty{95}{\%} $V_{\max}$?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian II --- \omterm{def:b1:enzymes:inhibitors}{Penghambat} I.}
+\begin{enumerate}[resume]
+  \item Hitunglah $1/v_0$ bagi keenam titik dengan I lalu carilah
+        kemiringan dan perpotongan garisnya.
+  \item Simpulkan $V_{\max}$ dan $K_m$ tampaknya dengan I.
+  \item Parameter mana yang berubah? Golongkan \omterm{def:b1:enzymes:inhibitors}{penghambatnya}.
+  \item Hitunglah $K_i$ dari $K_m^{\text{app}} = K_m(1 + [I]/K_i)$.
+  \item Pada $[S] = \qty{2}{mmol/L}$, kepekatan I berapa yang membagi
+        dua lajunya? Pada $[S] = \qty{20}{mmol/L}$?
+  \item Ajukan I itu mungkin apa, secara struktur, dan di mana ia
+        mengikat.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian III --- \omterm{def:b1:enzymes:inhibitors}{Penghambat} J.}
+\begin{enumerate}[resume]
+  \item Hitunglah kemiringan dan perpotongan garisnya dengan J lalu
+        simpulkan $V_{\max}$ dan $K_m$ tampaknya.
+  \item Golongkan J lalu hitunglah $K_i$-nya dari $V_{\max}^{\text{app}} =
+        V_{\max}/(1 + [J]/K_i)$.
+  \item Jelaskan mengapa menaikkan \omterm{def:b1:enzymes:enzyme}{substratnya} tidak sanggup mengatasi J.
+  \item Melipatduakan kepekatan \omterm{def:b1:enzymes:enzyme}{enzimnya} dengan hadirnya J berbuat apa
+        pada lajunya? Dan dengan hadirnya I?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Bagian IV --- Di dalam \omterm{def:b1:cell-unit-of-life:cell}{sel}.}
+\omterm{def:b1:cell-unit-of-life:cell}{Sel} menjaga \omterm{def:b1:enzymes:enzyme}{substratnya} pada \qty{0.5}{mmol/L} dan \omterm{def:b1:enzymes:enzyme}{enzimnya} pada
+\qty{10}{nmol/L} dalam volume \qty{1000}{\micro m^3}, pada
+\qty{37}{\celsius}, dengan $Q_{10} = 2$.
+\begin{enumerate}[resume]
+  \item Hitunglah lajunya dalam \omterm{def:b1:cell-unit-of-life:cell}{sel} (molekul hasil tiap sekon dalam
+        seluruh \omterm{def:b1:cell-unit-of-life:cell}{selnya}).
+  \item Hasilnya dibutuhkan sebanyak \qty{3e6}{} molekul tiap sekon.
+        Berapa kali lipat \omterm{def:b1:cell-unit-of-life:cell}{sel} harus menaikkan lajunya, dan sebutkan dua
+        cara yang mungkin dipakainya.
+  \item Hasilnya adalah \omterm{def:b1:enzymes:inhibitors}{penghambat} bersaing bagi \omterm{def:b1:enzymes:enzyme}{enzimnya} dengan
+        $K_i = \qty{0.2}{mmol/L}$, dan menumpuk sampai
+        \qty{0.4}{mmol/L}. Hitunglah lajunya pada saat itu, lalu beri
+        tanggapan atas apa yang dicapainya.
+  \item \omterm{def:b1:enzymes:enzyme}{Enzimnya} difosforilasi sebuah kinase, yang menurunkan $K_m$-nya
+        ke \qty{0.4}{mmol/L}. Hitunglah lajunya pada \omterm{def:b1:enzymes:enzyme}{substrat}
+        \qty{0.5}{mmol/L} sebelum dan sesudahnya.
+  \item pH optimum \omterm{def:b1:enzymes:enzyme}{enzimnya} 7.5 dan keaktifannya terbagi dua pada pH
+        6.5. Sebuah \omterm{def:b1:eukaryotic-cell:endomembrane}{lisosom} berada pada pH 5. Ramalkan, secara
+        kualitatif, keaktifannya di sana lalu jelaskan dari residu yang
+        dapat terion.
+  \item Sebuah mutasi mengganti histidina \omterm{def:b1:enzymes:enzyme}{sisi aktifnya} dengan alanina.
+        Ramalkan pengaruhnya pada $K_m$ dan pada $k_{\text{cat}}$,
+        beserta alasan masing-masing.
+  \item Jelaskan mengapa \omterm{def:b1:cell-unit-of-life:cell}{sel} menjaga \omterm{def:b1:enzymes:enzyme}{substratnya} dekat $K_m$ alih-alih
+        jauh di atasnya.
+  \item Nyatakan hasilnya: $K_m$, $V_{\max}$, $k_{\text{cat}}$
+        esterasenya, serta jenis dan $K_i$ tiap \omterm{def:b1:enzymes:inhibitors}{penghambatnya}.
+\end{enumerate}
+\end{problem}

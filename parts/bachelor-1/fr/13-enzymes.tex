@@ -1,0 +1,635 @@
+\chapter{Enzymes et catalyse biochimique}\label{ch:b1:enzymes}
+
+Versez du peroxyde d'hydrogène sur une pomme de terre coupée~: elle
+mousse. Une seule molécule de catalase des \omterm{def:b1:cell-unit-of-life:cell}{cellules} du tubercule brise
+quarante millions de molécules de peroxyde chaque seconde, une réaction
+qui, livrée à elle-même, prendrait des années. Le peroxyde allait de
+toute façon se décomposer --- la réaction suit la pente --- mais pas en
+un temps utile. Toute réaction de la \omterm{def:b1:cell-unit-of-life:cell}{cellule} est ainsi~: la
+thermodynamique dit dans quel sens elle peut aller, et une
+\emph{\omterm{def:b1:enzymes:enzyme}{enzyme}} dit si elle va maintenant. Ce chapitre décrit ce qu'une
+\omterm{def:b1:enzymes:enzyme}{enzyme} fait à une réaction, la cinétique par laquelle on mesure et
+compare les \omterm{def:b1:enzymes:enzyme}{enzymes}, les façons de les inhiber, et les façons dont la
+\omterm{def:b1:cell-unit-of-life:cell}{cellule} les allume et les éteint.
+
+\section{La catalyse}
+
+\begin{definition}[Enzyme, substrat, site actif]\label{def:b1:enzymes:enzyme}
+Une \emph{enzyme}\index{enzyme} est une \omterm{def:b1:proteins:peptide}{protéine} (rarement un \omterm{def:b1:nucleic-acids:chain}{ARN}) qui
+\emph{catalyse} une réaction~: elle en augmente la vitesse sans être
+consommée et sans changer l'équilibre. Les molécules sur lesquelles elle
+agit sont ses \emph{substrats}\index{substrat}~; ils se fixent dans le
+\emph{site actif}\index{site actif}, une crevasse que bordent quelques
+résidus, où la chimie se fait. Les enzymes sont \emph{spécifiques} ---
+d'un substrat ou d'une famille, d'une liaison, d'un stéréo-isomère ---
+et elles sont nommées d'après leur substrat et leur réaction avec le
+suffixe \emph{-ase} (lactase, \omterm{def:b1:nucleic-acids:chain}{ADN} polymérase, succinate déshydrogénase),
+en six classes~: oxydoréductases, transférases, hydrolases, lyases,
+isomérases, ligases. Beaucoup ont besoin d'un \emph{cofacteur}\index{cofacteur}
+non protéique~: un ion métallique (Zn, Mg, Fe), ou un
+\emph{coenzyme}\index{coenzyme} organique --- $\mathrm{NAD^+}$, FAD,
+coenzyme A, la plupart fabriqués à partir de vitamines, ce à quoi les
+vitamines servent.
+\end{definition}
+
+\begin{proposition}[Ce qu'une enzyme change et ce qu'elle ne change pas]\label{prop:b1:enzymes:whatitdoes}
+\index{energie d'activation@énergie d'activation}\index{etat de transition@état de transition}
+Une réaction passe par un \emph{\omterm{prop:b1:enzymes:whatitdoes}{état de transition}}, arrangement
+contraint des atomes, plus haut en \omterm{prop:b1:water-small-molecules:gibbs}{énergie libre} que les réactifs ou les
+produits de l'\emph{\omterm{prop:b1:enzymes:whatitdoes}{énergie d'activation}} $E_a$~; seules les molécules
+que l'agitation thermique fait franchir cette barrière réagissent, en
+une fraction proportionnelle à $e^{-E_a/RT}$. Une \omterm{def:b1:enzymes:enzyme}{enzyme} lie l'\omterm{prop:b1:enzymes:whatitdoes}{état de
+transition} plus fortement que le \omterm{def:b1:enzymes:enzyme}{substrat} --- son \omterm{def:b1:enzymes:enzyme}{site actif} est
+complémentaire de la forme contrainte --- et abaisse ainsi $E_a$~:
+l'abaisser de \qty{34}{kJ/mol} (la valeur de quelques \omterm{def:b1:water-small-molecules:water}{liaisons
+hydrogène}) à \qty{37}{\celsius} multiplie la vitesse par $e^{34\,000/2580} \approx
+10^6$. Elle ne change ni $\Delta G$ ni la constante d'équilibre, qui ne
+dépendent que des réactifs et des produits~: une \omterm{def:b1:enzymes:enzyme}{enzyme} accélère
+également les réactions directe et inverse et amène le système au même
+équilibre plus vite.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=10,
+  xlabel={coordonnée de réaction}, ylabel={énergie libre $G$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.08)}, anchor=north},
+  ylabel style={font=\small},
+  xtick=\empty, ytick=\empty,
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100, smooth] {5 + 4*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\addplot[very thick, omThm, domain=0:10, samples=100, smooth] {5 + 1.6*exp(-((x-5)^2)/2.2) - 2.5/(1+exp(-(x-5)*1.5))};
+\draw[<->, thick, omDef] (axis cs:5.6,5.0) -- (axis cs:5.6,8.95); \node[font=\scriptsize, omDef, anchor=west] at (axis cs:5.7,7.6) {$E_a$ sans enzyme};
+\draw[<->, thick, omThm] (axis cs:4.4,5.0) -- (axis cs:4.4,6.55); \node[font=\scriptsize, omThm, anchor=east] at (axis cs:4.3,4.4) {$E_a$ avec enzyme};
+\draw[<->, thick] (axis cs:9.3,2.5) -- (axis cs:9.3,5.0); \node[font=\scriptsize, anchor=west] at (axis cs:9.4,3.75) {$\Delta G$~: inchangé};
+\node[font=\scriptsize, anchor=north] at (axis cs:1.0,4.8) {substrat};
+\node[font=\scriptsize, anchor=north] at (axis cs:9.0,2.3) {produit};
+\node[font=\scriptsize, anchor=south] at (axis cs:5,9.05) {état de transition};
+\draw[dashed, gray] (axis cs:0,5) -- (axis cs:9.3,5);
+\end{axis}
+\end{tikzpicture}
+
+{\small \omterm{prop:b1:water-small-molecules:gibbs}{Énergie libre} le long d'une réaction. L'\omterm{def:b1:enzymes:enzyme}{enzyme} (en rouge)
+abaisse la barrière de l'\omterm{prop:b1:enzymes:whatitdoes}{état de transition} et laisse intacte la
+différence entre \omterm{def:b1:enzymes:enzyme}{substrat} et produit --- et donc l'équilibre.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-catalase-potato.png}
+
+{\small Du peroxyde d'hydrogène sur une pomme de terre coupée~: la
+catalase des \omterm{def:b1:cell-unit-of-life:cell}{cellules} le sépare en eau et en oxygène quarante millions
+de fois par seconde et par molécule d'\omterm{def:b1:enzymes:enzyme}{enzyme}, et l'oxygène mousse au
+dehors.}
+\end{omfigure}
+
+\begin{proposition}[Comment travaille un site actif]\label{prop:b1:enzymes:mechanisms}
+Un \omterm{def:b1:enzymes:enzyme}{site actif} accélère sa réaction par plusieurs moyens à la fois~: il
+\emph{lie et oriente} les \omterm{def:b1:enzymes:enzyme}{substrats} de sorte que les groupes réactifs se
+rencontrent dans la bonne géométrie, remplaçant une collision rare par
+une collision certaine~; il \emph{contraint} le \omterm{def:b1:enzymes:enzyme}{substrat} vers l'\omterm{prop:b1:enzymes:whatitdoes}{état de
+transition} (\emph{ajustement induit}\index{ajustement induit}~: l'\omterm{def:b1:enzymes:enzyme}{enzyme}
+se referme sur le \omterm{def:b1:enzymes:enzyme}{substrat}, et l'ajustement est le meilleur pour l'\omterm{prop:b1:enzymes:whatitdoes}{état
+de transition})~; ses \omterm{def:b1:proteins:aminoacid}{chaînes latérales} agissent comme \emph{acides et
+bases}, cédant et reprenant des protons au \omterm{def:b1:enzymes:enzyme}{substrat} au bon moment
+(l'histidine, dont le p$K_a$ est proche de 7, le fait dans de nombreuses
+\omterm{def:b1:enzymes:enzyme}{enzymes})~; certains forment une \emph{\omterm{def:b1:water-small-molecules:bonds}{liaison covalente}} transitoire
+avec le \omterm{def:b1:enzymes:enzyme}{substrat} (les sérine-protéases)~; et ses ions métalliques
+polarisent des liaisons et stabilisent des charges. L'eau est largement
+exclue du site, de sorte que charges et \omterm{def:b1:water-small-molecules:water}{liaisons hydrogène} agissent de
+toute leur force.
+\end{proposition}
+
+\begin{example}[Trois enzymes]\label{ex:b1:enzymes:three}
+Le lysozyme, présent dans les larmes et le blanc d'œuf, contraint un
+cycle de sucre de la paroi bactérienne dans la forme de l'\omterm{prop:b1:enzymes:whatitdoes}{état de
+transition} et coupe la chaîne~: une accélération d'un facteur $10^8$.
+L'anhydrase carbonique, dans les globules rouges, porte un ion zinc qui
+transforme l'eau en un hydroxyde prêt à attaquer le $\mathrm{CO_2}$~: un
+million de molécules par seconde, l'\omterm{def:b1:enzymes:enzyme}{enzyme} la plus rapide après la
+catalase. La chymotrypsine, dans le suc pancréatique, emploie une
+sérine rendue réactive par une histidine pour couper les \omterm{def:b1:proteins:peptide}{protéines} après
+les résidus aromatiques~: cent par seconde, avec un intermédiaire
+covalent.
+\end{example}
+
+\section{La cinétique enzymatique}
+
+\begin{definition}[Vitesse initiale, saturation]\label{def:b1:enzymes:rate}
+La \emph{vitesse}\index{vitesse de reaction@vitesse de réaction} $v$ d'une réaction
+enzymatique est la quantité de produit formée par unité de temps
+(\unit{mol/s}, ou en unités d'\omterm{def:b1:enzymes:enzyme}{enzyme}~: \qty{1}{\micro mol/min}). On la
+mesure comme \emph{vitesse initiale} $v_0$, avant que le \omterm{def:b1:enzymes:enzyme}{substrat} ne
+s'épuise ou que le produit ne s'accumule. À concentration d'\omterm{def:b1:enzymes:enzyme}{enzyme}
+fixée, $v_0$ croît avec la concentration de \omterm{def:b1:enzymes:enzyme}{substrat} $[S]$ puis
+\emph{sature} à un maximum $V_{\max}$~: l'\omterm{def:b1:enzymes:enzyme}{enzyme} est entièrement occupée
+et ne peut pas aller plus vite.
+\end{definition}
+
+\begin{theorem}[Michaelis--Menten]\label{thm:b1:enzymes:mm}
+\index{equation de Michaelis--Menten@équation de Michaelis--Menten}\index{constante de Michaelis}
+Pour une \omterm{def:b1:enzymes:enzyme}{enzyme} $E$ qui lie son \omterm{def:b1:enzymes:enzyme}{substrat} de façon réversible et le
+convertit,
+\[
+E + S \underset{k_{-1}}{\overset{k_1}{\rightleftharpoons}} ES
+\overset{k_{\text{cat}}}{\longrightarrow} E + P ,
+\]
+la vitesse initiale à la concentration de \omterm{def:b1:enzymes:enzyme}{substrat} $[S]$ vaut
+\[
+v_0 = \frac{V_{\max}\,[S]}{K_m + [S]}, \qquad V_{\max} = k_{\text{cat}}\,[E]_{\text{tot}},
+\qquad K_m = \frac{k_{-1} + k_{\text{cat}}}{k_1} .
+\]
+$K_m$, la \emph{\omterm{thm:b1:enzymes:mm}{constante de Michaelis}}, est la concentration de
+\omterm{def:b1:enzymes:enzyme}{substrat} à laquelle la vitesse vaut la moitié de son maximum, et mesure
+la quantité de \omterm{def:b1:enzymes:enzyme}{substrat} dont l'\omterm{def:b1:enzymes:enzyme}{enzyme} a besoin~; $k_{\text{cat}}$, le
+\emph{nombre de renouvellement}\index{nombre de renouvellement}, est le
+nombre de molécules de \omterm{def:b1:enzymes:enzyme}{substrat} qu'une \omterm{def:b1:enzymes:enzyme}{enzyme} convertit par seconde à
+saturation~; le rapport $k_{\text{cat}}/K_m$ est l'\emph{efficacité
+catalytique}, la constante de vitesse à faible \omterm{def:b1:enzymes:enzyme}{substrat}, majorée par la
+vitesse à laquelle le \omterm{def:b1:enzymes:enzyme}{substrat} peut atteindre l'\omterm{def:b1:enzymes:enzyme}{enzyme} par diffusion,
+soit environ $10^8$--$10^9$ \unit{L.mol^{-1}.s^{-1}}.
+\end{theorem}
+\begin{proof}
+On suppose un \emph{régime stationnaire} dans lequel $ES$ se forme aussi
+vite qu'il disparaît (valable après les premières millisecondes, tant
+que $[S] \gg [E]$)~:
+$k_1[E][S] = (k_{-1} + k_{\text{cat}})[ES]$, donc $[E][S] = K_m[ES]$
+avec $K_m$ tel que défini. La conservation donne $[E] = [E]_{\text{tot}} -
+[ES]$~; en substituant, $([E]_{\text{tot}} - [ES])[S] = K_m[ES]$, d'où
+$[ES] = [E]_{\text{tot}}[S]/(K_m + [S])$. La vitesse vaut
+$v_0 = k_{\text{cat}}[ES]$, ce qui donne la formule~; pour $[S] \gg K_m$,
+$v_0 \to k_{\text{cat}}[E]_{\text{tot}} = V_{\max}$, et pour $[S] = K_m$,
+$v_0 = V_{\max}/2$.
+\end{proof}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.52\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=22, ymin=0, ymax=1.12,
+  xlabel={$[S]$ (\unit{mmol/L})}, ylabel={$v_0$ (\unit{\micro mol/min})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,5,10,15,20}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:22, samples=100] {x/(2+x)};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(0.5,0.2) (1,0.333) (2,0.5) (5,0.714) (10,0.833) (20,0.909)};
+\draw[dashed, gray] (axis cs:0,1) -- (axis cs:22,1); \node[font=\scriptsize, anchor=south east] at (axis cs:22,1.0) {$V_{\max}$};
+\draw[dashed, gray] (axis cs:0,0.5) -- (axis cs:2,0.5) -- (axis cs:2,0); \node[font=\scriptsize, anchor=north] at (axis cs:2,-0.02) {$K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.46\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=5.6cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.7, xmax=2.2, ymin=0, ymax=5.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={1,3,5},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addplot[only marks, mark=*, mark size=1.6pt, omDef!70!black] coordinates {(2,5) (1,3) (0.5,2) (0.2,1.4) (0.1,1.2) (0.05,1.1)};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:0.05,4.6) {pente $K_m/V_{\max}$};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.05,0.55) {$1/V_{\max}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:-0.5,0.1) {$-1/K_m$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+{\small À gauche~: l'hyperbole de Michaelis--Menten pour
+$K_m = \qty{2}{mmol/L}$ et $V_{\max} = \qty{1}{\micro mol/min}$, avec
+les six points mesurés du problème du week-end. À droite~: les mêmes
+données en représentation de Lineweaver--Burk, $1/v_0$ en fonction de
+$1/[S]$~: une droite dont les ordonnées et abscisses à l'origine
+donnent $V_{\max}$ et $K_m$.}
+\end{omfigure}
+
+\begin{method}[Mesurer $K_m$ et $V_{\max}$]\label{met:b1:enzymes:lb}
+\begin{enumerate}
+  \item Préparer une série de concentrations de \omterm{def:b1:enzymes:enzyme}{substrat} allant de
+        $K_m/4$ à $10K_m$, à concentration d'\omterm{def:b1:enzymes:enzyme}{enzyme} constante~; suivre
+        le produit (couleur, absorbance, gaz) pendant la première minute
+        et prendre la pente pour $v_0$.
+  \item Porter $v_0$ en fonction de $[S]$~: l'hyperbole donne un
+        $V_{\max}$ approché (le plateau) et $K_m$ (la concentration à la
+        moitié de celui-ci).
+  \item Pour plus de précision, inverser~: $1/v_0 = (K_m/V_{\max})(1/[S]) +
+        1/V_{\max}$ (\emph{Lineweaver--Burk}). L'intersection de la
+        droite avec l'axe des $y$ vaut $1/V_{\max}$, avec l'axe des
+        $x$ $-1/K_m$, et sa pente $K_m/V_{\max}$.
+  \item Diviser $V_{\max}$ par la concentration d'\omterm{def:b1:enzymes:enzyme}{enzyme} pour obtenir
+        $k_{\text{cat}}$~; diviser par $K_m$ pour l'efficacité.
+        Recommencer avec un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} pour voir quel paramètre il
+        change.
+\end{enumerate}
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.5\linewidth]{images/book3/ai/b3-13-spectrophotometer-cuvette.png}
+
+{\small Un dosage enzymatique~: le produit absorbe la lumière, et le
+spectrophotomètre en enregistre l'apparition seconde par seconde~; la
+pente initiale est $v_0$.}
+\end{omfigure}
+
+\begin{example}[Enzymes comparées]\label{ex:b1:enzymes:compare}
+\begin{center}
+\small
+\begin{tabular}{lccc}
+\hline
+\omterm{def:b1:enzymes:enzyme}{enzyme} & $K_m$ (\unit{mol/L}) & $k_{\text{cat}}$ (\unit{s^{-1}}) & $k_{\text{cat}}/K_m$ (\unit{L.mol^{-1}.s^{-1}}) \\
+\hline
+catalase & \num{2.5e-2} & \num{4e7} & \num{1.6e9} \\
+anhydrase carbonique & \num{1.2e-2} & \num{1e6} & \num{8e7} \\
+chymotrypsine & \num{1.5e-2} & 100 & \num{7e3} \\
+lysozyme & \num{6e-6} & 0.5 & \num{8e4} \\
+\omterm{def:b1:nucleic-acids:chain}{ADN} polymérase & \num{1e-5} & 15 & \num{1.5e6} \\
+\hline
+\end{tabular}
+\end{center}
+La catalase et l'anhydrase carbonique travaillent à la limite de
+diffusion~: chaque collision avec le \omterm{def:b1:enzymes:enzyme}{substrat} est productive. La
+chymotrypsine est lente, mais elle doit l'être --- elle coupe une
+\omterm{def:b1:proteins:peptide}{liaison peptidique}, tâche bien plus ardue que de briser du peroxyde.
+\end{example}
+
+\section{L'inhibition}
+
+\begin{definition}[Inhibiteurs]\label{def:b1:enzymes:inhibitors}
+Un \emph{inhibiteur}\index{inhibiteur enzymatique} abaisse la vitesse
+d'une \omterm{def:b1:enzymes:enzyme}{enzyme}. Les inhibiteurs \emph{irréversibles} se lient par covalence
+et détruisent définitivement l'activité de l'\omterm{def:b1:enzymes:enzyme}{enzyme} (les neurotoxiques
+sur l'acétylcholinestérase, la pénicilline sur l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui réticule la
+paroi bactérienne, l'aspirine sur l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui fabrique les
+prostaglandines). Les inhibiteurs \emph{réversibles} se lient par des
+liaisons faibles et peuvent être éliminés par lavage~; selon l'endroit
+où ils se lient~:
+\begin{itemize}
+  \item \emph{compétitif}\index{inhibition competitive@inhibition compétitive}~: l'inhibiteur
+        ressemble au \omterm{def:b1:enzymes:enzyme}{substrat} et occupe le \omterm{def:b1:enzymes:enzyme}{site actif}~; il augmente le
+        $K_m$ apparent (du facteur $1 + [I]/K_i$) et laisse $V_{\max}$
+        inchangé --- assez de \omterm{def:b1:enzymes:enzyme}{substrat} le déloge~;
+  \item \emph{non compétitif}~: l'inhibiteur se lie ailleurs et gâche la
+        catalyse, que le \omterm{def:b1:enzymes:enzyme}{substrat} soit fixé ou non~; il abaisse
+        $V_{\max}$ et laisse $K_m$ inchangé --- aucune quantité de
+        \omterm{def:b1:enzymes:enzyme}{substrat} n'en vient à bout~;
+  \item \emph{incompétitif}~: l'inhibiteur ne se lie qu'au complexe
+        $ES$~; $V_{\max}$ et $K_m$ diminuent tous deux.
+\end{itemize}
+$K_i$, la constante de dissociation de l'inhibiteur, mesure sa
+puissance~: plus elle est basse, plus il est fort.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6.0cm,
+  axis x line=middle, axis y line=left,
+  xmin=-0.8, xmax=2.2, ymin=0, ymax=10.5,
+  xlabel={$1/[S]$}, ylabel={$1/v_0$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2}, ytick={2,4,6,8,10},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-0.5:2.1, samples=10] {1 + 2*x};
+\addlegendentry{sans inhibiteur}
+\addplot[very thick, omThm, domain=-0.25:2.1, samples=10] {1 + 4*x};
+\addlegendentry{compétitif~: même $1/V_{\max}$, plus pentu}
+\addplot[very thick, omProp, domain=-0.5:2.1, samples=10] {2 + 4*x};
+\addlegendentry{non compétitif~: même $-1/K_m$, plus haut}
+\end{axis}
+\end{tikzpicture}
+
+{\small Représentations de Lineweaver--Burk avec les deux \omterm{def:b1:enzymes:inhibitors}{inhibiteurs}
+courants. Un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} \omterm{def:b1:enzymes:inhibitors}{compétitif} fait pivoter la droite autour de son
+intersection avec l'axe des $y$ ($V_{\max}$ inchangé, $K_m$ augmenté)~;
+un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} non \omterm{def:b1:enzymes:inhibitors}{compétitif} la fait pivoter autour de son intersection
+avec l'axe des $x$ ($K_m$ inchangé, $V_{\max}$ abaissé).}
+\end{omfigure}
+
+\begin{example}[La compétition comme médicament]\label{ex:b1:enzymes:medicine}
+Le méthanol est inoffensif jusqu'à ce que l'alcool déshydrogénase du
+foie le transforme en formaldéhyde et en acide formique, qui rendent
+aveugle et tuent. Le traitement est l'éthanol~: un \omterm{def:b1:enzymes:enzyme}{substrat} concurrent
+de $K_m$ plus faible, qui occupe l'\omterm{def:b1:enzymes:enzyme}{enzyme} pendant que le méthanol est
+excrété inchangé. Les statines sont des \omterm{def:b1:enzymes:inhibitors}{inhibiteurs} \omterm{def:b1:enzymes:inhibitors}{compétitifs},
+ressemblant à l'\omterm{prop:b1:enzymes:whatitdoes}{état de transition}, de l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui engage le carbone
+vers le \omterm{def:b1:lipids:amphiphilic}{cholestérol}~; les sulfamides ressemblent au \omterm{def:b1:enzymes:enzyme}{substrat} d'une
+\omterm{def:b1:enzymes:enzyme}{enzyme} bactérienne qui fabrique le folate, que l'humain ne fabrique pas
+et dont il ne manque donc pas.
+\end{example}
+
+\section{La régulation}
+
+\begin{definition}[Enzymes allostériques]\label{def:b1:enzymes:allosteric}
+Une \emph{enzyme allostérique}\index{enzyme allosterique@enzyme allostérique} a plusieurs
+sous-unités et, outre ses \omterm{def:b1:enzymes:enzyme}{sites actifs}, des \emph{sites régulateurs} où
+se fixent des effecteurs~: les \emph{activateurs} la font basculer vers
+sa conformation active, les \emph{\omterm{def:b1:enzymes:inhibitors}{inhibiteurs}} vers l'inactive. Sa
+vitesse en fonction de $[S]$ est sigmoïde et non hyperbolique
+(\omterm{def:b1:proteins:allostery}{coopérativité} entre les \omterm{def:b1:enzymes:enzyme}{sites actifs}, comme pour l'hémoglobine,
+\cref{ch:b1:proteins}), de sorte qu'une faible variation de \omterm{def:b1:enzymes:enzyme}{substrat} au
+voisinage de la partie raide change beaucoup la vitesse~; les effecteurs
+décalent la courbe latéralement (ce qui change la concentration de
+\omterm{def:b1:enzymes:enzyme}{substrat} nécessaire) ou verticalement (ce qui change la vitesse
+maximale). Les \omterm{def:b1:enzymes:enzyme}{enzymes} \omterm{def:b1:proteins:allostery}{allostériques} siègent aux carrefours du
+métabolisme, et les effecteurs sont les produits mêmes de la voie et les
+signaux énergétiques de la \omterm{def:b1:cell-unit-of-life:cell}{cellule} (\omterm{def:b1:water-small-molecules:atp}{ATP}, ADP, AMP).
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.86\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=1.1,
+  xlabel={$[S]$ (relatif)}, ylabel={$v_0/V_{\max}$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10}, ytick={0,0.5,1},
+  legend style={font=\small, at={(0.5,-0.22)}, anchor=north, draw=none, legend columns=2, /tikz/every even column/.append style={column sep=0.4cm}},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=100] {x^3/(3^3+x^3)};
+\addlegendentry{enzyme allostérique seule ($n = 3$)}
+\addplot[very thick, omExo, domain=0:10, samples=100] {x^3/(1.8^3+x^3)};
+\addlegendentry{avec un activateur~: décalage à gauche}
+\addplot[very thick, omThm, domain=0:10, samples=100] {x^3/(5.5^3+x^3)};
+\addlegendentry{avec un inhibiteur~: décalage à droite}
+\addplot[thick, dashed, gray, domain=0:10, samples=100] {x/(3+x)};
+\addlegendentry{Michaelis--Menten, pour comparaison}
+\draw[dashed, gray] (axis cs:3,0) -- (axis cs:3,0.5);
+\end{axis}
+\end{tikzpicture}
+
+{\small Une \omterm{def:b1:enzymes:allosteric}{enzyme allostérique}. La courbe sigmoïde rend la vitesse
+sensible au \omterm{def:b1:enzymes:enzyme}{substrat} au voisinage du point milieu~; un activateur la
+décale à gauche (plus active à $[S]$ donné), un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} à droite. Au
+voisinage de $[S] = 3$, la vitesse peut passer du dixième aux neuf
+dixièmes du maximum.}
+\end{omfigure}
+
+\begin{proposition}[Quatre façons dont la cellule commande une enzyme]\label{prop:b1:enzymes:control}
+\begin{enumerate}
+  \item La \emph{rétro-inhibition}\index{retro-inhibition@rétro-inhibition}~: le produit
+        final d'une voie est un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} \omterm{def:b1:proteins:allostery}{allostérique} de sa première
+        \omterm{def:b1:enzymes:enzyme}{enzyme} engagée, de sorte que la voie ne tourne qu'au rythme
+        auquel le produit est consommé (l'isoleucine sur la thréonine
+        désaminase~; l'\omterm{def:b1:water-small-molecules:atp}{ATP} sur la phosphofructokinase,
+        \cref{ch:b1:respiration-fermentation}). Temps de réponse~:
+        quelques millisecondes.
+  \item La \emph{modification covalente}\index{modification covalente}~:
+        une kinase fixe un phosphate sur une sérine, une thréonine ou
+        une tyrosine de l'\omterm{def:b1:enzymes:enzyme}{enzyme}, une phosphatase le retire, et les deux
+        formes diffèrent par leur activité (la \omterm{def:b1:carbohydrates:polysaccharide}{glycogène} phosphorylase
+        est allumée par phosphorylation, la \omterm{def:b1:carbohydrates:polysaccharide}{glycogène} synthase éteinte,
+        par le même signal hormonal). De quelques secondes à quelques
+        minutes~; réversible~; amplifiable en cascades.
+  \item L'\emph{activation protéolytique}~: certaines \omterm{def:b1:enzymes:enzyme}{enzymes} sont
+        fabriquées sous forme de précurseurs inactifs (les
+        \emph{zymogènes}~: trypsinogène, pepsinogène, facteurs de la
+        coagulation) et allumées par la coupure d'un peptide, une fois
+        pour toutes, là et quand on les veut.
+  \item La \emph{quantité}~: la \omterm{def:b1:cell-unit-of-life:cell}{cellule} fabrique plus ou moins d'\omterm{def:b1:enzymes:enzyme}{enzyme}
+        en commandant son gène (\cref{ch:b1:expression-control}) et la
+        dégrade plus ou moins vite. De quelques minutes à quelques
+        heures.
+\end{enumerate}
+\end{proposition}
+
+\begin{example}[Les isoenzymes]\label{ex:b1:enzymes:isoenzymes}
+La lactate déshydrogénase existe sous cinq formes, tétramères de deux
+types de sous-unités en toutes combinaisons~; la forme du cœur a un
+faible $K_m$ pour le lactate et est inhibée par le pyruvate (elle oxyde
+le lactate pour alimenter le cycle de Krebs), la forme du muscle a un
+$V_{\max}$ élevé et tolère le pyruvate (elle fabrique du lactate lors
+d'un sprint). Le profil des formes présentes dans le sang révèle quel
+\omterm{def:b1:mammal-organization:organ}{organe} a été lésé --- un infarctus libère celle du cœur.
+\end{example}
+
+\section{Température et pH}
+
+\begin{proposition}[Les enzymes et leur environnement]\label{prop:b1:enzymes:environment}
+La vitesse d'une réaction enzymatique double à peu près tous les
+\qty{10}{\celsius} ($Q_{10} \approx 2$), l'énergie thermique faisant
+franchir la barrière à davantage de molécules, jusqu'à ce que l'\omterm{def:b1:enzymes:enzyme}{enzyme}
+commence à se déplier (\qtyrange{40}{60}{\celsius} pour la plupart~;
+\qty{100}{\celsius} pour les \omterm{def:b1:enzymes:enzyme}{enzymes} des bactéries des sources chaudes)
+et que la vitesse s'effondre. Chaque \omterm{def:b1:enzymes:enzyme}{enzyme} a un \emph{pH optimal}, où
+l'ionisation de ses résidus catalytiques et de son \omterm{def:b1:enzymes:enzyme}{substrat} est la
+bonne~: la pepsine, dans l'estomac, vers pH 2~; la trypsine, dans
+l'intestin, vers 8~; la plupart des \omterm{def:b1:enzymes:enzyme}{enzymes} intracellulaires vers 7. En
+s'éloignant de l'optimum la vitesse baisse, et très loin de lui la
+\omterm{def:b1:proteins:peptide}{protéine} se dénature. Température et pH agissent sur la \omterm{def:b1:proteins:peptide}{protéine}~; la
+\omterm{def:b1:cell-unit-of-life:cell}{cellule} maintient les deux dans le domaine où ses mille \omterm{def:b1:enzymes:enzyme}{enzymes}
+fonctionnent toutes.
+\end{proposition}
+
+\begin{example}[Une fièvre et une source chaude]\label{ex:b1:enzymes:fever}
+Une fièvre à \qty{40}{\celsius} accélère d'un quart chaque réaction du
+corps et commence à déplier les \omterm{def:b1:proteins:peptide}{protéines} les plus fragiles~; à
+\qty{42}{\celsius} celles de l'encéphale cèdent. L'\omterm{def:b1:nucleic-acids:chain}{ADN} polymérase d'une
+bactérie d'une source à \qty{75}{\celsius} survit à \qty{95}{\celsius},
+ce qui lui permet d'être soumise des milliers de fois au cycle de fusion
+de l'\omterm{def:b1:nucleic-acids:chain}{ADN} et lui a valu de devenir l'\omterm{def:b1:enzymes:enzyme}{enzyme} de la réaction de
+polymérisation en chaîne (volume de troisième année)~: la
+thermostabilité est une propriété de la séquence, non de la chimie
+catalysée.
+\end{example}
+
+\section{Exercices}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:1}
+Que change une \omterm{def:b1:enzymes:enzyme}{enzyme} dans une réaction, et que laisse-t-elle
+inchangé~? Illustrer avec le profil énergétique.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:2}
+Définir $K_m$, $V_{\max}$, $k_{\text{cat}}$ et $k_{\text{cat}}/K_m$,
+avec leurs unités.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:3}
+D'après la figure de Lineweaver--Burk des \omterm{def:b1:enzymes:inhibitors}{inhibiteurs}, lire $V_{\max}$
+et $K_m$ pour l'\omterm{def:b1:enzymes:enzyme}{enzyme} non inhibée et pour chaque \omterm{def:b1:enzymes:inhibitors}{inhibiteur}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b1:enzymes:4}
+Nommer les quatre façons dont une \omterm{def:b1:cell-unit-of-life:cell}{cellule} règle l'activité d'une \omterm{def:b1:enzymes:enzyme}{enzyme}
+et donner l'échelle de temps de chacune.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:5}
+Une \omterm{def:b1:enzymes:enzyme}{enzyme} a $K_m = \qty{0.1}{mmol/L}$ et $V_{\max} =
+\qty{50}{\micro mol/min}$. Calculer $v_0$ pour $[S] = 0.02$, $0.1$, $1$
+et \qty{10}{mmol/L}. Pour quel $[S]$ a-t-on $v_0 = 0.9\,V_{\max}$~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:6}
+Abaisser $E_a$ de \qty{20}{kJ/mol} à \qty{37}{\celsius} multiplie la
+vitesse par quel facteur~? De combien $E_a$ doit-elle baisser pour
+gagner un facteur $10^{10}$~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:7}
+$\qty{2}{pmol}$ d'anhydrase carbonique dans \qty{1}{mL} donnent
+$V_{\max} = \qty{120}{mmol/L}$ par minute. Calculer $k_{\text{cat}}$
+et, avec $K_m = \qty{12}{mmol/L}$, l'efficacité. Comparer à la limite de
+diffusion.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:8}
+Un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} \omterm{def:b1:enzymes:inhibitors}{compétitif} à \qty{2}{mmol/L} double le $K_m$ apparent.
+Calculer $K_i$. Quelle concentration de \omterm{def:b1:enzymes:enzyme}{substrat} ramène la vitesse à
+\qty{90}{\%} de $V_{\max}$ avec et sans l'\omterm{def:b1:enzymes:inhibitors}{inhibiteur}, si
+$K_m = \qty{1}{mmol/L}$~?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b1:enzymes:9}
+Expliquer pourquoi la \omterm{prop:b1:enzymes:control}{rétro-inhibition} agit sur la première étape
+engagée d'une voie plutôt que sur la dernière, et pourquoi
+l'\omterm{def:b1:enzymes:inhibitors}{inhibiteur} est en général le produit final plutôt qu'un
+intermédiaire.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:10}
+Le trypsinogène est activé dans l'intestin et non dans le pancréas qui
+le fabrique~; une petite fraction activée trop tôt détruit le pancréas.
+Expliquer la logique des zymogènes, le rôle de l'\omterm{def:b1:enzymes:enzyme}{enzyme} qui active le
+trypsinogène, et pourquoi le pancréas fabrique aussi un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} de la
+trypsine.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:11}
+Une \omterm{def:b1:enzymes:allosteric}{enzyme allostérique} de $n = 3$ et de demi-saturation en $[S]_{0.5}
+= 3$ voit sa courbe décalée à $[S]_{0.5} = 5.5$ par un \omterm{def:b1:enzymes:inhibitors}{inhibiteur}.
+Calculer la vitesse en $[S] = 3$ avec et sans l'\omterm{def:b1:enzymes:inhibitors}{inhibiteur}, et comparer
+au changement qu'un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} \omterm{def:b1:enzymes:inhibitors}{compétitif} produisant le même décalage de
+$K_m$ donnerait sur une \omterm{def:b1:enzymes:enzyme}{enzyme} michaélienne. Qu'ajoute la \omterm{def:b1:proteins:allostery}{coopérativité}
+à la régulation~?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b1:enzymes:12}
+«~Une \omterm{def:b1:enzymes:enzyme}{enzyme} est un catalyseur à qui l'on a dit quoi faire.~» Discuter
+en un paragraphe~: catalyse et spécificité, la régulation comme
+information ajoutée, et le coût d'une \omterm{def:b1:enzymes:enzyme}{enzyme} régulée comparée à un
+simple catalyseur.
+\end{exercise}
+
+\section{Problème~: une enzyme mesurée}
+
+\begin{problem}[{Problème du week-end --- une estérase dosée à six
+concentrations de \omterm{def:b1:enzymes:enzyme}{substrat}, seule puis avec deux \omterm{def:b1:enzymes:inhibitors}{inhibiteurs}, ses
+constantes extraites et son comportement dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule} prédit, jusqu'à
+ses $K_m$, $V_{\max}$ et $K_i$}]
+\label{pb:b1:enzymes:1}
+Une estérase est dosée dans \qty{1.0}{mL} à \qty{25}{\celsius}, pH 7.5,
+avec \qty{10}{nmol/L} d'\omterm{def:b1:enzymes:enzyme}{enzyme}. Les vitesses initiales
+(\unit{\micro mol/min}) à six concentrations de \omterm{def:b1:enzymes:enzyme}{substrat}, seule et en
+présence de \qty{1.0}{mmol/L} d'\omterm{def:b1:enzymes:inhibitors}{inhibiteur} I ou de \qty{1.0}{mmol/L}
+d'\omterm{def:b1:enzymes:inhibitors}{inhibiteur} J~:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccc}
+\hline
+$[S]$ (\unit{mmol/L}) & 0.5 & 1 & 2 & 5 & 10 & 20 \\
+\hline
+$v_0$, sans \omterm{def:b1:enzymes:inhibitors}{inhibiteur} & 0.200 & 0.333 & 0.500 & 0.714 & 0.833 & 0.909 \\
+$v_0$, avec I & 0.111 & 0.200 & 0.333 & 0.556 & 0.714 & 0.833 \\
+$v_0$, avec J & 0.100 & 0.167 & 0.250 & 0.357 & 0.417 & 0.455 \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Partie I --- L'\omterm{def:b1:enzymes:enzyme}{enzyme} seule.}
+\begin{enumerate}
+  \item Calculer $1/[S]$ et $1/v_0$ pour les six points sans
+        \omterm{def:b1:enzymes:inhibitors}{inhibiteur}.
+  \item Montrer que les points sont alignés et trouver la pente et
+        l'ordonnée à l'origine de la droite.
+  \item En déduire $V_{\max}$ et $K_m$.
+  \item Vérifier avec l'\omterm{thm:b1:enzymes:mm}{équation de Michaelis--Menten} en $[S] =
+        \qty{5}{mmol/L}$.
+  \item Calculer la quantité d'\omterm{def:b1:enzymes:enzyme}{enzyme} dans le dosage (en moles) et
+        $k_{\text{cat}}$ en \unit{s^{-1}}.
+  \item Calculer $k_{\text{cat}}/K_m$ et comparer à la limite de
+        diffusion.
+  \item À quelle concentration de \omterm{def:b1:enzymes:enzyme}{substrat} l'\omterm{def:b1:enzymes:enzyme}{enzyme} travaille-t-elle à
+        \qty{95}{\%} de $V_{\max}$~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie II --- L'\omterm{def:b1:enzymes:inhibitors}{inhibiteur} I.}
+\begin{enumerate}[resume]
+  \item Calculer $1/v_0$ pour les six points avec I et trouver la pente
+        et l'ordonnée à l'origine de leur droite.
+  \item En déduire les $V_{\max}$ et $K_m$ apparents avec I.
+  \item Quel paramètre a changé~? Classer l'\omterm{def:b1:enzymes:inhibitors}{inhibiteur}.
+  \item Calculer $K_i$ à partir de
+        $K_m^{\text{app}} = K_m(1 + [I]/K_i)$.
+  \item En $[S] = \qty{2}{mmol/L}$, quelle concentration de I divise la
+        vitesse par deux~? Et en $[S] = \qty{20}{mmol/L}$~?
+  \item Proposer ce que I pourrait être, structurellement, et où il se
+        fixe.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie III --- L'\omterm{def:b1:enzymes:inhibitors}{inhibiteur} J.}
+\begin{enumerate}[resume]
+  \item Calculer la pente et l'ordonnée à l'origine de la droite avec J
+        et en déduire les $V_{\max}$ et $K_m$ apparents.
+  \item Classer J et calculer son $K_i$ à partir de
+        $V_{\max}^{\text{app}} =
+        V_{\max}/(1 + [J]/K_i)$.
+  \item Expliquer pourquoi augmenter le \omterm{def:b1:enzymes:enzyme}{substrat} ne peut pas venir à
+        bout de J.
+  \item Doubler la concentration d'\omterm{def:b1:enzymes:enzyme}{enzyme} en présence de J fait quoi à
+        la vitesse~? Et en présence de I~?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Partie IV --- Dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule}.}
+La \omterm{def:b1:cell-unit-of-life:cell}{cellule} maintient le \omterm{def:b1:enzymes:enzyme}{substrat} à \qty{0.5}{mmol/L} et l'\omterm{def:b1:enzymes:enzyme}{enzyme} à
+\qty{10}{nmol/L} dans un volume de \qty{1000}{\micro m^3}, à
+\qty{37}{\celsius}, avec $Q_{10} = 2$.
+\begin{enumerate}[resume]
+  \item Calculer la vitesse dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule} (molécules de produit par
+        seconde dans la \omterm{def:b1:cell-unit-of-life:cell}{cellule} entière).
+  \item Le produit est nécessaire à raison de \qty{3e6}{} molécules par
+        seconde. De quel facteur la \omterm{def:b1:cell-unit-of-life:cell}{cellule} doit-elle augmenter la
+        vitesse, et nommer deux moyens d'y parvenir.
+  \item Le produit est un \omterm{def:b1:enzymes:inhibitors}{inhibiteur} \omterm{def:b1:enzymes:inhibitors}{compétitif} de l'\omterm{def:b1:enzymes:enzyme}{enzyme}, de
+        $K_i = \qty{0.2}{mmol/L}$, et il s'accumule jusqu'à
+        \qty{0.4}{mmol/L}. Calculer alors la vitesse, et commenter ce
+        que cela réalise.
+  \item L'\omterm{def:b1:enzymes:enzyme}{enzyme} est phosphorylée par une kinase, ce qui abaisse son
+        $K_m$ à \qty{0.4}{mmol/L}. Calculer la vitesse à
+        \qty{0.5}{mmol/L} de \omterm{def:b1:enzymes:enzyme}{substrat} avant et après.
+  \item Le pH optimal de l'\omterm{def:b1:enzymes:enzyme}{enzyme} est 7.5 et son activité est divisée
+        par deux à pH 6.5. Un \omterm{def:b1:eukaryotic-cell:endomembrane}{lysosome} est à pH 5. Prédire
+        qualitativement son activité là, et l'expliquer en termes de
+        résidus ionisables.
+  \item Une mutation remplace l'histidine du \omterm{def:b1:enzymes:enzyme}{site actif} par une alanine.
+        Prédire l'effet sur $K_m$ et sur $k_{\text{cat}}$, en justifiant
+        chacun.
+  \item Expliquer pourquoi la \omterm{def:b1:cell-unit-of-life:cell}{cellule} maintient le \omterm{def:b1:enzymes:enzyme}{substrat} au
+        voisinage de $K_m$ plutôt que très au-dessus.
+  \item Énoncer le résultat~: $K_m$, $V_{\max}$, $k_{\text{cat}}$ de
+        l'estérase, ainsi que le type et le $K_i$ de chaque \omterm{def:b1:enzymes:inhibitors}{inhibiteur}.
+\end{enumerate}
+\end{problem}
