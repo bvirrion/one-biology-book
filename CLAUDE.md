@@ -373,11 +373,17 @@ prefer diagrams over equations; SI units where relevant.
   wherever the thing can simply be seen** (and alongside a schematic when
   both help); a **free-of-rights photograph** for a specific real thing a
   reader would want to see as it is — a named scientist, a landmark
-  specimen, a famous organism or landscape. None of the supporting
-  infrastructure exists in this repo yet: it needs `images/book<N>/` with
-  `CREDITS.md`, `images/book<N>/ai/PROMPTS.md`, and an Image Credits page
-  in `frontmatter/` inputted by each entry file. Copy the shape from
-  `one-physics-book` (`images/book1/`, `frontmatter/image-credits*.tex`).
+  specimen, a famous organism or landscape. The infrastructure is in
+  place for Books 1–3 (`images/book<N>/` with `CREDITS.md`,
+  `images/book<N>/ai/PROMPTS.md`, an Image Credits page in `frontmatter/`
+  inputted by each entry file); Books 4–5 copy that shape.
+- **AI illustrations are JPEG, never PNG** (`images/book<N>/ai/*.jpg`,
+  made with `ffmpeg -i x.png -q:v 3 -pix_fmt yuvj420p x.jpg`, the HTML
+  reader's own recipe; then delete the PNG). A lossless PNG costs ~2–4 MB
+  in each of the eight language PDFs: with 188 of them every Book 1–3 PDF
+  weighed 160–185 MB (3.4 GB per release) and the release workflow died
+  with "No space left on device" (run 34020589660, 2026-09-06). All 188
+  were transcoded that day; `ls images/book*/ai/*.png` must stay empty.
 - Semantic colors: `omDef`, `omThm`, `omProp`, `omMeth`, `omExo`.
 - Brand `oc*` colors and `\ocRosette`/`\ocQuadLine` are cover-only
   (see THEME.md).

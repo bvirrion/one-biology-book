@@ -8,7 +8,7 @@ before insertion into the book. Rejected generations are not kept.
 
 Shared style suffix appended to every prompt: *"Clean realistic scientific illustration style, natural colours, soft even lighting, plain white or neutral background, absolutely no text, no letters, no labels, no arrows, no numbers, no captions."*
 
-Images used as bases for TikZ overlay labels (`fig-*.png`) were prompted
+Images used as bases for TikZ overlay labels (`fig-*.jpg`) were prompted
 with the same suffix; the labels are drawn by the book, not by the
 generator. Book 3 also reuses two Book 2 bases, `fig-leaf-cross-section`
 and `fig-plant-cell-cutaway-v2` (see `images/book2/ai/PROMPTS.md`).

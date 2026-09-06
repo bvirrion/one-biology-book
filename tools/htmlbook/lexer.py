@@ -1,0 +1,1132 @@
+"""Parse a One Math Book chapter (or solutions) file into a node tree.
+
+The book sources are disciplined by construction — every macro and
+environment lives in styles/onemath.sty and CONTRIBUTING.md forbids
+chapter-local definitions — so this is a targeted parser for that closed
+vocabulary, not a general TeX engine.  Any command or environment outside
+the vocabulary raises ParseError with file:line context: the converter
+must fail loudly rather than silently drop book content.
+
+Node shapes (plain dicts, `t` = type):
+
+Blocks:
+  {"t":"para",     "inl":[...]}
+  {"t":"dmath",    "tex":str}
+  {"t":"section",  "inl":[...], "star":bool}
+  {"t":"env",      "kind":str, "title":[...]|None, "label":str|None,
+                   "body":[blocks], "difficulty":int|None, "sol_key":str|None}
+  {"t":"list",     "kind":"itemize"|"enumerate", "resume":bool,
+                   "items":[[blocks]]}
+  {"t":"figure",   "tikz":str, "caption":[...]}
+  {"t":"table",    "colspec":str, "header":[cells]|None, "rows":[[cells]]}
+                   (a cell is an inline list)
+
+Inlines:
+  {"t":"text",  "s":str}
+  {"t":"math",  "tex":str}
+  {"t":"emph",  "inl":[...], "index":str|None}
+  {"t":"bold",  "inl":[...]}
+  {"t":"term",  "label":str, "inl":[...]}
+  {"t":"cref",  "label":str}
+"""
+
+import re
+
+STATEMENT_KINDS = (
+    "definition", "theorem", "proposition", "lemma", "corollary",
+    "method", "example", "notation", "remark",
+)
+# Environments whose bodies are parsed recursively as blocks.
+BLOCK_ENVS = STATEMENT_KINDS + ("proof", "exercise", "problem", "solution")
+LIST_ENVS = ("itemize", "enumerate")
+
+
+class ParseError(Exception):
+    pass
+
+
+class Cursor:
+    def __init__(self, text, filename):
+        self.s = text
+        self.i = 0
+        self.filename = filename
+
+    def line(self, i=None):
+        return self.s.count("\n", 0, self.i if i is None else i) + 1
+
+    def err(self, msg):
+        ctx = self.s[self.i:self.i + 60].replace("\n", "\\n")
+        raise ParseError(f"{self.filename}:{self.line()}: {msg} (at: {ctx!r})")
+
+
+def strip_comments(text):
+    """Remove unescaped %-comments (keep the newline)."""
+    out = []
+    i, n = 0, len(text)
+    while i < n:
+        c = text[i]
+        if c == "\\" and i + 1 < n:
+            out.append(text[i:i + 2])
+            i += 2
+        elif c == "%":
+            j = text.find("\n", i)
+            i = n if j < 0 else j
+        else:
+            out.append(c)
+            i += 1
+    return "".join(out)
+
+
+def read_group(cur):
+    """Read a balanced {...} group; skips leading whitespace (an argument
+    may start on the next source line). Returns the group content."""
+    s = cur.s
+    while cur.i < len(s) and s[cur.i] in " \n\t":
+        cur.i += 1
+    if cur.i >= len(s) or s[cur.i] != "{":
+        cur.err("expected '{'")
+    depth, start = 0, cur.i + 1
+    i = cur.i
+    while i < len(s):
+        c = s[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                cur.i = i + 1
+                return s[start:i]
+        i += 1
+    cur.err("unbalanced '{'")
+
+
+def read_optional(cur):
+    """Read a balanced [...] group if present ('{' groups may nest inside)."""
+    s = cur.s
+    if cur.i >= len(s) or s[cur.i] != "[":
+        return None
+    depth_sq, depth_br = 0, 0
+    start = cur.i + 1
+    i = cur.i
+    while i < len(s):
+        c = s[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == "{":
+            depth_br += 1
+        elif c == "}":
+            depth_br -= 1
+        elif c == "[" and depth_br == 0:
+            depth_sq += 1
+        elif c == "]" and depth_br == 0:
+            depth_sq -= 1
+            if depth_sq == 0:
+                cur.i = i + 1
+                return s[start:i]
+        i += 1
+    cur.err("unbalanced '['")
+
+
+CMD_RE = re.compile(r"\\([a-zA-Z]+)\s*")
+
+
+def find_inline_math_end(s, start):
+    """Index of the `$` closing the inline math opened at s[start] — the
+    first unescaped `$` at brace depth 0 (LaTeX re-enters math inside
+    \\text{...}, e.g. $\\sum_{\\text{$k$ even}}$). Returns -1 if none."""
+    depth = 0
+    i = start + 1
+    while i < len(s):
+        c = s[i]
+        if c == "\\":
+            i += 2
+            continue
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+        elif c == "$" and depth == 0:
+            return i
+        i += 1
+    return -1
+
+
+def find_env_end(cur, name):
+    """Return (body, end_pos) for the environment `name` starting after its
+    \\begin (cursor already past \\begin{name}[opt]); handles same-name
+    nesting; leaves cursor after \\end{name}."""
+    s = cur.s
+    depth = 1
+    i = cur.i
+    begin_pat = "\\begin{" + name + "}"
+    end_pat = "\\end{" + name + "}"
+    start = i
+    while i < len(s):
+        b = s.find(begin_pat, i)
+        e = s.find(end_pat, i)
+        if e < 0:
+            cur.err(f"missing \\end{{{name}}}")
+        if 0 <= b < e:
+            depth += 1
+            i = b + len(begin_pat)
+            continue
+        depth -= 1
+        if depth == 0:
+            body = s[start:e]
+            cur.i = e + len(end_pat)
+            return body
+        i = e + len(end_pat)
+    cur.err(f"missing \\end{{{name}}}")
+
+
+def split_top_level(body, sep_cmd, filename):
+    """Split env body on a top-level command (\\item) — outside math, braces
+    and nested environments. Returns list of chunks (first chunk = preamble
+    before the first separator)."""
+    chunks, buf = [], []
+    i, n = 0, len(body)
+    depth_br = 0
+    env_depth = 0
+    in_math = False
+    sep = "\\" + sep_cmd
+    while i < n:
+        c = body[i]
+        if c == "\\":
+            if body.startswith("\\begin{", i):
+                env_depth += 1
+            elif body.startswith("\\end{", i):
+                env_depth -= 1
+            if (not in_math and depth_br == 0 and env_depth == 0
+                    and body.startswith(sep, i)
+                    and not body[i + len(sep):i + len(sep) + 1].isalpha()):
+                chunks.append("".join(buf))
+                buf = []
+                i += len(sep)
+                continue
+            buf.append(body[i:i + 2])
+            i += 2
+            continue
+        if c == "$":
+            in_math = not in_math
+        elif not in_math:
+            if c == "{":
+                depth_br += 1
+            elif c == "}":
+                depth_br -= 1
+        buf.append(c)
+        i += 1
+    chunks.append("".join(buf))
+    return chunks
+
+
+def count_stars(opt):
+    """Difficulty option like `$\\star$` / `$\\star\\star\\star$` -> 1..3."""
+    return opt.count("\\star")
+
+
+class Parser:
+    def __init__(self, filename, text):
+        self.filename = filename
+        self.chapter_title = None      # inline list
+        self.chapter_label = None
+        text = strip_comments(text)
+        self.cur = Cursor(text, filename)
+
+    # ---------------------------------------------------------------- blocks
+
+    def parse(self):
+        """Parse the whole file; returns list of blocks."""
+        return self.parse_blocks(self.cur.s, self.cur)
+
+    def parse_blocks(self, body, outer_cur=None):
+        cur = Cursor(body, self.filename)
+        if outer_cur is not None:
+            cur = outer_cur if body is outer_cur.s else cur
+        blocks = []
+        parbuf = []  # raw tex accumulated for the current paragraph
+
+        def flush():
+            raw = "".join(parbuf).strip()
+            parbuf.clear()
+            if raw:
+                inl = self.parse_inlines(raw)
+                if inl:
+                    blocks.append({"t": "para", "inl": inl})
+
+        s = cur.s
+        while cur.i < len(s):
+            c = s[cur.i]
+            if c == "\n":
+                # blank line = paragraph break
+                m = re.match(r"\n\s*\n", s[cur.i:])
+                if m:
+                    flush()
+                    cur.i += m.end()
+                else:
+                    parbuf.append(" ")
+                    cur.i += 1
+                continue
+            if c == "$":
+                # consume the whole inline-math segment: a \begin{cases}
+                # inside $...$ must not be mistaken for a block environment
+                end = find_inline_math_end(s, cur.i)
+                if end < 0:
+                    cur.err("unbalanced $")
+                parbuf.append(s[cur.i:end + 1])
+                cur.i = end + 1
+                continue
+            if c == "\\":
+                if s.startswith("\\begin{", cur.i):
+                    flush()
+                    blocks.append(self.parse_env(cur))
+                    continue
+                if s.startswith("\\[", cur.i):
+                    flush()
+                    end = s.find("\\]", cur.i + 2)
+                    if end < 0:
+                        cur.err("missing \\]")
+                    blocks.append(
+                        {"t": "dmath", "tex": s[cur.i + 2:end].strip()})
+                    cur.i = end + 2
+                    continue
+                if s.startswith("\\chapter{", cur.i):
+                    flush()
+                    cur.i += len("\\chapter")
+                    self.chapter_title = self.parse_inlines(read_group(cur))
+                    continue
+                m = re.match(r"\\(sub)?section(\*?)\{", s[cur.i:])
+                if m:
+                    flush()
+                    cur.i += len("\\section") + len(m.group(1) or "") \
+                        + len(m.group(2))
+                    title = read_group(cur)
+                    blocks.append({"t": "subsection" if m.group(1) else "section",
+                                   "inl": self.parse_inlines(title),
+                                   "star": bool(m.group(2))})
+                    continue
+                m = re.match(r"\\admitted\b", s[cur.i:])
+                if m:
+                    # zero-arg macro: a whole "Admitted at this level" proof
+                    flush()
+                    blocks.append({"t": "admitted"})
+                    cur.i += m.end()
+                    continue
+                m = re.match(r"\\(medskip|smallskip|bigskip|noindent|par)\b",
+                             s[cur.i:])
+                if m:
+                    # purely presentational in print; paragraph flow in HTML
+                    if m.group(1) != "noindent":
+                        flush()
+                    cur.i += m.end()
+                    continue
+                if s.startswith("\\label{", cur.i):
+                    cur.i += len("\\label")
+                    label = read_group(cur)
+                    if self.chapter_label is None and not blocks \
+                            and not "".join(parbuf).strip():
+                        self.chapter_label = label
+                    elif blocks and not "".join(parbuf).strip() \
+                            and blocks[-1]["t"] in ("section", "subsection") \
+                            and "label" not in blocks[-1]:
+                        # \section{...}\label{sec:...}
+                        blocks[-1]["label"] = label
+                    else:
+                        # a label placed late in an environment body (the
+                        # style file's page-break workaround): surface it
+                        # as a node for parse_env to attach; anywhere else
+                        # the emitter fails loudly on it
+                        flush()
+                        blocks.append({"t": "label", "name": label})
+                    continue
+                # anything else: part of the running paragraph text
+                parbuf.append(self.take_inline_atom(cur))
+                continue
+            parbuf.append(c)
+            cur.i += 1
+        flush()
+        return blocks
+
+    def take_inline_atom(self, cur):
+        """Consume one inline-level backslash construct as raw text (validated
+        later by parse_inlines) — used while accumulating a paragraph."""
+        s = cur.s
+        if s.startswith("$", cur.i):  # unreachable; math has no backslash lead
+            pass
+        m = CMD_RE.match(s, cur.i)
+        if m:
+            name = m.group(1)
+            start = cur.i
+            cur.i = m.end()
+            # commands with brace groups: consume their groups too so a
+            # nested \begin inside an argument can't fool the block scanner
+            n_groups = {"omterm": 2, "cref": 1, "Cref": 1, "ref": 1,
+                        "eqref": 1, "emph": 1, "textbf": 1, "index": 1,
+                        "label": 1, "textsuperscript": 1, "footnote": 1,
+                        "texorpdfstring": 2, "hspace": 1, "rule": 2,
+                        "texttt": 1, "rotatebox": 2, "multicolumn": 3, "underline": 1,
+                        "H": 1, "c": 1, "v": 1, "textsc": 1,
+                        "qty": 2, "num": 1, "unit": 1, "ang": 1,
+                        "qtyrange": 3, "qtylist": 2}.get(name, 0)
+            if name in ("H", "c", "v") \
+                    and (cur.i >= len(s) or s[cur.i] != "{"):
+                n_groups = 0  # bare-letter accent form (\v S)
+            out = [s[start:cur.i]]
+            for _ in range(n_groups):
+                while cur.i < len(s) and s[cur.i] in " \n":
+                    cur.i += 1
+                out.append("{" + read_group(cur) + "}")
+            return "".join(out)
+        # escaped char like \, \\ \& \% \_ or "\ "
+        out = s[cur.i:cur.i + 2]
+        cur.i += 2
+        return out
+
+    # ------------------------------------------------------------------ envs
+
+    def parse_env(self, cur):
+        s = cur.s
+        cur.i += len("\\begin")
+        name = read_group(cur)
+
+        if name == "equation":
+            # numbered display equation; the label (if any) becomes an
+            # anchored \tag'd formula
+            body = find_env_end(cur, "equation")
+            label = None
+            m = re.search(r"\\label\{([^{}]*)\}", body)
+            if m:
+                label = m.group(1)
+                body = body[:m.start()] + body[m.end():]
+            return {"t": "dmath", "tex": body.strip(), "label": label}
+        if name in ("align*", "gather*"):
+            # display-math blocks; KaTeX renders them natively in display
+            # mode, so keep the whole environment verbatim
+            body = find_env_end(cur, name)
+            return {"t": "dmath",
+                    "tex": f"\\begin{{{name}}}" + body + f"\\end{{{name}}}"}
+        if name == "omfigure":
+            body = find_env_end(cur, "omfigure")
+            return self.parse_figure(body)
+        if name == "figure":
+            read_optional(cur)  # float placement ([ht]...): print-only
+            body = find_env_end(cur, "figure")
+            return self.parse_figure(body, floated=True)
+        if name == "center":
+            body = find_env_end(cur, "center")
+            return self.parse_center(body)
+        if name in LIST_ENVS:
+            opt = read_optional(cur)
+            resume = bool(opt) and "resume" in opt
+            if opt and opt.strip() not in ("resume",):
+                raise ParseError(
+                    f"{self.filename}: unsupported list option [{opt}]")
+            body = find_env_end(cur, name)
+            chunks = split_top_level(body, "item", self.filename)
+            if chunks[0].strip():
+                raise ParseError(
+                    f"{self.filename}: text before first \\item in {name}")
+            items = [self.parse_blocks(cchunk) for cchunk in chunks[1:]]
+            return {"t": "list", "kind": name, "resume": resume,
+                    "items": items}
+        if name in BLOCK_ENVS:
+            title, sol_key, difficulty = None, None, None
+            if name == "solution":
+                sol_key = read_group(cur)
+            else:
+                opt = read_optional(cur)
+                if opt is not None:
+                    if name == "exercise":
+                        difficulty = count_stars(opt)
+                        if difficulty == 0:
+                            raise ParseError(
+                                f"{self.filename}: exercise option {opt!r} "
+                                "is not a star difficulty")
+                    else:
+                        o = opt.strip()
+                        if o.startswith("{") and o.endswith("}"):
+                            o = o[1:-1]
+                        if o == "\\omnameProof":
+                            title = None  # explicit default title
+                        else:
+                            title = self.parse_inlines(o)
+            label = None
+            m = re.match(r"\s*\\label\{", s[cur.i:])
+            if m:
+                cur.i += m.end() - 1
+                label = read_group(cur)
+            body = find_env_end(cur, name)
+            body_blocks = self.parse_blocks(body)
+            # adopt a label written late in the body (page-break pattern)
+            for node in body_blocks[:]:
+                if node["t"] == "label":
+                    if label is None:
+                        label = node["name"]
+                    body_blocks.remove(node)
+            return {"t": "env", "kind": name, "title": title, "label": label,
+                    "difficulty": difficulty, "sol_key": sol_key,
+                    "body": body_blocks}
+        cur.err(f"unknown environment {name!r}")
+
+    def parse_figure(self, body, floated=False):
+        """An omfigure holds one or more pictures — tikzpictures, or raster
+        photos via \\includegraphics (side-by-side pictures are separated by
+        \\qquad/\\quad) — plus a {\\small ...} caption.
+
+        Every picture source (tikz env or the literal \\includegraphics
+        command) lands in "tikzs" in order; the FigureBuilder tells them
+        apart. A raster figure may also carry a labelled photo grid: a
+        {\\small ...} sub-caption right after the leading picture, then a
+        tabular whose rows alternate \\includegraphics cells and
+        {\\footnotesize label} cells (physics-1 solar system) — parsed into
+        "grid" = [[{"src", "label"}, ...], ...]."""
+        tikzs, widths, sublabels = [], {}, {}
+        rest = body
+        if "\\begin{minipage}" in rest:
+            # side-by-side sub-figures, each in a minipage (biology)
+            tikzs, widths, sublabels, rest = self.parse_minipage_figure(rest)
+        while True:
+            m = re.search(r"\\begin\{(tikzpicture|circuitikz)\}", rest)
+            if not m:
+                break
+            end_pat = f"\\end{{{m.group(1)}}}"
+            e = rest.find(end_pat, m.start())
+            if e < 0:
+                raise ParseError(
+                    f"{self.filename}: missing {end_pat}")
+            tikzs.append(rest[m.start():e + len(end_pat)])
+            rest = rest[:m.start()] + rest[e + len(end_pat):]
+        grid = None
+        if not tikzs:
+            tikzs, grid, sublabels, rest = self.parse_raster_figure(rest)
+        table = None
+        if not tikzs and re.search(r"\\begin\{(center|tabular)\}", rest):
+            # a table set as a figure (the genetic-code table)
+            table, rest = self.parse_table_figure(rest)
+        if not tikzs and table is None:
+            raise ParseError(
+                f"{self.filename}: omfigure without tikzpicture, "
+                "\\includegraphics or tabular")
+        if floated:
+            # floats: \caption{...} + optional \label, \centering etc.
+            label = None
+            mcap = re.search(r"\\caption\{", rest)
+            caption_text = ""
+            if mcap:
+                gcur = Cursor(rest, self.filename)
+                gcur.i = mcap.end() - 1
+                caption_text = read_group(gcur)
+                rest = rest[:mcap.start()] + rest[gcur.i:]
+            mlab = re.search(r"\\label\{([^{}]*)\}", rest)
+            if mlab:
+                label = mlab.group(1)
+                rest = rest[:mlab.start()] + rest[mlab.end():]
+            rest = re.sub(
+                r"\\centering|\\leavevmode|\\qquad|\\quad|\\hfill",
+                " ", rest)
+            if rest.strip():
+                raise ParseError(
+                    f"{self.filename}: unsupported figure content "
+                    f"{rest.strip()[:60]!r}")
+            return {"t": "figure", "tikzs": tikzs, "label": label,
+                    "caption": self.parse_inlines(caption_text)}
+        # what remains is the caption (plus separators like \qquad)
+        caption = re.sub(r"\\qquad|\\quad|\\hfill|\\medskip|\\smallskip"
+                         r"|\\bigskip", " ", rest).strip()
+        m2 = re.fullmatch(r"\{\\small\s+(.*)\}", caption, re.S)
+        if m2:
+            caption = m2.group(1)
+        node = {"t": "figure", "tikzs": tikzs, "label": None,
+                "caption": self.parse_inlines(caption)}
+        if grid is not None:
+            node["grid"] = grid
+        if sublabels:
+            node["sublabels"] = sublabels
+        if widths:
+            node["widths"] = widths
+        if table is not None:
+            node["table"] = table
+        return node
+
+    # The books' text width (a4paper, inner/outer 2.2cm): minipage widths
+    # are fractions of it, and figures inside a minipage size their
+    # \\linewidth-relative pictures from it.
+    TEXT_WIDTH_PT = 472
+
+    MINIPAGE = re.compile(
+        r"\\begin\{minipage\}(?:\[[a-z]\])?\{([\d.]+)\\(?:line|text|column)width\}")
+
+    def parse_minipage_figure(self, body):
+        """Sub-figures in `\\begin{minipage}[b]{0.48\\linewidth}` blocks
+        (\\hfill-separated): each holds one tikzpicture or one
+        \\includegraphics plus an optional {\\small ...} sub-caption.
+        Returns (sources, widths, sublabels, rest) — `widths` maps a
+        picture index to its fraction of the text width; a tikz source
+        gets a matching \\linewidth prefix so `width=0.9\\linewidth`
+        pictures inside it keep their print proportion."""
+        tikzs, widths, sublabels = [], {}, {}
+        rest = body
+        while True:
+            m = self.MINIPAGE.search(rest)
+            if not m:
+                break
+            cur = Cursor(rest, self.filename)
+            cur.i = m.end()
+            inner = find_env_end(cur, "minipage")
+            rest = rest[:m.start()] + rest[cur.i:]
+            width = float(m.group(1))
+            pm = re.search(r"\\begin\{(tikzpicture|circuitikz)\}", inner)
+            if pm:
+                end_pat = f"\\end{{{pm.group(1)}}}"
+                e = inner.find(end_pat, pm.start())
+                if e < 0:
+                    raise ParseError(f"{self.filename}: missing {end_pat}")
+                e += len(end_pat)
+                src = (f"\\setlength{{\\linewidth}}"
+                       f"{{{round(width * self.TEXT_WIDTH_PT)}pt}}%\n"
+                       + inner[pm.start():e])
+                inner = inner[:pm.start()] + inner[e:]
+            else:
+                im = self.INCLUDEGRAPHICS.search(inner)
+                if not im:
+                    raise ParseError(
+                        f"{self.filename}: minipage without a picture")
+                src = im.group(0)
+                inner = inner[:im.start()] + inner[im.end():]
+            idx = len(tikzs)
+            tikzs.append(src)
+            widths[idx] = width
+            sub = re.sub(r"\\centering|\\par\b|\\smallskip|\\medskip"
+                         r"|\\bigskip|\\vspace\*?\{[^{}]*\}|\\\\", " ",
+                         inner).strip()
+            m2 = re.fullmatch(r"\{\\(?:small|footnotesize|scriptsize)\s+(.*)\}",
+                              sub, re.S)
+            if m2:
+                sub = m2.group(1)
+            if sub:
+                sublabels[idx] = self.parse_inlines(sub)
+        return tikzs, widths, sublabels, rest
+
+    def parse_table_figure(self, body):
+        """An omfigure whose picture is a tabular (in a center block or
+        bare): returns (table node, rest) — `rest` is the caption."""
+        m = re.search(r"\\begin\{center\}", body)
+        if m:
+            cur = Cursor(body, self.filename)
+            cur.i = m.end()
+            inner = find_env_end(cur, "center")
+            table = self.parse_center(inner)
+            return table, body[:m.start()] + body[cur.i:]
+        m = re.search(r"\\begin\{tabular\}", body)
+        cur = Cursor(body, self.filename)
+        cur.i = m.end()
+        read_group(cur)   # colspec; parse_center re-reads it
+        find_env_end(cur, "tabular")
+        table = self.parse_center(body[m.start():cur.i])
+        return table, body[:m.start()] + body[cur.i:]
+
+    INCLUDEGRAPHICS = re.compile(
+        r"\\includegraphics(?:\[((?:[^\[\]{}]|\{[^{}]*\})*)\])?\s*\{([^{}]*)\}")
+
+    def parse_raster_figure(self, body):
+        """Extract \\includegraphics pictures from an omfigure body.
+
+        Returns (sources, grid, sublabels, rest): `sources` are the literal
+        \\includegraphics commands of the free-standing pictures (in
+        order), `grid` the optional labelled photo table (rows of
+        {"src", "label"} dicts) or None, `sublabels` = {index: inlines} for
+        a {\\small ...} sub-caption attached to a leading picture, and
+        `rest` the leftover text (the caption)."""
+        rest = re.sub(r"\\medskip|\\smallskip|\\bigskip|\\centering", " ",
+                      body)
+        grid = None
+        mt = re.search(r"\\begin\{tabular\}", rest)
+        if mt and not self.INCLUDEGRAPHICS.search(rest[mt.start():]):
+            return [], None, {}, body   # a table figure (parse_table_figure)
+        if mt:
+            cur = Cursor(rest, self.filename)
+            cur.i = mt.start() + len("\\begin")
+            read_group(cur)   # "tabular"
+            read_group(cur)   # colspec (layout only)
+            tab_body = find_env_end(cur, "tabular")
+            grid = self.parse_photo_grid(tab_body)
+            before, rest = rest[:mt.start()], rest[cur.i:]
+        else:
+            before = rest
+            rest = ""
+        sources = []
+        while True:
+            m = self.INCLUDEGRAPHICS.search(before)
+            if not m:
+                break
+            sources.append(m.group(0))
+            before = before[:m.start()] + before[m.end():]
+        if not sources and grid is None:
+            return [], None, {}, body
+        sublabels = {}
+        if grid is not None:
+            # text left before the tabular is the leading picture's
+            # sub-caption; the real caption follows the tabular
+            sub = re.sub(r"\\qquad|\\quad|\\hfill", " ", before).strip()
+            m2 = re.fullmatch(r"\{\\small\s+(.*)\}", sub, re.S)
+            if m2:
+                sub = m2.group(1)
+            if sub:
+                if not sources:
+                    raise ParseError(
+                        f"{self.filename}: figure sub-caption without a "
+                        "leading picture")
+                sublabels[len(sources) - 1] = self.parse_inlines(sub)
+        else:
+            rest = before
+        return sources, grid, sublabels, rest
+
+    def parse_photo_grid(self, body):
+        """Rows alternate picture cells and {\\footnotesize label} cells."""
+        # `\\[4pt]` row spacing leaves a leading [4pt] on the next chunk
+        rows_raw = [re.sub(r"^\s*\[[^\]]*\]", "", r).strip() for r in
+                    split_top_level(body, "\\", self.filename)]
+        rows_raw = [r for r in rows_raw if r]
+        grid = []
+        i = 0
+        while i < len(rows_raw):
+            pics = [c.strip() for c in
+                    self.split_raw_cells(rows_raw[i])]
+            if not all(self.INCLUDEGRAPHICS.fullmatch(c) for c in pics):
+                raise ParseError(
+                    f"{self.filename}: photo grid row is not all "
+                    f"\\includegraphics: {rows_raw[i][:60]!r}")
+            labels = [""] * len(pics)
+            if i + 1 < len(rows_raw) and not self.INCLUDEGRAPHICS.search(
+                    rows_raw[i + 1]):
+                labels = [c.strip() for c in
+                          self.split_raw_cells(rows_raw[i + 1])]
+                if len(labels) != len(pics):
+                    raise ParseError(
+                        f"{self.filename}: photo grid label row has "
+                        f"{len(labels)} cells for {len(pics)} pictures")
+                i += 1
+            row = []
+            for src, lab in zip(pics, labels):
+                m2 = re.fullmatch(r"\{\\(?:footnotesize|small|scriptsize)"
+                                  r"\s+(.*)\}", lab, re.S)
+                if m2:
+                    lab = m2.group(1)
+                row.append({"src": src, "label": self.parse_inlines(lab)})
+            grid.append(row)
+            i += 1
+        if not grid:
+            raise ParseError(f"{self.filename}: empty photo grid")
+        return grid
+
+    def split_raw_cells(self, raw):
+        """Top-level `&` split without inline parsing."""
+        cells, buf, depth = [], [], 0
+        i, n = 0, len(raw)
+        while i < n:
+            c = raw[i]
+            if c == "\\":
+                buf.append(raw[i:i + 2])
+                i += 2
+                continue
+            if c == "{":
+                depth += 1
+            elif c == "}":
+                depth -= 1
+            elif c == "&" and depth == 0:
+                cells.append("".join(buf))
+                buf = []
+                i += 1
+                continue
+            buf.append(c)
+            i += 1
+        cells.append("".join(buf))
+        return cells
+
+    def parse_center(self, body):
+        """A center block holds one or more tabulars (side-by-side tables
+        are separated by \\qquad), optionally after an \\arraystretch
+        row-height tweak (print-only; CSS handles it in HTML)."""
+        body = body.strip()
+        body = re.sub(r"^\\renewcommand\{\\arraystretch\}\{[\d.]+\}\s*",
+                      "", body)
+        body = re.sub(r"^\\small\s+", "", body)  # print-only sizing
+        if "\\begin{tabular}" not in body:
+            # a centred line of text (a displayed DNA sequence)
+            return {"t": "centered", "inl": self.parse_inlines(body)}
+        tables = []
+        cur = Cursor(body, self.filename)
+        while True:
+            rest = cur.s[cur.i:]
+            stripped = re.match(
+                r"(\s|\\qquad\b|\\quad\b|\\small\b|\\footnotesize\b"
+                r"|\\scriptsize\b|\\setlength\{[^{}]*\}\{[^{}]*\})*",
+                rest).end()
+            cur.i += stripped
+            if cur.i >= len(cur.s):
+                break
+            if not cur.s.startswith("\\begin{tabular}", cur.i):
+                raise ParseError(
+                    f"{self.filename}: only tabular is supported inside "
+                    "center")
+            cur.i += len("\\begin")
+            read_group(cur)  # "tabular"
+            colspec = read_group(cur)
+            tab_body = find_env_end(cur, "tabular")
+            tables.append(self.parse_tabular(colspec, tab_body))
+        if not tables:
+            raise ParseError(f"{self.filename}: empty center block")
+        if len(tables) == 1:
+            return tables[0]
+        return {"t": "tables", "tables": tables}
+
+    def parse_tabular(self, colspec, body):
+        """Rows are dicts {"cells": [...], "rule": bool} — `rule` marks a
+        row preceded by a mid-table \\hline (sign tables draw one above
+        the final sign row)."""
+        rows_raw = split_top_level(body, "\\", self.filename)
+        header, rows = None, []
+        pending_rule = False
+        for raw in rows_raw:
+            had_hline = "\\hline" in raw
+            raw = raw.replace("\\hline", "").strip()
+            if had_hline and len(rows) == 1 and header is None:
+                # an \hline right after the first row marks it as the header
+                header = rows.pop()["cells"]
+                had_hline = False
+            if not raw:
+                pending_rule = pending_rule or had_hline
+                continue
+            rows.append({"cells": self.split_cells(raw),
+                         "rule": had_hline or pending_rule})
+            pending_rule = False
+        return {"t": "table", "colspec": colspec, "header": header,
+                "rows": rows}
+
+    def split_cells(self, raw):
+        cells, buf = [], []
+        in_math, depth = False, 0
+        i, n = 0, len(raw)
+        while i < n:
+            c = raw[i]
+            if c == "\\":
+                buf.append(raw[i:i + 2])
+                i += 2
+                continue
+            if c == "$":
+                in_math = not in_math
+            elif c == "{" and not in_math:
+                depth += 1
+            elif c == "}" and not in_math:
+                depth -= 1
+            elif c == "&" and not in_math and depth == 0:
+                cells.append(self.parse_cell("".join(buf).strip()))
+                buf = []
+                i += 1
+                continue
+            buf.append(c)
+            i += 1
+        cells.append(self.parse_cell("".join(buf).strip()))
+        return cells
+
+    def parse_cell(self, raw):
+        """A table cell; \\multicolumn{n}{spec}{...} becomes one spanning
+        node (the emitter turns it into colspan)."""
+        m = re.fullmatch(r"\\multicolumn\{(\d+)\}\{[^{}]*\}\{(.*)\}", raw,
+                         re.S)
+        if m:
+            return [{"t": "span", "cols": int(m.group(1)),
+                     "inl": self.parse_inlines(m.group(2))}]
+        return self.parse_inlines(raw)
+
+    def accented_letter(self, cur, combining):
+        """Accent argument: a {X} group or a bare next letter (\\v S)."""
+        import unicodedata
+        src = cur.s
+        if cur.i < len(src) and src[cur.i] == "{":
+            inner = read_group(cur)
+        elif cur.i < len(src) and src[cur.i].isalpha():
+            inner = src[cur.i]
+            cur.i += 1
+        else:
+            cur.err("accent command needs a letter")
+        if len(inner) != 1 or not inner.isalpha():
+            cur.err(f"unsupported accent argument {inner!r}")
+        return unicodedata.normalize("NFC", inner + combining)
+
+    # --------------------------------------------------------------- inlines
+
+    def parse_inlines(self, raw):
+        cur = Cursor(raw, self.filename)
+        return self._inlines(cur, until=None)
+
+    def _inlines(self, cur, until):
+        s = cur.s
+        out = []
+        text = []
+
+        def emit_text():
+            if text:
+                joined = re.sub(r"\s+", " ", "".join(text))
+                if joined:
+                    out.append({"t": "text", "s": joined})
+                text.clear()
+
+        while cur.i < len(s):
+            c = s[cur.i]
+            if until and s.startswith(until, cur.i):
+                break
+            if c == "$":
+                end = find_inline_math_end(s, cur.i)
+                if end < 0:
+                    cur.err("unbalanced $")
+                emit_text()
+                out.append({"t": "math", "tex": s[cur.i + 1:end].strip()})
+                cur.i = end + 1
+                continue
+            if s.startswith("\\[", cur.i):
+                # display math nested in an inline context (e.g. \emph)
+                end = s.find("\\]", cur.i + 2)
+                if end < 0:
+                    cur.err("missing \\]")
+                emit_text()
+                out.append({"t": "math", "tex": s[cur.i + 2:end].strip(),
+                            "display": True})
+                cur.i = end + 2
+                continue
+            if c == "\\":
+                m = CMD_RE.match(s, cur.i)
+                if not m:
+                    nxt = s[cur.i + 1:cur.i + 2]
+                    following = s[cur.i + 2:cur.i + 3]
+                    if nxt in ("'", "`", "^", '"', "~") \
+                            and (following.isalpha() or following == "{"):
+                        # accents in prose, bare (\'e) or braced (\'{e})
+                        import unicodedata
+                        combining = {"'": "\u0301", "`": "\u0300",
+                                     "^": "\u0302", '"': "\u0308",
+                                     "~": "\u0303"}[nxt]
+                        if following == "{":
+                            cur.i += 2
+                            letter = read_group(cur)
+                            if len(letter) != 1 or not letter.isalpha():
+                                cur.err(f"unsupported accent argument "
+                                        f"{letter!r}")
+                        else:
+                            letter = following
+                            cur.i += 3
+                        text.append(unicodedata.normalize(
+                            "NFC", letter + combining))
+                        continue
+                    if nxt in (" ", "\n", ""):    # "\ " explicit space
+                        # ("" = trailing "\<newline>" whose newline was
+                        # stripped at a paragraph boundary)
+                        text.append(" ")
+                    elif nxt in (",", ";"):        # thin/thick space
+                        text.append(" ")
+                    elif nxt == "\\":
+                        text.append(" ")  # forced line break
+                    elif nxt in ("%", "&", "_", "#", "$", "{", "}"):
+                        text.append(nxt)
+                    elif nxt == "-":
+                        pass  # discretionary hyphen: hyphenation hint only
+                    else:
+                        cur.err(f"unsupported escape '\\{nxt}'")
+                    cur.i += 2
+                    continue
+                name = m.group(1)
+                cur.i = m.end()
+                if name == "omterm":
+                    emit_text()
+                    label = read_group(cur)
+                    inner = read_group(cur)
+                    out.append({"t": "term", "label": label,
+                                "inl": self.parse_inlines(inner)})
+                elif name in ("cref", "Cref"):
+                    # cleveref runs with [capitalize]: identical output
+                    emit_text()
+                    out.append({"t": "cref", "label": read_group(cur)})
+                elif name == "eqref":
+                    # amsmath: "(N.M)" linked, no kind name
+                    emit_text()
+                    out.append({"t": "eqref", "label": read_group(cur)})
+                elif name == "emph":
+                    emit_text()
+                    inner = read_group(cur)
+                    node = {"t": "emph", "inl": self.parse_inlines(inner),
+                            "index": None}
+                    # attach an immediately following \index{...}
+                    m2 = re.match(r"\s*\\index\{", s[cur.i:])
+                    if m2:
+                        cur.i += m2.end() - 1
+                        node["index"] = read_group(cur)
+                    out.append(node)
+                elif name == "textbf":
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "bold", "inl": self.parse_inlines(inner)})
+                elif name == "texttt":
+                    # monospace runs (DNA/RNA sequences)
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "code", "inl": self.parse_inlines(inner)})
+                elif name == "underline":
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "u", "inl": self.parse_inlines(inner)})
+                elif name == "rotatebox":
+                    # print-only rotation (tall table headers): keep the text
+                    read_group(cur)
+                    inner = read_group(cur)
+                    emit_text()
+                    out.extend(self.parse_inlines(inner))
+                elif name in ("O", "o"):
+                    text.append("\u00d8" if name == "O" else "\u00f8")
+                elif name == "index":
+                    # standalone index entry: metadata only, no visible text
+                    read_group(cur)
+                elif name in ("dots", "ldots"):
+                    text.append("…")
+                elif name == "texteuro":
+                    text.append("€")
+                elif name == "quad":
+                    text.append(" ")
+                elif name == "qquad":
+                    text.append("  ")
+                elif name == "textsuperscript":
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "sup", "inl": self.parse_inlines(inner)})
+                elif name == "footnote":
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "footnote",
+                                "inl": self.parse_inlines(inner)})
+                elif name == "texorpdfstring":
+                    # the TeX branch is what the book renders
+                    emit_text()
+                    tex_arg = read_group(cur)
+                    read_group(cur)  # pdf-string branch, unused
+                    out.extend(self.parse_inlines(tex_arg))
+                elif name == "checkmark":
+                    text.append("✓")
+                elif name in ("hfill", "leavevmode", "centering"):
+                    pass  # print-layout commands: no HTML equivalent
+                elif name == "hspace":
+                    read_group(cur)
+                    text.append(" ")
+                elif name == "rule":
+                    # struts like \rule{0pt}{11pt} (table row spacing)
+                    read_group(cur)
+                    read_group(cur)
+                elif name == "small":
+                    pass  # size switch inside a group; CSS owns sizing
+                elif name == "textsc":
+                    emit_text()
+                    inner = read_group(cur)
+                    out.append({"t": "sc",
+                                "inl": self.parse_inlines(inner)})
+                elif name == "linebreak":
+                    text.append(" ")
+                elif name == "guillemotleft":
+                    text.append("\u00ab")
+                elif name == "guillemotright":
+                    text.append("\u00bb")
+                elif name in ("oe", "OE"):
+                    text.append("\u0153" if name == "oe" else "\u0152")
+                elif name == "c":
+                    # cedilla accent, braced or bare letter
+                    text.append(self.accented_letter(cur, "\u0327"))
+                elif name == "v":
+                    # caron accent (\v{S}mulian, \v Smulian)
+                    text.append(self.accented_letter(cur, "\u030c"))
+                elif name == "H":
+                    # Hungarian umlaut accent (Erd\H{o}s)
+                    text.append(self.accented_letter(cur, "̋"))
+                elif name in ("qty", "num", "unit", "ang",
+                              "qtyrange", "qtylist"):
+                    # siunitx in prose: re-emit as a math node; the
+                    # emitter expands it to KaTeX-renderable LaTeX
+                    emit_text()
+                    n_args = {"qty": 2, "num": 1, "unit": 1, "ang": 1,
+                              "qtyrange": 3, "qtylist": 2}[name]
+                    args = "".join("{" + read_group(cur) + "}"
+                                   for _ in range(n_args))
+                    out.append({"t": "math", "tex": f"\\{name}{args}"})
+                else:
+                    cur.err(f"unsupported command \\{name}")
+                continue
+            if c == "~":
+                text.append(" ")
+                cur.i += 1
+                continue
+            if s.startswith("---", cur.i):
+                text.append("—")
+                cur.i += 3
+                continue
+            if s.startswith("--", cur.i):
+                text.append("–")
+                cur.i += 2
+                continue
+            if s.startswith("``", cur.i):
+                text.append("“")
+                cur.i += 2
+                continue
+            if s.startswith("''", cur.i):
+                text.append("”")
+                cur.i += 2
+                continue
+            if c == "`":
+                text.append("‘")
+                cur.i += 1
+                continue
+            if c == "'":
+                text.append("’")
+                cur.i += 1
+                continue
+            if c in "{}":
+                # bare group braces: transparent (e.g. {27} in prose)
+                cur.i += 1
+                continue
+            text.append(c)
+            cur.i += 1
+        emit_text()
+        return out
+
+
+def parse_chapter(path):
+    """Parse a chapter file; returns (title_inlines, chapter_label, blocks)."""
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    p = Parser(str(path), text)
+    blocks = p.parse()
+    if p.chapter_title is None or p.chapter_label is None:
+        raise ParseError(f"{path}: missing \\chapter{{...}}\\label{{...}}")
+    return p.chapter_title, p.chapter_label, blocks
+
+
+def parse_solutions(path):
+    """Parse a solutions file; returns dict sol_key -> body blocks."""
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+    # Drop the \section*{Chapter \ref{...} --- ...} header (it repeats the
+    # chapter title and its \ref cannot be resolved standalone). The title
+    # may span lines, so strip the balanced group, not a single line.
+    m = re.match(r"\s*\\section\*", text)
+    if m:
+        cur = Cursor(text, str(path))
+        cur.i = m.end()
+        read_group(cur)
+        text = text[cur.i:]
+    p = Parser(str(path), text)
+    blocks = p.parse()
+    solutions = {}
+    for b in blocks:
+        if b["t"] != "env" or b["kind"] != "solution":
+            raise ParseError(
+                f"{path}: unexpected top-level content in solutions file")
+        solutions[b["sol_key"]] = b["body"]
+    return solutions

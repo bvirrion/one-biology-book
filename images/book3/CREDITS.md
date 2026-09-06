@@ -30,6 +30,6 @@ produced with OpenAI image generation driven through the Codex CLI
 `images/book3/ai/PROMPTS.md`, and visually reviewed for biological
 accuracy before insertion into the book. They are disclosed collectively
 on the book's Image Credits page (`frontmatter/image-credits-book3.tex`).
-Book 3 also reuses `fig-leaf-cross-section.png` and
-`fig-plant-cell-cutaway-v2.png` from `images/book2/ai/` (prompts in
+Book 3 also reuses `fig-leaf-cross-section.jpg` and
+`fig-plant-cell-cutaway-v2.jpg` from `images/book2/ai/` (prompts in
 `images/book2/ai/PROMPTS.md`).

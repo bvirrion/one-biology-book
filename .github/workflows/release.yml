@@ -16,6 +16,17 @@ jobs:
         with:
           fetch-depth: 0            # need the tag's metadata for its date
 
+      - name: Free runner disk space
+        run: |
+          # The texlive image plus 26 PDFs (twice named) once filled the
+          # runner's ~14 GB and killed the job with "No space left on device"
+          # (run 34020589660, 2026-09-06). Drop toolchains this job never uses
+          # (~20 GB) and log the headroom so the next disk problem is visible.
+          df -h /
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+                      /opt/hostedtoolcache/CodeQL /usr/local/.ghcup
+          df -h /
+
       - name: Generate version info
         run: |
           DATE=$(git for-each-ref --format='%(creatordate:short)' "refs/tags/${GITHUB_REF_NAME}")
@@ -69,12 +80,15 @@ jobs:
           # Each PDF is attached twice: once versioned, once under its plain
           # slug — the plain name is what makes the README's
           # releases/latest/download/<slug>.pdf links permanent.
+          # Move + hard link, never copy: copying tripled the disk footprint
+          # of the series and filled the runner.
           for pdf in build/one_biology_book_*.pdf
           do
             slug="$(basename "$pdf" .pdf)"
-            cp "$pdf" "${slug}_${GITHUB_REF_NAME}.pdf"
-            cp "$pdf" "${slug}.pdf"
+            mv "$pdf" "${slug}_${GITHUB_REF_NAME}.pdf"
+            ln "${slug}_${GITHUB_REF_NAME}.pdf" "${slug}.pdf"
           done
+          df -h /
 
       - name: Create release and attach PDFs
         uses: softprops/action-gh-release@v2
@@ -85,9 +99,10 @@ jobs:
             The **One Biology Book** series compiled at `${{ github.ref_name }}`.
             Books 1 (Primary & Middle School, grades 1–9), 2 (High School,
             grades 10–12) and 3 (University, Year 1) are fully written;
-            Books 4 and 5 are titled chapter placeholders. Books 1 and 2 ship
-            in eight languages — English, French, Dutch, Spanish, Portuguese,
-            Hindi, Arabic and Indonesian — the other volumes in English.
+            Books 4 and 5 are titled chapter placeholders. Books 1, 2 and 3
+            each ship in eight languages — English, French, Dutch, Spanish,
+            Portuguese, Hindi, Arabic and Indonesian — the other volumes in
+            English.
 
             - **Download**: pick the PDF for your book and language below.
               Files without a version suffix are stable names — linking to

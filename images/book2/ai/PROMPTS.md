@@ -11,7 +11,7 @@ posture photo-style candidate were superseded by the images below).
 
 Shared style suffix appended to every prompt: *"Clean realistic scientific illustration style, natural colours, soft even lighting, plain white or neutral background, absolutely no text, no letters, no labels, no arrows, no numbers, no captions."*
 
-Images used as bases for TikZ overlay labels (`fig-*.png`) were prompted
+Images used as bases for TikZ overlay labels (`fig-*.jpg`) were prompted
 with the same suffix; the labels are drawn by the book, not by the
 generator.
 
