@@ -1,6 +1,779 @@
 \chapter{Microbial Metabolism and Biofilms}\label{ch:b2:microbial-metabolism}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Fill a glass cylinder with pond mud, a little shredded paper, an egg
+yolk and water, and leave it on a windowsill. Within weeks it
+stratifies into coloured bands: green algae at the top, a rusty
+layer, a purple band, a green one lower down, and black sulfide mud
+at the bottom. Nothing was added but light. Each band is a population
+that lives on a different chemistry --- on oxygen, on nitrate, on
+sulfate, on sulfide, on hydrogen --- and each feeds the next. The
+column is the microbial world in miniature: cells that earn their
+energy from almost any pair of substances that can exchange
+electrons, and that, together, run the chemical cycles of the
+planet. This chapter sets out the logic of that energetics, the
+kinetics of microbial growth, and the collective life of microbes on
+surfaces, which is how most of them actually live.
 
-\emph{This chapter has not been written yet.}
+\section{Ways of making a living}
+
+\begin{definition}[Trophic types]\label{def:b2:microbial-metabolism:trophic}
+\index{chemotroph}\index{phototroph}\index{lithotroph}\index{organotroph}
+An organism is classified by three answers. Its \emph{energy source}:
+light (\emph{phototroph}) or chemical reactions (\emph{chemotroph}).
+Its \emph{electron source}: inorganic substances --- $\mathrm{H_2}$,
+$\mathrm{H_2S}$, $\mathrm{NH_4^+}$, $\mathrm{Fe^{2+}}$, water ---
+(\emph{lithotroph}) or organic molecules (\emph{organotroph}). Its
+\emph{carbon source}: $\mathrm{CO_2}$ (\emph{autotroph}) or organic
+carbon (\emph{heterotroph}). Plants and cyanobacteria are
+photolithoautotrophs; animals, fungi and \emph{E.~coli} are
+chemoorganoheterotrophs; the nitrifying and sulfur-oxidising
+bacteria are chemolithoautotrophs, which make their organic matter
+from $\mathrm{CO_2}$ with energy drawn from the oxidation of
+minerals, in the dark. Almost every combination exists somewhere
+among \omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes}; eukaryotes occupy only two.
+\end{definition}
+
+\begin{theorem}[The energy of a redox pair]\label{thm:b2:microbial-metabolism:redox}
+\index{redox potential}\index{electron tower}
+Every energy-yielding metabolism moves electrons from a
+\emph{donor} couple to an \emph{acceptor} couple. Each couple has a
+standard potential $E^{\circ\prime}$ (at pH 7): the more negative,
+the more readily it gives electrons. Transferring $n$ moles of
+electrons from a donor at $E_d$ to an acceptor at $E_a$ releases a
+standard free energy
+\[
+\Delta G^{\circ\prime} = -\,n F\,(E_a - E_d), \qquad F = \qty{96.5}{kJ/V/mol},
+\]
+so that the yield is proportional to the vertical distance between
+the two couples on the \emph{\omterm{thm:b2:microbial-metabolism:redox}{electron tower}}. With
+$\mathrm{O_2/H_2O}$ at \qty{+0.82}{V} and $\mathrm{CO_2}$/glucose at
+\qty{-0.43}{V}, the 24 electrons of a glucose molecule yield
+$24\times 96.5\times 1.25 = \qty{2900}{kJ/mol}$; handed instead to
+sulfate ($\mathrm{SO_4^{2-}/H_2S}$, \qty{-0.22}{V}), the same
+electrons yield only $24\times 96.5\times 0.21 = \qty{490}{kJ/mol}$.
+\end{theorem}
+\begin{proof}
+For the reaction donor$_{\text{red}}$ + acceptor$_{\text{ox}}$
+$\to$ donor$_{\text{ox}}$ + acceptor$_{\text{red}}$, the free-energy
+change is the work done by $n$ moles of electron charge $nF$
+falling through the potential difference $E_a - E_d$, with the sign
+convention that a spontaneous transfer (electrons toward the more
+positive couple) has $\Delta G < 0$. This is the Nernst relation of
+the Year 1 volume applied to two half-reactions.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, y=6cm]
+  \draw[thick, ->] (0,-0.55) -- (0,0.95) node[above] {$E^{\circ\prime}$ (V)};
+  \foreach \v in {-0.4,-0.2,0,0.2,0.4,0.6,0.8} \draw (-0.08,\v) -- (0.08,\v) node[right, xshift=0.05cm] {\v};
+  % donors on the right: value/label position/text
+  \foreach \v/\y/\l in {-0.43/-0.49/{$\mathrm{CO_2}$/glucose}, -0.42/-0.40/{$2\mathrm{H^+/H_2}$}, -0.32/-0.31/{$\mathrm{NAD^+/NADH}$}, -0.27/-0.22/{$\mathrm{S^0/H_2S}$}, 0.03/0.03/{fumarate/succinate}, 0.34/0.34/{$\mathrm{NO_2^-/NH_4^+}$}}
+    { \draw[omDef, thick] (0.8,\v) -- (1.6,\v); \draw[omDef] (1.6,\v) -- (1.85,\y); \node[omDef, anchor=west] at (1.9,\y) {\l}; }
+  % acceptors on the left
+  \foreach \v/\y/\l in {-0.24/-0.29/{$\mathrm{CO_2/CH_4}$}, -0.22/-0.17/{$\mathrm{SO_4^{2-}/H_2S}$}, 0.43/0.43/{$\mathrm{NO_3^-/NO_2^-}$}, 0.74/0.69/{$\mathrm{NO_3^-/N_2}$}, 0.77/0.77/{$\mathrm{Fe^{3+}/Fe^{2+}}$}, 0.82/0.86/{$\mathrm{O_2/H_2O}$}}
+    { \draw[omThm, thick] (-1.6,\v) -- (-0.8,\v); \draw[omThm] (-1.6,\v) -- (-1.85,\y); \node[omThm, anchor=east] at (-1.9,\y) {\l}; }
+  \node[omThm, anchor=south] at (-2.4,0.93) {acceptors};
+  \node[omDef, anchor=south] at (2.4,0.93) {donors};
+  % arrows showing two metabolisms
+  \draw[->, very thick, omExo!80!black] (4.9,-0.43) -- (4.9,0.80);
+  \node[anchor=west, align=left] at (5.0,0.2) {aerobic respiration\\of glucose: \qty{1.25}{V},\\\qty{2900}{kJ/mol}};
+  \draw[->, very thick, omProp] (4.2,-0.43) -- (4.2,-0.24);
+  \node[anchor=north, align=center] at (4.2,-0.52) {sulfate reduction:\\\qty{0.21}{V}, \qty{490}{kJ/mol}};
+  \draw[dashed, gray] (3.5,-0.43) -- (4.9,-0.43);
+  \draw[dashed, gray] (3.5,0.82) -- (4.9,0.82);
+  \draw[dashed, gray] (3.5,-0.22) -- (4.2,-0.22);
+\end{tikzpicture}
+
+{\small The \omterm{thm:b2:microbial-metabolism:redox}{electron tower}. Donors (blue) are listed at their
+standard potentials; acceptors (red) likewise. A metabolism is a fall
+from a donor to an acceptor above it, and its energy yield is
+proportional to the height of the fall: glucose to oxygen is a long
+drop, glucose to sulfate a short one.}
+\end{omfigure}
+
+\begin{proposition}[Chemolithotrophy]\label{prop:b2:microbial-metabolism:lithotrophy}
+\index{chemolithotrophy}\index{nitrification}
+Some bacteria draw all their energy from inorganic oxidations, using
+oxygen (or nitrate) as acceptor, and fix $\mathrm{CO_2}$ with the
+ATP and reducing power so gained. \emph{Nitrifiers}: ammonium
+oxidisers (\emph{Nitrosomonas}) turn $\mathrm{NH_4^+}$ into nitrite
+($\Delta G^{\circ\prime} = \qty{-275}{kJ/mol}$), nitrite oxidisers
+(\emph{Nitrobacter}) turn nitrite into nitrate (\qty{-74}{kJ/mol});
+together they convert the ammonium of decay into the nitrate that
+plants take up (\cref{ch:b2:biogeochemical-cycles}).
+\emph{Sulfur oxidisers} (\emph{Thiobacillus}, \emph{Beggiatoa})
+oxidise $\mathrm{H_2S}$ to sulfur and sulfate; \emph{iron oxidisers}
+oxidise $\mathrm{Fe^{2+}}$ to rust; \emph{hydrogen oxidisers} burn
+$\mathrm{H_2}$. Because their electron donors sit high on the tower,
+the yield per molecule is small, and because their donors are poorer
+reductants than NADH, they must spend energy driving electrons
+\emph{uphill} to make the NADH that carbon fixation needs: a
+nitrifier oxidises some thirty ammonium ions to fix one
+$\mathrm{CO_2}$, and grows slowly.
+\end{proposition}
+\begin{proof}[Evidence]
+Winogradsky (1887--1890) grew filamentous sulfur bacteria in a drop
+of water into which he let sulfide diffuse from one side and air from
+the other: they gathered at the boundary, accumulated sulfur
+globules, and consumed them when the sulfide was cut off. He then
+isolated nitrifying bacteria on a purely mineral medium containing
+ammonium and no organic carbon at all, on which they grew and
+produced nitrate --- the first demonstration that life can be built
+from $\mathrm{CO_2}$ and the energy of an inorganic reaction,
+without light. He called it chemosynthesis.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.26\linewidth]{images/book4/winogradsky.jpg}\hspace{0.05\linewidth}
+\includegraphics[width=0.30\linewidth]{images/book4/ai/b4-02-winogradsky-column.jpg}
+
+{\small Sergei Winogradsky, who discovered \omterm{def:b2:microbial-metabolism:trophic}{chemolithotrophy}, and the
+column that bears his name: a mud-and-water cylinder that stratifies
+under light into bands of algae, iron and sulfur oxidisers, purple
+and green sulfur bacteria, and sulfate reducers in the black mud.}
+\end{omfigure}
+
+\begin{definition}[Anoxygenic photosynthesis]\label{def:b2:microbial-metabolism:anoxygenic}
+\index{anoxygenic photosynthesis}
+The purple and green bacteria photosynthesise with a single
+photosystem and a bacteriochlorophyll that absorbs in the near
+infrared, using $\mathrm{H_2S}$, $\mathrm{H_2}$ or organic acids as
+electron donors instead of water: they release sulfur or sulfate,
+never oxygen, and they need light of wavelengths that pass through
+the green and cyanobacterial layer above them. Purple sulfur
+bacteria therefore grow in the purple band of the Winogradsky
+column, just where sulfide from below meets the light from above;
+green sulfur bacteria, which tolerate more sulfide and less light,
+grow beneath them. Oxygenic photosynthesis, with its two photosystems
+in series, is a later invention of one lineage --- the cyanobacteria
+--- that learned to take electrons from water.
+\end{definition}
+
+\section{Anaerobic respirations and fermentations}
+
+\begin{definition}[Anaerobic respiration]\label{def:b2:microbial-metabolism:anaerobic}
+\index{anaerobic respiration}\index{denitrification}\index{sulfate reduction}\index{methanogenesis}
+\emph{Anaerobic respiration} is respiration --- an electron-transport
+chain that pumps protons and makes ATP by chemiosmosis --- with a
+terminal acceptor other than oxygen. \emph{Denitrifiers}
+(\emph{Pseudomonas}, \emph{Paracoccus}) reduce nitrate to nitrite,
+nitric oxide, nitrous oxide and finally $\mathrm{N_2}$, which escapes
+to the air; they use their aerobic chain with a few added enzymes
+and switch to nitrate only when oxygen is gone. \emph{Sulfate
+reducers} (\emph{Desulfovibrio}) reduce sulfate to sulfide, blacken
+the mud with iron sulfide and give it its smell. \emph{Methanogens},
+which are archaea, reduce $\mathrm{CO_2}$ with $\mathrm{H_2}$ to
+methane ($4\mathrm{H_2} + \mathrm{CO_2} \to \mathrm{CH_4} +
+2\mathrm{H_2O}$, $\Delta G^{\circ\prime} = \qty{-131}{kJ/mol}$), or
+split acetate into methane and $\mathrm{CO_2}$; they are killed by
+oxygen and live in cow rumens, rice paddies, marshes and landfills,
+from which they release a greenhouse gas that is the subject of
+\cref{ch:b2:global-change}. Iron and manganese oxides serve other
+groups. The Year 1 volume treated oxygen as \emph{the} acceptor; for
+most of Earth's history, and in every sediment today, it is only the
+first of a series.
+\end{definition}
+
+\begin{proposition}[The sequence of acceptors in a sediment]\label{prop:b2:microbial-metabolism:sequence}
+Going down through a water-logged sediment, the electron acceptors
+are used up in the order of the energy they yield: oxygen in the
+first millimetres, then nitrate, then manganese and iron oxides,
+then sulfate, and finally $\mathrm{CO_2}$ (\omterm{def:b2:microbial-metabolism:anaerobic}{methanogenesis}) in the
+deepest anoxic layer. The order is the order of the tower: at each
+depth the organisms using the best remaining acceptor grow fastest,
+out-compete the rest for the organic donors, and exhaust their
+acceptor before the next group takes over. In the sea, where sulfate
+is abundant (\qty{28}{mmol/L}), the sulfate zone is thick and
+\omterm{def:b2:microbial-metabolism:anaerobic}{methanogenesis} begins only metres down; in a freshwater marsh,
+sulfate-poor, methane forms just below the surface.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  \fill[omDef!8] (0,0) rectangle (4,0.6);
+  \node at (2,0.3) {water};
+  \fill[omExo!35] (0,-0.5) rectangle (4,0);
+  \fill[omProp!25] (0,-1.3) rectangle (4,-0.5);
+  \fill[omProp!45] (0,-2.0) rectangle (4,-1.3);
+  \fill[gray!50] (0,-3.4) rectangle (4,-2.0);
+  \fill[black!75] (0,-4.4) rectangle (4,-3.4);
+  \draw[thick] (0,0.6) -- (0,-4.4); \draw[thick] (4,0.6) -- (4,-4.4);
+  \draw[thick] (0,0) -- (4,0);
+  \node[anchor=west, align=left] at (4.2,-0.25) {oxygen respiration: $\mathrm{O_2 \to H_2O}$ --- \qty{2.9}{MJ} per glucose};
+  \node[anchor=west, align=left] at (4.2,-0.9) {nitrate reduction: $\mathrm{NO_3^- \to N_2}$ --- \qty{2.7}{MJ}};
+  \node[anchor=west, align=left] at (4.2,-1.65) {manganese and iron reduction: $\mathrm{Fe^{3+} \to Fe^{2+}}$};
+  \node[anchor=west, align=left, white] at (0.1,-2.7) {};
+  \node[anchor=west, align=left] at (4.2,-2.7) {sulfate reduction: $\mathrm{SO_4^{2-} \to H_2S}$ --- \qty{0.5}{MJ}};
+  \node[anchor=west, align=left] at (4.2,-3.9) {methanogenesis: $\mathrm{CO_2 \to CH_4}$ --- \qty{0.4}{MJ}};
+  \draw[->, thick] (-0.5,0) -- (-0.5,-4.4) node[below] {depth};
+  \node[anchor=east] at (-0.6,-0.25) {mm};
+  \node[anchor=east] at (-0.6,-2.7) {cm to m};
+\end{tikzpicture}
+
+{\small The succession of electron acceptors with depth in a
+sediment, in the order of the energy each yields per glucose. Each
+zone's organisms out-compete the next for organic matter until their
+acceptor is exhausted.}
+\end{omfigure}
+
+\begin{definition}[Fermentation, revisited]\label{def:b2:microbial-metabolism:fermentation}
+\index{fermentation!microbial}
+A \emph{fermentation} uses no external acceptor: the organic
+substrate is split into a more oxidised and a more reduced product,
+ATP is made only by substrate-level phosphorylation, and the NADH of
+glycolysis is re-oxidised by reducing a metabolite. Yeasts make
+ethanol and $\mathrm{CO_2}$; lactic bacteria make lactate (yoghurt,
+sauerkraut, sore muscles); \emph{E.~coli} makes a mixture of acids,
+ethanol and gases; clostridia make butyrate, butanol and acetone;
+propionibacteria make the propionate and $\mathrm{CO_2}$ of Swiss
+cheese. The yield is two ATP per glucose against about thirty by
+respiration, so a fermenter must process fifteen times more sugar
+for the same growth, and its products --- acids, alcohol --- poison
+its own medium: fermentations preserve food because the fermenter
+makes the food uninhabitable, including for itself.
+\end{definition}
+
+\begin{example}[Syntrophy: living on the rest]\label{ex:b2:microbial-metabolism:syntrophy}
+In an anoxic sediment the fermenters leave behind acetate, propionate,
+butyrate and $\mathrm{H_2}$. Oxidising propionate to acetate and
+$\mathrm{H_2}$ has a \emph{positive} standard free energy
+(\qty{+76}{kJ/mol}) and is impossible --- unless a methanogen next
+door consumes the hydrogen as fast as it forms, keeping its partial
+pressure below \qty{1e-4}{atm}, at which the reaction becomes
+exergonic. Neither partner can grow alone on propionate; together
+they turn it into methane. This \emph{interspecies hydrogen
+transfer} is why anaerobic digestion is always the work of a
+consortium, and why the archaeon and its bacterial partner are often
+found pressed against each other.
+\end{example}
+
+\section{Growth on a substrate}
+
+\begin{theorem}[Monod's law]\label{thm:b2:microbial-metabolism:monod}
+\index{Monod equation}\index{yield coefficient}
+A population growing on a single limiting substrate at concentration
+$S$ has a specific growth rate
+\[
+\mu = \mu_{\max}\,\frac{S}{K_s + S}, \qquad \frac{\mathrm{d}X}{\mathrm{d}t} = \mu X,
+\]
+where $X$ is the biomass concentration, $\mu_{\max}$ the maximal
+rate (the reciprocal of the shortest \omterm{def:b2:unicellular-diversity:division}{generation time} divided by
+$\ln 2$) and $K_s$ the \emph{half-saturation constant}, the
+substrate concentration at which growth runs at half speed --- a few
+milligrams per litre of glucose for \emph{E.~coli}. Substrate is
+consumed in proportion to growth, $\mathrm{d}S/\mathrm{d}t =
+-\mu X/Y$, with $Y$ the \emph{yield}: grams of biomass per gram of
+substrate, about \num{0.5} for aerobic growth on sugar and \num{0.1}
+for a fermenter.
+\end{theorem}
+\begin{proof}[Evidence]
+Monod (1942) grew \emph{E.~coli} in batches on a series of glucose
+concentrations and measured the exponential rate of each: the rates
+rose with concentration and saturated, as a Michaelis--Menten curve,
+which is what one expects if the rate is set by a saturable uptake
+system. The law is empirical --- a cell has thousands of enzymes,
+not one --- but it fits nearly every substrate-limited culture, and
+it is the foundation of \omterm{def:b2:microbial-metabolism:fermentation}{fermentation} technology and of wastewater
+engineering.
+\end{proof}
+
+\begin{theorem}[The chemostat]\label{thm:b2:microbial-metabolism:chemostat}
+\index{chemostat}\index{dilution rate}
+A \emph{chemostat} is a vessel of volume $V$ fed with fresh medium
+(substrate $S_{\text{in}}$) at a flow $F$ and drained at the same
+flow, so that the \emph{\omterm{thm:b2:microbial-metabolism:chemostat}{dilution rate}} is $D = F/V$. Biomass and
+substrate obey
+\[
+\frac{\mathrm{d}X}{\mathrm{d}t} = (\mu - D)\,X, \qquad
+\frac{\mathrm{d}S}{\mathrm{d}t} = D\,(S_{\text{in}} - S) - \frac{\mu X}{Y}.
+\]
+At steady state $\mu = D$: the culture grows exactly as fast as it is
+washed out, whatever $D$ below a critical value, and the operator
+sets the growth rate by turning the pump. The steady-state
+substrate and biomass are
+\[
+S^* = \frac{K_s\,D}{\mu_{\max} - D}, \qquad X^* = Y\,(S_{\text{in}} - S^*),
+\]
+and above the \emph{washout} rate $D_c = \mu_{\max}
+S_{\text{in}}/(K_s + S_{\text{in}})$ no population can hold on.
+\end{theorem}
+\begin{proof}
+Setting $\mathrm{d}X/\mathrm{d}t = 0$ with $X \neq 0$ gives $\mu = D$;
+inverting Monod's law, $D(K_s + S^*) = \mu_{\max} S^*$, hence $S^* =
+K_s D/(\mu_{\max} - D)$. Setting $\mathrm{d}S/\mathrm{d}t = 0$ and
+replacing $\mu$ by $D$: $D(S_{\text{in}} - S^*) = DX^*/Y$, hence
+$X^*$. The solution exists only while $S^* < S_{\text{in}}$, i.e.\
+$D < \mu_{\max} S_{\text{in}}/(K_s + S_{\text{in}})$; beyond that,
+$\mu < D$ for every $S \le S_{\text{in}}$ and $X$ decays to zero. The
+steady state is stable: if $X$ rises, $S$ falls, $\mu$ drops below
+$D$ and $X$ is washed back down.
+\end{proof}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.48\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.94\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=0.5, ymin=0, ymax=1.1,
+  xlabel={$S$ (\unit{g/L})}, ylabel={$\mu$ (\unit{h^{-1}})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.1,0.2,0.3,0.4,0.5}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:0.5, samples=100] {x/(0.02+x)};
+\draw[dashed, gray] (axis cs:0,1) -- (axis cs:0.5,1); \node[font=\scriptsize, anchor=south east] at (axis cs:0.5,1) {$\mu_{\max}$};
+\draw[dashed, gray] (axis cs:0,0.5) -- (axis cs:0.02,0.5) -- (axis cs:0.02,0); \node[font=\scriptsize, anchor=north west] at (axis cs:0.02,-0.02) {$K_s$};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.5\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.94\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1.1, ymin=0, ymax=2.2,
+  xlabel={dilution rate $D$ (\unit{h^{-1}})}, ylabel={\unit{g/L}},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.5,1}, ytick={0,1,2},
+  legend style={font=\scriptsize, at={(0.05,0.62)}, anchor=west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:0.99, samples=200] {0.5*(2 - 0.02*x/(1-x))};
+\addlegendentry{biomass $X^*$}
+\addplot[very thick, omThm, domain=0:0.99, samples=200] {0.02*x/(1-x)};
+\addlegendentry{substrate $S^*$}
+\addplot[thick, omProp, dashed, domain=0:0.99, samples=200] {x*0.5*(2 - 0.02*x/(1-x))};
+\addlegendentry{output $D X^*$}
+\draw[dashed, gray] (axis cs:0.99,0) -- (axis cs:0.99,2.1); \node[font=\scriptsize, anchor=south, align=center] at (axis cs:0.9,2.1) {washout};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+{\small Left: Monod's law with $\mu_{\max} = \qty{1}{h^{-1}}$ and
+$K_s = \qty{0.02}{g/L}$. Right: the chemostat fed with
+\qty{2}{g/L} of substrate ($Y = 0.5$): the biomass stays nearly
+constant and the residual substrate nearly zero up to the washout
+rate, near which the substrate breaks through and the population
+collapses; the biomass output per hour is greatest just before it.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book4/ai/b4-02-chemostat.jpg}
+
+{\small A laboratory chemostat: fresh medium pumped in from the
+reservoir on the left, culture overflowing to the right; the pump
+sets the growth rate.}
+\end{omfigure}
+
+\begin{example}[Reading a chemostat]\label{ex:b2:microbial-metabolism:chemostat}
+With $\mu_{\max} = \qty{1.0}{h^{-1}}$, $K_s = \qty{0.02}{g/L}$,
+$S_{\text{in}} = \qty{2}{g/L}$ and $Y = 0.5$, at $D =
+\qty{0.5}{h^{-1}}$: $S^* = 0.02\times 0.5/0.5 = \qty{0.02}{g/L}$ and
+$X^* = 0.5\times 1.98 = \qty{0.99}{g/L}$; the culture leaves
+\qty{1}{\%} of the sugar unused. The washout rate is $1.0\times
+2/2.02 = \qty{0.99}{h^{-1}}$. A digester or a gut works on the same
+principle: the human colon, fed three times a day and emptied once,
+holds its bacteria at a \omterm{thm:b2:microbial-metabolism:chemostat}{dilution rate} near \qty{0.04}{h^{-1}}, and any
+species that cannot double within a day is washed out --- unless it
+holds on to the wall.
+\end{example}
+
+\section{Biofilms}
+
+\begin{definition}[Biofilm]\label{def:b2:microbial-metabolism:biofilm}
+\index{biofilm}\index{extracellular matrix!bacterial}
+A \emph{biofilm} is a community of microorganisms attached to a
+surface and embedded in a self-produced \emph{matrix} of
+polysaccharides, proteins and extracellular DNA. It forms in stages:
+reversible \emph{attachment} of single cells (flagella, pili),
+irreversible attachment and \emph{microcolony} growth, \emph{maturation}
+into a structured film with towers and water channels, and
+\emph{dispersal} of cells that swim off to seed new surfaces. The
+matrix holds water and nutrients, protects the cells from
+desiccation, grazers, antibiotics and immune cells, and sets up
+chemical gradients that make the film a landscape of niches. Most
+bacteria on Earth live this way: on rocks in streams, on roots, on
+teeth (dental plaque), on catheters and implants, in the lungs of
+cystic fibrosis patients, on ship hulls and in pipes.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  \fill[gray!35] (0,0) rectangle (13.6,0.35);
+  \node at (6.8,0.17) {surface};
+  % stage 1 attachment
+  \foreach \p in {(0.6,0.55),(1.4,0.55)} \draw[thick, omDef, fill=omDef!30] \p ellipse (0.22 and 0.1);
+  \draw[thick, omDef, fill=omDef!30] (1.0,1.6) ellipse (0.22 and 0.1);
+  \draw[->, omDef] (1.0,1.45) -- (1.0,0.75);
+  \node[below, align=center] at (1.1,-0.05) {1. attachment};
+  % stage 2 microcolony
+  \begin{scope}[xshift=3.4cm]
+    \fill[omExo!25] (0.15,0.35) .. controls (0.1,1.1) and (1.5,1.1) .. (1.45,0.35);
+    \foreach \p in {(0.45,0.5),(0.8,0.5),(1.15,0.5),(0.6,0.75),(0.95,0.75),(0.8,0.95)} \draw[thick, omDef, fill=omDef!30] \p ellipse (0.18 and 0.09);
+    \node[below, align=center] at (0.8,-0.05) {2. microcolony,\\matrix secretion};
+  \end{scope}
+  % stage 3 mature with channels
+  \begin{scope}[xshift=6.8cm]
+    \fill[omExo!25] (0.0,0.35) .. controls (0.2,1.9) and (0.9,2.2) .. (1.1,1.5) .. controls (1.2,0.9) and (1.4,0.6) .. (1.5,0.35);
+    \fill[omExo!25] (1.7,0.35) .. controls (1.6,1.5) and (2.6,2.3) .. (2.9,1.2) .. controls (3.0,0.8) and (3.1,0.5) .. (3.2,0.35);
+    \foreach \p in {(0.35,0.55),(0.7,0.55),(0.5,0.85),(0.8,1.15),(0.55,1.45),(2.0,0.6),(2.4,0.6),(2.2,0.9),(2.5,1.25),(2.3,1.6),(2.6,1.9),(2.1,1.3)} \draw[thick, omDef, fill=omDef!30] \p ellipse (0.16 and 0.08);
+    \draw[<->, omThm, thick] (1.6,0.5) -- (1.6,1.6);
+    \node[omThm, anchor=south] at (1.6,2.45) {water channel};
+    \node[below, align=center] at (1.6,-0.05) {3. mature film: towers,\\channels, gradients};
+  \end{scope}
+  % stage 4 dispersal
+  \begin{scope}[xshift=11.2cm]
+    \fill[omExo!25] (0.0,0.35) .. controls (0.1,1.5) and (1.0,1.6) .. (1.1,0.35);
+    \foreach \p in {(0.3,0.55),(0.65,0.55),(0.5,0.85)} \draw[thick, omDef, fill=omDef!30] \p ellipse (0.16 and 0.08);
+    \foreach \p/\a in {(1.4,1.5)/40,(1.9,1.1)/10,(1.6,2.0)/70} \draw[thick, omDef, fill=omDef!30, rotate around={\a:\p}] \p ellipse (0.16 and 0.08);
+    \draw[->, omDef] (1.0,1.0) -- (1.35,1.35);
+    \node[below, align=center] at (1.0,-0.05) {4. dispersal};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The life cycle of a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm}: single cells attach, grow into
+microcolonies that secrete a matrix (grey), mature into a
+structured film with towers and water channels, and release
+swimming cells that colonise new surfaces.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book4/ai/b4-02-biofilm-sem.jpg}
+
+{\small A \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} on a catheter, seen by scanning electron
+microscopy: rod-shaped bacteria embedded in the fibrous matrix they
+have secreted, with open channels between the clusters.}
+\end{omfigure}
+
+\begin{theorem}[Gradients inside a biofilm]\label{thm:b2:microbial-metabolism:gradient}
+\index{oxygen penetration depth}
+In a film of thickness $L$ whose cells consume oxygen at a constant
+volumetric rate $q$, with the concentration held at $c_0$ at the
+surface and no flux through the substratum, the steady-state
+oxygen profile is a parabola, and if the film is thick enough for
+oxygen to run out, it does so at the \emph{penetration depth}
+\[
+L_p = \sqrt{\frac{2 D_e\, c_0}{q}},
+\]
+where $D_e$ is the effective diffusion coefficient in the matrix.
+With $D_e = \qty{1.5e-9}{m^2/s}$, $c_0 = \qty{0.25}{mol/m^3}$ and $q
+= \qty{0.17}{mol/m^3/s}$ (a dense film of respiring cells), $L_p
+\approx \qty{66}{\micro m}$: below a tenth of a millimetre a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm}
+is anoxic, and denitrifiers, fermenters and sulfate reducers live
+under a roof of aerobes.
+\end{theorem}
+\begin{proof}
+Let $x$ be the depth below the surface. At steady state the
+diffusive flux $-D_e\,\mathrm{d}c/\mathrm{d}x$ changes with depth
+only by the consumption: $D_e\,\mathrm{d}^2c/\mathrm{d}x^2 = q$.
+Integrating twice, $c = c_0 + a x + q x^2/2D_e$. If oxygen vanishes
+at depth $L_p$ with zero flux there (nothing arrives from below),
+$c(L_p) = 0$ and $c'(L_p) = 0$: the second gives $a = -qL_p/D_e$,
+and the first then gives $c_0 - qL_p^2/D_e + qL_p^2/2D_e = 0$, i.e.\
+$L_p^2 = 2D_e c_0/q$. The profile is $c = (q/2D_e)(L_p - x)^2$.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.78\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=120, ymin=0, ymax=0.28,
+  xlabel={depth in the film (\unit{\micro m})}, ylabel={$\mathrm{O_2}$ (\unit{mol/m^3})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,20,40,60,80,100,120}, ytick={0,0.1,0.2},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:66, samples=60] {0.25*(1-x/66)^2};
+\addplot[very thick, omDef, domain=66:120, samples=2] {0};
+\fill[omThm!12] (axis cs:66,0) rectangle (axis cs:120,0.28);
+\node[font=\scriptsize, anchor=north, align=center] at (axis cs:93,0.27) {anoxic zone:\\denitrifiers, fermenters,\\sulfate reducers};
+\draw[dashed, gray] (axis cs:66,0) -- (axis cs:66,0.28); \node[font=\scriptsize, anchor=south] at (axis cs:66,0.28) {$L_p$};
+\node[font=\scriptsize, anchor=west] at (axis cs:24,0.18) {aerobic zone};
+\end{axis}
+\end{tikzpicture}
+
+{\small Oxygen inside a respiring \omterm{def:b2:microbial-metabolism:biofilm}{biofilm}: a parabolic fall from the
+bulk value at the surface to zero at the penetration depth,
+\qty{66}{\micro m} for the figures of the theorem. Everything deeper
+is anoxic.}
+\end{omfigure}
+
+\begin{proposition}[Quorum sensing]\label{prop:b2:microbial-metabolism:quorum}
+\index{quorum sensing}\index{autoinducer}
+Bacteria count themselves. Each cell secretes a small signal
+molecule, an \emph{autoinducer} (acyl-homoserine lactones in
+Gram-negatives, short peptides in Gram-positives), at a low constant
+rate. In a dilute suspension the signal diffuses away; in a dense
+population or a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} it accumulates, and above a threshold
+concentration it binds a receptor that switches on a set of genes
+--- including the gene for the autoinducer itself, hence the name.
+The genes so controlled are those that pay only when many cells act
+together: luminescence, the secretion of digestive enzymes and
+toxins, matrix production, the virulence of pathogens that must
+overwhelm a host at once rather than alert it one cell at a time.
+\end{proposition}
+\begin{proof}[Evidence]
+Nealson, Platt and Hastings (1970) found that the marine bacterium
+\emph{Vibrio fischeri}, which lights the organ of a squid, is dark in
+dilute culture and glows only above about $10^{7}$ cells per
+millilitre; cell-free medium taken from a dense, glowing culture
+made a dilute one glow at once. The medium contained the signal; its
+structure, an acyl-homoserine lactone, was determined in 1981, and
+mutants unable to make it never glow however dense they become.
+\end{proof}
+
+\begin{example}[Why a biofilm survives antibiotics]\label{ex:b2:microbial-metabolism:tolerance}
+Cells in a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} survive concentrations of antibiotic a hundred to
+a thousand times those that kill the same strain in suspension,
+without any resistance gene. The matrix slows the drug's diffusion
+and binds some of it; the gradients leave the deep cells starved,
+anoxic and barely growing, and most antibiotics kill only growing
+cells (penicillins need wall synthesis, aminoglycosides need active
+transport); a few \emph{persister} cells are dormant altogether and
+regrow the film when the treatment stops. A chronic infection on an
+implant is therefore usually treated by removing the implant.
+\end{example}
+
+\section{Microbial communities}
+
+\begin{example}[The Winogradsky column, explained]\label{ex:b2:microbial-metabolism:column}
+Light and air enter from above; organic matter and sulfate from the
+mud. Cyanobacteria and algae grow at the top and release oxygen.
+Below, heterotrophs use up the oxygen on the organic matter, then
+the nitrate; deeper, sulfate reducers turn sulfate into sulfide,
+which diffuses upward and blackens the mud with iron sulfide. Where
+the rising sulfide meets the descending light, purple sulfur bacteria
+oxidise it photosynthetically (the purple band), green sulfur
+bacteria below them; where sulfide meets oxygen, in the dark,
+colourless sulfur oxidisers such as \emph{Beggiatoa} earn a living
+chemolithotrophically (the white veil); where reduced iron meets
+oxygen, iron oxidisers leave a rusty band. Sulfur cycles between
+sulfide and sulfate within the column; carbon cycles between
+$\mathrm{CO_2}$ and organic matter; only light enters and only heat
+leaves. It is a closed ecosystem with an open energy budget, and a
+scale model of the ocean floor.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.62\linewidth]{images/book4/ai/b4-02-hot-spring-mats.jpg}
+
+{\small Microbial mats around a hot spring: each colour is a
+population living at the temperature and chemistry of its band ---
+thermophilic cyanobacteria and green bacteria in the cooler
+outflow, colourless \omterm{def:b2:microbial-metabolism:trophic}{chemolithotrophs} in the hottest water.}
+\end{omfigure}
+
+\begin{remark}[Microbial mats and the early Earth]\label{rem:b2:microbial-metabolism:mats}
+Around hot springs and on tidal flats, layered microbial mats a few
+millimetres thick pack the whole column into a thickness that light
+can cross: cyanobacteria on top, purple bacteria beneath, sulfate
+reducers at the base, each layer consuming what the one above
+produces, and the mat migrating up through the sediment it traps.
+Fossil mats --- stromatolites --- are the oldest evidence of life,
+\num{3.5} billion years old. For two billion years, before plants or
+animals, the biosphere was these mats and the plankton above them,
+and it was they that filled the air with oxygen
+(\cref{ch:b2:biogeochemical-cycles}).
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:microbial-metabolism:1}
+Classify by energy source, electron source and carbon source: a
+cyanobacterium; \emph{Nitrosomonas}; \emph{E.~coli} on glucose; a
+purple non-sulfur bacterium growing in light on succinate;
+\emph{Thiobacillus} on $\mathrm{H_2S}$ in the dark.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:microbial-metabolism:2}
+List the electron acceptors of respiration in order of decreasing
+energy yield, and say where in a sediment each is used.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:microbial-metabolism:3}
+Balance the oxidation of glucose to $\mathrm{CO_2}$ by nitrate
+reduced to $\mathrm{N_2}$ (in acid solution, water as the other
+product). How many nitrate ions per glucose?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:microbial-metabolism:4}
+Define a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} and name its four stages. Give three places where
+\omterm{def:b2:microbial-metabolism:biofilm}{biofilms} matter to human health or industry.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:microbial-metabolism:5}
+Compute $\Delta G^{\circ\prime}$ for $4\mathrm{H_2} + \mathrm{CO_2}
+\to \mathrm{CH_4} + 2\mathrm{H_2O}$ from the potentials
+$\mathrm{2H^+/H_2}$ (\qty{-0.42}{V}) and $\mathrm{CO_2/CH_4}$
+(\qty{-0.24}{V}). How many ATP (at \qty{50}{kJ/mol}) can a methanogen
+make per $\mathrm{H_2}$ at most? Comment on its growth rate.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:microbial-metabolism:6}
+A bacterium has $\mu_{\max} = \qty{1.2}{h^{-1}}$ and $K_s =
+\qty{5}{mg/L}$ of glucose. Compute $\mu$ and the \omterm{def:b2:unicellular-diversity:division}{generation time} at
+1, 5 and \qty{50}{mg/L}. At what concentration does it grow at
+\qty{90}{\%} of its maximum?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:microbial-metabolism:7}
+A chemostat with $\mu_{\max} = \qty{0.8}{h^{-1}}$, $K_s =
+\qty{0.05}{g/L}$, $S_{\text{in}} = \qty{5}{g/L}$, $Y = 0.4$ runs at
+$D = \qty{0.4}{h^{-1}}$. Compute $S^*$, $X^*$, the biomass output
+per litre per hour, and the washout rate.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:microbial-metabolism:8}
+Oxidising one $\mathrm{NH_4^+}$ to nitrite yields \qty{275}{kJ}; a
+nitrifier captures a quarter of it as ATP (\qty{50}{kJ/mol}), and
+fixing one $\mathrm{CO_2}$ into biomass costs the equivalent of 12
+ATP. How many ammonium ions must it oxidise per carbon fixed? Why is
+a nitrifier's yield so low compared with a heterotroph's?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:microbial-metabolism:9}
+Compute the \omterm{thm:b2:microbial-metabolism:gradient}{oxygen penetration depth} in a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} with $D_e =
+\qty{1.2e-9}{m^2/s}$, $c_0 = \qty{0.20}{mol/m^3}$ and $q =
+\qty{0.5}{mol/m^3/s}$. What happens to $L_p$ if the bulk oxygen is
+doubled? If the cells respire four times faster?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:microbial-metabolism:10}
+Predict the bands of a Winogradsky column from top to bottom, naming
+the metabolism of each, and explain (a) why the purple band forms
+where it does, (b) why the mud turns black, (c) in what sense the
+column is a closed system and in what sense an open one.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:microbial-metabolism:11}
+Each cell of a population at density $n$ (cells per litre) secretes an
+autoinducer at $p = 5$ molecules per second; the molecule is
+degraded at a rate $k = \qty{5e-4}{s^{-1}}$. Write the steady-state
+concentration $A^*$ as a function of $n$. The receptor switches on
+at $A_c = \qty{10}{nmol/L}$: compute the threshold density in cells
+per millilitre. Compare with a dense culture ($10^{9}$ per
+millilitre) and with seawater ($10^{5}$ per millilitre), and explain
+why a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} reaches quorum in a volume where a suspension never
+would.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:microbial-metabolism:12}
+``\omterm{def:b2:unicellular-diversity:prokaryote}{Prokaryotes} run the chemistry of the planet.'' Discuss with three
+processes from this chapter that no eukaryote can carry out, saying
+for each what would happen to the biosphere if it stopped.
+\end{exercise}
+
+\section{Problem: A Wastewater Treatment Plant}
+
+\begin{problem}[{Weekend problem --- a town's sewage works analysed as
+a set of microbial reactors, from the energetics of its bacteria to
+the methane that powers it, ending on the plant's energy balance}]
+\label{pb:b2:microbial-metabolism:1}
+A plant treats $Q = \qty{10000}{m^3}$ of sewage a day carrying
+\qty{300}{g/m^3} of organic matter, measured as the oxygen needed to
+burn it (its \emph{chemical oxygen demand}, COD), and
+\qty{40}{g/m^3} of ammonium nitrogen. It has an aerated tank of
+activated sludge, an anoxic tank for \omterm{def:b2:microbial-metabolism:anaerobic}{denitrification}, and an
+anaerobic digester for the sludge. Data: aerobic heterotrophs
+convert organic matter with a yield $Y = 0.4$ (kilogram of biomass
+COD per kilogram of substrate COD, so the rest is oxidised);
+nitrification needs \qty{4.57}{kg} of $\mathrm{O_2}$ per kilogram of
+nitrogen; \omterm{def:b2:microbial-metabolism:anaerobic}{denitrification} needs \qty{2.86}{kg} of substrate COD per
+kilogram of nitrate nitrogen; aeration delivers \qty{2}{kg} of
+$\mathrm{O_2}$ per kilowatt-hour; the sludge's COD is converted to
+methane in the digester at \qty{60}{\%}, each kilogram of COD
+converted giving \qty{0.35}{m^3} of methane of energy content
+\qty{36}{MJ/m^3}, burnt in a generator of \qty{35}{\%} electrical
+efficiency. Nitrifiers: $\mu_{\max} = \qty{0.5}{d^{-1}}$, $K_s =
+\qty{1}{g/m^3}$ of ammonium nitrogen.
+
+\medskip
+\noindent\textbf{Part I --- The energetics.}
+\begin{enumerate}
+  \item Using the \omterm{thm:b2:microbial-metabolism:redox}{electron tower}, compute $\Delta G^{\circ\prime}$
+        for the oxidation of one mole of glucose (24 electrons at
+        \qty{-0.43}{V}) by oxygen (\qty{+0.82}{V}).
+  \item Compute it for nitrate reduced to $\mathrm{N_2}$
+        (\qty{+0.74}{V}) and for sulfate reduced to sulfide
+        (\qty{-0.22}{V}).
+  \item Why does \omterm{def:b2:microbial-metabolism:anaerobic}{denitrification} only start in the anoxic tank, and
+        why is \omterm{def:b2:microbial-metabolism:anaerobic}{sulfate reduction} (with its smell) a sign of a badly
+        run plant?
+  \item If cells capture \qty{40}{\%} of the free energy as ATP
+        (\qty{50}{kJ/mol}), how many ATP per glucose does each of the
+        three metabolisms give?
+  \item How much more glucose must a sulfate reducer process than an
+        aerobe for the same growth?
+  \item Fermenters in the digester get 2 ATP per glucose. Explain why
+        the digester nevertheless produces almost no biomass and
+        mostly gas.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The aerated tank.}
+\begin{enumerate}[resume]
+  \item Compute the daily load of organic matter, in kilograms of
+        COD.
+  \item Compute the biomass produced per day (as COD) and the
+        oxygen needed to oxidise the rest.
+  \item Compute the aeration energy for the organic matter, in
+        kilowatt-hours per day.
+  \item Compute the daily nitrogen load and the oxygen needed to
+        nitrify it.
+  \item The sludge is retained in the tank for a mean time $\theta$
+        (the reciprocal of its \omterm{thm:b2:microbial-metabolism:chemostat}{dilution rate}). Below what $\theta$
+        are the nitrifiers washed out at any ammonium concentration?
+  \item With $\theta = \qty{10}{d}$, compute the residual ammonium
+        concentration in the effluent.
+  \item Winter lowers $\mu_{\max}$ to \qty{0.25}{d^{-1}}. Recompute
+        the residual ammonium and say what the operator must do.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- \omterm{def:b2:microbial-metabolism:anaerobic}{Denitrification} and the digester.}
+The nitrate made in the aerated tank is recycled to the anoxic tank,
+where heterotrophs reduce it with the incoming organic matter.
+\begin{enumerate}[resume]
+  \item Compute the organic matter (kilograms of COD per day)
+        consumed by denitrifying all the nitrogen.
+  \item Compute the mass of nitrogen released to the air as
+        $\mathrm{N_2}$ per day, and the mass leaving in the effluent
+        as ammonium (question 12), as a fraction of the load.
+  \item That organic matter no longer needs aeration. Compute the
+        oxygen saved, and the total oxygen demand of the plant
+        (remaining organic matter plus nitrification).
+  \item The sludge produced (question 8, kept as COD) goes to the
+        digester. Compute the methane produced per day.
+  \item Compute the energy of that methane and the electricity it
+        yields.
+  \item Compute the aeration electricity for the total oxygen demand
+        of question 16, and compare.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} reactor.}
+A trickling filter grows a \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} on stones; the bulk water holds
+\qty{0.2}{mol/m^3} of oxygen, $D_e = \qty{1.5e-9}{m^2/s}$, and the
+film respires at $q = \qty{0.3}{mol/m^3/s}$.
+\begin{enumerate}[resume]
+  \item Derive the oxygen profile $c(x)$ in a film thick enough to
+        become anoxic.
+  \item Compute the penetration depth.
+  \item The film is \qty{300}{\micro m} thick. What fraction of it is
+        aerobic, and what do the cells below do with the nitrate
+        diffusing down from the aerobic layer?
+  \item Explain why a single \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} can nitrify and denitrify at
+        once, which the aerated tank cannot.
+  \item Chlorine is added to disinfect the effluent. Give two reasons
+        why the \omterm{def:b2:microbial-metabolism:biofilm}{biofilm} survives a dose that kills the same bacteria
+        in suspension.
+  \item State the result: the plant's daily oxygen demand, its methane
+        output, and the fraction of its aeration electricity that the
+        methane supplies.
+\end{enumerate}
+\end{problem}

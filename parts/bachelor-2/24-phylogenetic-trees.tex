@@ -1,6 +1,528 @@
-\chapter{Phylogenetic Trees and Evolutionary History}\label{ch:b2:phylogenetic-trees}
+\chapter{Phylogenetic Trees and the Molecular Clock}\label{ch:b2:phylogenetic-trees}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1965 two chemists, Emile Zuckerkandl and Linus Pauling, compared
+the amino-acid sequences of haemoglobin from a handful of
+vertebrates and noticed something no anatomist could have seen:
+the number of differences between two species was proportional to
+the time since their ancestors had parted, as read from fossils.
+A molecule kept time. Within a decade Carl Woese had used one gene,
+the RNA of the small ribosomal subunit, to draw the tree of all
+life and to find in it a third domain, the archaea, that no
+microscope had distinguished from bacteria. This chapter is about
+reconstructing history from resemblance: what a tree means, how one
+is built from characters and from distances, how sequences are made
+to tell time, and the traps --- convergence, unequal rates,
+saturation, long branches --- that a reader of trees must know.
 
-\emph{This chapter has not been written yet.}
+\section{Reading a tree}
+
+\begin{definition}[Phylogeny, clade, homology]\label{def:b2:phylogenetic-trees:tree}
+\index{phylogeny}\index{clade}\index{monophyletic group}\index{paraphyletic group}\index{polyphyletic group}\index{homology}\index{analogy}\index{synapomorphy}
+A \emph{phylogeny} is a tree whose tips are the species (or genes,
+or individuals) compared, whose internal nodes are their common
+ancestors, and whose root is the oldest ancestor of all. Its
+branching order alone carries the history: nodes may be rotated
+freely, and only the nesting matters. A \emph{clade} or
+\emph{monophyletic group} is an ancestor with \emph{all} its
+descendants (birds; mammals; birds and crocodiles together);
+a \emph{paraphyletic} group is an ancestor with some descendants
+left out (``reptiles'' without birds, ``fish'' without tetrapods,
+``\omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes}''); a \emph{polyphyletic} group joins descendants of
+different ancestors by a resemblance they evolved separately
+(``warm-blooded animals''). A character shared by two species
+because their ancestor had it is a \emph{homology} (the bones of
+the bat's wing and the whale's flipper); one they evolved
+independently is an \emph{analogy} or \emph{homoplasy} (the wings
+of bats and of birds as wings, the camera eyes of vertebrates and
+octopuses). Only homologies record history, and among them only
+the \emph{derived} states shared by a group --- its
+\emph{synapomorphies}, Hennig's word --- define a clade: feathers
+define birds, the ancestral state ``no feathers'' defines nothing.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth, line width=0.8pt]
+  \coordinate (root) at (0,0);
+  \coordinate (n1) at (1.2,0.9); \coordinate (n2) at (2.4,1.6); \coordinate (n3) at (3.6,2.3);
+  \draw (root) -- (1.4,-1.3) node[right] {mammals};
+  \draw (root) -- (n1);
+  \draw (n1) -- (4.8,-0.1) node[right] {turtles};
+  \draw (n1) -- (n2);
+  \draw (n2) -- (4.8,0.9) node[right] {lizards, snakes};
+  \draw (n2) -- (n3);
+  \draw (n3) -- (4.8,1.9) node[right] {crocodiles};
+  \draw (n3) -- (4.8,3.0) node[right] {birds};
+  \fill (root) circle (1.6pt); \fill (n1) circle (1.6pt); \fill (n2) circle (1.6pt); \fill (n3) circle (1.6pt);
+  \node[left] at (root) {amniotes};
+  % groups
+  \draw[omThm, thick, rounded corners=6pt] (3.1,1.55) rectangle (6.9,3.4);
+  \node[omThm, anchor=south west] at (3.1,3.4) {archosaurs: monophyletic};
+  \draw[omExo!80!black, thick, dashed, rounded corners=6pt] (2.2,-0.5) -- (2.2,2.2) -- (7.1,2.2) -- (7.1,-0.5) -- cycle;
+  \node[omExo!80!black, anchor=north east] at (7.1,-0.55) {``reptiles'' without birds: paraphyletic};
+  \node[anchor=west, align=left, text width=4.2cm] at (7.9,1.3) {synapomorphies:\\ $\bullet$ amniotic egg (all)\\ $\bullet$ antorbital opening in the skull (archosaurs)\\ $\bullet$ feathers (birds)};
+\end{tikzpicture}
+
+{\small Reading a tree. Birds nest inside the reptiles: crocodiles
+are closer to birds than to lizards. The named group ``reptiles'' is
+an ancestor with one line of descendants removed --- a paraphyletic
+grade, not a \omterm{def:b2:phylogenetic-trees:tree}{clade}.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-24-homologous-forelimbs.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-24-archaeopteryx.jpg}
+
+{\small \omterm{def:b2:phylogenetic-trees:tree}{Homology} and its record. Left: the same bones --- humerus,
+radius and ulna, wrist, five digits --- in an arm, a wing, a flipper
+and a leg. Right: \emph{Archaeopteryx}, with the teeth, clawed
+fingers and long bony tail of a small dinosaur and the feathers of a
+bird.}
+\end{omfigure}
+
+\section{Building trees from characters}
+
+\begin{method}[Parsimony]\label{meth:b2:phylogenetic-trees:parsimony}
+\index{parsimony}\index{outgroup}\index{bootstrap}
+Score the characters (morphological states or aligned sequence
+positions) for every taxon. For each possible tree, count the
+minimum number of character changes needed to explain the data on
+it; the most parsimonious tree needs fewest. Root the tree with an
+\emph{outgroup}, a taxon known to lie outside the group studied.
+Since the number of unrooted trees for $n$ taxa is $1\cdot 3\cdot
+5\cdots(2n - 5)$ --- three for four taxa, $2\times 10^{6}$ for ten,
+$10^{20}$ for twenty --- the search is exhaustive only for small
+sets and heuristic beyond. Confidence is measured by the
+\emph{bootstrap}: resample the characters with replacement a
+thousand times, rebuild the tree each time, and record how often
+each \omterm{def:b2:phylogenetic-trees:tree}{clade} recurs; a \omterm{def:b2:phylogenetic-trees:tree}{clade} found in \qty{95}{\%} of the resamples is
+well supported, one found in half is not.
+\end{method}
+
+\begin{example}[Four taxa, five sites]\label{ex:b2:phylogenetic-trees:parsimony}
+Sequences $A = \mathrm{AAGCT}$, $B = \mathrm{AAGCC}$, $C =
+\mathrm{GGACT}$, $D = \mathrm{GGATC}$. On the tree $((A,B),(C,D))$,
+sites 1, 2 and 3 each change once (on the internal branch), site 4
+once ($\mathrm{C}\to\mathrm{T}$ in $D$) and site 5 twice
+($\mathrm{T}\to\mathrm{C}$ in $B$ and in $D$): six steps. On
+$((A,C),(B,D))$, sites 1--3 each need two changes, sites 4 and 5
+one each: eight. On $((A,D),(B,C))$: nine. The first tree is most
+parsimonious, by two steps; the three sites that support it are
+its synapomorphies, and site 5 is a homoplasy on it --- the same
+change occurring twice, a fact of life in every real data set.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, line width=0.8pt]
+  \foreach \x/\a/\b/\c/\d/\steps/\lab in {0/A/B/C/D/6/{$((A,B),(C,D))$ --- 6 steps}, 4.6/A/C/B/D/8/{$((A,C),(B,D))$ --- 8 steps}, 9.2/A/D/B/C/9/{$((A,D),(B,C))$ --- 9 steps}} {
+    \begin{scope}[xshift=\x cm]
+      \draw (0,1.6) node[left] {\a} -- (0.8,1.1) -- (0,0.6) node[left] {\b};
+      \draw (0.8,1.1) -- (2.0,1.1);
+      \draw (2.8,1.6) node[right] {\c} -- (2.0,1.1) -- (2.8,0.6) node[right] {\d};
+      \node[anchor=north] at (1.4,0.2) {\lab};
+    \end{scope}
+  }
+  \node[anchor=north] at (5.9,-0.6) {\begin{tabular}{l@{\ }ccccc} site & 1 & 2 & 3 & 4 & 5 \\ \hline $A$ & A & A & G & C & T \\ $B$ & A & A & G & C & C \\ $C$ & G & G & A & C & T \\ $D$ & G & G & A & T & C \end{tabular}};
+\end{tikzpicture}
+
+{\small The three unrooted trees for four taxa, scored against the
+five-site alignment below them. Sites 1--3 change once on the first
+tree and twice on the others; sites 4 and 5 vary and cannot decide.}
+\end{omfigure}
+
+\section{Building trees from distances}
+
+\begin{method}[Clustering by distance: UPGMA]\label{meth:b2:phylogenetic-trees:upgma}
+\index{UPGMA}\index{neighbour joining}\index{distance matrix}
+From the pairwise distances between $n$ taxa (differences per site,
+corrected as below), join the closest pair into a cluster placed at
+a node of height half their distance; replace the pair by the
+cluster, whose distance to every other taxon is the average of its
+members' distances; repeat until one cluster remains. The result
+is a rooted tree with all tips at the same height --- it assumes
+a constant rate of change on every branch, a \omterm{thm:b2:phylogenetic-trees:clock}{molecular clock}. When
+rates differ between lineages, the method groups fast-evolving
+lineages together whatever their history; \emph{\omterm{ex:b2:phylogenetic-trees:parsimony}{neighbour joining}},
+which at each step joins the pair whose union shortens the whole
+tree most, does not assume a clock and is the standard fast method
+for large data sets.
+\end{method}
+
+\begin{example}[UPGMA]\label{ex:b2:phylogenetic-trees:upgma}
+Distances (in differences per hundred sites): $AB = 4$, $AC = 8$,
+$AD = 10$, $BC = 8$, $BD = 10$, $CD = 6$. Join $A$ and $B$ at height 2;
+then $d(AB, C) = 8$, $d(AB, D) = 10$, $d(C,D) = 6$: join $C$ and $D$ at
+height 3; finally $d(AB, CD) = (8 + 10 + 8 + 10)/4 = 9$: join the
+two clusters at height $4.5$. The tree is $((A,B),(C,D))$, and if
+the rate is $10^{-9}$ substitutions per site per year the root is
+$0.045/10^{-9} = 45$ million years old.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, line width=0.8pt, x=1.1cm]
+  \draw[->] (0,-0.4) -- (5,-0.4); \foreach \h in {0,1,2,3,4} \draw (\h,-0.5) -- (\h,-0.3) node[below=4pt] {\h};
+  \node[anchor=north] at (2.5,-0.9) {node height (differences per hundred sites)};
+  % A,B join at 2, C,D at 3, root at 4.5 ; draw as rooted tree, root on the right
+  \draw (0,3.0) node[left] {$A$} -- (2,3.0) -- (2,2.4) -- (0,2.4) node[left] {$B$};
+  \draw (0,1.2) node[left] {$C$} -- (3,1.2) -- (3,0.4) -- (0,0.4) node[left] {$D$};
+  \draw (2,2.7) -- (4.5,2.7) -- (4.5,0.8) -- (3,0.8);
+  \fill (2,2.7) circle (1.5pt); \fill (3,0.8) circle (1.5pt); \fill (4.5,1.75) circle (1.5pt);
+  \node[anchor=west] at (4.6,1.75) {root, 4.5};
+  \node[anchor=south west] at (2.05,3.05) {2};
+  \node[anchor=south west] at (3.05,1.25) {3};
+  \node[anchor=west, align=left] at (6.2,2.4) {\begin{tabular}{c|ccc} & $B$ & $C$ & $D$ \\ \hline $A$ & 4 & 8 & 10 \\ $B$ & & 8 & 10 \\ $C$ & & & 6 \end{tabular}};
+  \node[anchor=west, align=left] at (6.2,0.7) {after joining $AB$:\\ $d(AB,C) = 8$, $d(AB,D) = 10$\\ after joining $CD$: $d(AB,CD) = 9$};
+\end{tikzpicture}
+
+{\small UPGMA on four taxa. Each node sits at half the distance
+between the clusters it joins; every tip ends at height zero, as a
+clock requires.}
+\end{omfigure}
+
+\section{The molecular clock}
+
+\begin{theorem}[Substitutions as a Poisson process, and the correction for multiple hits]\label{thm:b2:phylogenetic-trees:clock}
+\index{molecular clock}\index{Jukes--Cantor correction}\index{saturation}
+If substitutions at a site occur at a constant rate $k$ per year,
+independently across sites, the number that accumulate along a
+lineage in time $t$ is Poisson with mean $kt$, and the expected
+number separating two lineages that diverged $t$ years ago is
+\[
+d = 2kt
+\]
+substitutions per site --- the \emph{\omterm{thm:b2:phylogenetic-trees:clock}{molecular clock}}. The observed
+proportion $p$ of sites that differ is smaller than $d$, because a
+site hit twice may return to its original base or match by chance;
+with four bases changing at equal rates,
+\[
+p = \tfrac{3}{4}\bigl(1 - e^{-4d/3}\bigr), \qquad
+d = -\tfrac{3}{4}\ln\bigl(1 - \tfrac{4}{3}p\bigr),
+\]
+the \emph{Jukes--Cantor} correction. As $d$ grows, $p$ saturates at
+$3/4$ --- two random sequences agree at a quarter of their sites
+--- and beyond $p \approx 0.5$ the correction magnifies every
+sampling error: a gene that has changed that much has stopped
+keeping time. Slow genes (ribosomal RNA, histones) date the deep
+branches, fast ones (mitochondrial DNA, introns) the recent.
+\end{theorem}
+\begin{proof}
+Let $q(t)$ be the probability that a site still carries its
+original base after time $t$. It is lost at rate $k$ and regained,
+from any of the three other bases, at rate $k/3$:
+$\mathrm{d}q/\mathrm{d}t = -kq + \tfrac{k}{3}(1 - q) = \tfrac{k}{3} -
+\tfrac{4k}{3}q$, whose solution with $q(0) = 1$ is $q = \tfrac14 +
+\tfrac34 e^{-4kt/3}$. Two lineages separated by total time $2t$ ---
+by symmetry, the same as one lineage evolving for $2t$ --- agree at
+a site with probability $\tfrac14 + \tfrac34 e^{-4d/3}$ where $d =
+2kt$, so $p = 1 - q = \tfrac34(1 - e^{-4d/3})$; inverting gives the
+correction. The Poisson count follows from constant, independent
+events, as in the physics of radioactive decay, and its standard
+deviation $\sqrt{kt}$ sets the precision of any date: a gene of $L$
+sites with $dL$ observed substitutions dates a divergence to a
+relative precision of about $1/\sqrt{dL}$.
+\end{proof}
+\begin{proof}[Evidence]
+Zuckerkandl and Pauling (1965) found the differences between the
+haemoglobins of horse, human, cow and others proportional to the
+fossil ages of their splits, and proposed the clock. Fitch and
+Margoliash (1967) built a tree of twenty species from cytochrome
+$c$ alone and recovered, from a single protein, the classical
+groupings of vertebrates, insects and fungi. The decisive test of
+method was Hillis and colleagues' experimental \omterm{def:b2:phylogenetic-trees:tree}{phylogeny} (1992):
+they propagated bacteriophage T7 through a known, branching series
+of eight lineages under a mutagen, sequenced the products, and gave
+the sequences to the tree-building methods blind --- parsimony,
+distance and likelihood methods all recovered the true tree, and
+parsimony reconstructed the ancestral sequences with over
+\qty{98}{\%} accuracy.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=2.5, ymin=0, ymax=1.05,
+  xlabel={true substitutions per site, $d$}, ylabel={observed differences, $p$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, ytick={0,0.25,0.5,0.75,1},
+  legend style={font=\scriptsize, at={(0.97,0.35)}, anchor=east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:2.5, samples=80] {0.75*(1-exp(-4*x/3))};
+\addlegendentry{$p = \tfrac34(1 - e^{-4d/3})$}
+\addplot[thick, gray, dashed, domain=0:1.05, samples=2] {x};
+\addlegendentry{$p = d$: no multiple hits}
+\draw[dotted, gray] (axis cs:0,0.75) -- (axis cs:2.5,0.75); \node[font=\scriptsize, anchor=south east] at (axis cs:2.5,0.75) {saturation, $p = 3/4$};
+\draw[<->, omThm, thick] (axis cs:0.383,0.30) -- (axis cs:0.383,0.383); \node[font=\scriptsize, omThm, anchor=west] at (axis cs:0.5,0.22) {$p = 0.30$ means $d = 0.38$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Multiple hits. The observed fraction of differing sites
+rises with the true number of substitutions and then saturates; a
+raw $p$ underestimates every distance and compresses the deep
+branches of a tree.}
+\end{omfigure}
+
+\begin{proposition}[Pitfalls of the clock and of trees]\label{prop:b2:phylogenetic-trees:pitfalls}
+\index{long-branch attraction}\index{rate heterogeneity}\index{incomplete lineage sorting}\index{likelihood (phylogenetics)}
+The clock is only approximately constant: rates differ between
+genes by a hundredfold (with function --- histone H4 has changed
+two residues in a billion years, fibrinopeptides change every few
+million), between sites within a gene (third codon positions,
+introns and loops change fastest), and between lineages (rodents
+tick faster than primates, with their shorter generations and
+higher metabolic rates). Every clock therefore needs
+\emph{calibration} by a fossil or a dated geological event, and
+dates carry the Poisson error above and the calibration's own.
+Trees have their own traps. \emph{\omterm{prop:b2:phylogenetic-trees:pitfalls}{Long-branch attraction}}: two
+lineages that have each changed a great deal share many sites by
+chance, and parsimony joins them whatever their history --- the
+cure is denser sampling to break the branches and a method that
+models the rates. \emph{Convergence} produces false synapomorphies.
+\emph{\omterm{prop:b2:phylogenetic-trees:pitfalls}{Incomplete lineage sorting}}: a gene's tree need not be the
+species' tree when speciations follow one another quickly, because
+the ancestral polymorphism sorts differently into each descendant
+--- so a species tree is built from many genes, not one. And in
+\omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes}, where genes move sideways
+(\cref{ch:b2:genome-diversification}), different genes tell
+different stories and the history is a web with a tree of ribosomal
+genes running through it. Modern practice replaces parsimony and
+distance by \emph{likelihood}: given a model of substitution (the
+rates of each change, their variation among sites), compute the
+probability of the observed sequences on each tree with its branch
+lengths, and choose the tree that makes the data most probable;
+its Bayesian form yields a probability for each \omterm{def:b2:phylogenetic-trees:tree}{clade} directly.
+The Year 3 volume gives the methods; here it is enough to know that
+every tree is a hypothesis with a measured support, not a fact.
+\end{proposition}
+\begin{proof}[Evidence]
+Woese and Fox (1977) compared small-subunit ribosomal RNA across
+\omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes} and found the methanogens as distant from the bacteria
+as either is from eukaryotes: the three domains, confirmed by every
+gene of the transcription and translation machinery since, and
+invisible to morphology. The same ribosomal trees, read naively,
+placed the fast-evolving microsporidia at the base of the
+eukaryotes; genes with slower rates, and models allowing for rate
+variation, moved them to the fungi, where they belong --- a
+textbook case of \omterm{prop:b2:phylogenetic-trees:pitfalls}{long-branch attraction} detected and cured.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, line width=0.8pt]
+  \node[anchor=south] at (1.5,2.6) {true tree};
+  \draw (0,2.2) node[left] {$A$} -- (0.8,1.6) -- (0,1.0) node[left] {$B$};
+  \draw (0.8,1.6) -- (1.6,1.6);
+  \draw[very thick, omThm] (1.6,1.6) -- (3.4,2.4) node[right] {$C$ (fast)};
+  \draw[very thick, omThm] (0.8,1.6) -- (0.8,0.2) -- (2.6,0.2) node[right] {$D$ (fast)};
+  \draw (1.6,1.6) -- (2.4,1.0) node[right] {$E$};
+  \begin{scope}[xshift=7cm]
+    \node[anchor=south] at (1.5,2.6) {tree parsimony finds};
+    \draw (0,2.2) node[left] {$A$} -- (0.8,1.6) -- (0,1.0) node[left] {$B$};
+    \draw (0.8,1.6) -- (1.6,1.6);
+    \draw (1.6,1.6) -- (2.4,1.9) node[right] {$E$};
+    \draw[very thick, omThm] (1.6,1.6) -- (2.2,1.0) -- (3.4,1.3) node[right] {$C$};
+    \draw[very thick, omThm] (2.2,1.0) -- (3.0,0.2) node[right] {$D$};
+  \end{scope}
+  \node[align=center, text width=7cm] at (5.6,-1.1) {$C$ and $D$ have each changed at many sites; at a quarter of those they now agree by chance, more than any true synapomorphy links them to their real relatives};
+\end{tikzpicture}
+
+{\small \omterm{prop:b2:phylogenetic-trees:pitfalls}{Long-branch attraction}. Two lineages that have evolved
+fastest are joined by the chance matches their many changes
+produce, and parsimony makes them sisters.}
+\end{omfigure}
+
+\begin{example}[Dating with a fossil]\label{ex:b2:phylogenetic-trees:dating}
+A gene of \num{1000} sites differs at \qty{10}{\%} of them between
+cow and whale, whose common ancestor the fossils put at 60 million
+years. Corrected, $d = -0.75\ln(1 - 0.133) = 0.107$; the rate is $k
+= d/2t = 0.107/(1.2\times 10^{8}) = 9\times 10^{-10}$ per site per
+year. The same gene differs at \qty{6}{\%} between whale and hippo:
+$d = 0.0625$, $t = d/2k = 35$ million years, with about $\pm
+\qty{13}{\%}$ from the Poisson count of 62 substitutions and a
+further uncertainty from the fossil date. The molecular result
+that whales are the hippos' closest living relatives, obtained this
+way in the 1990s against every anatomical tree, was confirmed by
+the discovery of early whales with the hippo-like ankle bone
+predicted --- the clock does not only date; it predicts what the
+rocks should hold.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:phylogenetic-trees:1}
+Define \omterm{def:b2:phylogenetic-trees:tree}{homology}, \omterm{def:b2:phylogenetic-trees:tree}{analogy} and \omterm{def:b2:phylogenetic-trees:tree}{synapomorphy}, with one example of
+each among vertebrate limbs, wings and eyes.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:phylogenetic-trees:2}
+Classify as monophyletic, paraphyletic or polyphyletic: birds;
+reptiles (without birds); fish (without tetrapods); flying
+vertebrates; mammals; \omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:phylogenetic-trees:3}
+On the tree $(\text{mammals},(\text{turtles},(\text{lizards},
+(\text{crocodiles},\text{birds}))))$, name the sister group of
+birds, the sister group of mammals, and the smallest \omterm{def:b2:phylogenetic-trees:tree}{clade}
+containing lizards and birds. Does swapping the positions of
+crocodiles and birds change the tree?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:phylogenetic-trees:4}
+How many unrooted trees are there for 4, 6 and 10 taxa? How many
+rooted trees for 4 (each unrooted tree can be rooted on any of its
+branches)?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:phylogenetic-trees:5}
+Sequences $A = \mathrm{CCTAG}$, $B = \mathrm{CCTGG}$, $C =
+\mathrm{TTCAG}$, $D = \mathrm{TTCGA}$. Count the steps on each of the
+three unrooted trees and give the most parsimonious one. Which
+sites are homoplastic on it?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:phylogenetic-trees:6}
+Distances (per hundred sites): $AB = 6$, $AC = 14$, $AD = 16$,
+$BC = 14$, $BD = 16$, $CD = 10$. Build the UPGMA tree with its node
+heights.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:phylogenetic-trees:7}
+Correct $p = 0.05$, $0.30$ and $0.60$ for multiple hits. Why is the
+third value nearly useless?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:phylogenetic-trees:8}
+A gene evolves at $10^{-9}$ substitutions per site per year. Two
+species differ by $d = 0.02$: when did they split? What $p$ would
+you observe between two species that split 500 million years ago,
+and what does that imply for dating deep splits with this gene?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:phylogenetic-trees:9}
+A \omterm{def:b2:phylogenetic-trees:tree}{clade} appears in \qty{52}{\%} of \num{1000} bootstrap resamples;
+another in \qty{99}{\%}. Interpret both. What would you do about the
+first?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:phylogenetic-trees:10}
+Explain \omterm{prop:b2:phylogenetic-trees:pitfalls}{long-branch attraction} with the quarter-by-chance argument
+and say why adding taxa that break the long branches helps.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:phylogenetic-trees:11}
+Human and chimpanzee mitochondrial DNA differ at \qty{9}{\%} of
+sites; the mitochondrial rate is about $2\times 10^{-8}$ per site
+per year. Date the split, give the Poisson uncertainty for a
+\qty{16000}{}-site genome, and name two reasons why the answer might
+still be wrong by a factor of two.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:phylogenetic-trees:12}
+``A gene tree is not a species tree.'' Discuss with \omterm{prop:b2:phylogenetic-trees:pitfalls}{incomplete
+lineage sorting}, horizontal transfer and \omterm{prop:b2:genome-diversification:duplication}{gene duplication}, and say
+how a species tree is nonetheless obtained.
+\end{exercise}
+
+\section{Problem: Dating the Whales}
+
+\begin{problem}[{Weekend problem --- whale, hippo, cow, pig and
+camel sequenced for one gene: the tree built by parsimony and by
+distance, the clock calibrated on a fossil, every split dated with
+its Poisson error, and the anatomical tree confronted with the
+molecular one, ending on the whale--hippo divergence time and the
+gene's substitution rate}]
+\label{pb:b2:phylogenetic-trees:1}
+A gene of \num{1000} sites is sequenced in whale ($W$), hippo
+($H$), cow ($C$), pig ($P$) and camel ($M$, the outgroup). Observed
+proportions of differing sites: $WH = 0.06$; $WC = HC = 0.10$; $WP =
+HP = CP = 0.12$; every distance to $M$ is $0.14$. Fossils put the
+split between cow and the whale--hippo line at 60 million years.
+Six informative sites, with the camel's state given last:
+\begin{center}
+\begin{tabular}{l@{\quad}cccccc}
+site & 1 & 2 & 3 & 4 & 5 & 6 \\ \hline
+$W$ & A & G & T & C & A & G \\
+$H$ & A & G & T & C & G & G \\
+$C$ & G & A & T & T & G & G \\
+$P$ & G & A & C & T & G & A \\
+$M$ & G & A & C & T & G & A \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Part I --- Parsimony.}
+\begin{enumerate}
+  \item Which sites are synapomorphies of $\{W, H\}$? Of $\{W, H,
+        C\}$? Which site is uninformative, and which is a homoplasy
+        or autapomorphy?
+  \item Count the steps of the six sites on the tree
+        $(M,(P,(C,(W,H))))$.
+  \item Count them on the anatomists' tree $(M,(P,(W,(C,H))))$,
+        which puts hippo with cow among the even-toed ungulates and
+        whales outside.
+  \item Which tree is preferred, and by how many steps? Why is that
+        margin weak, and what would strengthen it?
+  \item The bootstrap gives the $\{W, H\}$ \omterm{def:b2:phylogenetic-trees:tree}{clade} in \qty{83}{\%} of
+        resamples of the whole gene. Interpret.
+  \item Why is the camel used as the outgroup, and what would go
+        wrong if a fish were used instead?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Distances.}
+\begin{enumerate}[resume]
+  \item Correct the four distinct $p$ values ($0.06$, $0.10$, $0.12$,
+        $0.14$) for multiple hits.
+  \item Run UPGMA on the five taxa with the corrected distances and
+        give the node heights.
+  \item Does the distance tree agree with the parsimony tree?
+  \item Explain why UPGMA would fail if the whale lineage had
+        evolved twice as fast as the others.
+  \item Compute the number of substitutions the gene has
+        accumulated between whale and hippo, and its Poisson
+        standard deviation.
+  \item Give the relative precision of a date based on that count.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The clock.}
+\begin{enumerate}[resume]
+  \item Calibrate: from the cow--(whale, hippo) distance and the
+        60-million-year fossil, compute the rate $k$ per site per
+        year.
+  \item Date the whale--hippo split.
+  \item Date the pig split and the camel split.
+  \item Give the whale--hippo date with its Poisson uncertainty.
+  \item The fossil calibration is itself uncertain by $\pm 5$
+        million years. Propagate it to the whale--hippo date.
+  \item A different, faster gene gives $p = 0.45$ between whale and
+        camel. Correct it and comment on its reliability for this
+        split.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Confrontation.}
+\begin{enumerate}[resume]
+  \item The anatomists' tree rests on the double-pulley ankle bone
+        shared by cow, pig, hippo and camel but not by living
+        whales, which have no hind limbs. Explain why a lost
+        character cannot count against the whale--hippo \omterm{def:b2:phylogenetic-trees:tree}{clade}.
+  \item Fossil whales with hind limbs were found in 2001; their
+        ankle bone has the double pulley. What does that do to the
+        argument?
+  \item If whales are inside the even-toed ungulates, is the group
+        ``even-toed ungulates without whales'' monophyletic,
+        paraphyletic or polyphyletic?
+  \item A second gene gives the tree $(M,(P,(H,(W,C))))$. Name two
+        reasons a gene tree may differ from the species tree, and
+        say how to decide.
+  \item The mitochondrial genome of whale and hippo differs at
+        \qty{25}{\%} of sites. Correct it, and estimate the
+        mitochondrial rate from the date found in question 14.
+  \item Why is that rate so much higher than the nuclear gene's?
+  \item State the result: the tree, the nuclear rate $k$, and the
+        whale--hippo divergence time with its uncertainty.
+\end{enumerate}
+\end{problem}

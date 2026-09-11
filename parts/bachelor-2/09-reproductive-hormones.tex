@@ -1,6 +1,510 @@
 \chapter{Hormonal Control of Reproduction}\label{ch:b2:reproductive-hormones}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Every month, on a schedule kept to within a day or two for thirty
+years, one \omterm{def:b2:mammal-reproduction:ovary}{follicle} ripens, one egg is released, the lining of the
+uterus is built up and then, unless an embryo has arrived, torn
+down. No clock in the body ticks at this rate; the rhythm emerges
+from a conversation between three organs --- the hypothalamus, the
+pituitary and the ovary --- in which each hormone controls the
+release of the next and the last controls the first. This chapter
+takes that conversation apart: the axis that runs both sexes, the
+tonic control of the \omterm{def:b2:mammal-reproduction:testis}{testis}, the cyclic control of the ovary with
+its remarkable switch from negative to positive feedback, and the
+ways the axis is overridden by pregnancy, by drugs, and by the
+clinic.
 
-\emph{This chapter has not been written yet.}
+\section{The axis}
+
+\begin{definition}[The hypothalamo-pituitary-gonadal axis]\label{def:b2:reproductive-hormones:axis}
+\index{gonadotropin-releasing hormone}\index{luteinising hormone}\index{follicle-stimulating hormone}\index{negative feedback!hormonal}
+Neurons of the \emph{hypothalamus} secrete \emph{GnRH}
+(gonadotropin-releasing hormone, a peptide of ten amino acids) into
+the small portal vessels that run to the \emph{anterior pituitary},
+in brief \emph{pulses} every one to two hours. GnRH makes the
+pituitary secrete two glycoprotein hormones into the general
+circulation, the \emph{gonadotropins} \emph{LH} (luteinising
+hormone) and \emph{FSH} (follicle-stimulating hormone). These act on
+the \emph{gonads}: LH on the steroid-making cells (\omterm{def:b2:mammal-reproduction:testis}{Leydig cells},
+theca and luteal cells), FSH on the cells that nurse the gametes
+(Sertoli and granulosa cells). The gonads answer with steroids ---
+\emph{testosterone}, \emph{oestradiol}, \emph{progesterone} --- and
+with the peptide \emph{inhibin}, and these feed back on the
+hypothalamus and pituitary: the steroids on both, mostly
+\emph{negatively}; inhibin on FSH alone. The result is a regulated
+loop in which the gonad's output is held at a set point, and the
+same three-tier design runs the thyroid and the adrenal cortex. The
+mechanisms by which these hormones act on their cells are the
+subject of \cref{ch:b2:cell-signalling}.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, rounded corners, fill=omDef!15, align=center, minimum width=3cm] (hyp) at (0,4.2) {hypothalamus\\GnRH, in pulses};
+  \node[draw, rounded corners, fill=omDef!15, align=center, minimum width=3cm] (pit) at (0,2.2) {anterior pituitary\\LH and FSH};
+  \node[draw, rounded corners, fill=omProp!20, align=center, minimum width=3cm] (gon) at (0,0) {gonad\\steroids, inhibin};
+  \node[draw, rounded corners, fill=omExo!25, align=center, minimum width=3cm] (tar) at (5.2,0) {target tissues\\gametogenesis, ducts,\\secondary characters};
+  \draw[->, thick] (hyp) -- (pit) node[midway, right] {portal vessels};
+  \draw[->, thick] (pit) -- (gon) node[midway, right] {blood};
+  \draw[->, thick] (gon) -- (tar);
+  \draw[->, thick, omThm] (gon.west) .. controls (-3.0,0) and (-3.0,2.2) .. (pit.west);
+  \draw[->, thick, omThm] (gon.west) .. controls (-4.6,0) and (-4.6,4.2) .. (hyp.west);
+  \node[omThm, anchor=east, align=right] at (-3.9,1.2) {to the pituitary:\\steroids $(-)$,\\inhibin $(-)$ on FSH};
+  \node[omThm, anchor=east, align=right] at (-3.9,3.6) {to the hypothalamus:\\steroids $(-)$\\(oestradiol $(+)$\\at mid-cycle)};
+\end{tikzpicture}
+
+{\small The axis: hypothalamic GnRH drives pituitary LH and FSH,
+which drive the gonad; the gonad's steroids and inhibin feed back
+negatively on both upper tiers --- except for the brief positive
+feedback of oestradiol that triggers \omterm{def:b2:mammal-reproduction:ovary}{ovulation}.}
+\end{omfigure}
+
+\begin{proposition}[Why the pulses matter]\label{prop:b2:reproductive-hormones:pulses}
+\index{pulsatile secretion}\index{receptor desensitisation}
+The pituitary responds to GnRH only if it arrives in pulses. A cell
+exposed to a hormone continuously removes the hormone's receptors
+from its surface (\emph{desensitisation}); if the receptor pool is
+replenished at a rate $s$, removed at a basal rate $d$ and, in the
+presence of hormone $H$, at an extra rate $iH$, then
+\[
+\frac{\mathrm{d}R}{\mathrm{d}t} = s - (d + iH)\,R, \qquad R^* = \frac{s}{d + iH},
+\]
+so that a continuous high $H$ drives the receptor number to a low
+steady state and the cell falls silent, whereas brief pulses
+separated by hormone-free intervals let the pool recover
+(time constant $1/d$) between them. A GnRH pulse every ninety
+minutes keeps the pituitary responsive; a constant infusion, or a
+long-acting GnRH agonist, shuts it down within days --- the basis
+of the drugs that suppress the axis in prostate cancer, endometriosis
+and precocious puberty. Pulse frequency also encodes information:
+fast pulses favour LH, slow pulses favour FSH.
+\end{proposition}
+\begin{proof}[Evidence]
+Knobil (1978--1980) destroyed the GnRH neurons of rhesus monkeys,
+which abolished LH, FSH and the cycle, and then replaced GnRH by
+pump: one pulse an hour restored the gonadotropins and normal
+ovulatory cycles; the same daily dose given continuously restored
+them for a few days and then LH and FSH collapsed to zero; returning
+to pulses restored them again. The pattern of delivery, not the
+amount, is the signal.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=40, ymin=0, ymax=1.2,
+  xlabel={days}, ylabel={plasma LH (relative)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,10,20,30,40}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=2] {1};
+\addplot[very thick, omThm, domain=10:25, samples=60] {exp(-(x-10)/3)};
+\addplot[very thick, omDef, domain=25:40, samples=60] {1-exp(-(x-25)/2)};
+\fill[omDef!15] (axis cs:0,1.05) rectangle (axis cs:10,1.15); \node[font=\scriptsize] at (axis cs:5,1.1) {hourly pulses};
+\fill[omThm!15] (axis cs:10,1.05) rectangle (axis cs:25,1.15); \node[font=\scriptsize] at (axis cs:17.5,1.1) {continuous infusion};
+\fill[omDef!15] (axis cs:25,1.05) rectangle (axis cs:40,1.15); \node[font=\scriptsize] at (axis cs:32.5,1.1) {pulses again};
+\end{axis}
+\end{tikzpicture}
+
+{\small Knobil's experiment, schematically. In a monkey whose own
+GnRH neurons are destroyed, hourly pulses of GnRH sustain LH;
+switching to a continuous infusion of the same daily amount
+extinguishes it within days, and pulses restore it.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-09-hypothalamus-pituitary.jpg}
+
+{\small The base of the brain in sagittal section: the hypothalamus
+above, the stalk, and the pituitary in its bony pocket --- the
+hardware of the axis.}
+\end{omfigure}
+
+\section{The male: tonic control}
+
+\begin{proposition}[Control of the testis]\label{prop:b2:reproductive-hormones:testis}
+\index{testosterone}\index{inhibin}
+LH acts on the \omterm{def:b2:mammal-reproduction:testis}{Leydig cells}, which make \emph{testosterone}
+(\qtyrange{3}{10}{ng/mL} in the blood of an adult man, a hundred
+times more inside the \omterm{def:b2:mammal-reproduction:testis}{testis}). FSH acts on the \omterm{def:b2:mammal-reproduction:testis}{Sertoli cells}, which
+--- with the local testosterone --- support \omterm{def:b2:mammal-reproduction:testis}{spermatogenesis} and
+secrete \emph{inhibin}. Testosterone feeds back on the hypothalamus
+and pituitary to hold LH down; inhibin feeds back on the pituitary
+to hold FSH down. Both loops are \emph{negative} and the system is
+\emph{tonic}: hormone levels fluctuate with the pulses and with the
+day (highest in the morning) but do not cycle, and sperm are made
+continuously. Testosterone also builds and maintains the accessory
+glands and ducts, the beard, the voice, muscle and bone, red-cell
+production and libido, and in the fetus made the male body
+(\cref{ch:b2:mammal-reproduction}). Castration removes it: LH and
+FSH rise several-fold for want of feedback, and the secondary
+characters regress; injected testosterone restores the characters
+--- but not fertility, because it also suppresses LH and so the
+intratesticular testosterone that \omterm{def:b2:mammal-reproduction:testis}{spermatogenesis} requires. This is
+why anabolic steroids make men infertile.
+\end{proposition}
+\begin{proof}[Evidence]
+Berthold (1849) castrated cockerels: their combs shrank and they
+neither crowed nor fought. A \omterm{def:b2:mammal-reproduction:testis}{testis} grafted into the abdomen of a
+castrate, where it grew a new blood supply but no nerves, restored
+comb, crowing and fighting: the \omterm{def:b2:mammal-reproduction:testis}{testis} acted through the blood ---
+the first demonstration of an internal secretion, fifty years before
+the word hormone. Testosterone was isolated and synthesised in 1935.
+\end{proof}
+
+\section{The female: a cycle with a switch}
+
+\begin{definition}[The ovarian and uterine cycles]\label{def:b2:reproductive-hormones:cycle}
+\index{menstrual cycle}\index{follicular phase}\index{luteal phase}\index{LH surge}\index{endometrium}
+The cycle is counted from the first day of menstruation and lasts
+about 28 days. \emph{Follicular phase} (days 1--14): FSH, freed of
+feedback by the previous \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum}'s death, recruits a cohort
+of \omterm{def:b2:mammal-reproduction:ovary}{follicles}; they secrete \emph{oestradiol}, which rises steadily;
+oestradiol and inhibin lower FSH, and only the \omterm{def:b2:mammal-reproduction:ovary}{follicle} with the
+most FSH receptors survives the fall --- the dominant follicle. In
+the uterus, oestradiol rebuilds the \emph{endometrium} (the
+proliferative phase) and thins the cervical mucus. \emph{\omterm{def:b2:mammal-reproduction:ovary}{Ovulation}}
+(day 14): when oestradiol has stayed above about \qty{200}{pg/mL}
+for a day and a half, its feedback on the hypothalamus and pituitary
+switches from negative to \emph{positive}; LH rises tenfold in a day
+--- the \emph{LH surge} --- and about 36 hours after its onset the
+\omterm{def:b2:mammal-reproduction:ovary}{follicle} ruptures and releases the oocyte. \emph{Luteal phase} (days
+15--28): the emptied \omterm{def:b2:mammal-reproduction:ovary}{follicle} becomes the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum}, which
+under LH secretes \emph{progesterone} (\qtyrange{10}{20}{ng/mL}) and
+oestradiol; progesterone turns the endometrium secretory, thickens
+the mucus, raises the basal body temperature by \qty{0.3}{\celsius},
+and with oestradiol suppresses LH and FSH. The \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} has a
+lifespan of about 14 days; unless hCG from an embryo rescues it, it
+regresses, progesterone and oestradiol fall, the endometrium is shed
+(\emph{menstruation}), FSH rises, and the next cycle begins. The
+luteal phase is fixed at 14 days; variation in cycle length is
+variation in the follicular phase.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.94\linewidth, height=6.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=28, ymin=0, ymax=1.15,
+  xlabel={day of the cycle}, ylabel={hormones (relative to peak)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.11)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,7,14,21,28}, ytick={0,0.5,1},
+  legend style={font=\scriptsize, at={(0.5,-0.25)}, anchor=north, draw=none, legend columns=4},
+  clip=false,
+]
+\addplot[very thick, omThm, domain=0:28, samples=120] {0.1 + 0.9*exp(-((x-14)^2)/0.9)};
+\addlegendentry{LH}
+\addplot[very thick, omProp, domain=0:28, samples=120] {0.35*exp(-x/6) + 0.15 + 0.35*exp(-((x-14)^2)/1.2)};
+\addlegendentry{FSH}
+\addplot[very thick, omDef, domain=0:28, samples=160] {0.1 + 0.9*exp(-((x-12.5)^2)/6) + 0.4*exp(-((x-21)^2)/12)};
+\addlegendentry{oestradiol}
+\addplot[very thick, omExo!70!black, domain=0:28, samples=160] {0.03 + 0.97*exp(-((x-21)^2)/12)*(x>14)};
+\addlegendentry{progesterone}
+\draw[dashed, gray] (axis cs:14.5,0) -- (axis cs:14.5,1.1); \node[font=\scriptsize, anchor=south] at (axis cs:14.5,1.1) {ovulation};
+\node[font=\scriptsize, anchor=north] at (axis cs:7,1.1) {follicular phase};
+\node[font=\scriptsize, anchor=north] at (axis cs:21.5,1.1) {luteal phase};
+\end{axis}
+\end{tikzpicture}
+
+{\small The hormones of the cycle. Oestradiol from the growing
+\omterm{def:b2:mammal-reproduction:ovary}{follicle} rises through the \omterm{def:b2:reproductive-hormones:cycle}{follicular phase} and, past a threshold,
+triggers the \omterm{def:b2:reproductive-hormones:cycle}{LH surge}; \omterm{def:b2:mammal-reproduction:ovary}{ovulation} follows about 36 hours later; the
+\omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} then secretes progesterone for a fortnight and dies.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  % endometrium thickness over the cycle
+  \draw[thick, ->] (0,0) -- (12.4,0) node[right] {day};
+  \foreach \x/\l in {0/1, 2.1/5, 6.0/14, 12/28} \draw (\x,0.08) -- (\x,-0.08) node[below] {\l};
+  \fill[omThm!25] (0,0) -- (0,1.4) .. controls (0.8,1.2) and (1.6,0.5) .. (2.1,0.35) -- (2.1,0) -- cycle;
+  \fill[omDef!20] (2.1,0) -- (2.1,0.35) .. controls (3.5,0.6) and (5.2,1.3) .. (6.0,1.5) -- (6.0,0) -- cycle;
+  \fill[omExo!35] (6.0,0) -- (6.0,1.5) .. controls (8,1.8) and (11,1.9) .. (12,1.6) -- (12,0) -- cycle;
+  \node at (1.0,1.8) {menstruation};
+  \node at (4.0,1.8) {proliferative (oestradiol)};
+  \node at (9,2.2) {secretory (progesterone): glands, glycogen, spiral arteries};
+  \node[anchor=east] at (-0.1,0.8) {endometrium};
+\end{tikzpicture}
+
+{\small The uterine cycle. The \omterm{def:b2:reproductive-hormones:cycle}{endometrium} is shed at menstruation,
+rebuilt under oestradiol, and made secretory under progesterone,
+ready to receive a \omterm{def:b2:mammal-reproduction:implantation}{blastocyst} around day 21; when progesterone
+falls, it is shed again.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book4/ai/b4-09-ovary-histology.jpg}
+
+{\small An ovary in section: a mature \omterm{def:b2:mammal-reproduction:ovary}{follicle} with its cavity and
+oocyte, small primordial \omterm{def:b2:mammal-reproduction:ovary}{follicles} under the surface, and a \omterm{def:b2:mammal-reproduction:ovary}{corpus
+luteum} from a previous cycle.}
+\end{omfigure}
+
+\begin{theorem}[The switch from negative to positive feedback]\label{thm:b2:reproductive-hormones:switch}
+\index{positive feedback!LH surge}
+Oestradiol at the low levels of the early \omterm{def:b2:reproductive-hormones:cycle}{follicular phase}
+inhibits LH and FSH; oestradiol above about \qty{200}{pg/mL}, held
+for more than about \qty{36}{h}, does the opposite: it makes the
+hypothalamus release a burst of GnRH and the pituitary respond to it
+with a tenfold rise of LH. The mechanism is a change of sign, not
+of magnitude: a high, sustained dose induces in the pituitary a
+large store of LH and a heightened sensitivity to GnRH, and in the
+hypothalamus (through kisspeptin neurons) a switch of the GnRH
+pulse generator into a surge mode. The switch converts a graded
+signal --- how much oestradiol the \omterm{def:b2:mammal-reproduction:ovary}{follicle} makes --- into an
+all-or-none event timed to the day, which is what \omterm{def:b2:mammal-reproduction:ovary}{ovulation}
+requires; and because only a large, mature \omterm{def:b2:mammal-reproduction:ovary}{follicle} can sustain
+\qty{200}{pg/mL}, the surge fires only when there is an egg ready to
+release. Once \omterm{def:b2:mammal-reproduction:ovary}{ovulation} has occurred, the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum}'s
+progesterone restores the negative feedback and no second surge
+follows.
+\end{theorem}
+\begin{proof}[Evidence]
+In women and monkeys with the axis suppressed, an infusion of
+oestradiol that raises the plasma level above \qty{200}{pg/mL} for
+two days is followed by an \omterm{def:b2:reproductive-hormones:cycle}{LH surge}; the same amount given for one
+day, or a lower level for three, is not. Progesterone given before
+the infusion blocks the surge; given at the same time it advances
+and amplifies it. The threshold in dose and duration reproduces the
+timing of the natural surge from the natural oestradiol rise.
+\end{proof}
+
+\section{Overriding the cycle}
+
+\begin{proposition}[Pregnancy, lactation, menopause]\label{prop:b2:reproductive-hormones:overrides}
+\index{human chorionic gonadotropin}\index{menopause}
+An implanting embryo secretes \emph{hCG}, an LH-like hormone that
+binds the LH receptor and keeps the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} alive and
+secreting past its fourteen days; by week ten the \omterm{def:b2:mammal-reproduction:placenta}{placenta} itself
+makes enough progesterone and oestrogens to maintain the pregnancy
+and the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} is dispensable. Throughout pregnancy the high
+steroids hold LH and FSH at zero: no \omterm{def:b2:mammal-reproduction:ovary}{follicle} grows, no \omterm{def:b2:mammal-reproduction:ovary}{ovulation}
+occurs. After birth, suckling raises prolactin and slows the GnRH
+pulses, and \omterm{def:b2:mammal-reproduction:ovary}{ovulation} stays suppressed for months. At the
+\emph{menopause} the stock of \omterm{def:b2:mammal-reproduction:ovary}{follicles} is exhausted: oestradiol and
+inhibin fall, and, with nothing to feed back, LH and FSH rise to ten
+times their earlier level and stay there --- the signature of a
+gland that has stopped answering.
+\end{proposition}
+
+\begin{proposition}[Contraception and assisted reproduction]\label{prop:b2:reproductive-hormones:clinic}
+\index{contraception!hormonal}\index{in vitro fertilisation}
+The combined pill delivers a synthetic oestrogen and a progestin
+every day: the constant steroid level keeps FSH and LH low, no
+\omterm{def:b2:mammal-reproduction:ovary}{follicle} is recruited, no oestradiol rise occurs, and the surge
+never fires; the progestin also thickens the cervical mucus. The
+seven-day break lets the \omterm{def:b2:reproductive-hormones:cycle}{endometrium} bleed; missing pills for more
+than two days in a row lets FSH escape and a \omterm{def:b2:mammal-reproduction:ovary}{follicle} may grow.
+Emergency contraception delays the surge for a few days with a
+large progestin dose. In \emph{\omterm{prop:b2:reproductive-hormones:clinic}{in vitro fertilisation}} the axis is
+driven the other way: daily FSH for ten days overrides the
+selection of a single dominant follicle and matures ten or more; a
+GnRH antagonist prevents a premature spontaneous surge; an injection
+of hCG substitutes for the surge, and the oocytes are collected 34
+to 36 hours later, just before they would have been released; they
+are fertilised in the dish and one or two embryos are transferred,
+the rest frozen. In men, exogenous testosterone or a GnRH analogue
+suppresses \omterm{def:b2:mammal-reproduction:testis}{spermatogenesis} by suppressing LH --- the principle of a
+male hormonal contraceptive, still not marketed. All of this is the
+axis of the first section, read backwards.
+\end{proposition}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:reproductive-hormones:1}
+Draw the axis for the male: the three tiers, the four hormones, the
+two feedback loops, and the cells each hormone acts on.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:reproductive-hormones:2}
+Give the phases of the ovarian and uterine cycles with their days
+and the hormone that dominates each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:reproductive-hormones:3}
+Explain how the combined pill prevents \omterm{def:b2:mammal-reproduction:ovary}{ovulation}, and why bleeding
+occurs in the pill-free week.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:reproductive-hormones:4}
+What happens to LH, FSH and the secondary sexual characters of a
+castrated adult male? Which of these does injected testosterone
+reverse, and which not?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:reproductive-hormones:5}
+GnRH pulses come every \qty{90}{min} in the \omterm{def:b2:reproductive-hormones:cycle}{follicular phase} and
+every \qty{4}{h} in the \omterm{def:b2:reproductive-hormones:cycle}{luteal phase}. How many pulses a day in each?
+The pituitary favours LH at fast pulses and FSH at slow ones: which
+gonadotropin should rise first when the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} dies, and why
+is that the right one?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:reproductive-hormones:6}
+Convert \qty{200}{pg/mL} of oestradiol (molar mass
+\qty{272}{g/mol}) into \unit{pmol/L}, and \qty{15}{ng/mL} of
+progesterone (\qty{314}{g/mol}) into \unit{nmol/L}. How many
+molecules of oestradiol are there in one microlitre of plasma at
+the surge threshold?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:reproductive-hormones:7}
+A woman's cycles last 35 days. Given that the \omterm{def:b2:reproductive-hormones:cycle}{luteal phase} is
+fixed, on what day does she ovulate, and which days are fertile if
+sperm survive three days and the egg one? Why does the calendar
+method fail for irregular cycles?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:reproductive-hormones:8}
+An embryo implants on day 21 of a 28-day cycle and its hCG, starting
+at \qty{1}{IU/L}, doubles every two days. The \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum} needs a
+few IU/L of hCG by day 26 to survive. Is the embryo in time? What
+would happen if \omterm{def:b2:mammal-reproduction:implantation}{implantation} were delayed to day 25?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:reproductive-hormones:9}
+State what Knobil's experiment showed and what it ruled out, and
+predict the effect of giving a woman a long-acting GnRH agonist for
+a month: on LH, on oestradiol, on the \omterm{def:b2:reproductive-hormones:cycle}{endometrium}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:reproductive-hormones:10}
+In the receptor model, take $s = 100$ receptors per hour, $d =
+\qty{0.5}{h^{-1}}$ and $iH = \qty{6}{h^{-1}}$ while hormone is
+present. Compute the steady-state receptor number with no hormone
+and with continuous hormone. With a two-minute pulse every hour,
+compute the number lost per pulse and the fraction of the deficit
+recovered before the next pulse, and deduce the level around which
+the pool settles.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:reproductive-hormones:11}
+A postmenopausal woman has LH and FSH ten times the level of a young
+woman and very low oestradiol; a woman with a pituitary tumour
+secreting prolactin has low LH, low oestradiol and no cycles; a
+woman with a granulosa-cell tumour has high oestradiol, low LH and
+no cycles. Explain each profile from the axis.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:reproductive-hormones:12}
+``The same hormone inhibits and then triggers the \omterm{def:b2:reproductive-hormones:cycle}{LH surge}.''
+Explain how oestradiol can have both effects, why \omterm{def:b2:mammal-reproduction:ovary}{ovulation} needs a
+switch rather than a dial, and what would go wrong with a dial.
+\end{exercise}
+
+\section{Problem: A Cycle Measured}
+
+\begin{problem}[{Weekend problem --- daily hormone measurements of one
+cycle are read for their phases, the ovulation day and the fertile
+window; the surge threshold, the corpus luteum's clock and the hCG
+rescue are computed; the receptor model explains Knobil; and the
+axis is driven backwards in the clinic, ending on the ovulation day,
+the luteal length, the fertile window and the surge threshold}]
+\label{pb:b2:reproductive-hormones:1}
+Blood was sampled on selected days of a woman's cycle:
+
+\begin{center}
+\small
+\begin{tabular}{lcccccccccc}
+\hline
+day & 1 & 5 & 8 & 11 & 12 & 13 & 14 & 15 & 21 & 27 \\
+\hline
+oestradiol (\unit{pg/mL}) & 40 & 60 & 110 & 210 & 260 & 310 & 220 & 150 & 160 & 50 \\
+LH (\unit{IU/L}) & 5 & 5 & 6 & 7 & 8 & 20 & 65 & 15 & 4 & 4 \\
+progesterone (\unit{ng/mL}) & 0.5 & 0.5 & 0.6 & 0.7 & 0.8 & 1.0 & 1.5 & 3 & 16 & 2 \\
+temperature (\unit{\celsius}) & 36.4 & 36.4 & 36.4 & 36.4 & 36.4 & 36.4 & 36.4 & 36.5 & 36.8 & 36.7 \\
+\hline
+\end{tabular}
+\end{center}
+
+Menstruation began on day 1 and again on day 29.
+
+\medskip
+\noindent\textbf{Part I --- Reading the cycle.}
+\begin{enumerate}
+  \item Identify the follicular and \omterm{def:b2:reproductive-hormones:cycle}{luteal phases} from the table,
+        with the hormone that marks each.
+  \item On what day did the \omterm{def:b2:reproductive-hormones:cycle}{LH surge} peak? When did \omterm{def:b2:mammal-reproduction:ovary}{ovulation} occur?
+  \item How long was the \omterm{def:b2:reproductive-hormones:cycle}{luteal phase}? Is it consistent with the
+        lifespan of the \omterm{def:b2:mammal-reproduction:ovary}{corpus luteum}?
+  \item Explain the temperature shift and why it confirms, but
+        cannot predict, \omterm{def:b2:mammal-reproduction:ovary}{ovulation}.
+  \item On which days was oestradiol above \qty{200}{pg/mL}? Relate
+        the duration to the surge.
+  \item Give the fertile window of this cycle (sperm three days, egg
+        one day).
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Numbers.}
+\begin{enumerate}[resume]
+  \item Convert the day-13 oestradiol to \unit{pmol/L}, and the
+        day-21 progesterone to \unit{nmol/L}.
+  \item By what factor did LH rise from day 12 to day 14? Why does it
+        fall so fast afterwards (the half-life of LH is about
+        \qty{1}{h})?
+  \item If this woman's next cycle had a 21-day \omterm{def:b2:reproductive-hormones:cycle}{follicular phase}, on
+        what day would she ovulate and what would the cycle length
+        be?
+  \item An embryo implants 7 days after \omterm{def:b2:mammal-reproduction:ovary}{ovulation}. On what day of
+        this cycle would hCG appear, and, doubling every two days
+        from \qty{1}{IU/L}, what level would it reach by day 27?
+  \item Explain why the day-27 progesterone of \qty{2}{ng/mL} shows
+        that no embryo implanted.
+  \item What would the day-27 values of progesterone and oestradiol
+        have been if one had?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Feedback and pulses.}
+\begin{enumerate}[resume]
+  \item Explain, with the feedback signs, why FSH is highest at the
+        start of the cycle and why only one \omterm{def:b2:mammal-reproduction:ovary}{follicle} usually
+        survives.
+  \item In the receptor model with $s = 100$ per hour, $d =
+        \qty{0.5}{h^{-1}}$, $iH = \qty{6}{h^{-1}}$, compute $R^*$
+        without hormone and under continuous hormone.
+  \item A pulse lasts \qty{2}{min}. Starting from the unstimulated
+        $R^*$, how many receptors does one pulse remove (use the
+        linear approximation $iHR\,\Delta t$)? What fraction of the
+        deficit is recovered in the hour before the next pulse
+        (time constant $1/d$), and around what level does the pool
+        settle?
+  \item Use these numbers to explain Knobil's result.
+  \item A man is given a GnRH agonist continuously for prostate
+        cancer. Predict his LH and testosterone after one day and
+        after one month, and explain the difference.
+  \item A woman's granulosa cells fail to make inhibin. Predict her
+        FSH and LH, and the consequence for \omterm{def:b2:mammal-reproduction:ovary}{follicle} recruitment.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The clinic.}
+\begin{enumerate}[resume]
+  \item For \omterm{prop:b2:reproductive-hormones:clinic}{in vitro fertilisation} this woman receives FSH daily
+        from day 2. Explain why ten \omterm{def:b2:mammal-reproduction:ovary}{follicles} mature instead of one.
+  \item Why is a GnRH antagonist added from day 6, and what would
+        happen without it?
+  \item hCG is injected when the \omterm{def:b2:mammal-reproduction:ovary}{follicles} are ripe; the oocytes are
+        collected 35 hours later. Justify the timing from the table.
+  \item Ten oocytes are collected; \qty{70}{\%} fertilise,
+        \qty{40}{\%} of embryos reach the \omterm{def:b2:mammal-reproduction:implantation}{blastocyst} stage, and each
+        transferred \omterm{def:b2:mammal-reproduction:implantation}{blastocyst} implants with probability $0.35$.
+        Expected number of \omterm{def:b2:mammal-reproduction:implantation}{blastocysts}? Probability of at least one
+        pregnancy if two are transferred?
+  \item Explain why the combined pill, taken by this woman, would
+        have produced a table with no \omterm{def:b2:reproductive-hormones:cycle}{LH surge} and no progesterone
+        rise.
+  \item A male contraceptive based on a GnRH antagonist would also
+        abolish testosterone. What must be given with it, and why
+        does giving it not restore sperm production?
+  \item State the result: \omterm{def:b2:mammal-reproduction:ovary}{ovulation} day, luteal length, fertile
+        window, and the oestradiol threshold and duration that
+        triggered the surge.
+\end{enumerate}
+\end{problem}

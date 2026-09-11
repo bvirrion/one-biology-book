@@ -1,6 +1,572 @@
 \chapter{Chemical Messengers and Signal Transduction}\label{ch:b2:cell-signalling}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A single molecule of adrenaline, arriving at the surface of a liver
+cell, never enters it. It binds a protein on the outside, changes
+the protein's shape, and within a second the cell has made ten
+thousand molecules of a \omterm{prop:b2:cell-signalling:gpcr}{second messenger}, activated a hundred
+thousand enzyme molecules, and begun releasing a million molecules
+of glucose --- a chain of amplifications a million-fold long, started
+by a signal that stayed outside the door. This chapter is about the
+messengers cells send one another and how a cell converts a
+message at its surface into a change in its chemistry, its genes or
+its shape: the receptors, the \omterm{prop:b2:cell-signalling:gpcr}{second messengers}, the cascades of
+kinases, and the two designs --- the fast, wired signalling of nerves
+and the slow, broadcast signalling of \omterm{def:b2:cell-signalling:kinds}{hormones} --- whose contrast
+runs through the rest of this book.
 
-\emph{This chapter has not been written yet.}
+\section{Messengers}
+
+\begin{definition}[Kinds of chemical signalling]\label{def:b2:cell-signalling:kinds}
+\index{hormone}\index{endocrine signalling}\index{paracrine signalling}\index{neurotransmitter}
+A cell signals to another with a secreted molecule, a
+\emph{messenger} or \emph{ligand}, that binds a \emph{receptor} on or
+in the target. By range: \emph{endocrine} signalling, in which a
+\emph{hormone} is released into the \omterm{def:b2:blood-circulation:blood}{blood} by a gland and reaches
+every cell of the body, acting only on those with the receptor,
+over minutes to hours (insulin, cortisol, adrenaline, thyroxine);
+\emph{paracrine} signalling, in which the messenger diffuses to
+neighbouring cells within a millimetre and is destroyed on the way
+(growth factors, histamine, prostaglandins, the morphogens of
+\cref{ch:b2:vertebrate-development}); \emph{autocrine}, the cell
+signalling to itself; and \emph{synaptic}, in which a neuron
+releases a \emph{neurotransmitter} across a gap of \qty{20}{nm} onto
+one target cell, in a millisecond (\cref{ch:b2:neurons-synapses}).
+By chemistry: \emph{water-soluble} messengers --- amino-acid
+derivatives such as adrenaline, peptides and proteins such as
+insulin --- cannot cross the membrane and act on surface receptors;
+\emph{lipid-soluble} messengers --- the steroids (cortisol,
+oestradiol, testosterone), thyroxine, retinoic acid, nitric oxide ---
+cross it and act on receptors inside. The endocrine and nervous
+systems are the two ways a body of $10^{13}$ cells coordinates
+itself: the one broadcasts slowly to everyone, the other wires
+quickly to someone.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % endocrine
+  \begin{scope}
+    \draw[thick, fill=omProp!25] (0,1.6) circle (0.35); \node[above] at (0,2.0) {gland};
+    \draw[very thick, omThm!60] (-0.5,0.6) -- (4.5,0.6); \draw[very thick, omThm!60] (-0.5,0.2) -- (4.5,0.2); \node[omThm!70!black] at (2,0.4) {blood};
+    \foreach \x in {0.6,1.5,2.4,3.3} \fill[omProp] (\x,0.4) circle (0.05);
+    \draw[->, omProp] (0,1.25) -- (0,0.65);
+    \draw[thick, fill=omDef!20] (3.8,-0.8) circle (0.35); \node[below, align=center] at (3.8,-1.2) {target cell\\with receptor};
+    \draw[->, omProp] (3.8,0.15) -- (3.8,-0.4);
+    \draw[thick, fill=gray!20] (1.0,-0.8) circle (0.35); \node[below, align=center] at (1.0,-1.2) {no receptor:\\ignores it};
+    \node[align=center] at (2.2,-2.4) {endocrine: hormone in the blood,\\whole body, minutes to hours};
+  \end{scope}
+  % paracrine
+  \begin{scope}[xshift=6.6cm]
+    \draw[thick, fill=omProp!25] (0.8,0.6) circle (0.35);
+    \foreach \a in {0,45,...,315} \fill[omProp] (0.8,0.6) ++(\a:0.6) circle (0.04);
+    \draw[thick, fill=omDef!20] (1.9,0.9) circle (0.3); \draw[thick, fill=omDef!20] (1.7,-0.2) circle (0.3); \draw[thick, fill=omDef!20] (-0.2,0.0) circle (0.3);
+    \node[align=center] at (0.8,-2.4) {paracrine: diffuses to\\neighbours, destroyed\\within a millimetre};
+  \end{scope}
+  % synaptic
+  \begin{scope}[xshift=11.6cm]
+    \draw[very thick, omDef] (0,1.8) -- (0,0.5); \draw[thick, fill=omDef!25] (0,0.3) circle (0.25);
+    \draw[thick, fill=omExo!30] (0,-0.5) circle (0.3);
+    \foreach \x in {-0.08,0,0.08} \fill[omProp] (\x,-0.05) circle (0.03);
+    \node[align=center] at (0.2,-2.4) {synaptic: one target,\\\qty{20}{nm},\\a millisecond};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Three ranges of chemical signalling: a \omterm{def:b2:cell-signalling:kinds}{hormone} broadcast by
+the \omterm{def:b2:blood-circulation:blood}{blood} to every cell carrying its receptor; a paracrine factor
+reaching its neighbours; a \omterm{def:b2:cell-signalling:kinds}{neurotransmitter} delivered across a
+synapse to one cell.}
+\end{omfigure}
+
+\begin{theorem}[Receptor occupancy]\label{thm:b2:cell-signalling:occupancy}
+\index{dissociation constant}\index{receptor occupancy}
+A receptor $R$ binds its ligand $L$ reversibly, $R + L
+\rightleftharpoons RL$, with a \emph{\omterm{thm:b2:cell-signalling:occupancy}{dissociation constant}} $K_d =
+[R][L]/[RL]$. At equilibrium the fraction of receptors occupied is
+\[
+\theta = \frac{[RL]}{[R]_{\text{tot}}} = \frac{[L]}{K_d + [L]},
+\]
+the same hyperbola as an enzyme's saturation. $K_d$ is the
+concentration at which half the receptors are occupied and measures
+the \emph{affinity}: the lower, the tighter. \omterm{def:b2:cell-signalling:kinds}{Hormone} receptors have
+$K_d$ in the nanomolar to picomolar range, matched to the
+concentrations at which \omterm{def:b2:cell-signalling:kinds}{hormones} circulate ($10^{-12}$ to
+$10^{-9}$ mol/L): at $[L] = K_d/10$ a tenth are occupied, at
+$10K_d$ nine tenths. A cell cannot respond to a \omterm{def:b2:cell-signalling:kinds}{hormone} it does not
+have receptors for, and it tunes its sensitivity by changing the
+number of receptors, or --- as in \cref{ch:b2:reproductive-hormones}
+--- by withdrawing them when the \omterm{def:b2:cell-signalling:kinds}{hormone} is constantly present.
+\end{theorem}
+\begin{proof}
+With $[R] = [R]_{\text{tot}} - [RL]$, $K_d = ([R]_{\text{tot}} -
+[RL])[L]/[RL]$, so $[RL](K_d + [L]) = [R]_{\text{tot}}[L]$, which is
+the formula. It is the Michaelis--Menten expression of the Year 1
+volume without the catalytic step.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmode=log, xmin=0.01, xmax=100, ymin=0, ymax=1.1,
+  xlabel={ligand concentration (units of $K_d$)}, ylabel={fraction of receptors occupied},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0.01,0.1,1,10,100}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.01:100, samples=100] {x/(1+x)};
+\draw[dashed, gray] (axis cs:1,0) -- (axis cs:1,0.5) -- (axis cs:0.01,0.5);
+\node[font=\scriptsize, anchor=north west] at (axis cs:1.1,0.48) {$[L] = K_d$: half occupied};
+\node[font=\scriptsize, anchor=south east] at (axis cs:0.1,0.1) {10\% at $K_d/10$};
+\node[font=\scriptsize, anchor=north west] at (axis cs:10,0.92) {90\% at $10\,K_d$};
+\end{axis}
+\end{tikzpicture}
+
+{\small \omterm{thm:b2:cell-signalling:occupancy}{Receptor occupancy} against ligand concentration on a
+logarithmic scale: the response of a cell runs from a tenth to nine
+tenths over a hundredfold range of concentration centred on $K_d$.}
+\end{omfigure}
+
+\section{Receptors at the surface}
+
+\begin{proposition}[G-protein-coupled receptors and cyclic AMP]\label{prop:b2:cell-signalling:gpcr}
+\index{G protein}\index{G-protein-coupled receptor}\index{cyclic AMP}\index{second messenger}\index{protein kinase A}
+The largest family of receptors --- some \num{800} genes in a human,
+for \omterm{def:b2:cell-signalling:kinds}{hormones}, \omterm{def:b2:cell-signalling:kinds}{neurotransmitters}, odours, light --- are proteins that
+cross the membrane seven times. A ligand binding outside changes
+their shape inside, where they activate a \emph{\omterm{prop:b2:cell-signalling:gpcr}{G protein}}: a
+three-subunit switch that swaps its bound GDP for GTP, splits, and
+in its GTP-bound form regulates an effector enzyme for a few seconds
+before hydrolysing the GTP and switching itself off. The classic
+effector is \emph{adenylyl cyclase}, which makes \emph{\omterm{prop:b2:cell-signalling:gpcr}{cyclic AMP}}
+from ATP: a small, diffusible \emph{\omterm{prop:b2:cell-signalling:gpcr}{second messenger}} whose
+concentration rises within seconds from \qty{0.1}{\micro mol/L} to
+several micromolar and which activates \emph{\omterm{prop:b2:cell-signalling:gpcr}{protein kinase A}}, an
+enzyme that phosphorylates --- and so switches on or off --- dozens
+of target proteins. The signal is ended by phosphodiesterase, which
+destroys cAMP, and by phosphatases, which remove the phosphates.
+Adrenaline on a liver cell acts this way: receptor $\to$ \omterm{prop:b2:cell-signalling:gpcr}{G protein}
+$\to$ cyclase $\to$ cAMP $\to$ kinase A $\to$ phosphorylase kinase
+$\to$ glycogen phosphorylase $\to$ glucose. Glucagon uses the same
+route; other \omterm{prop:b2:cell-signalling:gpcr}{G proteins} inhibit the cyclase, or activate
+phospholipase C, which releases two other \omterm{prop:b2:cell-signalling:gpcr}{second messengers},
+\emph{inositol trisphosphate} --- which opens calcium stores --- and
+diacylglycerol.
+\end{proposition}
+\begin{proof}[Evidence]
+Sutherland (1957) showed that adrenaline added to a liver
+homogenate released glucose only if membranes were present, that
+the membranes produced a heat-stable factor which alone activated
+phosphorylase in the membrane-free fraction, and that the factor was
+\omterm{prop:b2:cell-signalling:gpcr}{cyclic AMP} --- the first \omterm{prop:b2:cell-signalling:gpcr}{second messenger}, and the first
+demonstration that a \omterm{def:b2:cell-signalling:kinds}{hormone} acts at the cell surface through an
+intracellular intermediary. Rodbell and Gilman (1970s) found that
+the cyclase needed GTP and isolated the \omterm{prop:b2:cell-signalling:gpcr}{G protein} that carries the
+signal between receptor and enzyme; cholera toxin, which locks the
+\omterm{prop:b2:cell-signalling:gpcr}{G protein} in its on state, causes the gut to secrete litres of fluid
+a day --- the disease is a signalling defect.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % membrane
+  \fill[omExo!30] (0,2.0) rectangle (12,2.5);
+  \node[anchor=east] at (-0.1,2.25) {membrane};
+  % receptor
+  \draw[thick, fill=omDef!40] (1.0,1.7) rectangle (1.8,2.8); \node[anchor=east] at (0.95,2.65) {receptor};
+  \fill[omProp] (1.4,3.35) circle (0.12); \node[omProp, above] at (1.4,3.45) {adrenaline};
+  \draw[->, omProp] (1.4,3.23) -- (1.4,2.85);
+  % G protein
+  \draw[thick, fill=omDef!25] (2.6,1.5) ellipse (0.72 and 0.36); \node at (2.6,1.5) {G protein};
+  \node[below] at (2.6,1.1) {GDP $\to$ GTP};
+  \draw[->, thick] (1.8,2.0) -- (2.2,1.75);
+  % cyclase
+  \draw[thick, fill=omDef!40] (4.2,1.7) rectangle (5.2,2.8); \node[above] at (4.7,2.85) {adenylyl cyclase};
+  \draw[->, thick] (3.15,1.5) -- (4.2,1.85);
+  % cAMP
+  \node[omThm, anchor=west] at (5.35,1.55) {ATP $\to$ cAMP};
+  \draw[->, thick, omThm] (4.7,1.7) -- (5.2,1.15);
+  % PKA
+  \draw[thick, fill=omThm!20] (7.3,0.9) ellipse (0.7 and 0.35); \node at (7.3,0.9) {kinase A};
+  \draw[->, thick, omThm] (6.4,0.9) -- (6.6,0.9);
+  % targets
+  \draw[->, thick] (8.0,0.9) -- (9.0,0.9);
+  \node[anchor=west, align=left] at (9.0,0.9) {phosphorylase kinase $\to$ phosphorylase\\$\to$ glycogen $\to$ glucose};
+  % amplification annotations
+  \node[gray, align=center] at (1.4,0.3) {1 hormone};
+  \node[gray, align=center] at (4.7,0.3) {$\sim 10^{2}$ G proteins};
+  \node[gray, align=center] at (7.3,0.3) {$\sim 10^{4}$ cAMP};
+  \node[gray, align=center] at (10.2,0.3) {$\sim 10^{6}$ glucose};
+  % off switches
+  \node[omExo!70!black, align=center, anchor=south] at (9.6,2.7) {off: GTP hydrolysis (seconds),\\phosphodiesterase destroys cAMP,\\phosphatases undo the phosphorylations};
+\end{tikzpicture}
+
+{\small The \omterm{prop:b2:cell-signalling:gpcr}{cyclic AMP} pathway from adrenaline to glucose. Each
+stage activates many copies of the next: a single \omterm{def:b2:cell-signalling:kinds}{hormone} molecule
+ends in a million molecules of product.}
+\end{omfigure}
+
+\begin{theorem}[Amplification in a cascade]\label{thm:b2:cell-signalling:amplification}
+\index{amplification (signalling)}
+If each of $n$ stages of a cascade activates $a$ molecules of the
+next during the lifetime of its own activation, one molecule of
+messenger produces $a^{n}$ molecules of the final product. With
+four amplifying stages of a hundred each --- a receptor activating a
+hundred \omterm{prop:b2:cell-signalling:gpcr}{G proteins}, a cyclase making a hundred cAMP, a kinase
+phosphorylating a hundred enzymes, an enzyme releasing a hundred
+glucose molecules --- $a^{n} = 10^{8}$; in practice a million or so,
+in a few seconds, from a \omterm{def:b2:cell-signalling:kinds}{hormone} at $10^{-9}$ mol/L. Amplification
+is why \omterm{def:b2:cell-signalling:kinds}{hormones} can be effective at concentrations a millionfold
+below those of the metabolites they control, and why the cascade
+must be switched off at every stage: an amplifier that cannot be
+turned off is a disease (cholera, and the many cancers in which a
+signalling protein is locked on).
+\end{theorem}
+\begin{proof}
+Stage 1 produces $a$ active molecules; each of these produces $a$
+at stage 2, giving $a^{2}$; by induction, $a^{n}$ after $n$ stages.
+The gain of each stage is the number of substrate turnovers an
+activated catalyst achieves before it is inactivated: its catalytic
+rate times its active lifetime.
+\end{proof}
+
+\begin{proposition}[Receptor tyrosine kinases and calcium]\label{prop:b2:cell-signalling:rtk}
+\index{receptor tyrosine kinase}\index{insulin receptor}\index{calcium signalling}\index{calmodulin}
+A second family of surface receptors --- for insulin, for the growth
+factors that drive cell division, for the inductive signals of
+development --- are \emph{\omterm{prop:b2:cell-signalling:rtk}{receptor tyrosine kinases}}: single-pass
+proteins that, when their ligand brings two of them together,
+phosphorylate each other on tyrosines and so create docking sites
+for a set of adaptor proteins. From these run several cascades at
+once: a chain of three kinases (the MAP kinase cascade) that ends in
+the nucleus and switches on the genes of growth; a lipid kinase
+whose product recruits the kinase that mediates insulin's metabolic
+effects --- moving glucose transporters to the membrane, switching
+on glycogen synthesis; and others. A third universal \omterm{prop:b2:cell-signalling:gpcr}{second
+messenger} is \emph{calcium}: held in the cytosol at
+\qty{0.1}{\micro mol/L}, ten thousand times below the outside, it
+floods in through channels opened by a signal or a voltage, or out
+of the endoplasmic reticulum in answer to inositol trisphosphate,
+rising to micromolar in milliseconds; bound to \emph{calmodulin} it
+activates kinases and pumps, and bound to troponin it triggers
+contraction (\cref{ch:b2:muscle-movement}). Pumps return it to the
+stores within a second. Whatever the receptor, the cell's interior
+speaks a few languages --- cAMP, calcium, phosphorylation --- and the
+specificity lies in which proteins each cell type has for them to
+act on.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book4/ai/b4-19-adrenaline-runner.jpg}
+
+{\small The cascade at work. A fright releases adrenaline from
+the adrenal medulla; within seconds the \omterm{def:b2:heart:anatomy}{heart} races, the liver
+pours out glucose and the airways widen --- one messenger,
+several receptors, a million-fold amplification in each cell.}
+\end{omfigure}
+
+\section{Receptors inside}
+
+\begin{proposition}[Nuclear receptors]\label{prop:b2:cell-signalling:nuclear}
+\index{nuclear receptor}\index{steroid hormone}
+Steroids, thyroxine, retinoic acid and vitamin D diffuse through
+the membrane and bind receptors in the cytosol or nucleus that are
+themselves \emph{\omterm{prop:b2:cell-differentiation:transcriptional}{transcription factors}}: the hormone--receptor
+complex binds specific DNA sequences and switches its target genes
+on or off. The response is slow --- minutes to hours to make the
+mRNA and the protein --- and lasting: cortisol induces the enzymes
+of gluconeogenesis for hours, oestradiol builds the uterine lining
+over days, testosterone makes muscle over weeks, thyroxine sets the
+metabolic rate of every cell. Some steroids also have fast actions
+through surface receptors, and some surface pathways also reach the
+nucleus (the MAP kinase cascade), so the distinction is not
+absolute; but the rule stands that a lipid-soluble messenger
+changes what a cell \emph{is} by changing its genes, while a
+water-soluble one changes what it \emph{does} by changing its
+enzymes.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \foreach \x/\t in {0/{water-soluble: adrenaline, insulin, glucagon}, 7.4/{lipid-soluble: cortisol, oestradiol, thyroxine}} \node[anchor=south, font=\scriptsize\bfseries] at (\x+2.6,3.4) {\t};
+  % left: surface receptor
+  \fill[omExo!30] (0,2.4) rectangle (5.2,2.8);
+  \draw[thick, fill=omDef!40] (1.6,2.1) rectangle (2.3,3.1);
+  \fill[omProp] (1.95,3.35) circle (0.1);
+  \draw[->, thick] (1.95,2.1) -- (1.95,1.6) node[below, align=center] {second messengers,\\kinases: enzymes\\switched in seconds};
+  \node[align=center] at (4.5,1.0) {changes what\\the cell does};
+  % right: nuclear receptor
+  \begin{scope}[xshift=7.4cm]
+    \fill[omExo!30] (0,2.4) rectangle (5.2,2.8);
+    \fill[omProp] (1.5,3.35) circle (0.1);
+    \draw[->, omProp] (1.5,3.25) -- (1.5,1.9);
+    \draw[thick, fill=omThm!20] (1.5,1.5) ellipse (0.72 and 0.3); \node at (1.5,1.5) {receptor};
+    \draw[thick] (0.6,0.4) -- (4.6,0.4); \draw[thick] (0.6,0.25) -- (4.6,0.25); \node[below] at (2.6,0.2) {DNA: target genes on or off, hours};
+    \draw[->, thick] (1.5,1.2) -- (2.4,0.5);
+    \node[align=center] at (4.0,1.4) {changes what\\the cell is};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Two designs. A water-soluble messenger acts at the surface
+and changes enzyme activity within seconds; a lipid-soluble one
+enters, binds a receptor that is a \omterm{prop:b2:cell-differentiation:transcriptional}{transcription factor}, and changes
+gene expression over hours.}
+\end{omfigure}
+
+\section{A worked case: insulin, glucagon and the glucose set point}
+
+\begin{proposition}[Two hormones and a set point]\label{prop:b2:cell-signalling:glucose}
+\index{insulin}\index{glucagon}\index{blood glucose}
+The \omterm{def:b2:blood-circulation:blood}{blood}'s glucose is held near \qty{5}{mmol/L} (\qty{0.9}{g/L}) by
+two antagonistic \omterm{def:b2:cell-signalling:kinds}{hormones} of the pancreatic islets. After a meal
+the rising glucose is sensed by the $\beta$ cells --- which
+metabolise it, close a potassium channel as their ATP rises,
+depolarise, admit calcium and release \emph{insulin} --- and insulin,
+through its tyrosine-kinase receptor, makes muscle and fat take up
+glucose (by moving transporters to their membranes), the liver
+store it as glycogen and fat, and all tissues stop burning fat.
+Between meals the falling glucose lets the $\alpha$ cells release
+\emph{glucagon}, which, through cAMP in the liver, breaks glycogen
+down and makes new glucose from amino acids; adrenaline does the
+same faster in emergencies, and cortisol and growth \omterm{def:b2:cell-signalling:kinds}{hormone} over
+hours. Each \omterm{def:b2:cell-signalling:kinds}{hormone} is released in proportion to the deviation it
+corrects: a negative feedback with two effectors, one for each
+direction, and a set point defended to within a fifth. The brain,
+which burns \qty{120}{g} of glucose a day and stores none, is the
+organ the loop protects; type 1 diabetes is the loss of the
+$\beta$ cells, and its untreated course --- glucose at
+\qty{20}{mmol/L}, fat burnt for want of insulin, acid in the \omterm{def:b2:blood-circulation:blood}{blood}
+--- is what the loop looks like with one arm removed.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.82\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=6, ymin=0, ymax=1.1,
+  xlabel={hours after a meal}, ylabel={relative to peak},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,1,2,3,4,5,6}, ytick={0,0.5,1},
+  legend style={font=\scriptsize, at={(0.5,-0.28)}, anchor=north, draw=none, legend columns=3},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:6, samples=80] {0.55 + 0.45*exp(-((x-0.9)^2)/0.5) - 0.08*exp(-((x-4)^2)/2)};
+\addlegendentry{blood glucose (5 mmol/L at 0.55)}
+\addplot[very thick, omThm, domain=0:6, samples=80] {0.15 + 0.85*exp(-((x-1.1)^2)/0.45)};
+\addlegendentry{insulin}
+\addplot[very thick, omProp, domain=0:6, samples=80] {0.75 - 0.5*exp(-((x-1.2)^2)/0.8) + 0.25*(1-exp(-x/5))*0.6};
+\addlegendentry{glucagon}
+\end{axis}
+\end{tikzpicture}
+
+{\small Glucose, insulin and glucagon after a meal. Insulin rises
+with the glucose and brings it down; as glucose falls toward the set
+point, glucagon rises to hold it there.}
+\end{omfigure}
+
+\begin{example}[Speed, reach and cost of the two systems]\label{ex:b2:cell-signalling:compare}
+Adrenaline in the \omterm{def:b2:blood-circulation:blood}{blood} reaches every cell in about a minute
+(the circulation time) and acts for minutes; a nerve impulse
+reaches its target in milliseconds and acts for milliseconds. A
+\omterm{def:b2:cell-signalling:kinds}{hormone} costs almost nothing per cell reached --- a nanomole spread
+over the body --- but cannot address one cell; a nerve addresses one
+cell exactly but must build and maintain a wire to it. The body uses
+both: the sympathetic nerves of \cref{ch:b2:blood-pressure} act on
+the \omterm{def:b2:heart:anatomy}{heart} and the \omterm{def:b2:blood-circulation:vessels}{arterioles} in a second, and the adrenal medulla,
+itself a modified sympathetic ganglion, backs them up by pouring the
+same molecule into the \omterm{def:b2:blood-circulation:blood}{blood} for the whole body. And at the synapse
+the two designs meet, for a \omterm{def:b2:cell-signalling:kinds}{neurotransmitter} is a messenger acting
+on a receptor by the same mechanisms --- a channel that opens, a \omterm{prop:b2:cell-signalling:gpcr}{G
+protein} that switches --- only across twenty nanometres instead of a
+metre.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:cell-signalling:1}
+Classify as endocrine, paracrine, autocrine or synaptic, and as
+water- or lipid-soluble: insulin, cortisol, acetylcholine at a
+synapse, histamine at a wound, oestradiol, adrenaline from the
+adrenal, nitric oxide from the endothelium.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:cell-signalling:2}
+List the steps from adrenaline at the liver cell membrane to glucose
+in the \omterm{def:b2:blood-circulation:blood}{blood}, and name the off-switch at each step.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:cell-signalling:3}
+Compare surface and \omterm{prop:b2:cell-signalling:nuclear}{nuclear receptors}: what binds them, where they
+are, how fast they act, what they change.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:cell-signalling:4}
+What are the three universal \omterm{prop:b2:cell-signalling:gpcr}{second messengers} named in this
+chapter, how is each raised, and how is each removed?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:cell-signalling:5}
+A receptor has $K_d = \qty{2}{nmol/L}$. Compute the occupancy at
+0.2, 2, 20 and \qty{200}{nmol/L}. A cell doubles its receptor number:
+what changes, the occupancy or the number of occupied receptors?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:cell-signalling:6}
+A cascade has stages with gains of 50, 200, 100 and 300. Compute the
+overall amplification. If the \omterm{def:b2:cell-signalling:kinds}{hormone} is at \qty{1}{nmol/L} and
+\qty{1}{\%} of the receptors ($10^{4}$ per cell) are occupied, how
+many product molecules does the cell make per second if each stage's
+gain is per second?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:cell-signalling:7}
+Cholera toxin locks the stimulatory \omterm{prop:b2:cell-signalling:gpcr}{G protein} in its GTP-bound
+state in gut cells. Explain, step by step, why the patient loses
+litres of fluid a day, and why the effect persists for days after
+the bacteria are gone.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:cell-signalling:8}
+The cytosolic calcium rises from \qty{0.1}{} to \qty{1}{\micro
+mol/L} in a cell of \qty{2000}{\micro m^3} when a channel opens. How
+many calcium ions entered? If a single open channel passes $10^{6}$
+ions a second, how long did one channel take, and why does a cell
+open many at once?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:cell-signalling:9}
+Insulin and glucagon both act on the liver, one through a tyrosine
+kinase and one through cAMP. Explain how the liver cell integrates
+the two signals, what happens to glycogen when both are high, and
+why the ratio matters more than either level.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:cell-signalling:10}
+Adrenaline raises cAMP in a liver cell within \qty{5}{s} and glucose
+output within \qty{30}{s}; cortisol raises the liver's gluconeogenic
+enzymes over \qty{4}{h}. Using diffusion, transcription (\qty{50}{}
+nucleotides a second on a \qty{3000}{}-nucleotide gene), translation
+(\qty{5}{} amino acids a second on a \num{500}-residue protein) and
+the need to accumulate thousands of enzyme molecules, account for
+the two time scales.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:cell-signalling:11}
+A \omterm{def:b2:genome-diversification:mutation}{mutation} makes a growth-factor \omterm{prop:b2:cell-signalling:rtk}{receptor tyrosine kinase}
+dimerise, and so signal, without its ligand. Predict the behaviour
+of the cell, explain why this is a common step in cancer, and say
+what a drug that blocks the kinase's ATP site would do.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:cell-signalling:12}
+``The endocrine system broadcasts; the nervous system wires.''
+Discuss the two designs in speed, reach, specificity and cost, and
+say where each is indispensable and where the body uses both for
+the same message.
+\end{exercise}
+
+\section{Problem: A Hormone from Blood to Gene}
+
+\begin{problem}[{Weekend problem --- adrenaline followed from the
+adrenal gland to a liver cell's glucose, with its concentration,
+receptor occupancy, cascade gain and timing computed, then cortisol
+followed to a gene, and the glucose loop analysed, ending on the
+occupancy, the amplification and the time each hormone takes}]
+\label{pb:b2:cell-signalling:1}
+Data: the adrenal medulla releases \qty{1}{nmol} of adrenaline into
+\qty{5}{L} of \omterm{def:b2:blood-circulation:blood}{blood} in a fright; adrenaline's $K_d$ at the liver
+receptor is \qty{1}{nmol/L}; a liver cell (\qty{5000}{\micro m^3})
+carries $2\times 10^{4}$ receptors. Cascade gains per second of
+activation: receptor $\to$ \omterm{prop:b2:cell-signalling:gpcr}{G protein} 20, \omterm{prop:b2:cell-signalling:gpcr}{G protein} $\to$ cAMP 100
+(the cyclase's turnover in the \omterm{prop:b2:cell-signalling:gpcr}{G protein}'s 3-second lifetime),
+cAMP $\to$ kinase A 1 (stoichiometric), kinase A $\to$ phosphorylase
+kinase 50, $\to$ phosphorylase 50, $\to$ glucose 1000. The liver
+holds \qty{100}{g} of glycogen. Cortisol: transcription at
+\qty{50}{} nucleotides a second on a gene of \qty{4000}{}
+nucleotides, translation at \qty{5}{} residues a second on a
+\num{600}-residue enzyme, \num{20} ribosomes per mRNA, \num{100}
+mRNAs made per hour, an effect needing $10^{5}$ enzyme molecules.
+
+\medskip
+\noindent\textbf{Part I --- The \omterm{def:b2:cell-signalling:kinds}{hormone} arrives.}
+\begin{enumerate}
+  \item Compute the \omterm{def:b2:blood-circulation:blood}{plasma} concentration of adrenaline after the
+        release, ignoring its removal.
+  \item Compute the \omterm{thm:b2:cell-signalling:occupancy}{receptor occupancy} and the number of occupied
+        receptors per liver cell.
+  \item Adrenaline is removed with a half-life of \qty{2}{min}. What
+        is its concentration and occupancy after \qty{6}{min}?
+  \item How long does the adrenaline take to reach the liver from
+        the adrenal, given a circulation time of about a minute? Why
+        does the sympathetic nerve to the liver act faster?
+  \item A cell with $2\times 10^{5}$ receptors and the same $K_d$:
+        what changes?
+  \item Why is $K_d$ matched to the circulating concentration ---
+        what would a receptor with $K_d = \qty{1}{\micro mol/L}$ do
+        with a nanomolar \omterm{def:b2:cell-signalling:kinds}{hormone}?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The cascade.}
+\begin{enumerate}[resume]
+  \item Compute the overall gain from one occupied receptor to
+        glucose molecules per second.
+  \item Compute the cAMP molecules the cell makes in the first
+        second, and the concentration they reach in its volume.
+  \item Compute the glucose output of one liver cell per second at
+        the occupancy of question 2, and per minute.
+  \item The liver has $2\times 10^{11}$ cells. Compute the output
+        the gains predict, in grams per minute, and compare with the
+        \qty{5}{g/min} actually observed. What limits the real
+        output?
+  \item How long would the \qty{100}{g} of glycogen last at this
+        rate? Why does it not run out in a fright?
+  \item Name the off-switch at each amplifying stage and say which
+        acts fastest.
+  \item A phosphodiesterase inhibitor (caffeine) is present. Predict
+        the effect on the cascade and on the glucose output.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Cortisol to a gene.}
+\begin{enumerate}[resume]
+  \item Compute the time to transcribe one mRNA.
+  \item Compute the time to translate one enzyme molecule, and the
+        number of enzyme molecules per mRNA per hour (each mRNA
+        living an hour, ribosomes starting one after another).
+  \item Compute the enzyme molecules made per hour from the
+        \num{100} mRNAs, and the time to reach $10^{5}$.
+  \item Add the time for cortisol to enter, bind, and reach the DNA
+        (minutes) and explain the observed \qty{4}{h}.
+  \item Why would the body not use a cascade like adrenaline's for
+        cortisol's job, and why not use cortisol's mechanism for a
+        fright?
+  \item Cortisol also raises the number of adrenaline receptors in
+        liver cells. Explain how a slow \omterm{def:b2:cell-signalling:kinds}{hormone} can amplify a fast
+        one, and what this does to the fast one's occupancy curve.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The loop.}
+\begin{enumerate}[resume]
+  \item After a meal glucose rises from 5 to \qty{8}{mmol/L}.
+        Describe the $\beta$ cell's response from glucose to
+        insulin release, naming the coupling.
+  \item Insulin acts through a tyrosine kinase, glucagon through
+        cAMP. Explain why a single cell can obey both and how the
+        liver's glycogen enzymes are set by their ratio.
+  \item A patient has no $\beta$ cells. Predict fasting and
+        post-meal glucose, and explain why fat is burnt and acid
+        appears.
+  \item Injected insulin has no feedback. Explain the danger of an
+        unusually long run with a usual dose.
+  \item Compare the glucose loop with the \omterm{def:b2:blood-pressure:baroreflex}{baroreflex} of
+        \cref{ch:b2:blood-pressure}: sensor, effectors, gain, speed.
+  \item State the result: adrenaline's occupancy after release, the
+        cascade gain, the liver's glucose output, and the time
+        cortisol takes.
+\end{enumerate}
+\end{problem}

@@ -1,6 +1,609 @@
-\chapter{Biodiversity and Global Change}\label{ch:b2:global-change}
+\chapter{Global Change and the Biosphere}\label{ch:b2:global-change}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Between 1851 and 1858 Henry Thoreau walked the \omterm{def:b2:plant-meristems:wood}{woods} and meadows
+around Concord, Massachusetts, and wrote down the day each of some
+five hundred plants first flowered. A century and a half later,
+botanists went back to the same places with his notebooks. The
+highbush blueberry that Thoreau saw open on May 11 now opens on
+April 12; the whole flora flowers, on average, ten days earlier
+than in his time, in step with a spring that is \qty{2.4}{\celsius}
+warmer; and a quarter of his species are gone from Concord --- not
+at random, but those whose flowering could not track the
+temperature. The previous chapters gave the machinery: the cycles
+of \cref{ch:b2:biogeochemical-cycles}, the selection and drift of
+\cref{ch:b2:population-genetics}, the competition and speciation
+of \cref{ch:b2:speciation}, the \omterm{def:b2:living-soil:soil}{soils} of \cref{ch:b2:living-soil}.
+This chapter puts a number on what is happening to living things
+as one species changes the chemistry of the air and the sea: how
+much warming per tonne of carbon, how many days of spring per
+degree, how many metres uphill, how much acid in the sea, how many
+species per hectare lost --- and what the numbers say about the
+century ahead.
 
-\emph{This chapter has not been written yet.}
+\section{The physical change}
+
+\begin{proposition}[Warming is proportional to cumulative emissions]\label{prop:b2:global-change:tcre}
+\index{global warming}\index{cumulative emissions}\index{carbon budget}\index{greenhouse effect}
+Carbon dioxide absorbs the infrared the ground emits and returns a
+part of it; more \ensuremath{\mathrm{CO_2}} means a warmer surface, by about
+\qty{3}{\celsius} for each doubling once the oceans have caught up
+(the \emph{climate sensitivity}). Because the temperature response
+to \ensuremath{\mathrm{CO_2}} is logarithmic in concentration while the \omterm{prop:b2:biogeochemical-cycles:carbon}{airborne
+fraction} of emissions falls as the concentration rises, the two
+curvatures nearly cancel, and the global mean warming is, to a
+good approximation, \emph{linear in the cumulative amount of
+carbon emitted}, whatever the timing:
+\[
+\Delta T \approx \lambda\,C_{\text{cum}}, \qquad \lambda \approx
+\qty{1.65}{\celsius} \text{ per } \qty{1000}{GtC}
+\]
+(\qty{0.45}{\celsius} per \qty{1000}{Gt} of \ensuremath{\mathrm{CO_2}}). Some
+\qty{700}{GtC} emitted since 1850 have warmed the planet by
+\qty{1.2}{\celsius} --- and the relation gives every target a
+budget: \qty{1.5}{\celsius} allows about \qty{900}{GtC} in all,
+\qty{200}{GtC} more than has been emitted, twenty years at the
+present rate. The warming is unequal: twice the average over land
+and three times in the Arctic; nights more than days; and it comes
+with the rest --- more intense rain and longer droughts, a sea
+level rising \qty{4}{mm} a year, ice that is a fifth smaller in
+summer, and an ocean that has absorbed \qty{90}{\%} of the heat and
+a quarter of the carbon.
+\end{proposition}
+\begin{proof}[Evidence]
+The proportionality was found in climate models of every
+complexity and confirmed by the observed record: plotting the
+warming since 1850 against \omterm{prop:b2:global-change:tcre}{cumulative emissions} gives a straight
+line through the decades. The \omterm{prop:b2:global-change:tcre}{greenhouse effect} itself is measured
+from orbit: satellites see the infrared the Earth emits with the
+absorption bands of \ensuremath{\mathrm{CO_2}}, methane and water vapour cut out of
+it, and the cut has deepened between 1970 and 2020 by exactly the
+amount the rise in these gases predicts. The isotopes and the
+falling oxygen of \cref{ch:b2:biogeochemical-cycles} tie the extra
+\ensuremath{\mathrm{CO_2}} to fossil fuel.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.88\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=1845, xmax=2030, ymin=-0.3, ymax=1.5,
+  xlabel={decade}, ylabel={warming (\unit{\celsius}) since 1850--1900},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1850,1900,1950,2000}, ytick={0,0.5,1,1.5},
+  scaled x ticks=false, x tick label style={/pgf/number format/1000 sep=},
+  clip=false,
+]
+\addplot[ybar, bar width=7pt, fill=omThm!50, draw=omThm] coordinates {
+(1855,0.00) (1865,-0.04) (1875,0.02) (1885,-0.06) (1895,-0.02) (1905,-0.10) (1915,-0.06) (1925,0.05) (1935,0.15) (1945,0.25) (1955,0.15) (1965,0.15) (1975,0.18) (1985,0.40) (1995,0.55) (2005,0.78) (2015,1.02) (2023,1.28)};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:1850,1.2) {each bar: a decade's mean; the last, 2020--2024\\ \qty{700}{GtC} emitted, $\qty{1.65}{\celsius}/\qty{1000}{GtC}$: \qty{1.2}{\celsius}};
+\end{axis}
+\end{tikzpicture}
+
+{\small Global mean surface temperature by decade, relative to the
+second half of the nineteenth century. The last four decades each
+set a record, and the rise since 1970 is \qty{0.2}{\celsius} per
+decade.}
+\end{omfigure}
+
+\section{The calendar: phenology}
+
+\begin{theorem}[Degree-days and the advance of spring]\label{thm:b2:global-change:phenology}
+\index{phenology}\index{degree-days}\index{thermal time}\index{phenological mismatch}
+Many events in the life of plants and ectotherms --- budburst,
+flowering, egg hatching, emergence --- occur when the accumulated
+\emph{\omterm{thm:b2:global-change:phenology}{thermal time}} since a start date, the sum of daily
+temperatures above a base $T_b$ (\emph{degree-days}), reaches a
+fixed total $K$. If spring temperature rises linearly, $T(t) = T_b
++ b\,(t - t_0)$ at $b$ degrees per day from the day $t_0$ it crosses
+the base, the event occurs at
+\[
+t^{*} = t_0 + \sqrt{2K/b},
+\]
+and a uniform warming of $\Delta T$ brings the crossing day forward
+by $\Delta T/b$ and the event with it: with $b \approx
+\qty{0.1}{\celsius}$ per day, \emph{about ten days earlier per
+degree}. Species differ in $T_b$, $K$ and in whether they also use
+day length, which warming does not change --- so the members of a
+food chain advance at different rates and their timing comes
+apart: a \emph{\omterm{thm:b2:global-change:phenology}{phenological mismatch}} between the caterpillar and
+the bird that must feed its chicks on it.
+\end{theorem}
+\begin{proof}
+Degree-days from $t_0$: $\int_{t_0}^{t}(T - T_b)\,\mathrm{d}t' =
+b\,(t - t_0)^{2}/2$, equal to $K$ when $t - t_0 = \sqrt{2K/b}$.
+Warming by $\Delta T$ replaces $T$ by $T + \Delta T$: the base is
+crossed $\Delta T/b$ days earlier and the accumulation, identical
+from that day on, completes $\Delta T/b$ days earlier. (If the
+warming also steepens $b$, the interval $\sqrt{2K/b}$ shortens
+too.) A species cued by day length keeps its date; one cued by
+degree-days moves; the gap between them grows by $\Delta T/b$.
+\end{proof}
+\begin{proof}[Evidence]
+Thoreau's Concord flora, and the Marsham family's record of
+twenty-seven signs of spring in Norfolk kept from 1736 to 1947,
+both show flowering and leafing advancing by \qtyrange{3}{6}{days}
+per degree of spring warming. The Kyoto cherry blossom, dated in
+court diaries since the ninth century, held around mid-April for a
+thousand years and has moved to early April since 1900, the
+earliest dates on record falling in the 2020s. In the Netherlands
+the oak's caterpillars now peak two weeks earlier than in 1985; the
+great tit, cued by the same warmth, has kept pace, but the pied
+flycatcher, which times its migration from Africa by day length,
+arrives as before and finds the peak gone --- its populations have
+fallen by \qty{90}{\%} where the mismatch is largest (Both and
+colleagues, 2006).
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.62\linewidth]{images/book4/ai/b4-27-phenology-cherry.jpg}
+
+{\small A cherry orchard in bloom. The Kyoto cherries, dated in
+diaries for twelve centuries, now open earlier than in any year
+before 1900 --- and the bees that pollinate them must be flying on
+the same day.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.74\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=100, ymin=0, ymax=14,
+  xlabel={days from 1 March}, ylabel={daily mean temperature (\unit{\celsius})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,20,40,60,80,100},
+  legend style={font=\scriptsize, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:100, samples=2] {2 + 0.1*x};
+\addlegendentry{spring before warming}
+\addplot[very thick, omThm, domain=0:100, samples=2] {3 + 0.1*x};
+\addlegendentry{spring \qty{1}{\celsius} warmer}
+\draw[dashed, gray] (axis cs:0,5) -- (axis cs:100,5); \node[font=\scriptsize, anchor=south east] at (axis cs:100,5) {base temperature $T_b = \qty{5}{\celsius}$};
+\fill[omDef, opacity=0.15] (axis cs:30,5) -- (axis cs:93,5) -- (axis cs:93,11.3) -- cycle;
+\fill[omThm, opacity=0.15] (axis cs:20,5) -- (axis cs:83,5) -- (axis cs:83,11.3) -- cycle;
+\draw[<->, thick] (axis cs:83,1.6) -- (axis cs:93,1.6); \node[font=\scriptsize, anchor=south] at (axis cs:88,1.8) {10 days};
+\draw[dotted] (axis cs:93,0) -- (axis cs:93,5); \draw[dotted] (axis cs:83,0) -- (axis cs:83,5);
+\node[font=\scriptsize, anchor=south, align=center] at (axis cs:62,11.4) {$K = 200$ degree-days\\ (shaded areas)};
+\end{axis}
+\end{tikzpicture}
+
+{\small Degree-days. The event occurs when the shaded area
+between the temperature line and the base reaches $K$; a spring one
+degree warmer crosses the base ten days sooner and completes the
+sum ten days sooner.}
+\end{omfigure}
+
+\section{The map: range shifts}
+
+\begin{proposition}[Isotherms move, and species follow]\label{prop:b2:global-change:range}
+\index{range shift}\index{climate velocity}\index{lapse rate}
+Temperature falls by about \qty{6.5}{\celsius} per kilometre of
+altitude and by about \qty{0.65}{\celsius} per hundred kilometres of
+latitude in the temperate zone; a warming of \qty{1}{\celsius}
+therefore moves every isotherm about \qty{150}{m} uphill and
+\qty{150}{km} poleward. Species whose limits are set by temperature
+move with their isotherm if they can: the average of hundreds of
+studied species has shifted \qty{11}{m} uphill and \qty{17}{km}
+poleward per decade since 1970, at the speed of the isotherms, and
+the fastest --- mobile, generalist, short-lived --- outrun them,
+while trees, whose \omterm{def:b2:angiosperm-reproduction:seed}{seeds} travel metres a year, and species already
+at the summit or the pole, cannot follow: a mountain's top has
+nowhere to go, and each degree of warming removes the highest
+\qty{150}{m} of every range. Marine species, with no barriers and
+sharper thermal limits, move fastest, tens of kilometres a decade;
+the cod, the mackerel and the fisheries with them have moved north
+across whole seas. The upper edge of a range advances, the lower
+edge retreats as it warms and as new competitors arrive from
+below, and the community at any point is reassembled from species
+that have never met.
+\end{proposition}
+\begin{proof}[Evidence]
+Parmesan (1996) resurveyed the Edith's checkerspot butterfly
+across its western North American range: populations at the
+southern edge and low altitudes were extinct, those at the northern
+edge and high altitudes thriving, and the whole range had moved
+\qty{92}{km} north and \qty{124}{m} up --- the first species shown
+to have tracked the isotherms. Lenoir and colleagues (2008)
+compared forest plant surveys of 1905--1985 with 1986--2005 across
+the French mountains: the optimum altitude of 171 species had
+risen by \qty{29}{m} a decade. Chen and colleagues (2011), across
+two thousand species, found the shifts two to three times faster
+than earlier estimates, and proportional to the local warming.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \fill[gray!25] (0,0) -- (3.5,4.2) -- (7,0) -- cycle;
+  \draw[thick] (0,0) -- (3.5,4.2) -- (7,0);
+  \foreach \y/\lab in {1.0/{\qty{12}{\celsius}}, 2.2/{\qty{8}{\celsius}}, 3.4/{\qty{4}{\celsius}}} { \draw[omDef, thick] ({\y/1.2},\y) -- ({7-\y/1.2},\y) node[right] {\lab}; }
+  \foreach \y in {1.15,2.35,3.55} { \draw[omThm, thick, dashed] ({\y/1.2},\y) -- ({7-\y/1.2},\y); }
+  \node[omThm, anchor=west, align=left] at (7.6,3.7) {dashed: the same isotherms\\ after \qty{1}{\celsius} of warming,\\ \qty{150}{m} higher};
+  \fill[omProp!50] (0.83,1.0) -- (6.17,1.0) -- (5.17,2.2) -- (1.83,2.2) -- cycle;
+  \node[align=center] at (3.5,1.6) {a species' band,\\ \qtyrange{1000}{1200}{m}};
+  \draw[->, thick, omExo!80!black] (1.1,2.2) -- (1.1,2.9); \node[omExo!80!black, anchor=east, align=right] at (0.95,2.55) {the band moves up\\ and shrinks};
+  \node[anchor=north] at (3.5,-0.1) {a mountain: area shrinks with altitude, and the summit has nowhere higher};
+\end{tikzpicture}
+
+{\small A \omterm{prop:b2:global-change:range}{range shift} on a mountain. Each degree lifts the
+isotherms \qty{150}{m}; a species tracks its band upward into a
+smaller area, and a band already at the summit is lost.}
+\end{omfigure}
+
+\section{The sea: acidification and heat}
+
+\begin{theorem}[Acidification]\label{thm:b2:global-change:acid}
+\index{ocean acidification}\index{carbonate system}\index{saturation state}\index{coral bleaching}
+Carbon dioxide dissolving in seawater makes carbonic acid, which
+dissociates: $\ensuremath{\mathrm{CO_2}} + \ensuremath{\mathrm{H_2O}} \rightleftharpoons \ensuremath{\mathrm{H^{+}}} +
+\ensuremath{\mathrm{HCO_3^{-}}}$, with $[\ensuremath{\mathrm{H^{+}}}][\ensuremath{\mathrm{HCO_3^{-}}}]/[\ensuremath{\mathrm{CO_2}}] = K_1$.
+Bicarbonate is the ocean's largest carbon pool and is held nearly
+constant by the alkalinity, so
+\[
+[\ensuremath{\mathrm{H^{+}}}] \propto p_{\ensuremath{\mathrm{CO_2}}}, \qquad
+\Delta\mathrm{pH} \approx -\log_{10}\frac{p_{\ensuremath{\mathrm{CO_2}}}}{p_0}
+\]
+--- more precisely $-0.9\log_{10}$ of the ratio, because bicarbonate
+rises a little. From 280 to \qty{420}{ppm} the surface pH has fallen
+by $0.15$, from $8.2$ to $8.05$: a \qty{40}{\%} increase in hydrogen
+ions; at \qty{800}{ppm} it would fall by $0.4$. The extra hydrogen
+ions consume carbonate, $\ensuremath{\mathrm{H^{+}}} + \ensuremath{\mathrm{CO_3^{2-}}} \to \ensuremath{\mathrm{HCO_3^{-}}}$, and
+the \emph{\omterm{thm:b2:global-change:acid}{saturation state}} $\Omega$ of calcium carbonate ---
+the product of calcium and carbonate concentrations over the
+solubility product --- falls in proportion: shells and skeletons
+of aragonite (corals, pteropods) form readily at $\Omega > 3$, with
+difficulty near 1, and dissolve below it; the tropical surface,
+at $\Omega \approx 4$ before industry and 3 now, reaches 2 at
+\qty{560}{ppm}, and the cold, \ensuremath{\mathrm{CO_2}}-rich polar surface waters
+reach 1 first.
+\end{theorem}
+\begin{proof}
+From the equilibrium, $[\ensuremath{\mathrm{H^{+}}}] = K_1[\ensuremath{\mathrm{CO_2}}]/[\ensuremath{\mathrm{HCO_3^{-}}}]$ and
+$[\ensuremath{\mathrm{CO_2}}]$ is proportional to $p_{\ensuremath{\mathrm{CO_2}}}$ by Henry's law;
+with $[\ensuremath{\mathrm{HCO_3^{-}}}]$ constant, $[\ensuremath{\mathrm{H^{+}}}]$ is proportional to
+$p_{\ensuremath{\mathrm{CO_2}}}$ and $\mathrm{pH} = -\log_{10}[\ensuremath{\mathrm{H^{+}}}]$ changes by
+$-\log_{10}$ of the ratio. The second equilibrium, $[\ensuremath{\mathrm{H^{+}}}][\ensuremath{\mathrm{CO_3^{2-}}}]/[\ensuremath{\mathrm{HCO_3^{-}}}]
+= K_2$, gives $[\ensuremath{\mathrm{CO_3^{2-}}}] \propto 1/[\ensuremath{\mathrm{H^{+}}}] \propto
+1/p_{\ensuremath{\mathrm{CO_2}}}$, so $\Omega$ falls as $p_{\ensuremath{\mathrm{CO_2}}}$ rises, and
+the \qty{40}{\%} rise in $[\ensuremath{\mathrm{H^{+}}}]$ is a \qty{30}{\%} fall in
+carbonate. (The full chemistry, with the change in bicarbonate and
+the ion activities, gives the factor $0.9$ and the observed
+numbers; the Year 3 volume treats it.)
+\end{proof}
+\begin{proof}[Evidence]
+The ocean station north of Hawaii has measured surface pH monthly
+since 1988: it falls by $0.0018$ a year, in step with the
+\ensuremath{\mathrm{CO_2}} at Mauna Loa above it, as the chemistry requires.
+Pteropods --- the sea's snails, food for salmon and whales ---
+collected off the Pacific coast show their aragonite shells
+pitted and dissolving where upwelling brings water with $\Omega <
+1$ to the surface. \omterm{thm:b2:global-change:acid}{Coral bleaching} is heat, not acid: when the
+water stays \qty{1}{\celsius} above the summer maximum for a few
+weeks, the coral expels its symbiotic algae and starves; the Great
+Barrier Reef bleached in 1998, 2002, 2016, 2017, 2020, 2022 and 2024,
+and half its coral cover is gone since 1995.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=250, xmax=1000, ymin=7.6, ymax=8.3,
+  xlabel={atmospheric \ensuremath{\mathrm{CO_2}} (ppm)}, ylabel={surface pH},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={280,420,560,800,1000}, ytick={7.6,7.8,8.0,8.2},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=250:1000, samples=60] {8.2 - 0.9*log10(x/280)};
+\fill[omDef] (axis cs:280,8.2) circle (2pt); \node[font=\scriptsize, anchor=south west] at (axis cs:285,8.2) {1750};
+\fill[omThm] (axis cs:420,8.04) circle (2pt); \node[font=\scriptsize, anchor=south west] at (axis cs:425,8.04) {2020s: $-0.15$, $+\qty{40}{\%}$ \ensuremath{\mathrm{H^{+}}}};
+\fill[omThm] (axis cs:800,7.79) circle (2pt); \node[font=\scriptsize, anchor=south west] at (axis cs:805,7.79) {2100 at high emissions};
+\node[font=\scriptsize, anchor=north east, align=right] at (axis cs:1000,8.28) {$\Omega_{\text{aragonite}}$, tropics:\\ 4 in 1750, 3 now, 2 at \qty{560}{ppm}};
+\end{axis}
+\end{tikzpicture}
+
+{\small Surface ocean pH against atmospheric carbon dioxide,
+$\mathrm{pH} = 8.2 - 0.9\log_{10}(p/280)$. The scale is
+logarithmic: each tenth of a unit is a quarter more hydrogen
+ions.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-27-coral-bleaching.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-27-glacier-retreat.jpg}
+
+{\small Two thermometers. Left: a bleached reef, the coral's white
+skeleton showing through tissue that has lost its algae. Right: a
+valley glacier that has withdrawn up its valley, leaving bare rock
+where ice stood a century ago.}
+\end{omfigure}
+
+\section{The ledger: extinction and its estimate}
+
+\begin{theorem}[The species--area relation and the cost of habitat loss]\label{thm:b2:global-change:sar}
+\index{species--area relation}\index{extinction rate}\index{habitat loss}\index{extinction debt}
+The number of species found in an area $A$ grows as a power of the
+area, $S = cA^{z}$, with $z \approx 0.25$ for islands and habitat
+fragments (doubling the area adds a fifth more species; a
+hundredfold more area, three times as many). If a habitat is
+reduced to a fraction $1 - h$ of its extent, the number of species
+it can eventually hold falls to $(1 - h)^{z}$ of the original: a
+loss of half the habitat costs \qty{16}{\%} of its species,
+\qty{90}{\%} costs \qty{44}{\%}, and \qty{99}{\%} costs
+\qty{68}{\%}. The loss is not immediate --- the survivors in the
+fragment persist for a while, an \emph{\omterm{thm:b2:global-change:sar}{extinction debt}} paid over
+decades as small populations succumb to the drift and inbreeding of
+\cref{ch:b2:population-genetics} --- and it is the basis of the
+estimate that the current \omterm{thm:b2:global-change:sar}{extinction rate} is a hundred to a
+thousand times the background rate of the fossil record: about
+one species in a million per year, against the several thousand a
+year, out of some ten million, now being lost.
+\end{theorem}
+\begin{proof}
+$S'/S = (A'/A)^{z} = (1 - h)^{z}$; with $z = 0.25$, $0.5^{0.25} =
+0.84$, $0.1^{0.25} = 0.56$, $0.01^{0.25} = 0.32$. The relation
+itself is empirical; its exponent reflects the balance, on islands,
+between the immigration of new species (falling as the island
+fills) and the extinction of resident ones (rising as their
+populations shrink with area), the equilibrium of MacArthur and
+Wilson's theory.
+\end{proof}
+\begin{proof}[Evidence]
+The islands of the Krakatau group, sterilised by the eruption of
+1883, were recolonised by plants, birds and insects in a
+succession that reached, within fifty years, the species numbers
+predicted from their areas; the mangrove islets Simberloff and
+Wilson fumigated in Florida in 1966 returned to their original
+species counts, with different species, within a year. The Atlantic
+forest of Brazil, reduced to \qty{10}{\%} of its extent, has lost
+or nearly lost the fraction of its bird species the relation
+predicts; and in every group assessed by the World Conservation
+Union, a quarter to a third of species are threatened --- birds
+\qty{13}{\%}, mammals \qty{27}{\%}, amphibians \qty{41}{\%}, corals
+\qty{44}{\%} --- with \omterm{thm:b2:global-change:sar}{habitat loss} the first cause, and hunting,
+\omterm{prop:b2:global-change:invasion}{invasive species}, pollution and, increasingly, climate the others.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{loglogaxis}[
+  width=0.68\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=1, xmax=100000, ymin=5, ymax=200,
+  xlabel={island area (\unit{km^2})}, ylabel={species of land birds},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=2pt, omDef] coordinates {(1.5,9) (8,14) (35,22) (150,32) (400,37) (1200,52) (4000,70) (13000,92) (35000,125) (85000,160)};
+\addplot[very thick, omThm, domain=1:100000, samples=2] {9*x^0.25};
+\node[font=\scriptsize, omThm, anchor=north west, align=left] at (axis cs:2,120) {$S = 9A^{0.25}$: a hundredfold\\ more area, three times\\ as many species};
+\end{loglogaxis}
+\end{tikzpicture}
+
+{\small The \omterm{thm:b2:global-change:sar}{species--area relation}, here for land birds on islands
+of an archipelago: a straight line of slope $z = 0.25$ on
+logarithmic axes. Cut a habitat to a tenth and it will, in time,
+keep little more than half of its species.}
+\end{omfigure}
+
+\begin{proposition}[Invasions, services, and what can be done]\label{prop:b2:global-change:invasion}
+\index{invasive species}\index{ecosystem services}\index{mitigation}\index{net zero}
+Ships, planes and trade have moved thousands of species past the
+barriers that kept them apart; most fail to establish, but the
+few that do --- the rabbit in Australia, the zebra mussel in the
+Great Lakes, the brown tree snake that emptied Guam of its birds,
+the chytrid fungus that has driven ninety amphibian species to
+extinction --- spread as a front advancing at constant speed, $c =
+2\sqrt{rD}$ for a population growing at rate $r$ and dispersing
+with diffusion coefficient $D$ (Skellam's muskrat, released near
+Prague in 1905, expanded across Europe at \qty{11}{km} a year,
+its range radius a straight line in time). Against all this stands
+what the biosphere does for its one troublesome species:
+\omterm{def:b2:angiosperm-reproduction:pollination}{pollination} of three quarters of crops, water purification, flood
+control, the fixing of nitrogen and the making of \omterm{def:b2:living-soil:soil}{soil}, fisheries,
+the carbon held in forests and \omterm{def:b2:living-soil:soil}{soils} --- \emph{\omterm{prop:b2:global-change:invasion}{ecosystem services}}
+valued, where a price can be put on them, at more than the world's
+economic product. What can be done follows from the numbers.
+Warming stops when net emissions do, and not before: the \omterm{thm:b2:biogeochemical-cycles:box}{box
+models} of \cref{ch:b2:biogeochemical-cycles} allow no other
+reading of \emph{\omterm{prop:b2:global-change:invasion}{net zero}}. Land can help within limits --- a
+gigatonne of carbon a year from reforestation and \omterm{def:b2:living-soil:soil}{soils} for a few
+decades, against ten from fossil fuels --- and species can be
+helped to move, or kept in reserves large and connected enough
+that the \omterm{thm:b2:global-change:sar}{species--area relation} and the drift of small populations
+do not finish them. The tools are those of this book: the
+\omterm{def:b2:population-genetics:frequencies}{population genetics} of the reserve, the competition of the
+invader, the phenology of the crop, the budget of the \omterm{def:b2:living-soil:soil}{soil}.
+\end{proposition}
+
+\begin{example}[Three futures]\label{ex:b2:global-change:scenarios}
+Emissions held at \qty{10}{GtC} a year to 2100 add \qty{800}{GtC}
+to the \qty{700}{} already emitted: $1.65\times 1.5 =
+\qty{2.5}{\celsius}$ by the century's end and still rising. Emissions
+falling to zero by 2070 add about \qty{250}{GtC}: \qty{1.6}{\celsius},
+then level. Doubling emissions first, as the century's early
+decades did, gives \qty{4}{\celsius} or more. The ranges of the
+temperate zone move \qty{400}{km} in the first case and
+\qty{60}{km} beyond today's in the second; spring comes twenty-five
+days earlier, or six; surface pH reaches $7.8$, or stays near
+$8.0$; and the extinction estimates, which depend on habitat and
+warming together, range from a tenth to a third of species. The
+difference between the futures is the cumulative area under one
+curve, which is the sum of decisions not yet made.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:global-change:1}
+State the relation between warming and \omterm{prop:b2:global-change:tcre}{cumulative emissions}, and
+compute the warming for \omterm{prop:b2:global-change:tcre}{cumulative emissions} of 700, 1000 and
+\qty{2000}{GtC}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:global-change:2}
+Define degree-days and \omterm{thm:b2:global-change:phenology}{phenological mismatch}, with the flycatcher
+as an example.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:global-change:3}
+How far do isotherms move uphill and poleward per degree of
+warming, and why can a mountain-top species not follow?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:global-change:4}
+Explain in three sentences why adding \ensuremath{\mathrm{CO_2}} to the sea lowers
+its pH and its carbonate, and which organisms are hurt.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:global-change:5}
+Compute the \omterm{prop:b2:global-change:tcre}{carbon budget} remaining for \qty{1.5}{\celsius} and for
+\qty{2}{\celsius} with $\lambda = \qty{1.65}{\celsius}$ per
+\qty{1000}{GtC} and \qty{700}{GtC} already emitted; convert both to
+years at \qty{10}{GtC/yr}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:global-change:6}
+Spring warms at $b = \qty{0.12}{\celsius}$ per day from a base of
+\qty{5}{\celsius}; a moth needs $K = 150$ degree-days. Compute the
+days from base-crossing to emergence, and the advance for a
+warming of \qty{1.5}{\celsius}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:global-change:7}
+A plant's range spans \qtyrange{800}{1400}{m} on a mountain
+\qty{1800}{m} high whose area halves every \qty{300}{m} of altitude.
+After \qty{3}{\celsius} of warming, where is the band and how much
+area has it lost? After \qty{5}{\celsius}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:global-change:8}
+Compute the surface pH and the rise in hydrogen-ion concentration
+at 560, 800 and \qty{1000}{ppm}, from $\mathrm{pH} = 8.2 -
+0.9\log_{10}(p/280)$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:global-change:9}
+With $z = 0.25$, what fraction of species is eventually lost when
+\qty{70}{\%}, \qty{95}{\%} and \qty{99.9}{\%} of a habitat is
+destroyed? Why is the immediate loss smaller?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:global-change:10}
+An invader grows at $r = 0.7$ per year and disperses with $D =
+\qty{20}{km^2/yr}$. Compute its front speed and the time to cross a
+country \qty{1000}{km} wide. What halves the speed: halving $r$ or
+halving $D$?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:global-change:11}
+The background \omterm{thm:b2:global-change:sar}{extinction rate} is 1 per million species-years and
+there are 8 million species. Compute the expected extinctions a
+year and per century at background, and at 1000 times background.
+Compare with the ten thousand documented extinctions of the last
+century and comment on the discrepancy.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:global-change:12}
+``Warming stops when net emissions stop.'' Justify from the \omterm{thm:b2:biogeochemical-cycles:box}{box
+model} of the atmosphere and the proportionality of warming to
+\omterm{prop:b2:global-change:tcre}{cumulative emissions}, and say what is missing from the argument.
+\end{exercise}
+
+\section{Problem: The Biosphere in 2100}
+
+\begin{problem}[{Weekend problem --- two emission paths carried
+to 2100: the warming of each, the spring it makes, the distance
+its isotherms travel, the acid it puts in the sea and the species
+it costs a forest, ending on the two warmings, the two pH values
+and the fraction of species lost}]
+\label{pb:b2:global-change:1}
+Data. $\lambda = \qty{1.65}{\celsius}$ per \qty{1000}{GtC};
+\qty{700}{GtC} emitted by 2020 (warming \qty{1.2}{\celsius}). Path
+A: \qty{10}{GtC/yr} constant to 2100. Path B: falling linearly to
+zero in 2070. Spring warms at $b = \qty{0.1}{\celsius}$ per day
+above a base of \qty{5}{\celsius}; a tree needs $K = 200$
+degree-days to leaf, and a migratory bird arrives on a fixed date,
+20 days after the tree's leafing in 2020. \omterm{prop:b2:global-change:range}{Lapse rate}
+\qty{6.5}{\celsius/km}; latitudinal gradient \qty{0.65}{\celsius}
+per \qty{100}{km}. Ocean: $\mathrm{pH} = 8.2 - 0.9\log_{10}(p/280)$;
+\ensuremath{\mathrm{CO_2}} in 2100: \qty{600}{ppm} on path A, \qty{420}{ppm} on path B.
+A forest region of \qty{e5}{km^2} with 400 tree species, $z = 0.25$,
+loses \qty{60}{\%} of its area to clearing by 2100 on path A and
+\qty{20}{\%} on path B.
+
+\medskip
+\noindent\textbf{Part I --- Warming.}
+\begin{enumerate}
+  \item Compute the \omterm{prop:b2:global-change:tcre}{cumulative emissions} in 2100 on each path.
+  \item Compute the warming in 2100 on each path.
+  \item Compute the warming in 2050 on each.
+  \item What is the warming rate per decade on path A? Compare with
+        the observed \qty{0.2}{\celsius} per decade.
+  \item On path B, does the warming stop in 2070? Why, according
+        to the proportionality?
+  \item What cumulative emission corresponds to \qty{2}{\celsius},
+        and in what year does path A cross it?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Spring.}
+\begin{enumerate}[resume]
+  \item Compute the days from base-crossing to leafing in 2020.
+  \item Compute the advance of leafing, relative to 2020, in 2100
+        on each path (warming relative to 2020).
+  \item The bird's arrival date does not change. Compute the gap
+        between leafing and arrival on each path in 2100.
+  \item The caterpillars the bird needs peak 15 days after leafing
+        and last 10 days. On which path does the bird still find
+        them?
+  \item Suppose instead the bird advances by \qty{3}{d} per
+        degree. Recompute the gap on path A.
+  \item State in one sentence why the mismatch, not the warming
+        itself, is what threatens the bird.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Ranges.}
+\begin{enumerate}[resume]
+  \item Compute the altitudinal and latitudinal displacement of
+        isotherms on each path, relative to 2020.
+  \item A tree species disperses \qty{100}{m} a year. Can it track
+        the isotherms poleward on path A? On path B?
+  \item A species occupies \qtyrange{1500}{1800}{m} on a
+        \qty{2000}{m} mountain. On path A, where does its band sit
+        in 2100, and what happens?
+  \item The mountain's area halves every \qty{300}{m}. Compute the
+        area factor lost by that species on path B.
+  \item A marine fish tracks isotherms at \qty{30}{km} a decade.
+        Is that enough on path A?
+  \item Explain why the lower edge of a range retreats even where
+        the species could tolerate the heat.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Sea and forest.}
+\begin{enumerate}[resume]
+  \item Compute the surface pH in 2100 on each path, and the rise
+        in hydrogen-ion concentration since 1750.
+  \item The \omterm{thm:b2:global-change:acid}{saturation state} $\Omega$ of the tropical surface was
+        4 in 1750 and falls as $[\ensuremath{\mathrm{H^{+}}}]^{-1}$. Compute it in 2100
+        on each path and say what it means for coral.
+  \item Compute the number of tree species the forest region can
+        eventually hold on each path, and the number lost.
+  \item Warming adds losses: suppose each degree above 2020 removes
+        a further \qty{5}{\%} of the surviving species. Recompute
+        the species remaining on each path.
+  \item Give the fraction of the 400 species lost on each path.
+  \item Which of the two causes, clearing or warming, dominates on
+        each path?
+  \item State the result: the warming, the pH and the fraction of
+        tree species lost in 2100 on each path.
+\end{enumerate}
+\end{problem}

@@ -1,6 +1,573 @@
 \chapter{Plant Adaptations and Phenotypic Plasticity}\label{ch:b2:plant-plasticity}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Two leaves from the same oak: the one from the top of the crown is
+small, thick and leathery, the one from the shaded interior three
+times as large and thin as paper. A seedling of the same oak under a
+closed canopy grows tall and spindly; its sibling in a clearing stays
+short and stout. Neither difference is genetic. A plant cannot walk
+to a better place, so it builds itself to fit the place it has: it
+senses light, gravity, touch, water, salt, cold, and it bends,
+thickens, elongates, closes its pores or hardens its cells
+accordingly. This chapter is about that plasticity --- how a plant
+reads its surroundings and what it does about them --- and about
+the heritable \omterm{def:b2:plant-plasticity:plasticity}{adaptations} by which lineages have fitted themselves
+to deserts, shade, salt and frost.
 
-\emph{This chapter has not been written yet.}
+\section{Plasticity and its limits}
+
+\begin{definition}[Phenotypic plasticity and the norm of reaction]\label{def:b2:plant-plasticity:plasticity}
+\index{phenotypic plasticity}\index{norm of reaction}\index{acclimation}\index{adaptation}
+\emph{Phenotypic plasticity} is the capacity of one \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} to
+produce different \omterm{def:b2:meiosis-heredity:vocabulary}{phenotypes} in different environments. The
+\emph{norm of reaction} of a \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} is the curve of its \omterm{def:b2:meiosis-heredity:vocabulary}{phenotype}
+against an environmental variable --- leaf thickness against light,
+stem length against temperature; \omterm{def:b2:meiosis-heredity:vocabulary}{genotypes} differ in their norms,
+and the differences are heritable even when the plasticity itself
+is not. \emph{Acclimation} is the reversible, physiological form:
+a leaf that thickens its cuticle in a dry week, a cell that makes
+antifreeze in autumn. \emph{Adaptation}, in the evolutionary sense,
+is the heritable fit of a lineage to its habitat, selected over
+generations; a cactus is adapted to drought, a bean acclimates to a
+dry spell. Plants are more plastic than animals because they are
+modular and indeterminate (\cref{ch:b2:plant-meristems}): the next
+leaf can be built differently from the last, and the sessile life
+makes plasticity the only way to move.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.72\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=100, ymin=0, ymax=1.2,
+  xlabel={light (\% of full sun)}, ylabel={leaf thickness (relative)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,25,50,75,100}, ytick={0,0.5,1},
+  legend style={font=\scriptsize, at={(0.97,0.08)}, anchor=south east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=2:100, samples=60] {0.35 + 0.65*(1-exp(-x/30))};
+\addlegendentry{genotype 1: a plastic oak}
+\addplot[very thick, omThm, domain=2:100, samples=60] {0.55 + 0.2*(1-exp(-x/30))};
+\addlegendentry{genotype 2: a less plastic one}
+\end{axis}
+\end{tikzpicture}
+
+{\small Two norms of reaction. Each \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} makes thicker leaves in
+more light; the slope of the curve --- the plasticity --- is itself a
+heritable trait, and the two \omterm{def:b2:meiosis-heredity:vocabulary}{genotypes} differ in it.}
+\end{omfigure}
+
+\begin{proposition}[Sun leaves and shade leaves]\label{prop:b2:plant-plasticity:sunshade}
+\index{sun leaf}\index{shade leaf}
+A leaf developing in full sun is small, thick, with two or three
+layers of palisade cells, many stomata, a thick cuticle, a high
+concentration of the carbon-fixing enzyme and a high maximal rate of
+photosynthesis; a leaf of the same plant developing in shade is
+large, thin, with one palisade layer, more chlorophyll per unit
+mass, a low respiration rate and a low light-compensation point. The
+\omterm{prop:b2:plant-plasticity:sunshade}{shade leaf} is built to harvest every photon at minimal cost, the
+\omterm{prop:b2:plant-plasticity:sunshade}{sun leaf} to use a flood of them without overheating or wilting. The
+decision is made while the leaf is still a primordium, from the
+light --- and in particular its colour --- that reaches the bud;
+a mature leaf cannot rebuild itself, which is why a plant moved from
+shade to sun scorches until it has made new leaves.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-15-sun-shade-leaves.jpg}
+
+{\small A \omterm{prop:b2:plant-plasticity:sunshade}{sun leaf} and a \omterm{prop:b2:plant-plasticity:sunshade}{shade leaf} from one oak: same \omterm{def:b2:meiosis-heredity:vocabulary}{genotype},
+different light, different leaves.}
+\end{omfigure}
+
+\section{Reading the light}
+
+\begin{theorem}[Phytochrome as a light-quality meter]\label{thm:b2:plant-plasticity:phytochrome}
+\index{phytochrome}\index{red:far-red ratio}\index{shade avoidance}
+Phytochrome exists in two forms: $P_r$, which absorbs red light
+(\qty{660}{nm}) and is converted to $P_{fr}$, and $P_{fr}$, which
+absorbs far-red (\qty{730}{nm}) and is converted back --- and it is
+$P_{fr}$ that acts. In continuous light the two conversions balance
+at a \emph{photoequilibrium} whose position depends only on the
+ratio of red to far-red in the light:
+\[
+\varphi = \frac{P_{fr}}{P_{r} + P_{fr}} = \frac{R}{R + a\,FR},
+\]
+where $R$ and $FR$ are the photon flux densities in the two bands
+and $a$ a constant of the pigment ($a \approx 0.77$). Sunlight has
+$R{:}FR \approx 1.15$, giving $\varphi \approx 0.6$; light filtered
+through leaves, which absorb red and transmit far-red, has $R{:}FR
+\approx 0.2$ and $\varphi \approx 0.2$. A low $\varphi$ tells a
+plant it is under or beside other plants before it is actually
+shaded --- far-red reflected from a neighbour is detected on the
+side facing it --- and it responds with the \emph{\omterm{thm:b2:plant-plasticity:phytochrome}{shade avoidance}
+syndrome}: faster stem elongation, longer petioles, leaves held
+upward, less branching, earlier flowering. A seedling in a closed
+canopy doubles its rate of elongation.
+\end{theorem}
+\begin{proof}
+Let $k_1 R$ be the rate constant for $P_r \to P_{fr}$ (proportional
+to the red flux) and $k_2\,FR$ that for $P_{fr} \to P_r$. At
+equilibrium $k_1 R\,P_r = k_2\,FR\,P_{fr}$, so $P_{fr}/P_r = k_1 R/
+(k_2 FR)$ and $\varphi = P_{fr}/(P_r + P_{fr}) = R/(R + a\,FR)$ with
+$a = k_2/k_1$. (Both forms absorb somewhat in both bands, which the
+constant $a$ absorbs; the form of the result is unchanged.) With
+$a = 0.77$: $1.15/(1.15 + 0.89) = 0.56$; $0.2/(0.2 + 0.77) = 0.21$.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1.4, ymin=0, ymax=0.8,
+  xlabel={red : far-red ratio of the light}, ylabel={$\varphi = P_{fr}/P_{\text{total}}$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.2,0.6,1.15}, ytick={0,0.2,0.4,0.6},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:1.4, samples=60] {x/(x+0.77)};
+\draw[dashed, gray] (axis cs:1.15,0) -- (axis cs:1.15,0.6) -- (axis cs:0,0.6); \node[font=\scriptsize, anchor=south west] at (axis cs:1.15,0.6) {open sun};
+\draw[dashed, gray] (axis cs:0.2,0) -- (axis cs:0.2,0.21) -- (axis cs:0,0.21); \node[font=\scriptsize, anchor=west] at (axis cs:0.25,0.15) {under a canopy};
+\end{axis}
+\end{tikzpicture}
+
+{\small The phytochrome photoequilibrium against the red-to-far-red
+ratio. Sunlight holds most of the pigment in the active form;
+leaf-filtered light holds it mostly inactive, and the plant reads
+the difference as neighbours.}
+\end{omfigure}
+
+\begin{proposition}[Phototropism]\label{prop:b2:plant-plasticity:phototropism}
+\index{phototropism}\index{tropism}\index{Cholodny--Went hypothesis}
+A \emph{tropism} is a growth movement oriented by a directional
+stimulus. In \emph{phototropism} a shoot bends toward blue light:
+the light is sensed at the tip by a blue-light receptor
+(phototropin), the auxin descending from the tip is redirected
+toward the shaded side --- its carriers move to the lateral membrane
+--- and the shaded side, receiving more auxin, elongates faster
+than the lit side, so the shoot curves toward the light. The
+bending is differential growth, not a muscle: it occurs only in
+the \omterm{prop:b2:plant-meristems:ram}{elongation zone}, takes an hour or two, and is irreversible.
+Roots, in which the same auxin excess \emph{inhibits} elongation,
+bend away.
+\end{proposition}
+\begin{proof}[Evidence]
+Darwin (1880) showed with grass coleoptiles that the tip perceives
+the light and the zone below it bends: covering the tip with an
+opaque cap abolished the bending, covering the base with a tube did
+not, and a transparent cap left it intact. Boysen-Jensen (1913) cut
+the tip off and replaced it with a block of gelatin between: bending
+persisted, so the signal was a diffusible substance; a sheet of mica
+inserted on the shaded side blocked it, on the lit side did not, so
+the substance travelled down the shaded side. Went (1928) collected
+the substance in agar from cut tips and found that a block placed
+off-centre on a decapitated coleoptile in the dark made it bend
+away from the block --- by an angle proportional to the amount ---
+and, collecting agar from the two halves of a unilaterally lit tip,
+found about two thirds of the auxin on the shaded side and one third
+on the lit side (Briggs, 1957, with better methods). The lateral
+redistribution of a growth hormone is the \omterm{prop:b2:plant-plasticity:phototropism}{Cholodny--Went
+hypothesis}, and it has held.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \foreach \x/\lab/\cap/\bend in {0/{intact:\\bends}/0/1, 2.6/{tip covered:\\no bending}/1/0, 5.2/{base covered:\\bends}/2/1, 7.8/{tip cut off:\\no bending}/3/0, 10.4/{tip on gelatin:\\bends}/4/1} {
+    \begin{scope}[xshift=\x cm]
+      \fill[omExo!30] (-0.7,0) rectangle (0.7,0.2);
+      \ifnum\bend=1
+        \draw[very thick, omExo!70!black] (0,0.2) -- (0,1.6) .. controls (0,2.3) and (0.5,2.6) .. (0.9,2.8);
+      \else
+        \draw[very thick, omExo!70!black] (0,0.2) -- (0,3.0);
+      \fi
+      \ifnum\cap=1 \fill[black] (-0.2,2.7) rectangle (0.2,3.1); \fi
+      \ifnum\cap=2 \fill[black] (-0.2,0.2) rectangle (0.2,1.5); \fi
+      \ifnum\cap=3 \draw[thick] (-0.3,2.6) -- (0.3,2.6); \fi
+      \ifnum\cap=4 \fill[omDef!35] (-0.2,2.55) rectangle (0.2,2.75); \draw[very thick, omExo!70!black] (0.55,2.75) -- (0.9,3.1); \fi
+      \node[below, align=center] at (0,-0.15) {\lab};
+    \end{scope}
+  }
+  \node[anchor=east, align=right, omProp!80!black] at (-1.0,2.2) {light from\\the right $\to$};
+\end{tikzpicture}
+
+{\small The coleoptile experiments. Darwin: the tip senses the
+light and the region below bends; capping the tip stops it,
+shielding the base does not. Boysen-Jensen: the signal crosses a
+block of gelatin --- it is a substance.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-15-phototropism.jpg}
+
+{\small Seedlings in a box with one window: all bend toward the
+light, by growing faster on the side away from it.}
+\end{omfigure}
+
+\begin{theorem}[How much a stem bends]\label{thm:b2:plant-plasticity:bend}
+If the shaded side of a stem of diameter $d$ elongates by a relative
+amount $\varepsilon_s$ and the lit side by $\varepsilon_l$ over a
+growing zone of length $L$, the zone curves through an angle
+\[
+\theta = \frac{L\,(\varepsilon_s - \varepsilon_l)}{d}
+\]
+(in radians). A coleoptile growing at \qty{5}{\%} an hour over a
+zone of \qty{10}{mm} and \qty{1}{mm} across, with auxin split
+$65 : 35$ so that the two sides grow at $1.3$ and $0.7$ times the
+mean, bends in three hours by $\theta = 10\times(0.195 - 0.105)/1 =
+0.9$ radians, about \qty{50}{\degree}. Bending needs no new
+mechanism: the ordinary growth of \cref{ch:b2:plant-meristems}, made
+unequal on two sides, is enough.
+\end{theorem}
+\begin{proof}
+The two sides of the zone become arcs of radii $\rho + d/2$ and
+$\rho - d/2$ subtending the same angle $\theta$, of lengths $L(1 +
+\varepsilon_s)$ and $L(1 + \varepsilon_l)$; their difference is
+$\theta d$, so $\theta = L(\varepsilon_s - \varepsilon_l)/d$. Over
+three hours at \qty{5}{\%} an hour the mean extension is $0.15$;
+$1.3\times 0.15 = 0.195$ and $0.7\times 0.15 = 0.105$.
+\end{proof}
+
+\begin{proposition}[Gravitropism]\label{prop:b2:plant-plasticity:gravitropism}
+\index{gravitropism}\index{statolith}
+A shoot laid on its side turns upward and a root downward within
+hours. The direction of gravity is sensed by \emph{statoliths} ---
+dense starch grains in specialised cells of the \omterm{prop:b2:plant-meristems:ram}{root cap} and of the
+stem's starch sheath --- which settle to the lower side of the cell
+in seconds and, by pressing on the membrane or the endoplasmic
+reticulum, redirect the auxin carriers so that auxin accumulates
+on the lower side. In the shoot the lower side grows faster and the
+stem curves up; in the root the same auxin excess inhibits the lower
+side, the upper side grows faster, and the root curves down. Remove
+the \omterm{prop:b2:plant-meristems:ram}{root cap} and the root grows straight in any direction; starch-free
+mutants sense gravity poorly; a root on a slowly rotating drum
+(a clinostat), which never lets the statoliths settle, grows
+without direction. The response is a second use of the
+Cholodny--Went mechanism, with a different sensor.
+\end{proposition}
+
+\section{Water: closing the pores}
+
+\begin{proposition}[Stomatal control]\label{prop:b2:plant-plasticity:stomata}
+\index{stoma}\index{guard cell}\index{abscisic acid}\index{stomatal conductance}
+The leaf's pores, the \emph{stomata}, are each bounded by two
+\emph{\omterm{prop:b2:plant-plasticity:stomata}{guard cells}} whose walls are thickened unevenly, so that when
+they take up potassium and water and swell, they bow apart and open
+the pore, and when they lose them they close it. They open in the
+morning under blue light and low internal $\mathrm{CO_2}$, and
+close in the dark; they close within minutes when \emph{\omterm{def:b2:plant-flowering:dormancy}{abscisic
+acid}} arrives --- made in roots that sense drying soil and carried
+up in the xylem, or made in the leaf itself as it loses turgor ---
+and when the air is very dry. The \emph{\omterm{prop:b2:plant-plasticity:stomata}{stomatal conductance}} $g_s$
+sets both the water lost, $E = g_s\,(w_i - w_a)$ (the difference in
+water vapour mole fraction between the leaf interior, saturated, and
+the air), and the $\mathrm{CO_2}$ taken in, $A = g_s\,(c_a -
+c_i)/1.6$ (the factor $1.6$ being the ratio of the diffusivities of
+water vapour and $\mathrm{CO_2}$). The leaf trades water for carbon
+through one valve, and its \emph{water-use efficiency} is
+\[
+\frac{A}{E} = \frac{c_a - c_i}{1.6\,(w_i - w_a)},
+\]
+a few thousandths of a mole of carbon per mole of water: a typical
+C$_3$ leaf spends \qtyrange{400}{600}{g} of water per gram of carbon
+fixed, a C$_4$ leaf half that, a \omterm{prop:b2:plant-plasticity:xerophytes}{CAM plant} a fifth.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.42\linewidth]{images/book4/ai/b4-15-stomata-sem.jpg}
+
+{\small Stomata on the underside of a leaf, some open and some
+closed: two \omterm{prop:b2:plant-plasticity:stomata}{guard cells} around each pore, the valve through which
+the leaf trades water for carbon dioxide.}
+\end{omfigure}
+
+\begin{example}[The cost of a day's carbon]\label{ex:b2:plant-plasticity:wue}
+At midday a sunflower leaf with $g_s = \qty{0.3}{mol.m^{-2}.s^{-1}}$,
+$w_i - w_a = 0.02$ and $c_a - c_i = \qty{120}{\micro mol/mol}$
+transpires $E = \qty{6}{mmol.m^{-2}.s^{-1}}$ and fixes $A =
+0.3\times 120/1.6 = \qty{22}{\micro mol.m^{-2}.s^{-1}}$: $A/E =
+\qty{3.7e-3}{}$, i.e.\ 270 molecules of water for each carbon atom,
+\qty{400}{g} of water per gram of carbon. A hectare of such leaves
+loses \qty{40}{t} of water on a summer day to fix \qty{100}{kg} of
+carbon. When the soil dries, \omterm{def:b2:plant-flowering:dormancy}{abscisic acid} closes the stomata to a
+tenth of this conductance: $E$ falls tenfold, $A$ less than that
+(since $c_i$ falls too), and the plant survives on a starvation
+diet rather than dying of thirst.
+\end{example}
+
+\begin{proposition}[Adaptations to drought]\label{prop:b2:plant-plasticity:xerophytes}
+\index{xerophyte}\index{CAM plant}\index{succulent}
+Plants of dry places (\emph{xerophytes}) combine heritable
+structures and strategies. Reduce the loss: thick cuticle, stomata
+sunk in pits or under hairs (which thicken the still air layer),
+leaves reduced to spines (cactus) or shed in the dry season, small
+thick leaves that roll. Store: succulent stems and leaves with
+water-holding mucilage. Reach: roots \qty{50}{m} deep (mesquite) or
+spreading just under the surface to catch a shower. Shift: \omterm{prop:b2:plant-plasticity:xerophytes}{CAM
+plants} open their stomata at night, when $w_i - w_a$ is small, fix
+$\mathrm{CO_2}$ into malic acid, and refix it behind closed stomata
+by day --- the same carbon at a fifth of the water. Escape: desert
+annuals live as \omterm{def:b2:angiosperm-reproduction:seed}{seeds} for years and complete a \omterm{def:b2:plant-life-cycles:cycles}{life cycle} in the
+weeks after rain. Tolerate: resurrection plants lose \qty{95}{\%} of
+their water and revive. Each strategy has a price --- CAM is slow,
+succulence is heavy, spines cannot photosynthesise --- and the
+plant that pays it is outgrown wherever water is plentiful.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-15-cactus.jpg}
+
+{\small A barrel cactus: a succulent stem with a thick cuticle,
+ribs that let it swell after rain, leaves reduced to spines, and
+stomata that open only at night.}
+\end{omfigure}
+
+\section{Cold, salt and the stress response}
+
+\begin{proposition}[Acclimation to stress]\label{prop:b2:plant-plasticity:stress}
+\index{cold acclimation}\index{halophyte}\index{heat shock protein}
+A week at \qty{4}{\celsius} lowers the temperature that kills a
+winter rye from \qty{-5}{\celsius} to \qty{-25}{\celsius}: the
+cells have loaded sugars and proteins that lower the freezing point
+and protect membranes, changed their lipids to stay fluid, and made
+antifreeze proteins that stop ice crystals growing; the killing
+event is not the ice, which forms harmlessly between cells, but the
+dehydration of the cell as water leaves it to join the ice. A few
+hours at \qty{40}{\celsius} induce \emph{\omterm{prop:b2:plant-plasticity:stress}{heat shock proteins}} that
+refold denatured proteins and protect the cell at
+\qty{45}{\celsius}. Salt is met by exclusion at the root,
+compartmentation into the vacuole (with compatible solutes in the
+cytosol to balance it), and, in true \emph{halophytes}, secretion
+through salt glands. Most of these responses pass through the same
+signalling: a sensor, a rise in cytosolic calcium, \omterm{def:b2:plant-flowering:dormancy}{abscisic acid},
+and a set of \omterm{prop:b2:cell-differentiation:transcriptional}{transcription factors} that switch on hundreds of
+protective genes --- a stress programme as general as the immune
+response of an animal, and, like it, costly: the acclimated plant
+grows slowly, and a plant that acclimates when it need not loses to
+one that does not.
+\end{proposition}
+\begin{proof}[Evidence]
+\omterm{def:b2:plant-plasticity:plasticity}{Cold-acclimation} experiments measure the temperature at which half
+the cells of a leaf die (the LT$_{50}$) before and after a period at
+low temperature; the shift, of ten to twenty degrees in a week, is
+reversed by a week of warmth. Mutants unable to switch on the cold
+programme (the CBF \omterm{prop:b2:cell-differentiation:transcriptional}{transcription factors}) acclimate poorly, and
+plants expressing those factors constitutively survive frost
+without \omterm{def:b2:plant-plasticity:plasticity}{acclimation} --- but grow as dwarfs.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, rounded corners, fill=omExo!25, align=center] (s) at (0,0) {stress\\drought, cold,\\salt, heat};
+  \node[draw, rounded corners, fill=omDef!15, align=center] (sen) at (3.2,0) {sensor\\(membrane, turgor,\\unfolded proteins)};
+  \node[draw, rounded corners, fill=omDef!15, align=center] (ca) at (6.4,0) {second messengers\\Ca$^{2+}$, ABA};
+  \node[draw, rounded corners, fill=omProp!20, align=center] (tf) at (9.6,0) {transcription\\factors};
+  \node[draw, rounded corners, fill=omThm!15, align=center] (out) at (12.8,0.9) {protective genes:\\solutes, antifreeze,\\chaperones, transporters};
+  \node[draw, rounded corners, fill=omThm!15, align=center] (out2) at (12.8,-0.9) {growth slowed:\\the cost};
+  \draw[->, thick] (s) -- (sen); \draw[->, thick] (sen) -- (ca); \draw[->, thick] (ca) -- (tf);
+  \draw[->, thick] (tf) -- (out); \draw[->, thick] (tf) -- (out2);
+\end{tikzpicture}
+
+{\small The common shape of a plant's stress response: a sensor, a
+calcium and \omterm{def:b2:plant-flowering:dormancy}{abscisic acid} signal, \omterm{prop:b2:cell-differentiation:transcriptional}{transcription factors}, and a
+programme of protective genes --- paid for in growth.}
+\end{omfigure}
+
+\begin{example}[Cues that lie]\label{ex:b2:plant-plasticity:lie}
+Plasticity is only as good as the cue. A seedling under a neighbour's
+far-red shade elongates --- correctly, if the neighbour is a seedling
+it can overtop; fatally, if it is a tree, since the reserves spent
+on stem are lost to root and leaf. Crops planted densely shade each
+other, elongate, and lodge; breeders have selected wheats and rices
+that ignore the far-red signal. A warm week in February brings out
+leaves that a March frost kills; the plants that survive are those
+that also count the cold (\cref{ch:b2:plant-flowering}). Every
+plastic response is a bet on the cue's honesty, and the \omterm{def:b2:plant-plasticity:plasticity}{norm of
+reaction} is shaped by how often, in the lineage's past, the cue told
+the truth.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:plant-plasticity:1}
+Define \omterm{def:b2:plant-plasticity:plasticity}{phenotypic plasticity}, \omterm{def:b2:plant-plasticity:plasticity}{norm of reaction}, \omterm{def:b2:plant-plasticity:plasticity}{acclimation} and
+\omterm{def:b2:plant-plasticity:plasticity}{adaptation}, with a plant example of each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:plant-plasticity:2}
+Describe Darwin's four coleoptile treatments and what each showed.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:plant-plasticity:3}
+List five differences between a \omterm{prop:b2:plant-plasticity:sunshade}{sun leaf} and a \omterm{prop:b2:plant-plasticity:sunshade}{shade leaf}, and say
+when in the leaf's life the choice is made.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:plant-plasticity:4}
+How does a stoma open, what opens it in the morning, and what closes
+it in a drought?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:plant-plasticity:5}
+Compute $\varphi$ for $R{:}FR = 1.15$ (sun), $0.7$ (a gap), $0.2$
+(under a canopy) and $0.05$ (deep shade) with $a = 0.77$. Between
+which two of these does the plant switch on \omterm{thm:b2:plant-plasticity:phytochrome}{shade avoidance} if the
+threshold is $\varphi = 0.4$?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:plant-plasticity:6}
+A leaf has $g_s = \qty{0.25}{mol.m^{-2}.s^{-1}}$, $w_i - w_a = 0.025$,
+$c_a - c_i = \qty{100}{\micro mol/mol}$. Compute $E$, $A$, the
+water-use efficiency in moles and in grams of water per gram of
+carbon, and the water lost per square metre in a 12-hour day.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:plant-plasticity:7}
+Recompute the previous exercise for a \omterm{prop:b2:plant-plasticity:xerophytes}{CAM plant} whose stomata open
+at night with $w_i - w_a = 0.005$ and the same conductance. By what
+factor is the water cost of carbon reduced?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:plant-plasticity:8}
+A statolith is a starch grain of radius \qty{2}{\micro m} and density
+\qty{1500}{kg/m^3} in cytoplasm of density \qty{1100}{kg/m^3} and
+viscosity \qty{0.01}{Pa.s}. Compute its settling speed (Stokes) and
+the time to cross a \qty{10}{\micro m} cell. Why does a clinostat
+turning once a minute abolish gravitropism?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:plant-plasticity:9}
+A stem \qty{2}{mm} across grows \qty{2}{\%} an hour over a
+\qty{20}{mm} zone. Light from one side splits the auxin $60 : 40$.
+Through what angle has it bent after two hours? After how long is it
+at \qty{90}{\degree} to its original direction?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:plant-plasticity:10}
+A seedling with \qty{50}{mg} of reserves elongates at \qty{2}{cm}
+a day in the open and \qty{4}{cm} a day under a canopy, spending
+\qty{1}{mg} of reserves per centimetre of stem beyond what its
+leaves supply. The canopy is \qty{30}{cm} above it in a nettle bed
+and \qty{10}{m} in a wood. In which case does \omterm{thm:b2:plant-plasticity:phytochrome}{shade avoidance}
+succeed, and what happens in the other?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:plant-plasticity:11}
+Explain why freezing kills a cell by dehydration rather than by ice,
+what a week of cold does to prevent it, and why a plant that
+expresses the cold programme all year is a dwarf.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:plant-plasticity:12}
+``Plasticity is a bet on the honesty of a cue.'' Discuss with the
+far-red signal, the warm week in February, and the breeding of crops
+that ignore their neighbours.
+\end{exercise}
+
+\section{Problem: A Seedling Under the Canopy}
+
+\begin{problem}[{Weekend problem --- a seedling's light climate,
+elongation, water budget and tropisms computed from the physics of
+its sensors, ending on its phytochrome state, its height after a
+fortnight, and its daily water use}]
+\label{pb:b2:plant-plasticity:1}
+A birch seedling germinates under a canopy that transmits
+\qty{3}{\%} of the sunlight and lowers $R{:}FR$ from $1.15$ to $0.2$
+($a = 0.77$). In full sun it would elongate at \qty{1.5}{cm} a day;
+under the canopy its elongation rate is multiplied by $1 +
+2(0.6 - \varphi)$. Its stem is \qty{2}{mm} across with a
+\qty{15}{mm} growing zone. Leaves: \qty{20}{cm^2} in all; $g_s =
+\qty{0.2}{mol.m^{-2}.s^{-1}}$; $w_i - w_a = 0.015$ in the shade,
+$0.03$ in a gap; $c_a - c_i = \qty{80}{\micro mol/mol}$; the day
+lasts \qty{14}{h}. Statoliths: radius \qty{2.5}{\micro m}, density
+\qty{1500}{kg/m^3}, in cytoplasm of \qty{1100}{kg/m^3} and
+\qty{0.01}{Pa.s}.
+
+\medskip
+\noindent\textbf{Part I --- The light.}
+\begin{enumerate}
+  \item Compute $\varphi$ in the open and under the canopy.
+  \item What does the seedling conclude from $\varphi$, and what
+        would it conclude if the canopy transmitted \qty{3}{\%} of
+        the light without changing its colour (a shade cloth)?
+  \item Compute the elongation rate under the canopy.
+  \item How tall is the seedling after 14 days there, against a
+        sibling in the open?
+  \item A gap opens on one side, raising $R{:}FR$ on that side to
+        $0.8$. What two responses follow, and by which two
+        photoreceptors?
+  \item Why are leaves developed under the canopy larger and
+        thinner, and what happens to them if the canopy is felled?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Bending toward the gap.}
+\begin{enumerate}[resume]
+  \item Light from the gap splits the auxin $65 : 35$ across the
+        stem. With the canopy elongation rate of question 3, compute
+        the relative extension of each side of the growing zone in
+        one hour.
+  \item Compute the angle of bending after one hour.
+  \item After how long does the stem point straight at the gap, if
+        the gap is at \qty{60}{\degree} from vertical?
+  \item The stem is now leaning. Compute the settling speed of a
+        statolith and the time to cross a \qty{12}{\micro m} cell.
+  \item The shoot's gravitropism and its phototropism now disagree.
+        Which wins in a shade-avoiding plant, and why is that
+        adaptive?
+  \item A root of the same seedling is tilted \qty{45}{\degree} by a
+        stone. Predict its response and explain why it is opposite
+        to the shoot's although the mechanism is the same.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Water.}
+\begin{enumerate}[resume]
+  \item Compute the transpiration rate per square metre in the shade,
+        and the water lost by the seedling's leaves in a day.
+  \item Compute the carbon fixed per square metre per second and per
+        day, and the water-use efficiency in grams of water per gram
+        of carbon.
+  \item What is the seedling's whole daily carbon gain in the shade,
+        in milligrams?
+  \item Recompute the water lost and the efficiency in the gap.
+  \item The soil dries and \omterm{def:b2:plant-flowering:dormancy}{abscisic acid} reduces $g_s$ to
+        \qty{0.02}{mol.m^{-2}.s^{-1}}. Recompute $E$ and $A$
+        (assume $c_a - c_i$ rises to \qty{200}{\micro mol/mol}).
+        Which falls more, and why?
+  \item The seedling has \qty{5}{g} of leaf tissue that is \qty{85}{\%}
+        water and can lose a fifth of it before wilting. How long
+        does it last in the gap with the stomata open if the roots
+        supply nothing?
+  \item Explain why a CAM strategy would not suit a birch seedling
+        under a canopy.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The bet.}
+\begin{enumerate}[resume]
+  \item The seedling holds \qty{100}{mg} of reserves and spends
+        \qty{2}{mg} per centimetre of stem beyond what its leaves
+        supply in the shade. How much stem can it build on reserves
+        alone?
+  \item The canopy is a nettle bed \qty{40}{cm} above; then a wood
+        \qty{8}{m} above. Say in each case whether elongation reaches
+        light before the reserves run out, and what the better
+        response would have been in the wood.
+  \item A birch is a pioneer of open ground; a beech seedling can
+        wait for decades in deep shade. Compare their expected norms
+        of reaction to $\varphi$.
+  \item A plant breeder wants a dense-planted crop that does not
+        elongate. Which sensor or response would you disable, and
+        what side effect must you check?
+  \item Explain in two sentences why a plant that cannot sense its
+        neighbours and a plant that always believes them are both
+        worse off than one that sometimes does.
+  \item State the result: $\varphi$ in sun and shade, the seedling's
+        height after 14 days, and its daily water use in the shade
+        and in the gap.
+\end{enumerate}
+\end{problem}

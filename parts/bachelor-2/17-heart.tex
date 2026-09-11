@@ -1,6 +1,566 @@
 \chapter{The Heart and the Cardiac Cycle}\label{ch:b2:heart}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Cut out a frog's \omterm{def:b2:heart:anatomy}{heart} and drop it into salt solution, and it goes
+on beating for hours --- no nerves, no brain, no \omterm{def:b2:blood-circulation:blood}{blood}, just a
+muscle that contracts on its own about once a second because a
+small patch of its cells cannot stay still. A human \omterm{def:b2:heart:anatomy}{heart} does this
+some three billion times in a life, moving on the order of two
+hundred million litres, without ever being switched off. This
+chapter is about that pump: its chambers and valves, the cycle of
+filling and emptying and the pressures that drive it, the electrical
+system that times it and the trace it leaves on the skin, the law
+that lets it match its output to its inflow beat by beat, and the
+nerves and hormones that adjust its pace and force.
 
-\emph{This chapter has not been written yet.}
+\section{The pump}
+
+\begin{definition}[Chambers and valves]\label{def:b2:heart:anatomy}
+\index{heart}\index{atrium}\index{ventricle}\index{heart valve}
+The heart is two pumps side by side, each an \emph{atrium} that
+receives \omterm{def:b2:blood-circulation:blood}{blood} from the \omterm{def:b2:blood-circulation:vessels}{veins} and a \emph{ventricle} that ejects it
+into an \omterm{def:b2:blood-circulation:vessels}{artery}. The right heart takes \omterm{def:b2:blood-circulation:blood}{blood} from the venae cavae
+and sends it to the lungs through the pulmonary \omterm{def:b2:blood-circulation:vessels}{artery}; the left
+heart takes it back from the pulmonary \omterm{def:b2:blood-circulation:vessels}{veins} and sends it round the
+body through the aorta. Four valves make the flow one-way: the
+\emph{atrioventricular valves} (tricuspid on the right, mitral on
+the left), flaps tethered by cords to papillary muscles so that
+they cannot be blown back into the atrium; and the
+\emph{semilunar valves} (pulmonary and aortic), three pockets that
+fill and seal when the arterial pressure exceeds the ventricle's.
+The valves are passive: they open and close on pressure
+differences alone. The ventricular wall is \emph{myocardium},
+striated muscle of branched cells joined end to end by
+\emph{intercalated discs} full of gap junctions, so that the whole
+ventricle is electrically one cell and contracts as one; the left
+ventricle's wall is three times thicker than the right's because it
+pumps against five times the pressure. The heart muscle is fed by
+its own \emph{coronary arteries}, which fill in diastole, and it
+runs almost entirely on aerobic metabolism --- it cannot borrow.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-17-heart-cutaway.jpg}
+
+{\small The \omterm{def:b2:heart:anatomy}{heart} in frontal section: two atria above, two \omterm{def:b2:heart:anatomy}{ventricles}
+below, the thick left \omterm{def:b2:heart:anatomy}{ventricle}, the atrioventricular valves with
+their cords, and the two great arteries leaving the top.}
+\end{omfigure}
+
+\begin{proposition}[The cardiac cycle]\label{prop:b2:heart:cycle}
+\index{cardiac cycle}\index{systole}\index{diastole}\index{stroke volume}\index{ejection fraction}
+One beat at rest lasts about \qty{0.8}{s}. \emph{Diastole}
+(\qty{0.5}{s}): the \omterm{def:b2:heart:anatomy}{ventricles} relax, their pressure falls below the
+atria's, the atrioventricular valves open and \omterm{def:b2:blood-circulation:blood}{blood} flows in,
+mostly passively, then with a final push from atrial contraction;
+the \omterm{def:b2:heart:anatomy}{ventricle} ends diastole holding about \qty{120}{mL} (the
+\emph{end-diastolic volume}). \emph{Systole} (\qty{0.3}{s}): the
+\omterm{def:b2:heart:anatomy}{ventricles} contract; as soon as their pressure exceeds the atrial
+pressure the atrioventricular valves close (the first \omterm{def:b2:heart:anatomy}{heart} sound,
+``lub''), and for a few hundredths of a second the \omterm{def:b2:heart:anatomy}{ventricle}
+squeezes a closed chamber --- \emph{isovolumetric contraction} ---
+until its pressure passes the arterial pressure (\qty{80}{mmHg} on
+the left), when the semilunar valves open and \omterm{def:b2:blood-circulation:blood}{blood} is ejected. The
+left \omterm{def:b2:heart:anatomy}{ventricle} reaches \qty{120}{mmHg} and expels about
+\qty{70}{mL} (the \emph{\omterm{prop:b2:heart:cycle}{stroke volume}}, an \emph{\omterm{prop:b2:heart:cycle}{ejection fraction}}
+of \qty{60}{\%}); as it relaxes, its pressure falls below the
+aorta's, the aortic valve snaps shut (the second sound, ``dub''),
+and an isovolumetric relaxation brings the pressure down to the
+atrial level, when filling resumes. The right \omterm{def:b2:heart:anatomy}{heart} does the same
+at a fifth of the pressure, ejecting the same volume.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=7.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=0.8, ymin=0, ymax=130,
+  xlabel={time in the cycle (s)}, ylabel={pressure (\unit{mmHg})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.1,0.3,0.8}, ytick={0,40,80,120},
+  legend style={font=\scriptsize, at={(0.6,0.45)}, anchor=west, draw=none},
+  clip=false,
+]
+% aortic pressure
+\addplot[very thick, omThm] coordinates {(0,82) (0.05,80) (0.1,80) (0.12,95) (0.16,115) (0.2,120) (0.25,112) (0.3,100) (0.32,104) (0.34,100) (0.45,94) (0.6,88) (0.8,82)};
+\addlegendentry{aorta}
+% left ventricular pressure
+\addplot[very thick, omDef] coordinates {(0,5) (0.04,8) (0.05,10) (0.08,60) (0.1,80) (0.12,95) (0.16,115) (0.2,120) (0.25,112) (0.3,100) (0.32,60) (0.35,20) (0.38,5) (0.5,3) (0.7,5) (0.75,8) (0.8,5)};
+\addlegendentry{left ventricle}
+% atrial pressure
+\addplot[thick, omProp] coordinates {(0,6) (0.03,9) (0.06,6) (0.1,8) (0.15,6) (0.3,7) (0.36,10) (0.4,5) (0.6,6) (0.75,9) (0.8,6)};
+\addlegendentry{left atrium}
+\draw[dashed, gray] (axis cs:0.05,0) -- (axis cs:0.05,128); \node[font=\scriptsize, anchor=south, align=center] at (axis cs:0.05,128) {mitral\\closes};
+\draw[dashed, gray] (axis cs:0.1,0) -- (axis cs:0.1,128); \node[font=\scriptsize, anchor=south, align=center] at (axis cs:0.13,128) {aortic\\opens};
+\draw[dashed, gray] (axis cs:0.31,0) -- (axis cs:0.31,128); \node[font=\scriptsize, anchor=south, align=center] at (axis cs:0.31,128) {aortic\\closes};
+\draw[dashed, gray] (axis cs:0.38,0) -- (axis cs:0.38,128); \node[font=\scriptsize, anchor=south, align=center] at (axis cs:0.4,128) {mitral\\opens};
+\node[font=\scriptsize] at (axis cs:0.2,45) {systole};
+\node[font=\scriptsize] at (axis cs:0.55,25) {diastole};
+\end{axis}
+\end{tikzpicture}
+
+{\small Pressures in the left \omterm{def:b2:heart:anatomy}{heart} through one beat. The \omterm{def:b2:heart:anatomy}{ventricle}
+squeezes a closed chamber until it exceeds the aortic pressure,
+ejects while it is above it, relaxes until it falls below the atrial
+pressure, and fills.}
+\end{omfigure}
+
+\begin{theorem}[The work of the heart]\label{thm:b2:heart:work}
+\index{cardiac work}\index{pressure--volume loop}
+Plotted as pressure against volume, one beat of the left \omterm{def:b2:heart:anatomy}{ventricle}
+traces a loop --- filling along the bottom, isovolumetric
+contraction up the right side, ejection along the top from
+\qty{120}{mL} to \qty{50}{mL}, isovolumetric relaxation down the
+left --- and the area of the loop is the mechanical work of the
+beat:
+\[
+W = \oint P\,\mathrm{d}V \approx \bar P_{\text{ejection}}\times \text{stroke volume} \approx \qty{100}{mmHg}\times\qty{70}{mL} = \qty{0.93}{J}.
+\]
+At 72 beats a minute the left \omterm{def:b2:heart:anatomy}{ventricle} does about \qty{1.1}{W}, the
+right \qty{0.2}{W}; the \omterm{def:b2:heart:anatomy}{heart}'s metabolism is some \qty{8}{W}, so its
+mechanical efficiency is near \qty{15}{\%}, the rest being heat and
+the cost of tension. Raising the pressure the \omterm{def:b2:heart:anatomy}{heart} pumps against
+(hypertension, a narrowed aortic valve) raises the work per beat in
+proportion, and the muscle thickens in response as any muscle does
+--- until its coronary supply can no longer keep up with its bulk.
+\end{theorem}
+\begin{proof}
+Work is force times distance, and for a pressure acting on a moving
+wall, pressure times swept volume: $\mathrm{d}W = P\,\mathrm{d}V$.
+Round a closed loop the net work is the enclosed area (filling at
+low pressure costs little; ejection at high pressure returns much
+more). $\qty{100}{mmHg} = \qty{1.33e4}{Pa}$ and $\qty{70}{mL} =
+\qty{7e-5}{m^3}$: $1.33\times 10^{4}\times 7\times 10^{-5} =
+\qty{0.93}{J}$; times $1.2$ beats a second, \qty{1.1}{W}.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.62\linewidth, height=6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=150, ymin=0, ymax=140,
+  xlabel={left ventricular volume (\unit{mL})}, ylabel={pressure (\unit{mmHg})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,50,120}, ytick={0,80,120},
+  clip=false,
+]
+\fill[omDef!12] (axis cs:50,5) -- (axis cs:120,8) -- (axis cs:120,80) -- (axis cs:110,115) -- (axis cs:80,122) -- (axis cs:50,100) -- cycle;
+\draw[very thick, omDef, ->] (axis cs:50,5) -- (axis cs:120,8);
+\draw[very thick, omDef, ->] (axis cs:120,8) -- (axis cs:120,80);
+\draw[very thick, omDef, ->] (axis cs:120,80) .. controls (axis cs:110,118) and (axis cs:80,125) .. (axis cs:50,100);
+\draw[very thick, omDef, ->] (axis cs:50,100) -- (axis cs:50,5);
+\node[font=\scriptsize, anchor=south] at (axis cs:85,11) {filling};
+\node[font=\scriptsize, anchor=west] at (axis cs:122,44) {isovolumetric contraction};
+\node[font=\scriptsize, anchor=south] at (axis cs:85,124) {ejection};
+\node[font=\scriptsize, anchor=east] at (axis cs:48,52) {relaxation};
+\node[font=\scriptsize] at (axis cs:85,60) {area $=$ work, \qty{0.9}{J}};
+\end{axis}
+\end{tikzpicture}
+
+{\small The \omterm{thm:b2:heart:work}{pressure--volume loop} of the left \omterm{def:b2:heart:anatomy}{ventricle}. The area
+enclosed is the work of one beat; a higher arterial pressure raises
+the top of the loop and the work with it.}
+\end{omfigure}
+
+\section{The heart's own clock}
+
+\begin{proposition}[Automaticity and conduction]\label{prop:b2:heart:conduction}
+\index{sinoatrial node}\index{pacemaker}\index{atrioventricular node}\index{Purkinje fibres}
+The beat originates in the \emph{\omterm{prop:b2:heart:conduction}{sinoatrial node}}, a patch of
+specialised muscle cells in the wall of the right \omterm{def:b2:heart:anatomy}{atrium} whose
+membrane potential never rests: after each action potential it
+drifts slowly upward (a \emph{pacemaker potential}, driven by a
+sodium current that switches on at negative potentials and by
+calcium channels) until it reaches threshold and fires again, about
+a hundred times a minute if left alone. The impulse spreads through
+the atrial muscle, cell to cell through the gap junctions, and the
+atria contract; it reaches the \emph{\omterm{prop:b2:heart:conduction}{atrioventricular node}}, the
+only electrical bridge between atria and \omterm{def:b2:heart:anatomy}{ventricles}, which conducts
+slowly and delays it by a tenth of a second --- time for the atria
+to finish filling the \omterm{def:b2:heart:anatomy}{ventricles}; then it races down the
+\emph{bundle of His} and the \emph{\omterm{prop:b2:heart:conduction}{Purkinje fibres}}, fast-conducting
+cells that deliver it to the whole ventricular muscle within
+\qty{30}{ms}, so that the \omterm{def:b2:heart:anatomy}{ventricles} contract from the apex upward,
+as a unit, and drive the \omterm{def:b2:blood-circulation:blood}{blood} toward the outflow valves. Every
+part of this system can pace on its own, each more slowly than the
+last (the node at 100, the AV node at 50, the \omterm{prop:b2:heart:conduction}{Purkinje fibres} at
+30), so that if the node fails a lower centre takes over --- at a
+slower rate.
+\end{proposition}
+\begin{proof}[Evidence]
+An isolated \omterm{def:b2:heart:anatomy}{heart}, or a strip of sinoatrial tissue, beats in a dish
+without nerves; a strip of \omterm{def:b2:heart:anatomy}{ventricle} beats too, but more slowly.
+Cooling or warming the \omterm{prop:b2:heart:conduction}{sinoatrial node} alone changes the rate of
+the whole \omterm{def:b2:heart:anatomy}{heart}; cutting the AV bundle dissociates the \omterm{def:b2:heart:anatomy}{ventricles},
+which then beat at their own slow rhythm while the atria continue
+at the node's (\omterm{def:b2:heart:anatomy}{heart} block). Recording from a single node cell
+shows the slow diastolic depolarisation that no ordinary muscle
+cell has; blocking the pacemaker current slows it.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % simplified heart outline, scaled up
+  \draw[thick, fill=omThm!6] (0,0) .. controls (-4.2,1.3) and (-3.8,5.4) .. (-1.3,5.8) .. controls (0,6.1) and (0.6,5.6) .. (1.3,5.8) .. controls (3.8,5.4) and (4.2,1.3) .. (0,0);
+  \draw[thick] (-3.0,3.5) .. controls (-0.8,3.85) and (0.8,3.85) .. (3.0,3.5);
+  \draw[thick] (0,3.75) -- (0,0.6);
+  \node at (-1.5,4.7) {right atrium}; \node at (1.5,4.7) {left atrium};
+  \node[align=center] at (-1.3,2.55) {right\\ventricle}; \node[align=center] at (1.3,2.55) {left\\ventricle};
+  % SA node
+  \fill[omDef] (-2.5,5.0) circle (0.16); \node[omDef, anchor=east] at (-3.3,5.4) {SA node}; \draw[omDef] (-3.3,5.35) -- (-2.62,5.08);
+  \draw[omDef, dashed] (-2.5,5.0) circle (0.45); \draw[omDef, dashed] (-2.5,5.0) circle (0.8);
+  % AV node
+  \fill[omDef] (-0.25,3.7) circle (0.14); \node[omDef, anchor=west] at (0.15,4.05) {AV node}; \draw[omDef] (0.15,4.05) -- (-0.12,3.78);
+  % bundle and Purkinje
+  \draw[very thick, omDef] (-0.25,3.6) -- (-0.25,2.1);
+  \draw[very thick, omDef] (-0.25,2.1) .. controls (-0.8,1.4) .. (-1.9,1.1);
+  \draw[very thick, omDef] (-0.25,2.1) .. controls (0.8,1.4) .. (1.9,1.1);
+  \foreach \p in {(-1.9,1.1),(1.9,1.1)} { \draw[omDef] \p -- ++(-0.3,0.6); \draw[omDef] \p -- ++(0.3,0.7); \draw[omDef] \p -- ++(0,0.85); }
+  \node[omDef, anchor=west] at (3.4,1.0) {Purkinje fibres}; \draw[omDef] (3.4,1.0) -- (2.2,1.1);
+  \node[omDef, anchor=east] at (-0.45,3.05) {bundle of His};
+  % timing
+  \node[anchor=west, align=left] at (5.6,5.0) {SA node fires: $t = 0$\\atria depolarise: 0--\qty{80}{ms}};
+  \node[anchor=west, align=left] at (5.6,3.5) {AV node delay: \qty{100}{ms}};
+  \node[anchor=west, align=left] at (5.6,1.9) {bundle and Purkinje fibres:\\ventricles depolarised\\by \qty{220}{ms}, apex first};
+\end{tikzpicture}
+
+{\small The conduction system. The \omterm{prop:b2:heart:conduction}{sinoatrial node} fires, the atria
+depolarise, the \omterm{prop:b2:heart:conduction}{atrioventricular node} delays the impulse, and the
+bundle and \omterm{prop:b2:heart:conduction}{Purkinje fibres} deliver it to the \omterm{def:b2:heart:anatomy}{ventricles} from the
+apex upward.}
+\end{omfigure}
+
+\begin{proposition}[The electrocardiogram]\label{prop:b2:heart:ecg}
+\index{electrocardiogram}
+The \omterm{def:b2:heart:anatomy}{heart} is a large mass of cells depolarising and repolarising in
+sequence, and the currents that flow in the body around it can be
+recorded as voltages of a millivolt between electrodes on the
+limbs: the \emph{electrocardiogram}. Its waves are the events of
+the conduction system: the \emph{P wave} is atrial depolarisation;
+the flat \emph{PR interval} (\qty{0.16}{s}) is the AV delay; the
+\emph{QRS complex}, sharp and brief (\qty{0.08}{s}), is ventricular
+depolarisation --- large because the ventricular mass is large, brief
+because the \omterm{prop:b2:heart:conduction}{Purkinje fibres} are fast; the \emph{T wave} is
+ventricular repolarisation. (Atrial repolarisation is buried in the
+QRS.) The trace reports timing and conduction, not force: a blocked
+AV node lengthens the PR interval or dissociates P from QRS, a dead
+region of \omterm{def:b2:heart:anatomy}{ventricle} distorts the QRS, an irregular \omterm{def:b2:heart:anatomy}{atrium} (atrial
+fibrillation) replaces P waves with noise and makes the \omterm{def:b2:heart:anatomy}{ventricles}
+beat irregularly, and an interval between R waves gives the rate.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.9\linewidth, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1.0, ymin=-0.4, ymax=1.3,
+  xlabel={time (s)}, ylabel={mV},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.2,0.4,0.6,0.8,1.0}, ytick={0,1},
+  clip=false,
+]
+\addplot[very thick, omDef] coordinates {(0,0) (0.08,0) (0.1,0.05) (0.14,0.15) (0.18,0.05) (0.2,0) (0.28,0) (0.3,-0.1) (0.31,0) (0.33,1.1) (0.35,0) (0.36,-0.25) (0.375,0) (0.5,0) (0.54,0.1) (0.58,0.28) (0.62,0.1) (0.65,0) (0.88,0) (0.9,0.05) (0.94,0.15) (0.98,0.05) (1.0,0)};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.14,0.17) {P};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.33,1.12) {R};
+\node[font=\scriptsize, anchor=north] at (axis cs:0.295,-0.11) {Q};
+\node[font=\scriptsize, anchor=north] at (axis cs:0.365,-0.27) {S};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.58,0.3) {T};
+\draw[<->, gray] (axis cs:0.1,0.45) -- (axis cs:0.3,0.45); \node[font=\scriptsize, anchor=south, gray] at (axis cs:0.2,0.46) {PR \qty{0.16}{s}};
+\draw[<->, gray] (axis cs:0.3,0.6) -- (axis cs:0.375,0.6); \node[font=\scriptsize, anchor=west, gray] at (axis cs:0.38,0.6) {QRS \qty{0.08}{s}};
+\draw[<->, gray] (axis cs:0.33,1.25) -- (axis cs:0.94,1.25); \node[font=\scriptsize, anchor=south, gray] at (axis cs:0.63,1.25) {R--R interval $=$ 60/rate};
+\end{axis}
+\end{tikzpicture}
+
+{\small A normal electrocardiogram: P (atria), the PR delay at the
+AV node, QRS (ventricular depolarisation), T (ventricular
+repolarisation).}
+\end{omfigure}
+
+\section{Regulating the output}
+
+\begin{theorem}[The Frank--Starling law]\label{thm:b2:heart:starling}
+\index{Frank--Starling law}\index{preload}\index{cardiac output}
+The force of a ventricular contraction rises with the volume that
+filled it: within the working range, the more the \omterm{def:b2:heart:anatomy}{ventricle} is
+stretched in diastole (the \emph{preload}), the more it ejects in
+systole. The \omterm{def:b2:heart:anatomy}{heart} therefore pumps out, beat by beat, whatever it
+receives --- a rise in venous return of \qty{20}{\%} is met by a rise
+in \omterm{prop:b2:heart:cycle}{stroke volume} of \qty{20}{\%} without any nerve or hormone --- and
+the two \omterm{def:b2:heart:anatomy}{ventricles}, which must move the same volume, balance each
+other automatically: if the right \omterm{def:b2:heart:anatomy}{heart} delivers more \omterm{def:b2:blood-circulation:blood}{blood} to the
+lungs, the left \omterm{def:b2:heart:anatomy}{heart} receives more and pumps more. The mechanism is
+in the \omterm{def:b2:cell-differentiation:fibre}{sarcomere}: at the short lengths of a poorly filled
+\omterm{def:b2:heart:anatomy}{ventricle} the thick and thin filaments overlap too much and the
+calcium sensitivity is low; stretching toward the optimal length
+(\qty{2.2}{\micro m}) increases both the overlap available for
+cross-bridges and the sensitivity, so that the same calcium pulse
+produces more force. Beyond the optimum (an overstretched, failing
+\omterm{def:b2:heart:anatomy}{heart}) the force falls again.
+\end{theorem}
+\begin{proof}[Evidence]
+Frank (1895) recorded the pressure developed by a frog \omterm{def:b2:heart:anatomy}{ventricle}
+filled to different volumes: the peak pressure rose with the
+filling volume up to a maximum and then fell. Starling (1914), with
+a dog heart--lung preparation in which venous return and arterial
+resistance could be set independently, showed that raising the
+return raised the output stroke by stroke, and that raising the
+arterial resistance was met, after a few beats of accumulation, by
+a larger end-diastolic volume and a restored output --- the \omterm{def:b2:heart:anatomy}{ventricle}
+answers a load by stretching and a stretch by contracting harder.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.66\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=200, ymin=0, ymax=140,
+  xlabel={end-diastolic volume (\unit{mL})}, ylabel={stroke volume (\unit{mL})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,50,100,150,200}, ytick={0,50,100},
+  legend style={font=\scriptsize, at={(0.5,-0.3)}, anchor=north, draw=none, legend columns=3},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=40:200, samples=60] {130*(1-exp(-(x-40)/70))};
+\addlegendentry{normal}
+\addplot[very thick, omThm, domain=40:200, samples=60] {130*1.3*(1-exp(-(x-40)/55))};
+\addlegendentry{with sympathetic stimulation}
+\addplot[very thick, omExo!70!black, domain=40:200, samples=60] {130*0.5*(1-exp(-(x-40)/90))};
+\addlegendentry{failing heart}
+\fill[omDef] (axis cs:120,88) circle (2pt); \node[font=\scriptsize, anchor=south east] at (axis cs:118,90) {rest};
+\end{axis}
+\end{tikzpicture}
+
+{\small Starling curves. \omterm{prop:b2:heart:cycle}{Stroke volume} rises with filling; the
+sympathetic nerves shift the curve upward (more output from the same
+filling), a failing \omterm{def:b2:heart:anatomy}{heart} shifts it down.}
+\end{omfigure}
+
+\begin{proposition}[Nerves and hormones]\label{prop:b2:heart:control}
+\index{sympathetic nervous system!heart}\index{vagus nerve}\index{adrenaline}\index{cardiac output}
+The \omterm{thm:b2:heart:starling}{cardiac output} is \omterm{def:b2:heart:anatomy}{heart} rate times \omterm{prop:b2:heart:cycle}{stroke volume}, \qty{5}{L/min}
+at rest and up to \qty{25}{L/min} in a trained athlete's exercise.
+Both factors are set by the autonomic nerves. The \emph{vagus}
+(parasympathetic), releasing acetylcholine onto the \omterm{prop:b2:heart:conduction}{sinoatrial node},
+slows the pacemaker drift and holds the resting rate at 70 rather
+than the node's own 100; cut the vagi and the rate rises. The
+\emph{sympathetic} nerves, releasing noradrenaline, and the adrenal
+medulla, releasing \emph{adrenaline} into the \omterm{def:b2:blood-circulation:blood}{blood}, speed the drift
+(more beats), speed conduction, and raise the force of contraction
+at any filling (a steeper Starling curve, the property called
+\emph{contractility}), by raising the calcium delivered to the
+\omterm{def:b2:cell-differentiation:fibre}{sarcomeres} at each beat. In exercise the vagal brake is released
+first, then the sympathetic accelerator pressed, and a rate of 180
+with a \omterm{prop:b2:heart:cycle}{stroke volume} of \qty{140}{mL} gives \qty{25}{L/min}; the
+signals are relayed through the receptors and second messengers of
+\cref{ch:b2:cell-signalling}, and the whole is commanded by the
+pressure-regulating centres of \cref{ch:b2:blood-pressure}.
+\end{proposition}
+
+\begin{example}[Reading a heart]\label{ex:b2:heart:reading}
+Two sounds per beat: lub, the AV valves closing at the start of
+systole; dub, the semilunar valves closing at its end. A murmur is
+turbulent flow through a narrowed valve (a stenosis) or back
+through a leaking one (an insufficiency): a murmur between lub and
+dub is a leaking mitral valve or a narrowed aortic valve, after dub
+a leaking aortic valve. A pulse of 70 with a \omterm{def:b2:blood-circulation:blood}{blood} pressure of
+$120/80$~mmHg means a \omterm{prop:b2:heart:cycle}{stroke volume} near \qty{70}{mL};
+a rate of 40 in an athlete is a large \omterm{prop:b2:heart:cycle}{stroke volume} and a strong
+vagal tone; a rate of 40 with a PR interval that lengthens until a
+beat drops is a diseased AV node. The physiology of this chapter is
+what a physician hears through a stethoscope in thirty seconds.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:heart:1}
+Trace a drop of \omterm{def:b2:blood-circulation:blood}{blood} from the vena cava to the aorta, naming each
+chamber, valve and vessel in order.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:heart:2}
+Give the phases of the \omterm{prop:b2:heart:cycle}{cardiac cycle} with the state of each valve
+in each phase, and the event that causes each of the two \omterm{def:b2:heart:anatomy}{heart}
+sounds.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:heart:3}
+Name the parts of the conduction system in order, with the time the
+impulse takes to reach each, and the ECG wave each produces.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:heart:4}
+State the \omterm{thm:b2:heart:starling}{Frank--Starling law} and say why it guarantees that the two
+\omterm{def:b2:heart:anatomy}{ventricles} pump the same volume.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:heart:5}
+A \omterm{def:b2:heart:anatomy}{heart} has an end-diastolic volume of \qty{130}{mL} and an
+end-systolic volume of \qty{50}{mL} at 70 beats a minute. Compute
+the \omterm{prop:b2:heart:cycle}{stroke volume}, the \omterm{prop:b2:heart:cycle}{ejection fraction} and the \omterm{thm:b2:heart:starling}{cardiac output}. A
+failing \omterm{def:b2:heart:anatomy}{heart} has \qty{180}{mL} and \qty{120}{mL}: recompute, and say
+what has happened to the \omterm{prop:b2:heart:cycle}{ejection fraction}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:heart:6}
+Compute the work of a beat for a \omterm{prop:b2:heart:cycle}{stroke volume} of \qty{70}{mL} at a
+mean ejection pressure of \qty{100}{mmHg}, and the power at 72 beats
+a minute. Recompute for a hypertensive at \qty{150}{mmHg}. How
+much extra oxygen per minute does the second \omterm{def:b2:heart:anatomy}{heart} need, if the
+mechanical efficiency is \qty{15}{\%} and \qty{1}{mL} of oxygen
+yields \qty{20}{J}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:heart:7}
+On an ECG the R waves are \qty{0.5}{s} apart in one recording and
+\qty{1.5}{s} in another. Give the \omterm{def:b2:heart:anatomy}{heart} rates. In a third, P waves
+come every \qty{0.6}{s} and QRS complexes every \qty{1.8}{s}, with no
+fixed relation. What has happened?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:heart:8}
+The sinoatrial cell's potential drifts from \qty{-60}{mV} to a
+threshold of \qty{-40}{mV} at \qty{25}{mV/s} before each action
+potential of \qty{0.15}{s}. Compute the interval between beats and
+the rate. Acetylcholine lowers the drift to \qty{18}{mV/s} and the
+starting potential to \qty{-65}{mV}; noradrenaline raises the drift
+to \qty{40}{mV/s}. Compute both rates.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:heart:9}
+Explain why the AV node's delay is necessary, what would happen to
+the output without it, and why a slow AV node (a long PR interval)
+is harmless up to a point and dangerous beyond it.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:heart:10}
+An athlete at rest has a rate of 45 and an output of \qty{5}{L/min};
+in exercise a rate of 180 and \qty{30}{L/min}. Compute the \omterm{prop:b2:heart:cycle}{stroke
+volumes} and say what the Starling curve and the sympathetic nerves
+each contribute. Why can the rate not usefully exceed about 200?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:heart:11}
+A narrowed aortic valve leaves an opening of \qty{1}{cm^2} instead
+of \qty{3}{cm^2}. Using continuity, compute the velocity of the
+ejected \omterm{def:b2:blood-circulation:blood}{blood} at \qty{250}{mL/s} through each, and, from Bernoulli
+($\Delta P = \tfrac12\rho v^2$), the pressure the \omterm{def:b2:heart:anatomy}{ventricle} must
+generate above the aortic pressure in each case. What does the
+\omterm{def:b2:heart:anatomy}{ventricle} do about it, and what is the eventual cost?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:heart:12}
+``The \omterm{def:b2:heart:anatomy}{heart} is a pump that regulates itself and is only adjusted by
+the nervous system.'' Discuss, distinguishing what automaticity, the
+\omterm{thm:b2:heart:starling}{Frank--Starling law} and the autonomic nerves each provide, and what
+a transplanted \omterm{def:b2:heart:anatomy}{heart} --- which has no nerves --- can and cannot do.
+\end{exercise}
+
+\section{Problem: A Heart Under Load}
+
+\begin{problem}[{Weekend problem --- one heart followed from rest to
+exercise and into disease: its cycle timed, its work computed, its
+electrocardiogram read, its Starling response and its autonomic
+control quantified, and a narrowed valve's cost estimated, ending on
+the output at rest and in exercise, the work per beat, and the
+gradient across the stenosis}]
+\label{pb:b2:heart:1}
+Data: at rest, rate 70, end-diastolic volume \qty{130}{mL},
+end-systolic \qty{60}{mL}, mean ejection pressure \qty{100}{mmHg}
+($\qty{1}{mmHg} = \qty{133}{Pa}$), aortic pressure $120/80$~mmHg.
+Systole lasts \qty{0.3}{s} at any rate. Pacemaker: drift from
+\qty{-60}{mV} to \qty{-40}{mV}, action potential \qty{0.15}{s}. The
+\omterm{def:b2:heart:anatomy}{heart} consumes \qty{20}{J} per millilitre of oxygen with a
+mechanical efficiency of \qty{15}{\%}; coronary \omterm{def:b2:blood-circulation:blood}{blood} carries
+\qty{0.2}{mL} of oxygen per millilitre and the \omterm{def:b2:heart:anatomy}{heart} extracts
+\qty{70}{\%} of it. \omterm{def:b2:blood-circulation:blood}{Blood} density \qty{1060}{kg/m^3}.
+
+\medskip
+\noindent\textbf{Part I --- The cycle at rest.}
+\begin{enumerate}
+  \item Compute the \omterm{prop:b2:heart:cycle}{stroke volume}, \omterm{prop:b2:heart:cycle}{ejection fraction} and \omterm{thm:b2:heart:starling}{cardiac
+        output}.
+  \item Compute the duration of one cycle and of diastole.
+  \item Compute the mean ejection rate during systole, in
+        millilitres per second, and the mean velocity through an
+        aortic valve of \qty{3}{cm^2}.
+  \item The ventricular pressure rises at \qty{1500}{mmHg/s} during
+        isovolumetric contraction, from 10 to \qty{80}{mmHg}. How
+        long does that phase last?
+  \item Compute the work of one beat and the mechanical power of the
+        left \omterm{def:b2:heart:anatomy}{ventricle}.
+  \item Compute the \omterm{def:b2:heart:anatomy}{heart}'s total power and oxygen consumption
+        (both \omterm{def:b2:heart:anatomy}{ventricles}: take the right as a fifth of the left).
+  \item Compute the coronary \omterm{def:b2:blood-circulation:blood}{blood} flow needed to supply that oxygen.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The pacemaker and the trace.}
+\begin{enumerate}[resume]
+  \item What drift rate (\unit{mV/s}) gives a rate of 70?
+  \item The vagus is cut: the rate becomes 100. What drift rate is
+        that?
+  \item Compute the drift rate for a rate of 180 in exercise.
+  \item On the ECG at rest, give the R--R interval, and say what
+        the P, QRS and T waves correspond to.
+  \item The PR interval is \qty{0.16}{s} at rest. Its length is
+        mostly the AV node's delay: explain what the delay achieves
+        and why a rate of 180 requires the node to speed up too.
+  \item A patient's ECG shows QRS complexes every \qty{1.5}{s} with P
+        waves every \qty{0.8}{s}, unrelated. Diagnose, give the
+        ventricular rate, and say which tissue is pacing the
+        \omterm{def:b2:heart:anatomy}{ventricles}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Exercise.}
+In exercise the rate rises to 180 and the sympathetic nerves raise
+contractility so that the end-systolic volume falls to
+\qty{30}{mL}; venous return raises the end-diastolic volume to
+\qty{150}{mL}.
+\begin{enumerate}[resume]
+  \item Compute the \omterm{prop:b2:heart:cycle}{stroke volume}, \omterm{prop:b2:heart:cycle}{ejection fraction} and output.
+  \item Compute the duration of diastole at 180 and explain why the
+        rate cannot usefully go much higher.
+  \item Compute the power of the left \omterm{def:b2:heart:anatomy}{ventricle} at a mean ejection
+        pressure of \qty{120}{mmHg}, and the \omterm{def:b2:heart:anatomy}{heart}'s oxygen
+        consumption.
+  \item Compute the coronary flow needed, and compare with rest.
+        Why is the diastolic shortening a problem for it?
+  \item Without the sympathetic nerves (a transplanted \omterm{def:b2:heart:anatomy}{heart}) the
+        rate rises only slowly, through adrenaline in the \omterm{def:b2:blood-circulation:blood}{blood}, and
+        contractility less. Predict the output in the first minute
+        of exercise, using the Starling law alone with the same
+        filling.
+  \item Attribute the rise of output from rest to exercise to its
+        three causes (rate, filling, contractility), in litres per
+        minute each.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- A narrowed valve.}
+The aortic valve narrows to \qty{1}{cm^2}.
+\begin{enumerate}[resume]
+  \item Compute the ejection velocity at rest through the narrowed
+        valve.
+  \item Using Bernoulli, $\Delta P = \tfrac12\rho v^{2}$, compute the
+        pressure the \omterm{def:b2:heart:anatomy}{ventricle} must add to push \omterm{def:b2:blood-circulation:blood}{blood} through it, in
+        mmHg.
+  \item Recompute both in exercise.
+  \item What must the \omterm{def:b2:heart:anatomy}{ventricle}'s peak pressure be in each case to
+        keep the aortic pressure normal, and by what factor is its
+        work per beat raised at rest?
+  \item The \omterm{def:b2:heart:anatomy}{ventricle} wall thickens in response. Explain why this
+        helps and why it eventually fails (think of the coronary
+        supply and of diastolic filling).
+  \item State the result: the output at rest and in exercise, the
+        work per beat at rest, and the gradient across the narrowed
+        valve at rest and in exercise.
+\end{enumerate}
+\end{problem}

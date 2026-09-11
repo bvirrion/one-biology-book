@@ -18,10 +18,10 @@ collège SVT biology parts, Book 2 the lycée S SVT biology parts, Books
 of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
-**Current state: Books 1, 2 and 3 written in English (2026-08-28,
-2026-09-02 and 2026-09-04); Books 1, 2 and 3 all ship in the seven target
-languages (2026-09-04, 2026-09-05 and 2026-09-06); Books 4–5 are titled
-placeholders**
+**Current state: Books 1, 2, 3 and 4 written in English (2026-08-28,
+2026-09-02, 2026-09-04 and 2026-09-10); Books 1, 2 and 3 all ship in the
+seven target languages (2026-09-04, 2026-09-05 and 2026-09-06); Book 4 is
+English only; Book 5 is a titled placeholder**
 (chapter architecture in place, no chapter written).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
@@ -82,6 +82,40 @@ placeholders**
   differential equations, no matrices, no statistics beyond a mean.
   **Translated into all seven target languages on 2026-09-06**, in two waves,
   each edition self-scored 96/100.
+
+- **Book 4** (University Biology, Year 2): 27 chapters + 27 solutions
+  files, ~321 pp, written 2026-09-10 on the Book 3 calibration: exactly
+  12 exercises ramped 4×★, 5×★★, 3×★★★, plus one 25-question weekend
+  `problem` (Parts I–IV with `[resume]`) ending on a named quantified
+  result (a selection coefficient, a cardiac output, a divergence time,
+  an airborne fraction, a humus stock); every exercise and problem has a
+  keyed solution (`tools/check_problem_numbering.py` passes). Year-2
+  register: the laws are `theorem`s with Year-2 derivations (the
+  Lotka–Volterra isoclines, the selection equation and drift decay,
+  Jukes–Cantor, the one-box residence-time model, degree-days, the
+  species–area relation, the Goldman/chord-conductance potential),
+  classic experiments are `\begin{proof}[Evidence]`, the rest
+  `\admitted` with prose pointers to the Year 3 volume. 181 figures:
+  TikZ/pgfplots schematics, 71 AI illustrations (`images/book4/ai/`,
+  prompts in `PROMPTS.md`, JPEG) and 6 free-license photographs
+  (`images/book4/`, records in `CREDITS.md`) plus 2 reused from
+  `images/book2/` and `images/book3/`, all credited in
+  `frontmatter/image-credits-book4.tex`. ~3,090 generated `\omterm`
+  links; `tools/term_config/book4_en.py` is curated (STOP for "ovary",
+  EXTRA for the trophic adjectives, and `EXTRA_PROTECT` regexes for
+  "flower" as a verb, "dominant generation/plants/follicle", "wood" as
+  woodland, "seed the clouds"). Math level guard: ODE systems and phase
+  planes, exp/ln, Poisson and binomial counts, log axes, matrices
+  allowed; no PDEs (the Fisher wave speed is stated, not derived), no
+  statistics beyond a mean, chi-square only as a recipe with the critical
+  value given. Chemistry is plain math (`$\mathrm{CO_2}$`,
+  `\ensuremath{\mathrm{NH_4^{+}}}` inside math): mhchem is not loaded.
+  Gotchas met: a `\\` inside a TikZ node needs `align=`; pgfplots fills
+  must be drawn before the curves they would hide; a legend inside the
+  axis covers the curves (put it below with `at={(0.5,-0.28)},
+  anchor=north`); a three-panel TikZ row wider than the text needs
+  `\resizebox{\linewidth}{!}{…}`; a `\qty{120}{/}` time or pressure pair
+  prints without its slash (write `$120/80$~mmHg`).
 
 `CONTRIBUTING.md` holds the authoritative style/structure conventions;
 `THEME.md` documents the One Course cover brand. Read both before writing
@@ -374,9 +408,9 @@ prefer diagrams over equations; SI units where relevant.
   both help); a **free-of-rights photograph** for a specific real thing a
   reader would want to see as it is — a named scientist, a landmark
   specimen, a famous organism or landscape. The infrastructure is in
-  place for Books 1–3 (`images/book<N>/` with `CREDITS.md`,
+  place for Books 1–4 (`images/book<N>/` with `CREDITS.md`,
   `images/book<N>/ai/PROMPTS.md`, an Image Credits page in `frontmatter/`
-  inputted by each entry file); Books 4–5 copy that shape.
+  inputted by each entry file); Book 5 copies that shape.
 - **AI illustrations are JPEG, never PNG** (`images/book<N>/ai/*.jpg`,
   made with `ffmpeg -i x.png -q:v 3 -pix_fmt yuvj420p x.jpg`, the HTML
   reader's own recipe; then delete the PNG). A lossless PNG costs ~2–4 MB

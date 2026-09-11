@@ -1,6 +1,622 @@
 \chapter{Population Genetics and Natural Selection}\label{ch:b2:population-genetics}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1848 a black peppered moth was caught near Manchester; by 1895
+nineteen moths in twenty in the city were black, and by 1970, as the
+soot went, the pale form was back. The moths did not change: the
+proportions of two \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} in a population of millions did, under
+the eyes of birds, in a few dozen generations. Darwin had seen that
+selection must change species but had no way to count it; the
+counting is \omterm{def:b2:population-genetics:frequencies}{population genetics}, and it is the arithmetic of this
+chapter. It asks how \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies behave when nothing acts on
+them, and then how fast selection, \omterm{def:b2:genome-diversification:mutation}{mutation}, migration, chance and
+inbreeding move them --- and it ends with the characters that are
+not one gene but many, which is most of what selection actually
+sees.
 
-\emph{This chapter has not been written yet.}
+\section{The gene pool at rest}
+
+\begin{definition}[Population, gene pool, frequencies]\label{def:b2:population-genetics:frequencies}
+\index{population genetics}\index{gene pool}\index{allele frequency}
+A \emph{population} is a group of individuals of one species that
+interbreed; its \emph{gene pool} is the set of all their \omterm{def:b2:meiosis-heredity:vocabulary}{alleles}.
+For a locus with two \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} $A$ and $a$ in a \omterm{def:b2:meiosis-heredity:meiosis}{diploid} population of
+$N$ individuals, the \emph{\omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies} are $p = (2N_{AA} +
+N_{Aa})/2N$ and $q = 1 - p$, and the \emph{\omterm{def:b2:meiosis-heredity:vocabulary}{genotype} frequencies} are
+the fractions of $AA$, $Aa$ and $aa$. Evolution, in the narrowest
+sense, is a change of \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies between generations; the
+question of this chapter is what changes them and by how much.
+\end{definition}
+
+\begin{theorem}[Hardy--Weinberg]\label{thm:b2:population-genetics:hw}
+\index{Hardy--Weinberg law}
+In a large population mating at random, without selection, \omterm{def:b2:genome-diversification:mutation}{mutation}
+or migration, the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies do not change from one
+generation to the next, and after a single generation of random
+mating the \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} frequencies are
+\[
+AA : p^{2}, \qquad Aa : 2pq, \qquad aa : q^{2},
+\]
+and stay so. Dominance does not make a \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} spread, and
+a rare \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is not lost: it hides in heterozygotes,
+which outnumber the homozygotes $2p/q$ to one --- for $q = 0.01$,
+two hundred to one. The law is the null hypothesis of \omterm{def:b2:population-genetics:frequencies}{population
+genetics}: a departure from it in a real population, or a change of
+$p$ between generations, is the signature of one of the forces
+below.
+\end{theorem}
+\begin{proof}
+Random mating is random union of gametes: a gamete carries $A$ with
+probability $p$ and $a$ with probability $q$, independently of its
+partner, so the zygote is $AA$ with probability $p^{2}$, $Aa$ with
+$2pq$, $aa$ with $q^{2}$. The \omterm{def:b2:population-genetics:frequencies}{allele frequency} in the next
+generation is $p' = p^{2} + \tfrac12(2pq) = p(p + q) = p$: unchanged.
+Since the \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} frequencies depend only on $p$, they are the same
+in every generation after the first.
+\end{proof}
+
+\begin{example}[Reading a frequency]\label{ex:b2:population-genetics:cf}
+Cystic fibrosis, \omterm{def:b2:meiosis-heredity:vocabulary}{recessive}, affects one European child in 2500:
+$q^{2} = 1/2500$, $q = 0.02$, and the carrier frequency is $2pq
+\approx 0.04$ --- one person in 25 carries an \omterm{def:b2:meiosis-heredity:vocabulary}{allele} that kills its
+homozygotes, and \qty{98}{\%} of the copies of the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} sit in
+healthy carriers where selection cannot see them. That is why a
+lethal \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} is removed so slowly, and why eugenic schemes to
+eliminate \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} diseases by sterilising the affected never
+could have worked: the arithmetic of the next section shows how
+slowly.
+\end{example}
+
+\section{Selection}
+
+\begin{definition}[Fitness]\label{def:b2:population-genetics:fitness}
+\index{fitness}\index{selection coefficient}
+The \emph{fitness} $w$ of a \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} is its relative contribution
+of offspring to the next generation --- survival to reproduction
+times fecundity, scaled so that the best \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} has $w = 1$. The
+\emph{selection coefficient} $s$ of a \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} is its shortfall,
+$w = 1 - s$. Fitness is a property of a \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} in an environment,
+not of an \omterm{def:b2:meiosis-heredity:vocabulary}{allele} in itself: the melanic moth's \omterm{def:b2:meiosis-heredity:vocabulary}{allele} had $w > 1$
+relative to the pale one on sooty \omterm{def:b2:plant-meristems:wood}{bark} and $w < 1$ on lichen.
+\end{definition}
+
+\begin{theorem}[Selection changes allele frequency]\label{thm:b2:population-genetics:selection}
+\index{natural selection!equation}
+With \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} fitnesses $w_{AA}$, $w_{Aa}$, $w_{aa}$, the mean
+\omterm{def:b2:population-genetics:fitness}{fitness} is $\bar w = p^{2}w_{AA} + 2pq\,w_{Aa} + q^{2}w_{aa}$ and the
+\omterm{def:b2:population-genetics:frequencies}{allele frequency} in the next generation is
+\[
+p' = \frac{p^{2}w_{AA} + pq\,w_{Aa}}{\bar w}, \qquad
+\Delta p = p' - p = \frac{pq\,\bigl[p(w_{AA} - w_{Aa}) + q(w_{Aa} - w_{aa})\bigr]}{\bar w}.
+\]
+Two consequences. First, $\Delta p$ is proportional to $pq$: selection
+is fastest at intermediate frequencies and slowest when an \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is
+rare or nearly fixed --- there is little variation to act on.
+Second, against a \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} ($w_{AA} = w_{Aa} = 1$, $w_{aa} =
+1 - s$) the change is $\Delta q = -s\,pq^{2}/\bar w$, proportional
+to $q^{2}$: a rare \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} is almost invisible to selection, and
+halving its frequency from $0.01$ takes about a hundred generations
+even when its homozygotes are lethal. A favourable \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele}
+spreads fast at first and then stalls at the end, for the same
+reason.
+\end{theorem}
+\begin{proof}
+Of the offspring, a fraction $p^{2}w_{AA}/\bar w$ are $AA$ and
+$2pq\,w_{Aa}/\bar w$ are $Aa$ (each \omterm{def:b2:meiosis-heredity:vocabulary}{genotype}'s frequency weighted by
+its \omterm{def:b2:population-genetics:fitness}{fitness} and renormalised); the $A$ \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} among them are all of
+the first and half of the second, giving $p'$. Subtracting $p =
+p\bar w/\bar w$ and expanding $\bar w$ gives $\Delta p$. For a lethal
+\omterm{def:b2:meiosis-heredity:vocabulary}{recessive} ($s = 1$): $q' = q^{2}\cdot 0 + pq$ over $\bar w = 1 -
+q^{2}$, so $q' = q/(1 + q)$, hence $1/q' = 1/q + 1$ and after $t$
+generations $1/q_t = 1/q_0 + t$: from $q_0 = 0.01$ to $0.005$ takes
+$t = 100$.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=150, ymin=0, ymax=1.05,
+  xlabel={generations}, ylabel={frequency of the favoured allele},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.11)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,50,100,150}, ytick={0,0.5,1},
+  legend style={font=\scriptsize, at={(0.97,0.35)}, anchor=east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef] table[x=t, y=dom] {
+t dom
+0 0.01
+10 0.02
+20 0.04
+30 0.075
+40 0.14
+50 0.24
+60 0.38
+70 0.53
+80 0.66
+90 0.76
+100 0.83
+110 0.88
+120 0.91
+130 0.93
+140 0.945
+150 0.955
+};
+\addlegendentry{favoured allele dominant, $s = 0.1$}
+\addplot[very thick, omThm] table[x=t, y=rec] {
+t rec
+0 0.01
+10 0.0101
+20 0.0102
+30 0.0104
+40 0.0106
+50 0.0108
+60 0.011
+70 0.0113
+80 0.0116
+90 0.012
+100 0.0124
+110 0.0128
+120 0.0133
+130 0.0138
+140 0.0144
+150 0.015
+};
+\addlegendentry{favoured allele recessive, $s = 0.1$}
+\end{axis}
+\end{tikzpicture}
+
+{\small Selection at work with a \qty{10}{\%} advantage. A favoured
+\omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} rises from \qty{1}{\%} to a majority in seventy
+generations and then slows, its rare \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} rival hiding in
+heterozygotes; a favoured \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} at \qty{1}{\%} barely
+moves in the same time, since it is almost never exposed.}
+\end{omfigure}
+
+\begin{proposition}[Kinds of selection]\label{prop:b2:population-genetics:kinds}
+\index{directional selection}\index{stabilising selection}\index{balancing selection}\index{heterozygote advantage}
+\emph{Directional} selection favours one extreme and drives an
+\omterm{def:b2:meiosis-heredity:vocabulary}{allele} toward fixation (the melanic moth in a sooty wood; antibiotic
+resistance; the size of a finch's beak in a drought).
+\emph{Stabilising} selection favours the middle and removes the
+extremes (human birth weight: the babies who die are the smallest
+and the largest); it keeps a population where it is and is the
+commonest kind. \emph{Disruptive} selection favours both extremes
+against the middle, and can split a population
+(\cref{ch:b2:speciation}). \emph{Balancing} selection keeps two
+\omterm{def:b2:meiosis-heredity:vocabulary}{alleles} in the population indefinitely: by \emph{\omterm{prop:b2:population-genetics:kinds}{heterozygote
+advantage}}, when $Aa$ is fitter than either homozygote --- with
+$w_{AA} = 1 - s$, $w_{aa} = 1 - t$, $w_{Aa} = 1$, the frequency
+settles at $\hat p = t/(s + t)$ --- or by \emph{frequency-dependent}
+selection, when a \omterm{def:b2:meiosis-heredity:vocabulary}{genotype} is fitter the rarer it is (the rare
+$S$ \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} of \cref{ch:b2:angiosperm-reproduction}, prey a
+predator has not learned, the two mouth-sides of a scale-eating
+fish).
+\end{proposition}
+\begin{proof}[Evidence]
+Sickle-cell haemoglobin kills most homozygotes before they
+reproduce, yet the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is at \qty{10}{\%} to \qty{20}{\%} across
+malarial Africa. Allison (1954) showed that \omterm{def:b2:meiosis-heredity:vocabulary}{heterozygous} children
+had far fewer and milder malarial infections than either
+homozygote, and the \omterm{def:b2:meiosis-heredity:vocabulary}{allele}'s frequency maps onto the historical
+distribution of falciparum malaria; in populations of African
+descent living where there is no malaria the frequency has been
+falling ever since. With $t \approx 0.8$ for the sickle homozygote
+and $s \approx 0.1$ for the normal homozygote in a malarial region,
+$\hat q = s/(s + t) \approx 0.11$ --- what is observed.
+\end{proof}
+
+\section{Mutation, migration, and the balance}
+
+\begin{theorem}[Mutation--selection balance]\label{thm:b2:population-genetics:balance}
+\index{mutation--selection balance}\index{genetic load}
+A deleterious \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is fed by \omterm{def:b2:genome-diversification:mutation}{mutation} at rate $\mu$ per gamete
+per generation and removed by selection. At equilibrium the two
+balance: for a \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} with \omterm{def:b2:meiosis-heredity:vocabulary}{homozygous} disadvantage $s$,
+\[
+\hat q = \sqrt{\mu/s}\,;
+\]
+for a \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} (or partly \omterm{def:b2:meiosis-heredity:vocabulary}{dominant}) \omterm{def:b2:meiosis-heredity:vocabulary}{allele} with \omterm{def:b2:meiosis-heredity:vocabulary}{heterozygous}
+disadvantage $hs$, $\hat q = \mu/hs$. The equilibrium frequency of a
+\omterm{def:b2:meiosis-heredity:vocabulary}{recessive} is thus large even for a lethal: with $\mu = 10^{-5}$ and
+$s = 1$, $\hat q = 3\times 10^{-3}$, and \qty{0.6}{\%} of the population
+carry it. Every population carries such a \emph{\omterm{thm:b2:population-genetics:balance}{genetic load}} at
+thousands of loci, most of it \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} and hidden, and the
+equilibrium of \cref{ch:b2:asexual-reproduction}'s ratchet argument
+--- a fraction $e^{-U/s}$ of individuals free of deleterious
+\omterm{def:b2:genome-diversification:mutation}{mutations} --- is the same balance summed over the genome.
+\end{theorem}
+\begin{proof}
+Each generation \omterm{def:b2:genome-diversification:mutation}{mutation} adds $\mu p \approx \mu$ to $q$ and
+selection removes $s\,pq^{2}/\bar w \approx sq^{2}$ (for small $q$);
+setting $\mu = s\hat q^{2}$ gives the \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} result. For a
+\omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} selection removes $hs\,q$ per generation (each copy
+is exposed in a heterozygote), and $\mu = hs\hat q$.
+\end{proof}
+
+\begin{proposition}[Migration and the one-migrant rule]\label{prop:b2:population-genetics:migration}
+\index{gene flow}\index{migration (genetic)}
+If a fraction $m$ of a population each generation are immigrants
+from a population with \omterm{def:b2:population-genetics:frequencies}{allele frequency} $p_{m}$, the frequency
+moves toward $p_{m}$ by $\Delta p = m(p_{m} - p)$: the difference
+between the two populations decays as $(1 - m)^{t}$. \emph{\omterm{prop:b2:population-genetics:migration}{Gene
+flow}} homogenises; it undoes local \omterm{def:b2:plant-plasticity:plasticity}{adaptation} unless selection is
+stronger than $m$, and it is the force that keeps a species one
+species. Conversely, populations exchanging no migrants diverge by
+drift and by their separate \omterm{def:b2:genome-diversification:mutation}{mutations}, and a single migrant per
+generation --- whatever the population size --- is enough to prevent
+them from drifting to fixation for different \omterm{def:b2:meiosis-heredity:vocabulary}{alleles}.
+\end{proposition}
+
+\section{Chance: genetic drift}
+
+\begin{theorem}[Genetic drift]\label{thm:b2:population-genetics:drift}
+\index{genetic drift}\index{effective population size}\index{fixation}
+In a population of $N$ \omterm{def:b2:meiosis-heredity:meiosis}{diploid} individuals, each generation's
+\omterm{def:b2:population-genetics:frequencies}{allele frequency} is a random sample of $2N$ gametes from the
+previous one, so that $p$ wanders at random with a variance of
+$p(1 - p)/2N$ per generation. The \emph{heterozygosity} $H = 2pq$
+decays on average by a factor $(1 - 1/2N)$ each generation,
+\[
+H_t = H_0\left(1 - \frac{1}{2N}\right)^{t} \approx H_0\,e^{-t/2N},
+\]
+and every \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is eventually lost or \emph{fixed}, with
+probability equal to its current frequency: a new neutral \omterm{def:b2:genome-diversification:mutation}{mutation},
+at frequency $1/2N$, is fixed with probability $1/2N$ and, if it is,
+takes about $4N$ generations to do so. Drift is negligible in a
+population of millions and dominant in one of dozens: a
+\emph{bottleneck} or a \emph{founder} event --- a few colonists on an
+island, a species reduced to a hundred by hunting --- loses \omterm{def:b2:meiosis-heredity:vocabulary}{alleles}
+by chance in a generation and leaves a population that is uniform,
+impoverished and full of homozygotes. The $N$ that matters is the
+\emph{effective} size, the number of individuals actually breeding,
+usually much smaller than the census.
+\end{theorem}
+\begin{proof}
+The next generation's $2N$ gene copies are drawn with replacement
+from a pool in which $A$ has frequency $p$: the number of $A$ copies
+is binomial with mean $2Np$ and variance $2Np(1 - p)$, so $p'$ has
+mean $p$ and variance $p(1 - p)/2N$. Two copies drawn at random in
+the next generation come from the same parental copy with
+probability $1/2N$ and are then identical, so the chance that two
+copies differ (the heterozygosity) is multiplied by $1 - 1/2N$ each
+generation. Fixation probability: a neutral \omterm{def:b2:meiosis-heredity:vocabulary}{allele}'s frequency is a
+martingale --- its expected value never changes --- and it ends at 0
+or 1, so the probability of ending at 1 equals its starting value.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.82\linewidth, height=6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=60, ymin=0, ymax=1.05,
+  xlabel={generations}, ylabel={allele frequency $p$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.11)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,20,40,60}, ytick={0,0.5,1},
+  legend style={font=\scriptsize, at={(0.5,-0.25)}, anchor=north, draw=none, legend columns=2},
+  clip=false,
+]
+\addplot[thick, omThm] coordinates {(0,0.5) (2,0.55) (4,0.62) (6,0.58) (8,0.7) (10,0.8) (12,0.75) (14,0.85) (16,0.92) (18,0.88) (20,0.95) (22,1) (60,1)};
+\addlegendentry{$N = 10$}
+\addplot[thick, omThm!60] coordinates {(0,0.5) (2,0.42) (4,0.35) (6,0.4) (8,0.3) (10,0.2) (12,0.25) (14,0.15) (16,0.1) (18,0.05) (20,0.08) (22,0.02) (24,0) (60,0)};
+\addplot[thick, omDef] coordinates {(0,0.5) (5,0.52) (10,0.49) (15,0.53) (20,0.56) (25,0.54) (30,0.58) (35,0.55) (40,0.57) (45,0.6) (50,0.58) (55,0.61) (60,0.6)};
+\addlegendentry{$N = 1000$}
+\addplot[thick, omDef!60] coordinates {(0,0.5) (5,0.48) (10,0.5) (15,0.47) (20,0.45) (25,0.46) (30,0.44) (35,0.45) (40,0.43) (45,0.44) (50,0.42) (55,0.43) (60,0.42)};
+\end{axis}
+\end{tikzpicture}
+
+{\small Drift. Two populations of ten individuals starting at
+$p = 0.5$ fix opposite \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} within twenty-five generations; two
+of a thousand wander by a few percent in sixty.}
+\end{omfigure}
+
+\begin{proposition}[Inbreeding]\label{prop:b2:population-genetics:inbreeding}
+\index{inbreeding}\index{inbreeding coefficient}\index{inbreeding depression}
+Mating between relatives does not change \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies but
+raises the proportion of homozygotes: an individual's
+\emph{\omterm{prop:b2:population-genetics:inbreeding}{inbreeding coefficient}} $F$ is the probability that its two
+\omterm{def:b2:meiosis-heredity:vocabulary}{alleles} at a locus are identical by descent, and the \omterm{def:b2:meiosis-heredity:vocabulary}{genotype}
+frequencies become $p^{2} + Fpq$, $2pq(1 - F)$, $q^{2} + Fpq$. For
+the offspring of first cousins $F = 1/16$, of siblings $1/4$, of
+self-fertilisation $1/2$. Since the \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} of the \omterm{thm:b2:population-genetics:balance}{genetic
+load} are exposed in the extra homozygotes, inbred offspring suffer
+\emph{\omterm{prop:b2:population-genetics:inbreeding}{inbreeding depression}}: a lethal \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} at $q = 0.01$
+appears in $q^{2} = 10^{-4}$ of random-mating offspring but in
+$q^{2} + Fpq = 7\times 10^{-4}$ of cousins' children, sevenfold more;
+summed over thousands of loci, the children of cousins have about
+twice the infant mortality of others, and a small population that
+inbreeds for generations loses fertility and vigour --- the plight
+of the cheetah, the Florida panther and the royal houses of Europe.
+\end{proposition}
+
+\section{Many genes: quantitative characters}
+
+\begin{theorem}[Heritability and the response to selection]\label{thm:b2:population-genetics:heritability}
+\index{heritability}\index{quantitative genetics}\index{breeder's equation}
+A character such as height, yield or beak depth is set by many
+genes of small effect and by the environment, and varies
+continuously. Its variance in a population splits into a
+\emph{genetic} part $V_G$ and an \emph{environmental} part $V_E$, and
+the \emph{heritability} $h^{2} = V_A/V_P$ is the fraction of the
+phenotypic variance due to the additive effects of genes (the part
+that is transmitted). If the parents of the next generation are
+selected with a mean that exceeds the population's by $S$ (the
+\emph{selection differential}), their offspring exceed it by
+\[
+R = h^{2}\,S
+\]
+--- the \emph{\omterm{thm:b2:population-genetics:heritability}{breeder's equation}}. It is the whole of animal and
+plant breeding in one line: a heritability of $0.5$ and parents a
+standard deviation above the mean give offspring half a standard
+deviation above it, and the gain accumulates generation after
+generation. Heritability is a property of a population in an
+environment, not of a character: it says nothing about whether a
+trait is fixed, and a trait with $h^{2} = 0.8$ in one population may
+have $h^{2} = 0$ in another where every individual has the same
+\omterm{def:b2:meiosis-heredity:vocabulary}{genotype}.
+\end{theorem}
+\begin{proof}
+The offspring's expected \omterm{def:b2:meiosis-heredity:vocabulary}{phenotype} regresses on the mid-parent's
+with slope $h^{2}$ (the additive genetic covariance between
+relatives over the phenotypic variance), so a parental deviation $S$
+gives an offspring deviation $h^{2}S$. In practice $h^{2}$ is
+measured from that regression, or from the resemblance of twins and
+siblings, or from the response itself.
+\end{proof}
+\begin{proof}[Evidence]
+The Illinois maize experiment, begun in 1896, selected the ears with
+the highest and lowest oil content every year: after a hundred
+generations the high line had risen from \qty{5}{\%} to \qty{20}{\%}
+oil and the low line fallen to under \qty{1}{\%}, both still
+responding --- the variation of many genes is not exhausted by a
+century of selection. In the Galápagos, the Grants measured every
+finch on one island through the drought of 1977: the survivors had
+beaks \qty{4}{\%} deeper than the dead, the character had $h^{2}
+\approx 0.7$, and the next year's chicks had beaks
+\qty{3}{\%} deeper than the previous generation's --- selection
+observed, measured, and its response predicted by the equation
+above.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.78\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=6, xmax=14, ymin=0, ymax=0.32,
+  xlabel={beak depth (mm)}, ylabel={frequency},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={7,9,11,13}, ytick=\empty,
+  legend style={font=\scriptsize, at={(0.5,-0.28)}, anchor=north, draw=none, legend columns=3},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=6:14, samples=100] {0.3*exp(-((x-9.4)^2)/(2*0.9))};
+\addlegendentry{before the drought, mean 9.4}
+\addplot[very thick, omThm, domain=6:14, samples=100] {0.28*exp(-((x-9.9)^2)/(2*0.8))};
+\addlegendentry{survivors, mean 9.9}
+\addplot[very thick, omProp, dashed, domain=6:14, samples=100] {0.3*exp(-((x-9.75)^2)/(2*0.9))};
+\addlegendentry{next generation, mean 9.75}
+\draw[<->] (axis cs:9.4,0.02) -- (axis cs:9.9,0.02); \node[font=\scriptsize, anchor=south] at (axis cs:9.65,0.025) {$S$};
+\end{axis}
+\end{tikzpicture}
+
+{\small The \omterm{thm:b2:population-genetics:heritability}{breeder's equation} in a finch population. The drought
+left survivors with a mean beak $S = \qty{0.5}{mm}$ deeper; with
+$h^{2} = 0.7$ their offspring were $R = \qty{0.35}{mm}$ deeper than
+the generation before.}
+\end{omfigure}
+
+\begin{example}[The moth's arithmetic]\label{ex:b2:population-genetics:moth}
+The melanic \omterm{def:b2:meiosis-heredity:vocabulary}{allele} of the peppered moth is \omterm{def:b2:meiosis-heredity:vocabulary}{dominant}. From a
+frequency of about $10^{-3}$ in 1848 to \qty{90}{\%} of moths
+(a frequency near $0.7$) by 1895 is fifty generations; the selection
+equation reproduces it with $s$ between $0.2$ and $0.3$ against the pale form
+--- and Kettlewell's release experiments of the 1950s, in which
+birds took pale moths from sooty trunks and dark ones from clean
+trunks in about that ratio, measured the coefficient directly. The
+return after clean-air laws, from \qty{90}{\%} melanic in 1960 to
+under \qty{10}{\%} by 2000, ran at the same speed the other way. The
+whole episode --- a large population, a \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele}, a strong
+and reversible selective agent --- is \omterm{def:b2:population-genetics:frequencies}{population genetics} happening
+in public.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book4/ai/b4-22-peppered-moths.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.46\linewidth]{images/book4/ai/b4-22-banded-snails.jpg}
+
+{\small Left: the two forms of the peppered moth on lichen ---
+which one a bird finds depends on the \omterm{def:b2:plant-meristems:wood}{bark}. Right: the shell
+polymorphism of the grove snail, colours and bands kept in every
+population by predators that learn the common form.}
+\end{omfigure}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:population-genetics:1}
+In a sample of 1000 people, 640 are $MM$, 320 $MN$ and 40 $NN$.
+Compute the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies and the Hardy--Weinberg expectations.
+Is the population in equilibrium?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:population-genetics:2}
+Albinism is \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} and affects one person in \num{20000}.
+Compute the \omterm{def:b2:population-genetics:frequencies}{allele frequency} and the carrier frequency.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:population-genetics:3}
+Define \omterm{def:b2:population-genetics:fitness}{fitness}, \omterm{def:b2:population-genetics:fitness}{selection coefficient} and heritability, and give the
+five forces that change \omterm{def:b2:meiosis-heredity:vocabulary}{allele} frequencies.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:population-genetics:4}
+Give one example each of directional, stabilising and \omterm{prop:b2:population-genetics:kinds}{balancing
+selection}, with the agent of selection in each.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:population-genetics:5}
+A lethal \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} has frequency $0.02$. How many
+generations to halve it? To reach $0.001$? What does this say about
+the effect of preventing affected individuals from reproducing?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:population-genetics:6}
+With $w_{AA} = 1$, $w_{Aa} = 1$, $w_{aa} = 0.8$ and $p = 0.3$, compute
+$\bar w$, $p'$ and $\Delta p$. Repeat for $p = 0.9$. Why is the
+second change so much smaller?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:population-genetics:7}
+The sickle-cell homozygote has $w = 0.2$ and the normal homozygote
+$w = 0.88$ in a malarial region, heterozygotes $w = 1$. Compute the
+equilibrium frequency of the sickle \omterm{def:b2:meiosis-heredity:vocabulary}{allele} and the fraction of
+children born with the disease at equilibrium.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:population-genetics:8}
+A \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} lethal arises by \omterm{def:b2:genome-diversification:mutation}{mutation} at $\mu = \qty{2e-5}{}$ per
+gamete. Compute its equilibrium frequency and the fraction of
+affected births. A \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} lethal (before reproduction) at the same
+rate: what fraction of births?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:population-genetics:9}
+A population of 50 breeding individuals starts with $H = 0.5$.
+Compute its heterozygosity after 10, 50 and 200 generations. How
+large must a population be to keep \qty{90}{\%} of its
+heterozygosity over 100 generations?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:population-genetics:10}
+An island is colonised by 10 birds from a mainland population in
+which an \omterm{def:b2:meiosis-heredity:vocabulary}{allele} has frequency $0.1$. Compute the probability that
+the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} is absent from the founders, and the probability that it
+is eventually fixed on the island if it is present in one copy.
+Compare with the mainland.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:population-genetics:11}
+Milk yield has $h^{2} = 0.3$ and a standard deviation of
+\qty{1000}{L}. A breeder keeps the top \qty{20}{\%} of cows as
+mothers (their mean is $1.4$ standard deviations above the herd's).
+Compute the response per generation. If bulls are chosen from the
+top \qty{1}{\%} (mean $2.7$ standard deviations above), what is the
+response? Why does the response slow after many generations?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:population-genetics:12}
+``Selection is blind to what it cannot see.'' Discuss, with the
+\omterm{def:b2:meiosis-heredity:vocabulary}{recessive} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} in heterozygotes, the neutral \omterm{def:b2:genome-diversification:mutation}{mutation}, and the
+character with zero heritability, what selection can and cannot
+act on.
+\end{exercise}
+
+\section{Problem: The Moth, the Island and the Herd}
+
+\begin{problem}[{Weekend problem --- the peppered moth's rise
+computed from the selection equation, a founder population's drift
+and inbreeding followed, a mutation--selection balance struck, and a
+breeder's programme predicted, ending on the selection coefficient
+of the moth, the island's heterozygosity, and the herd's gain}]
+\label{pb:b2:population-genetics:1}
+Peppered moth: melanic \omterm{def:b2:meiosis-heredity:vocabulary}{allele} $M$ \omterm{def:b2:meiosis-heredity:vocabulary}{dominant}, frequency $p_0 = 0.001$
+in 1848; \qty{90}{\%} of moths melanic 50 generations later; assume
+$w_{MM} = w_{Mm} = 1$ and $w_{mm} = 1 - s$. Island: founded by 12
+birds from a mainland where $H = 0.4$ and a \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} deleterious
+\omterm{def:b2:meiosis-heredity:vocabulary}{allele} has $q = 0.05$; the island holds 40 breeding birds
+thereafter. \omterm{def:b2:genome-diversification:mutation}{Mutation}: $\mu = \qty{1e-5}{}$. Herd: $h^{2} = 0.4$,
+standard deviation \qty{800}{L}.
+
+\medskip
+\noindent\textbf{Part I --- The moth.}
+\begin{enumerate}
+  \item In 1848, what fraction of moths were melanic, and what
+        fraction of the $M$ \omterm{def:b2:meiosis-heredity:vocabulary}{alleles} sat in heterozygotes?
+  \item Show that, with $M$ \omterm{def:b2:meiosis-heredity:vocabulary}{dominant}, the frequency of the pale
+        \omterm{def:b2:meiosis-heredity:vocabulary}{allele} obeys $q' = q(1 - sq)/(1 - sq^{2})$.
+  \item Starting from $q_0 = 0.999$, compute $q$ after one generation
+        for $s = 0.3$.
+  \item \qty{90}{\%} melanic means $q^{2} = 0.1$. What is $q$ then?
+  \item By trial with the recursion (or the approximation
+        $\Delta q \approx -sq^{2}p$ while $q$ is near 1), estimate the
+        number of generations for $s = 0.3$ to take $q$ from $0.999$
+        to $0.32$, and compare with the 50 observed.
+  \item After the clean-air laws the pale form has the advantage, $s
+        = 0.3$ against $mm$ becoming $s = 0.3$ against $M\_$. Show
+        that $\Delta p = -spq^{2}/\bar w$, and explain why the return
+        of the pale form is slow at first and ends in an exponential
+        decline of $M$, whereas the rise began exponentially and
+        ended in a crawl.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The island.}
+\begin{enumerate}[resume]
+  \item Compute the probability that none of the 12 founders carries
+        the deleterious \omterm{def:b2:meiosis-heredity:vocabulary}{allele}.
+  \item Compute the expected heterozygosity after the founding
+        generation (drawn from $H = 0.4$ by 12 individuals, i.e.\ 24
+        gene copies).
+  \item Compute the heterozygosity after 100 generations at $N =
+        40$, as a fraction of the mainland's.
+  \item A neutral \omterm{def:b2:genome-diversification:mutation}{mutation} appears in one bird. Compute its
+        probability of fixation and the expected time to fixation if
+        it fixes.
+  \item The island birds mate at random but are all related. With
+        $F = 1/(2N)$ accumulating per generation to about $0.3$ after
+        30 generations, compute the frequency of affected homozygotes
+        for the \omterm{def:b2:meiosis-heredity:vocabulary}{allele} at $q = 0.05$, with and without inbreeding.
+  \item One mainland bird arrives every generation. Explain what this
+        does to the island's divergence and its load.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The balance.}
+\begin{enumerate}[resume]
+  \item Compute the equilibrium frequency of a \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} lethal fed
+        by $\mu = 10^{-5}$, and the fraction of affected births.
+  \item Compute the same for $s = 0.1$ (a mildly deleterious
+        \omterm{def:b2:meiosis-heredity:vocabulary}{recessive}).
+  \item Compute the equilibrium for a \omterm{def:b2:meiosis-heredity:vocabulary}{dominant} \omterm{def:b2:meiosis-heredity:vocabulary}{allele} with
+        \omterm{def:b2:meiosis-heredity:vocabulary}{heterozygous} disadvantage $hs = 0.05$.
+  \item Medicine cures the lethal so that $s$ falls to $0.1$. How
+        does the equilibrium change, and how long (order of
+        magnitude) does the population take to get there?
+  \item The genome has \num{20000} genes each mutating to a
+        \omterm{def:b2:meiosis-heredity:vocabulary}{recessive} lethal at $10^{-5}$. How many \omterm{prop:b2:meiosis-heredity:extensions}{lethal alleles} does an
+        average person carry in the \omterm{def:b2:meiosis-heredity:vocabulary}{heterozygous} state? (At
+        equilibrium each locus has $2\hat q$ copies per person.)
+  \item Explain why that number is compatible with a healthy
+        population and why it makes cousin marriage costly.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The herd.}
+\begin{enumerate}[resume]
+  \item The breeder keeps the top \qty{30}{\%} of cows (mean $1.16$
+        standard deviations above the herd). Compute the selection
+        differential in litres and the response.
+  \item After five generations of the same selection, what is the
+        expected gain, and why might the real gain be smaller?
+  \item Bulls contribute half the genes and are selected from the top
+        \qty{2}{\%} ($2.4$ standard deviations). Compute the response
+        when cows and bulls are selected as above (average the two
+        differentials).
+  \item A herd where all cows are \omterm{def:b2:asexual-reproduction:clone}{clones} of one animal: what are
+        $h^{2}$ and the response? What does that say about
+        heritability?
+  \item A finch population has $h^{2} = 0.7$ for beak depth and the
+        drought leaves survivors \qty{0.6}{mm} deeper. Predict the
+        next generation.
+  \item The breeder turns to a trait with $h^{2} = 0.1$. What
+        selection differential, in standard deviations, gives the
+        same response as question 19?
+  \item State the result: the moth's $s$ and time to \qty{90}{\%}
+        melanic, the island's heterozygosity after 100 generations,
+        and the herd's response per generation.
+\end{enumerate}
+\end{problem}

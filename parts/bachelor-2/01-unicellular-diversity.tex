@@ -1,6 +1,876 @@
 \chapter{Diversity of Unicellular Organisms}\label{ch:b2:unicellular-diversity}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A drop of pond water under the microscope holds a green cell rowing
+with two flagella, a slipper-shaped ciliate sweeping bacteria into its
+gullet, a glassy diatom sliding along the slide, and, too small to
+see well, a thousand bacteria. Each is one cell and each is a whole
+organism: it feeds, moves, senses, grows, reproduces and dies as a
+single cell. Most of the living world has always been like this. This
+chapter takes the \omterm{def:b2:unicellular-diversity:unicellular}{unicellular organism} as a design problem --- what
+one cell can and cannot do --- and surveys the answers that
+\omterm{def:b2:unicellular-diversity:prokaryote}{prokaryotes} and eukaryotes have found, up to the point where cells
+begin to stay together.
 
-\emph{This chapter has not been written yet.}
+\section{One cell, all the functions}
+
+\begin{definition}[Unicellular, colonial, multicellular]\label{def:b2:unicellular-diversity:unicellular}
+An organism is \emph{unicellular}\index{unicellular organism} when a
+single cell carries out every function of life --- nutrition,
+exchange, movement, reproduction --- and lives on its own. It is
+\emph{colonial}\index{colonial organism} when cells of one kind stay
+attached after dividing but each remains able to live alone if
+separated. It is \emph{multicellular}\index{multicellular organism}
+when its cells are of several types, depend on one another, and only
+a few of them (the germ line) leave descendants. Unicellular
+organisms include all archaea, nearly all bacteria, and most
+lineages of eukaryotes; the informal name \emph{\omterm{def:b2:unicellular-diversity:protist}{protist}} covers the
+unicellular eukaryotes, which are not one group but many.
+\end{definition}
+
+\begin{example}[Six inhabitants of a drop]\label{ex:b2:unicellular-diversity:drop}
+\emph{Escherichia coli}, a rod \qty{2}{\micro m} long, swims with a
+tuft of flagella and divides every twenty minutes when fed.
+\emph{Chlamydomonas}, a green alga \qty{10}{\micro m} across, rows
+with two flagella toward the light it detects with an eyespot.
+\emph{Paramecium}, a ciliate of \qty{200}{\micro m}, is covered with
+thousands of cilia, feeds through a gullet and bails water out with
+two \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile vacuoles}. A diatom lives in a two-part shell of
+silica, ornamented with pores. \emph{Amoeba} flows by extending
+pseudopods and engulfs what it meets. A yeast cell buds a daughter
+from its side. Six answers, of widely different size and machinery,
+to one problem.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[x=1.9cm]
+  % log scale from 0.1 um to 100 mm : position = log10(size in um) + 1
+  \draw[thick] (0,0) -- (6,0);
+  \foreach \p/\l in {0/{\qty{0.1}{\micro m}},1/{\qty{1}{\micro m}},2/{\qty{10}{\micro m}},3/{\qty{100}{\micro m}},4/{\qty{1}{mm}},5/{\qty{10}{mm}},6/{\qty{100}{mm}}}
+    \draw (\p,0.12) -- (\p,-0.12) node[below, font=\scriptsize] {\l};
+  \foreach \p/\c/\l in {0.5/omDef/mycoplasma, 1.3/omDef/{\emph{E.~coli}}, 1.7/omDef/yeast, 2.0/omProp/{\emph{Chlamydomonas}}, 2.7/omProp/diatoms, 3.3/omProp/{\emph{Paramecium}}, 3.65/omProp/{\emph{Amoeba proteus}}, 3.9/omThm/{\emph{Thiomargarita} (a bacterium)}, 5.7/omProp/{\emph{Acetabularia}}}
+    { \fill[\c] (\p,0) circle (0.05); \node[rotate=60, anchor=west, font=\scriptsize, \c, inner sep=1pt] at (\p,0.12) {\l}; }
+  \node[font=\scriptsize, anchor=north] at (3,-0.55) {cell size (logarithmic scale)};
+\end{tikzpicture}
+
+{\small The sizes of \omterm{def:b2:unicellular-diversity:unicellular}{unicellular organisms} span five orders of
+magnitude. \omterm{def:b2:unicellular-diversity:prokaryote}{Prokaryotes} (blue) cluster around a micrometre; eukaryotic
+cells (orange) are ten to a hundred times larger; the largest single
+cells --- a giant sulfur bacterium, the alga \emph{Acetabularia} ---
+are exceptions that the text explains.}
+\end{omfigure}
+
+\begin{proposition}[Surface, volume and the limit on size]\label{prop:b2:unicellular-diversity:surface}
+\index{surface-to-volume ratio}
+A cell exchanges with its surroundings through its surface and
+consumes in proportion to its volume. For a sphere of radius $r$,
+the \emph{\omterm{prop:b2:unicellular-diversity:surface}{surface-to-volume ratio}} is
+\[
+\frac{S}{V} = \frac{4\pi r^2}{\tfrac{4}{3}\pi r^3} = \frac{3}{r},
+\]
+so that doubling the radius halves the surface available per unit of
+cytoplasm. A cell that relies on diffusion across its membrane to
+feed its interior therefore cannot grow indefinitely: at some radius
+the supply through the surface no longer meets the demand of the
+volume. The same law explains why small cells are metabolically the
+most active per gram, and why large cells are flattened, elongated,
+vacuolated or full of internal membranes.
+\end{proposition}
+
+\begin{theorem}[Time to diffuse a distance]\label{thm:b2:unicellular-diversity:diffusion}
+\index{diffusion time}
+A molecule with diffusion coefficient $D$ wanders in random steps;
+after a time $t$ its mean square displacement along one axis is
+$\langle x^2\rangle = 2Dt$. The time needed to cover a distance $x$
+by diffusion alone is therefore
+\[
+t \approx \frac{x^2}{2D},
+\]
+which grows with the \emph{square} of the distance. With
+$D \approx \qty{1e-9}{m^2/s}$ for a small molecule in water, crossing
+a bacterium (\qty{1}{\micro m}) takes half a millisecond; crossing a
+\qty{1}{mm} cell would take eight minutes, and a metre, sixteen
+years.
+\end{theorem}
+\begin{proof}
+Let the molecule take steps of length $\ell$ at random to the left
+or right every $\tau$ seconds. After $n$ steps its displacement is
+$x = \sum_i \varepsilon_i \ell$ with $\varepsilon_i = \pm 1$
+independent, so $\langle x\rangle = 0$ and $\langle x^2\rangle =
+\sum_i \langle\varepsilon_i^2\rangle \ell^2 = n\ell^2$ (the cross
+terms average to zero). With $n = t/\tau$ this is $\langle x^2\rangle
+= (\ell^2/\tau)\,t$, and writing $D = \ell^2/2\tau$ gives
+$\langle x^2\rangle = 2Dt$. Setting $\langle x^2\rangle = x^2$ gives
+the time.
+\end{proof}
+
+\begin{theorem}[Diffusive supply to a spherical cell]\label{thm:b2:unicellular-diversity:supply}
+\index{diffusion-limited uptake}
+A spherical cell of radius $r_0$ that absorbs every molecule of a
+solute reaching its surface, in a medium where the concentration far
+away is $c_\infty$, receives at steady state a flux (molecules per
+second) of
+\[
+J = 4\pi D r_0\, c_\infty .
+\]
+The supply grows only with $r_0$, while the demand grows with
+$r_0^3$: beyond a certain radius a cell fed by diffusion starves.
+\end{theorem}
+\begin{proof}
+At steady state the number of molecules crossing every sphere of
+radius $r > r_0$ per second is the same, $J = 4\pi r^2 D\,
+(\mathrm{d}c/\mathrm{d}r)$ (Fick's law, the flux directed inward).
+So $r^2\,\mathrm{d}c/\mathrm{d}r = J/4\pi D$ is constant; integrating
+from $r_0$, where $c = 0$, to infinity, where $c = c_\infty$:
+$c_\infty = (J/4\pi D)\int_{r_0}^{\infty} r^{-2}\,\mathrm{d}r =
+J/(4\pi D r_0)$, whence $J = 4\pi D r_0 c_\infty$.
+\end{proof}
+
+\begin{example}[How big can a diffusion-fed cell be?]\label{ex:b2:unicellular-diversity:howbig}
+An aerobic cell consumes oxygen at about $q = \qty{0.02}{mol/m^3/s}$
+of cytoplasm (a brisk rate). Its demand is $q \cdot \tfrac{4}{3}\pi
+r_0^3$; the supply from air-saturated water ($c_\infty =
+\qty{0.25}{mol/m^3}$, $D = \qty{2e-9}{m^2/s}$) is $4\pi D r_0
+c_\infty$. Equating, $r_0^2 = 3Dc_\infty/q = 3\times 2\times 10^{-9}
+\times 0.25/0.02 = \qty{7.5e-8}{m^2}$, so $r_0 \approx
+\qty{270}{\micro m}$. Real active cells stay well below this because
+oxygen must also diffuse \emph{inside} them; the \qty{750}{\micro m}
+sulfur bacterium \emph{Thiomargarita} gets round the limit by being
+almost entirely a vacuole, its cytoplasm a thin shell a few
+micrometres deep.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6.2cm,
+  axis x line=bottom, axis y line=left,
+  xmode=log, ymode=log,
+  xmin=0.3, xmax=1000, ymin=1e-6, ymax=1e4,
+  xlabel={cell radius (\unit{\micro m})}, ylabel={molecules per second (relative)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small},
+  legend style={font=\small, at={(0.03,0.97)}, anchor=north west, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.3:1000, samples=40] {x/10};
+\addlegendentry{supply by diffusion, $\propto r$}
+\addplot[very thick, omThm, domain=0.3:1000, samples=40] {(x/10)^3/1000*1.0};
+\addlegendentry{demand of the cytoplasm, $\propto r^3$}
+\draw[dashed, gray] (axis cs:270,1e-6) -- (axis cs:270,27);
+\node[font=\scriptsize, anchor=west] at (axis cs:300,3e-4) {starvation radius};
+\end{axis}
+\end{tikzpicture}
+
+{\small Supply through the surface grows with $r$, demand with
+$r^3$ (logarithmic axes). Where the lines cross, a cell fed by
+diffusion alone can no longer keep its interior supplied; the
+crossing sits near a few hundred micrometres for an active aerobic
+cell.}
+\end{omfigure}
+
+\section{Prokaryotic diversity}
+
+\begin{definition}[The prokaryotic cell]\label{def:b2:unicellular-diversity:prokaryote}
+A \emph{prokaryote}\index{prokaryote} (the bacteria and the archaea,
+two domains as distinct from each other as either is from us) is a
+cell without a nucleus or membrane-bound organelles: a single
+circular chromosome in a \emph{nucleoid}\index{nucleoid}, often with
+small extra circles called \emph{plasmids}\index{plasmid}, ribosomes
+free in a cytoplasm of \qtyrange{0.5}{2}{\micro m}, a plasma membrane
+that carries the respiratory or photosynthetic chains, and a rigid
+\emph{cell wall}\index{cell wall!bacterial} that resists the turgor
+of a cytoplasm several bars above its surroundings. Shapes are few
+and named: \emph{coccus} (sphere), \emph{bacillus} (rod),
+\emph{spirillum} and \emph{spirochaete} (helices), \emph{vibrio}
+(comma); cells may stay in pairs, chains, tetrads or clusters after
+dividing.
+\end{definition}
+
+\begin{proposition}[Two envelopes: Gram-positive and Gram-negative]\label{prop:b2:unicellular-diversity:gram}
+\index{Gram stain}\index{peptidoglycan}
+The bacterial wall is built of \emph{peptidoglycan}, chains of two
+alternating sugars cross-linked by short peptides into one giant
+molecule around the cell. \emph{Gram-positive} bacteria have a thick
+layer (\qtyrange{20}{80}{nm}) outside a single membrane and retain
+the crystal-violet stain of the Gram procedure; \emph{Gram-negative}
+bacteria have a thin layer (a few nanometres) sandwiched between the
+plasma membrane and an \emph{outer membrane} whose outer leaflet is
+made of lipopolysaccharide, and they lose the stain. The outer
+membrane, pierced by porins, is a second barrier: it keeps out many
+antibiotics and detergents, which is why Gram-negative infections
+are harder to treat. Archaea have neither peptidoglycan nor the
+ester-linked lipids of every other cell: their membranes are built
+of ether-linked isoprenoid chains, sometimes spanning the whole
+bilayer as a monolayer, which keeps them stable in boiling acid.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[scale=0.9, every node/.style={font=\scriptsize}]
+  % Gram-positive
+  \begin{scope}
+    \fill[omDef!15] (0,0) rectangle (4,1.6);
+    \node at (2,0.4) {cytoplasm};
+    \fill[omDef!60] (0,1.6) rectangle (4,1.85);
+    \node[right] at (4.05,1.72) {plasma membrane};
+    \fill[omProp!50] (0,1.85) rectangle (4,3.0);
+    \foreach \y in {2.0,2.25,...,2.85} \draw[omProp!90!black] (0.1,\y) -- (3.9,\y);
+    \node[right, align=left] at (4.05,2.45) {thick peptidoglycan\\(\qtyrange{20}{80}{nm})};
+    \node[above, font=\small\bfseries] at (2,3.05) {Gram-positive};
+  \end{scope}
+  % Gram-negative
+  \begin{scope}[xshift=7.6cm]
+    \fill[omDef!15] (0,0) rectangle (4,1.6);
+    \node at (2,0.4) {cytoplasm};
+    \fill[omDef!60] (0,1.6) rectangle (4,1.85);
+    \node[right] at (4.05,1.72) {plasma membrane};
+    \fill[omProp!50] (0,2.05) rectangle (4,2.25);
+    \draw[omProp!90!black] (0.1,2.15) -- (3.9,2.15);
+    \node[right] at (4.05,2.15) {thin peptidoglycan};
+    \node at (2,1.95) {periplasm};
+    \fill[omThm!50] (0,2.55) rectangle (4,2.85);
+    \foreach \x in {0.6,2.0,3.4} \fill[white] (\x-0.12,2.55) rectangle (\x+0.12,2.85);
+    \node[right] at (4.05,2.7) {outer membrane with porins};
+    \foreach \x in {0.2,0.5,...,3.9} \draw[omThm!80!black, thick] (\x,2.85) -- (\x,3.1);
+    \node[right] at (4.05,3.15) {lipopolysaccharide};
+    \node[above, font=\small\bfseries] at (2,3.3) {Gram-negative};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The two bacterial envelopes in section. Left: one membrane
+under a thick peptidoglycan coat. Right: a thin peptidoglycan layer
+in the periplasm between two membranes, the outer one studded with
+porins and coated with lipopolysaccharide.}
+\end{omfigure}
+
+\begin{proposition}[The bacterial flagellum and chemotaxis]\label{prop:b2:unicellular-diversity:flagellum}
+\index{flagellum!bacterial}\index{chemotaxis}
+The bacterial \emph{flagellum} is a rigid helical filament of the
+protein flagellin, \qty{20}{nm} thick and several body lengths long,
+turned by a rotary motor set in the envelope. The motor is driven not
+by ATP but by protons flowing down the electrochemical gradient
+across the membrane, at some \num{1000} protons per turn and up to
+\num{300} turns per second. In \emph{E.~coli} the several flagella
+bundle together when they all turn counter-clockwise and push the
+cell in a straight \emph{run}; when one or more reverse, the bundle
+flies apart and the cell \emph{tumbles} to a new random direction.
+\emph{Chemotaxis} is the bias of this random walk: the cell measures
+whether an attractant concentration has risen over the last second
+and, if so, suppresses tumbling. It steers by comparing the present
+with the recent past --- along its path --- because across its own
+\qty{1}{\micro m} of length no gradient is measurable.
+\end{proposition}
+\begin{proof}[Evidence]
+Berg and Brown (1972) followed single \emph{E.~coli} cells in three
+dimensions with a tracking microscope: runs of about a second at
+\qty{20}{\micro m/s}, tumbles of a tenth of a second, and in a
+gradient of serine the runs up the gradient were longer while the
+runs down it were not shortened. Tethering a cell to a glass slide by
+one flagellum made the whole body spin, which proved the motor is
+rotary; cells with the motor uncoupled from ATP synthesis still swam
+as long as a proton gradient could be imposed, which identified the
+fuel.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  % run and tumble path without gradient
+  \begin{scope}
+    \draw[very thick, omDef] (0,0) -- (1.2,0.5) -- (0.7,1.4) -- (1.9,1.8) -- (2.6,0.9) -- (3.4,1.5) -- (3.0,2.5);
+    \foreach \p in {(1.2,0.5),(0.7,1.4),(1.9,1.8),(2.6,0.9),(3.4,1.5)} \fill[omThm] \p circle (0.06);
+    \node[align=center] at (1.8,-0.5) {no gradient:\\runs of equal length, random turns};
+  \end{scope}
+  \begin{scope}[xshift=6cm]
+    \shade[left color=white, right color=omExo!50] (-0.3,-0.2) rectangle (5.2,3.0);
+    \draw[very thick, omDef] (0,0.3) -- (0.9,0.8) -- (0.6,1.3) -- (2.4,1.5) -- (2.2,2.2) -- (4.6,2.4);
+    \foreach \p in {(0.9,0.8),(0.6,1.3),(2.4,1.5),(2.2,2.2)} \fill[omThm] \p circle (0.06);
+    \node[align=center] at (2.4,-0.5) {attractant increasing to the right:\\runs up the gradient last longer};
+    \node[anchor=south east] at (5.1,2.6) {more attractant};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Run and tumble. Left: without a gradient the cell performs a
+random walk, each run (blue) ended by a tumble (red dot). Right: when
+an attractant increases along a run, tumbling is suppressed and the
+run lengthens; the walk drifts up the gradient.}
+\end{omfigure}
+
+\begin{example}[Cyanobacteria and the heterocyst]\label{ex:b2:unicellular-diversity:cyanobacteria}
+Cyanobacteria are the bacteria that photosynthesise as plants do,
+splitting water and releasing oxygen on stacked internal membranes
+(the thylakoids, which the chloroplast inherited from them). Many
+grow as filaments of cells sharing a sheath. In \emph{Anabaena},
+when combined nitrogen runs out, every tenth cell or so becomes a
+\emph{heterocyst}: it dismantles its oxygen-producing photosystem,
+thickens its wall against oxygen, and fixes atmospheric nitrogen with
+an enzyme that oxygen would destroy, exporting glutamine to its
+neighbours in exchange for sugar. A filament of \emph{Anabaena} is a
+first sketch of a division of labour between cells.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.62\linewidth]{images/book4/ai/b4-01-anabaena.jpg}
+
+{\small A filament of \emph{Anabaena}: a chain of green
+photosynthetic cells interrupted by larger, paler heterocysts, the
+cells that fix nitrogen.}
+\end{omfigure}
+
+\begin{remark}[Dormancy]\label{rem:b2:unicellular-diversity:spores}
+Some Gram-positive rods (\emph{Bacillus}, \emph{Clostridium}) answer
+starvation by building an \emph{endospore}: a copy of the chromosome
+wrapped in several dehydrated coats, metabolically inert, resistant
+to boiling, radiation and centuries of drought, which germinates when
+conditions return. Many \omterm{def:b2:unicellular-diversity:protist}{protists} do the same with a \emph{cyst}.
+Dormancy is the other way of surviving a bad season, alongside
+motility.
+\end{remark}
+
+\section{Eukaryotic unicellular organisms}
+
+\begin{definition}[Protists: a grade, not a group]\label{def:b2:unicellular-diversity:protist}
+\emph{Protists}\index{protist} are the eukaryotes that are neither
+animals, nor land plants, nor fungi --- mostly \omterm{def:b2:unicellular-diversity:unicellular}{unicellular}, some
+\omterm{def:b2:unicellular-diversity:unicellular}{colonial}, a few (the kelps) \omterm{def:b2:unicellular-diversity:unicellular}{multicellular}. They share the eukaryotic
+cell of the Year 1 volume (nucleus, mitochondria, endomembranes,
+cytoskeleton, $9+2$ cilia) and nothing else in particular: the
+lineages that contain them are as distant from one another as animals
+are from plants. Green algae belong with the land plants; diatoms and
+brown algae form a lineage of their own; ciliates, dinoflagellates and
+the malaria parasite form another; amoebae and slime moulds are
+closer to animals and fungi than to any of these. The word names a
+level of organisation --- the eukaryotic cell living alone --- and
+not a branch of the tree.
+\end{definition}
+
+\begin{example}[Four ways to be a eukaryotic cell alone]\label{ex:b2:unicellular-diversity:four}
+\emph{Chlamydomonas}: an ovoid green alga with a cellulose-free
+glycoprotein wall, one cup-shaped chloroplast, an orange eyespot
+that shades a light sensor so that the cell knows which way the
+light is as it rotates, and two anterior flagella that beat in a
+breaststroke; it is a phototroph. \emph{Paramecium}: a ciliate, its
+whole surface beating with cilia in coordinated waves, a mouth-like
+oral groove that sweeps bacteria into food vacuoles, two \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile
+vacuoles}, and two kinds of nucleus --- a small germinal
+\emph{micronucleus} and a large working \emph{macronucleus} with
+hundreds of copies of each gene; it is a phagotroph. \emph{Amoeba}:
+no wall, no fixed shape, moving and feeding by \emph{pseudopods}
+that actin polymerisation pushes out. The diatom: a photosynthetic
+cell enclosed in two overlapping valves of silica like a box and its
+lid, so ornamented with pores that the shells were once used to test
+microscope lenses; when it divides, each daughter keeps one valve and
+makes a new, smaller, inner one.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  % Paramecium outline (slipper)
+  \draw[thick, fill=omProp!8] plot[smooth cycle, tension=0.8] coordinates {(0,0) (1.5,0.9) (3.5,1.1) (5.5,0.7) (6.4,0) (5.5,-0.8) (3.5,-1.1) (1.5,-0.9)};
+  % cilia
+  \foreach \t in {3,9,...,357} {
+    \pgfmathsetmacro{\cx}{3.2+3.25*cos(\t)}
+    \pgfmathsetmacro{\cy}{1.08*sin(\t)}
+    \pgfmathsetmacro{\dx}{3.2+3.55*cos(\t)}
+    \pgfmathsetmacro{\dy}{1.32*sin(\t)}
+    \draw[gray] (\cx,\cy) -- (\dx,\dy);
+  }
+  % macronucleus and micronucleus
+  \draw[thick, fill=omDef!40] (3.2,0.05) ellipse (0.9 and 0.45);
+  \fill[omDef!90!black] (2.4,0.55) circle (0.13);
+  % oral groove and gullet
+  \draw[thick, omThm] (4.3,-0.95) .. controls (3.6,-0.5) and (3.3,-0.2) .. (3.0,-0.35);
+  \fill[omThm!30] (2.9,-0.45) circle (0.16);
+  % food vacuoles
+  \foreach \p in {(1.4,-0.3),(1.0,0.35),(4.8,0.35)} \draw[thick, omExo!80!black, fill=omExo!30] \p circle (0.17);
+  % contractile vacuoles
+  \foreach \c in {(1.2,0.0),(5.2,-0.2)} {
+    \draw[thick, omDef] \c circle (0.28);
+    \foreach \a in {0,60,...,300} \draw[omDef] \c ++(\a:0.28) -- ++(\a:0.22);
+  }
+  % labels
+  \draw (2.4,0.55) -- (2.7,1.6) node[above] {micronucleus};
+  \draw (3.6,0.3) -- (4.8,1.6) node[above] {macronucleus};
+  \draw (1.2,0.28) -- (0.3,1.5) node[above, align=center] {contractile vacuole\\(with radial canals)};
+  \draw (5.2,-0.48) -- (6.5,-1.5) node[below] {contractile vacuole};
+  \draw (4.3,-0.95) -- (4.7,-1.75) node[below] {oral groove};
+  \draw (2.9,-0.61) -- (2.7,-1.6) node[below, align=center] {gullet and forming\\food vacuole};
+  \draw (1.4,-0.47) -- (0.0,-1.5) node[below] {food vacuoles};
+  \draw (6.35,0.4) -- (6.9,1.2) node[above, align=center] {cilia};
+\end{tikzpicture}
+
+{\small \emph{Paramecium}, schematic: the ciliated cortex, the two
+nuclei, the oral groove leading to the gullet where food vacuoles
+form, and the two star-shaped \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile vacuoles} that expel the
+water that osmosis drives in.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book4/ai/b4-01-diatoms.jpg}
+
+{\small Diatoms seen by dark-field microscopy: each cell lives in a
+two-valved shell of silica, patterned with pores through which it
+exchanges with the water.}
+\end{omfigure}
+
+\begin{definition}[Modes of nutrition]\label{def:b2:unicellular-diversity:nutrition}
+\index{phagotrophy}\index{osmotrophy}\index{mixotrophy}
+A \omterm{def:b2:unicellular-diversity:unicellular}{unicellular} eukaryote feeds in one of three ways, or in two at
+once. \emph{Phototrophy}: it has chloroplasts and makes its own
+organic matter from light and $\mathrm{CO_2}$ (green algae, diatoms,
+dinoflagellates). \emph{Phagotrophy}: it engulfs particles ---
+bacteria, other \omterm{def:b2:unicellular-diversity:protist}{protists} --- into a food vacuole where lysosomal
+enzymes digest them (amoebae, ciliates, choanoflagellates).
+\emph{Osmotrophy}: it absorbs dissolved molecules across its
+membrane, often after secreting enzymes outside (yeasts, many
+parasites). \emph{Mixotrophs} such as \emph{Euglena} photosynthesise
+in the light and eat in the dark. \omterm{def:b2:unicellular-diversity:prokaryote}{Prokaryotes} cannot phagocytose: the
+wall forbids it, which is why a \omterm{def:b2:unicellular-diversity:prokaryote}{prokaryote} never became a predator
+by engulfing.
+\end{definition}
+
+\begin{proposition}[Osmoregulation in fresh water]\label{prop:b2:unicellular-diversity:osmoregulation}
+\index{contractile vacuole}
+A freshwater \omterm{def:b2:unicellular-diversity:protist}{protist} is far saltier inside (some \qty{100}{mmol/L}
+of solutes) than the pond (about \qty{1}{mmol/L}), and its membrane
+lets water through. Water therefore enters continuously by osmosis,
+at a rate proportional to the surface area and to the osmotic
+pressure difference $\Delta\Pi = RT\,\Delta c$ --- about
+\qty{2.4}{bar} for the figures above. A walled cell resists by
+turgor; a naked cell would swell and burst within minutes. The
+\emph{\omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile vacuole}} is the answer: a reservoir fed by radial
+canals that fills with water pumped in by proton-driven transporters
+and then contracts, expelling the water through a pore, every few
+seconds to every few minutes. A \emph{Paramecium} passes its own
+volume of water every half hour; marine relatives, in a medium as
+salty as themselves, have no \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile vacuole} at all.
+\end{proposition}
+
+\section{The physics of a small swimmer}
+
+\begin{proposition}[Life at low Reynolds number]\label{prop:b2:unicellular-diversity:reynolds}
+\index{Reynolds number}
+The \emph{\omterm{prop:b2:unicellular-diversity:reynolds}{Reynolds number}} $Re = \rho v L/\eta$ compares inertial to
+viscous forces for a body of size $L$ moving at speed $v$ in a fluid
+of density $\rho$ and viscosity $\eta$. For a human swimmer it is
+about $10^6$; for \emph{Paramecium} (\qty{200}{\micro m},
+\qty{1}{mm/s}) it is 0.2, and for a bacterium $10^{-5}$. Below
+$Re \approx 1$ inertia is irrelevant: a cell that stops beating
+stops moving within a nanometre, water feels like thick syrup, and a
+reciprocal motion (the same stroke forwards and backwards) produces
+no net displacement. Small swimmers therefore use non-reciprocal
+strokes: the rotating helix of the bacterial flagellum, the
+asymmetric beat of a cilium (stiff power stroke, curled recovery
+stroke), the breaststroke of \emph{Chlamydomonas}.
+\end{proposition}
+
+\begin{theorem}[Stokes' law and sinking]\label{thm:b2:unicellular-diversity:stokes}
+\index{Stokes' law}
+A sphere of radius $r$ and density $\rho_{\text{cell}}$ moving slowly
+through a fluid of viscosity $\eta$ feels a drag $F = 6\pi\eta r v$.
+Left to itself in water of density $\rho$ it sinks at the terminal
+speed
+\[
+v_s = \frac{2\,r^2\,(\rho_{\text{cell}} - \rho)\,g}{9\eta},
+\]
+proportional to the square of its radius: a cell ten times larger
+sinks a hundred times faster. This is why the phytoplankton is small,
+why diatoms carry spines and oil droplets, and why a
+\emph{Chlamydomonas} that stops swimming sinks out of the light in a
+few days.
+\end{theorem}
+\begin{proof}
+At terminal speed the drag balances the apparent weight (weight
+minus buoyancy): $6\pi\eta r v_s = \tfrac{4}{3}\pi r^3
+(\rho_{\text{cell}} - \rho) g$. Solving for $v_s$ gives the formula.
+The drag law itself is derived in the physics series for
+$Re \ll 1$; here it is taken as given.
+\end{proof}
+
+\begin{example}[A diatom's fall]\label{ex:b2:unicellular-diversity:fall}
+A centric diatom of radius \qty{10}{\micro m}, \qty{100}{kg/m^3}
+denser than sea water ($\eta = \qty{1e-3}{Pa.s}$), sinks at
+$v_s = 2\times 10^{-10}\times 100\times 9.81/(9\times 10^{-3}) =
+\qty{2.2e-5}{m/s}$, about \qty{2}{m} per day: it would leave the
+\qty{50}{m} sunlit layer in under a month. Its populations survive
+because turbulence stirs the water, because oil droplets and a low
+density trim $\rho_{\text{cell}} - \rho$, and because a cell that
+sinks and divides on the way leaves descendants that are lifted
+again.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.8\linewidth, height=6.0cm,
+  axis x line=bottom, axis y line=left,
+  xmode=log, ymode=log,
+  xmin=0.5, xmax=200, ymin=1e-3, ymax=1e4,
+  xlabel={radius (\unit{\micro m})}, ylabel={sinking speed (\unit{\micro m/s})},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.1)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.5:200, samples=40] {0.218*x^2};
+\addplot[only marks, mark=*, mark size=1.8pt, omThm] coordinates {(1,0.218) (10,21.8) (100,2180)};
+\node[font=\scriptsize, anchor=west] at (axis cs:1.15,0.218) {bacterium};
+\node[font=\scriptsize, anchor=west] at (axis cs:11.5,21.8) {diatom};
+\node[font=\scriptsize, anchor=east] at (axis cs:85,2180) {large protist};
+\end{axis}
+\end{tikzpicture}
+
+{\small Stokes sinking speed against radius for cells
+\qty{100}{kg/m^3} denser than water. The slope of 2 on logarithmic
+axes is the $r^2$ law: a bacterium sinks a centimetre a day, a large
+\omterm{def:b2:unicellular-diversity:protist}{protist} a couple of metres an hour.}
+\end{omfigure}
+
+\section{Reproduction and sex in one cell}
+
+\begin{definition}[Modes of division]\label{def:b2:unicellular-diversity:division}
+\index{binary fission}\index{budding}\index{multiple fission}
+A \omterm{def:b2:unicellular-diversity:unicellular}{unicellular organism} reproduces by dividing. \emph{Binary
+fission}: the cell grows to twice its size and splits into two
+equal daughters (bacteria, \emph{Paramecium}, \emph{Amoeba}).
+\emph{Budding}: a small daughter grows out of the mother and detaches
+(yeast; the mother keeps a scar and can bud some twenty times).
+\emph{Multiple fission}: the cell grows large, then divides several
+times in quick succession inside the mother wall and releases 4, 8,
+16 or more daughters at once (\emph{Chlamydomonas}, the malaria
+parasite in a red cell). Under constant conditions the number of
+cells grows exponentially, $N(t) = N_0\,2^{t/T}$ with $T$ the
+\emph{generation time}\index{generation time}: twenty minutes for
+\emph{E.~coli} in rich medium, a day for many algae, a week for some
+ciliates. (Growth as a function of food is treated in
+\cref{ch:b2:microbial-metabolism}.)
+\end{definition}
+
+\begin{proposition}[Sex without reproduction: conjugation in \emph{Paramecium}]\label{prop:b2:unicellular-diversity:conjugation}
+\index{conjugation!ciliates}
+Two \emph{Paramecium} of complementary mating types join by their
+oral surfaces. In each, the diploid micronucleus undergoes meiosis to
+four haploid nuclei, three of which degenerate; the survivor divides
+by mitosis into a stationary and a migratory nucleus, and the two
+cells exchange their migratory nuclei across the junction. Each cell
+then fuses its stationary nucleus with the one it received, and the
+two partners separate, each with a new diploid micronucleus of the
+same genotype as its partner's. The old macronucleus breaks down and
+a new one is built from the new micronucleus. No new cell was made:
+conjugation is genetic mixing --- meiosis and fertilisation,
+\cref{ch:b2:meiosis-heredity} --- decoupled from multiplication.
+Bacterial conjugation, which transfers a \omterm{def:b2:unicellular-diversity:prokaryote}{plasmid} one way from donor
+to recipient, is a different process with the same name
+(\cref{ch:b2:genome-diversification}).
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  \foreach \i/\x in {0/0,1/3.6,2/7.2,3/10.8} {
+    \draw[thick, fill=omProp!8] (\x,0.55) ellipse (1.0 and 0.5);
+    \draw[thick, fill=omProp!8] (\x,-0.55) ellipse (1.0 and 0.5);
+  }
+  % stage 0: two cells, diploid micronuclei 2n
+  \fill[omDef!90!black] (0,0.55) circle (0.12); \node[right] at (0.15,0.55) {$2n$};
+  \fill[omDef!90!black] (0,-0.55) circle (0.12); \node[right] at (0.15,-0.55) {$2n$};
+  \node[below, align=center] at (0,-1.15) {two cells join};
+  % stage 1: meiosis, 4 haploid, 3 degenerate
+  \foreach \dy in {0.55,-0.55} {
+    \fill[omDef!90!black] (3.6-0.3,\dy+0.15) circle (0.08);
+    \fill[gray!60] (3.6+0.1,\dy+0.2) circle (0.06);
+    \fill[gray!60] (3.6+0.3,\dy-0.05) circle (0.06);
+    \fill[gray!60] (3.6-0.1,\dy-0.25) circle (0.06);
+  }
+  \node[below, align=center] at (3.6,-1.15) {meiosis:\\4 haploid nuclei,\\three degenerate};
+  % stage 2: mitosis, exchange
+  \foreach \dy in {0.55,-0.55} {
+    \fill[omDef!90!black] (7.2-0.35,\dy) circle (0.08);
+    \fill[omThm] (7.2+0.35,\dy) circle (0.08);
+  }
+  \draw[->, thick, omThm] (7.55,0.45) -- (7.55,-0.45);
+  \draw[->, thick, omThm] (6.85,-0.45) -- (6.85,0.45);
+  \node[below, align=center] at (7.2,-1.15) {mitosis; migratory\\nuclei (red)\\are exchanged};
+  % stage 3: fusion 2n
+  \fill[omDef!90!black] (10.8,0.55) circle (0.12); \node[right] at (10.95,0.55) {$2n$};
+  \fill[omDef!90!black] (10.8,-0.55) circle (0.12); \node[right] at (10.95,-0.55) {$2n$};
+  \node[below, align=center] at (10.8,-1.15) {fertilisation:\\new identical diploid\\nuclei; cells part};
+  \foreach \x in {1.3,4.9,8.5} \draw[->, thick, gray] (\x,0) -- (\x+1.0,0);
+\end{tikzpicture}
+
+{\small Conjugation in \emph{Paramecium}. Two cells exchange haploid
+nuclei and separate, each carrying a recombined diploid micronucleus;
+the number of cells has not changed.}
+\end{omfigure}
+
+\section{Toward multicellularity}
+
+\begin{proposition}[The volvocine series]\label{prop:b2:unicellular-diversity:volvox}
+\index{Volvox@\emph{Volvox}}\index{multicellularity, origin of}
+Among green algae one lineage displays, in living species, the steps
+from one cell to a body. \emph{Chlamydomonas} lives alone.
+\emph{Gonium} is a flat plate of 4 to 16 identical cells that swim
+together. \emph{Pandorina} and \emph{Eudorina} are hollow balls of 16
+to 32 cells, still all alike, each able to found a new colony.
+\emph{Pleodorina} has some small cells that only swim and never
+divide. \emph{Volvox} is a sphere of \num{500} to \num{50000} small
+somatic cells, flagellated, which will die with the colony, around a
+handful of large germ cells (gonidia) that divide to form daughter
+spheres inside the mother. Somatic and germinal cells have appeared:
+this is the threshold of multicellularity, crossed in this lineage
+some \num{200} million years ago and, independently, at least
+twenty-five times elsewhere in the tree of life --- in animals,
+plants, fungi, brown algae, red algae and several bacterial groups.
+\end{proposition}
+\begin{proof}[Evidence]
+The molecular phylogeny of the volvocine algae, built from dozens of
+genes, places \emph{Chlamydomonas} at the base and \emph{Volvox}
+at the tips, with the \omterm{def:b2:unicellular-diversity:unicellular}{colonial} forms between and the number of cells
+increasing along the branches; the genome of \emph{Volvox carteri}
+(2010) differs from that of \emph{Chlamydomonas} by a few hundred
+genes, chiefly those of the extracellular matrix that holds the cells
+and of the regulators that silence division in somatic cells. The
+transition needed remarkably little new genetic material.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  % Chlamydomonas
+  \draw[thick, fill=omProp!25] (0,0) circle (0.22);
+  \node[below=0.35cm, align=center] at (0,0) {\emph{Chlamydomonas}\\1 cell};
+  % Gonium plate
+  \begin{scope}[xshift=2.2cm]
+    \foreach \x in {-0.3,0,0.3} \foreach \y in {-0.3,0,0.3} \draw[thick, fill=omProp!25] (\x,\y) circle (0.14);
+    \draw[gray, dashed] (-0.55,-0.55) rectangle (0.55,0.55);
+    \node[below=0.7cm, align=center] at (0,0) {\emph{Gonium}\\plate of 8--16};
+  \end{scope}
+  % Eudorina ball
+  \begin{scope}[xshift=4.5cm]
+    \draw[gray, dashed] (0,0) circle (0.6);
+    \foreach \a in {0,45,...,315} \draw[thick, fill=omProp!25] (\a:0.55) circle (0.13);
+    \draw[thick, fill=omProp!25] (0,0.1) circle (0.13);
+    \node[below=0.7cm, align=center] at (0,0) {\emph{Eudorina}\\ball of 32,\\all alike};
+  \end{scope}
+  % Pleodorina
+  \begin{scope}[xshift=7.4cm]
+    \draw[gray, dashed] (0,0) circle (0.7);
+    \foreach \a in {0,30,...,330} \draw[thick, fill=omProp!25] (\a:0.62) circle (0.09);
+    \foreach \a in {60,180,300} \draw[thick, fill=omProp!60] (\a:0.62) circle (0.14);
+    \node[below=0.8cm, align=center] at (0,0) {\emph{Pleodorina}\\some cells\\only swim};
+  \end{scope}
+  % Volvox
+  \begin{scope}[xshift=10.6cm]
+    \draw[thick, fill=omProp!6] (0,0) circle (0.95);
+    \foreach \a in {0,12,...,348} \fill[omProp!70] (\a:0.9) circle (0.035);
+    \foreach \a in {0,12,...,348} \fill[omProp!50] (\a:0.72) circle (0.03);
+    \foreach \p in {(0.25,0.2),(-0.3,-0.25),(0.1,-0.4),(-0.2,0.35)} \draw[thick, omThm, fill=omThm!40] \p circle (0.13);
+    \node[below=1.05cm, align=center] at (0,0) {\emph{Volvox}\\thousands of somatic cells\\and a few germ cells (red)};
+  \end{scope}
+  \foreach \x in {0.5,3.0,5.3,8.3} \draw[->, gray] (\x,0) -- (\x+0.6,0);
+\end{tikzpicture}
+
+{\small The volvocine series: a single cell, a plate, a hollow ball
+of identical cells, a ball in which some cells have given up
+division, and \emph{Volvox}, where thousands of mortal somatic cells
+surround a few germ cells.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.55\linewidth]{images/book4/ai/b4-01-volvox.jpg}
+
+{\small A \emph{Volvox} colony: a hollow green sphere of flagellated
+cells, with daughter colonies growing inside it.}
+\end{omfigure}
+
+\begin{remark}[Why divide the labour?]\label{rem:b2:unicellular-diversity:whydivide}
+In these algae a cell cannot swim and divide at the same time: the
+basal bodies that anchor the flagella are needed to organise the
+spindle. A single cell alternates; a small colony can afford to stop
+swimming while all its cells divide; a large colony would sink out of
+the light (\omterm{thm:b2:unicellular-diversity:stokes}{Stokes' law}, \cref{thm:b2:unicellular-diversity:stokes})
+during the hours its division takes. Beyond a certain size, keeping
+some cells swimming while others divide is worth the loss of their
+descendants --- and a soma is born. The choanoflagellates, collared
+flagellates whose cell is a copy of the sponge's feeding cell, show
+the same first steps on the branch that led to animals.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:unicellular-diversity:1}
+Define \omterm{def:b2:unicellular-diversity:unicellular}{unicellular}, \omterm{def:b2:unicellular-diversity:unicellular}{colonial} and \omterm{def:b2:unicellular-diversity:unicellular}{multicellular}, and place
+\emph{E.~coli}, \emph{Gonium}, \emph{Volvox} and a yeast cell in the
+right category with a reason.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:unicellular-diversity:2}
+Compute the \omterm{prop:b2:unicellular-diversity:surface}{surface-to-volume ratio} of a coccus of radius
+\qty{0.5}{\micro m} and of a spherical \omterm{def:b2:unicellular-diversity:protist}{protist} of radius
+\qty{50}{\micro m}. Which one respires faster per unit of
+cytoplasm, and why?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:unicellular-diversity:3}
+Give three structural differences between a bacterium and a
+\omterm{def:b2:unicellular-diversity:unicellular}{unicellular} eukaryote, and one thing a bacterium cannot do that an
+amoeba can.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:unicellular-diversity:4}
+Name the function of each of the following structures of
+\emph{Paramecium}: cilia, oral groove, food vacuole, \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile
+vacuole}, macronucleus, micronucleus.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:unicellular-diversity:5}
+With $D = \qty{5e-10}{m^2/s}$ for a metabolite in cytoplasm, how long
+does diffusion take across a \qty{1}{\micro m} bacterium and across a
+\qty{500}{\micro m} amoeba? Comment on what the amoeba must do that
+the bacterium need not.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:unicellular-diversity:6}
+Compute the \omterm{prop:b2:unicellular-diversity:reynolds}{Reynolds number} of a \emph{Paramecium} (\qty{200}{\micro
+m}, \qty{1}{mm/s}), of a bacterium (\qty{2}{\micro m}, \qty{20}{\micro
+m/s}) and of a human swimmer (\qty{2}{m}, \qty{1}{m/s}), with
+$\rho = \qty{1000}{kg/m^3}$ and $\eta = \qty{1e-3}{Pa.s}$. Why can a
+swimmer glide after a stroke while a bacterium cannot?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:unicellular-diversity:7}
+A diatom of radius \qty{10}{\micro m} is \qty{100}{kg/m^3} denser
+than water. Compute its sinking speed and the time to fall through
+\qty{50}{m}. By what factor does the time change if the cell halves
+its radius? If it trims its excess density to \qty{20}{kg/m^3}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:unicellular-diversity:8}
+Model a \emph{Paramecium} as an ellipsoid of half-axes \num{100},
+\num{25} and \qty{25}{\micro m} ($V = \tfrac{4}{3}\pi abc$). It
+expels its own volume of water every \qty{30}{min}. Compute the
+water influx in \unit{\micro m^3/s} and in litres per second.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:unicellular-diversity:9}
+An attractant doubles in concentration over \qty{1}{mm}. What is the
+relative difference between the two ends of a \qty{1}{\micro m}
+bacterium? Between the start and the end of a \qty{1}{s} run at
+\qty{20}{\micro m/s}? Counting $N$ molecules has a relative error of
+about $1/\sqrt{N}$: explain why the bacterium compares times rather
+than sides.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:unicellular-diversity:10}
+\emph{Thiomargarita namibiensis} is a spherical sulfur bacterium of
+diameter \qty{500}{\micro m} whose cytoplasm is a shell
+\qty{2}{\micro m} thick around a vacuole of nitrate. Compute the
+ratio of its surface to its \emph{cytoplasmic} volume and compare
+with \emph{E.~coli} (a cylinder of radius \qty{0.5}{\micro m};
+ignore the ends). Explain how the vacuole lets it be so large, and
+what the nitrate is for.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:unicellular-diversity:11}
+In \emph{Volvox} the somatic cells never divide and die with the
+colony. Using the flagellation constraint and \omterm{thm:b2:unicellular-diversity:stokes}{Stokes' law}, explain
+why such cells are worth having in a colony of \num{10000} cells but
+not in one of 16, and why the germ cells are the largest cells of the
+sphere.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:unicellular-diversity:12}
+``\omterm{def:b2:unicellular-diversity:protist}{Protist} is a grade, not a clade.'' Explain the distinction with the
+lineages named in this chapter, and say why the same statement is
+true of ``\omterm{def:b2:unicellular-diversity:prokaryote}{prokaryote}'' and false of ``cyanobacterium''.
+\end{exercise}
+
+\section{Problem: A Drop of Pond Water}
+
+\begin{problem}[{Weekend problem --- a sample of pond water is counted,
+grown, and analysed for the physics that governs its cells, ending on
+the water and energy budget of a green alga}]
+\label{pb:b2:unicellular-diversity:1}
+A pond of \qty{1000}{m^3} is sampled in spring. Under the microscope,
+a counting chamber whose grid covers \qty{1}{mm}$\times$\qty{1}{mm}
+under a coverslip held \qty{0.1}{mm} above it shows 24 cells of
+\emph{Chlamydomonas} (spheres of radius \qty{5}{\micro m},
+density \qty{1050}{kg/m^3}). Take $\rho = \qty{1000}{kg/m^3}$,
+$\eta = \qty{1e-3}{Pa.s}$, $g = \qty{9.81}{m/s^2}$, $R =
+\qty{8.314}{J/mol/K}$, $T = \qty{293}{K}$, $D = \qty{1.9e-9}{m^2/s}$
+for $\mathrm{CO_2}$ in water.
+
+\medskip
+\noindent\textbf{Part I --- Counting.}
+\begin{enumerate}
+  \item Compute the volume of water under the grid, in microlitres.
+  \item Deduce the density of \emph{Chlamydomonas} in the pond, in
+        cells per millilitre.
+  \item Compute the volume and the \omterm{prop:b2:unicellular-diversity:surface}{surface-to-volume ratio} of one
+        cell.
+  \item What fraction of the pond water's volume is occupied by these
+        cells?
+  \item How many \emph{Chlamydomonas} does the pond hold?
+  \item A filamentous cyanobacterium is also present. Give two
+        features visible under the microscope that distinguish it
+        from the alga.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Growth.}
+The sample is kept in the light and counted again after \qty{48}{h}:
+\num{384} cells under the grid.
+\begin{enumerate}[resume]
+  \item Compute the \omterm{def:b2:unicellular-diversity:division}{generation time} $T$.
+  \item Compute the growth rate constant $k$ in $N = N_0 e^{kt}$, in
+        \unit{h^{-1}}.
+  \item How long would it take the pond population to reach
+        \qty{1e8}{} cells per millilitre at this rate?
+  \item Give three reasons why it will not.
+  \item If the cells grow only during the \qty{12}{h} of daylight and
+        not at all at night, how long does the same increase take?
+  \item \emph{Chlamydomonas} divides by \omterm{def:b2:unicellular-diversity:division}{multiple fission}, releasing
+        4, 8 or 16 daughters at once. Explain why a \omterm{def:b2:unicellular-diversity:division}{generation time}
+        is nevertheless well defined by the count.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The physics of the cell.}
+\begin{enumerate}[resume]
+  \item Compute the \omterm{prop:b2:unicellular-diversity:reynolds}{Reynolds number} of a cell swimming at
+        \qty{100}{\micro m/s}.
+  \item A cell of mass $m$ that stops beating its flagella coasts a
+        distance $mv/(6\pi\eta r)$. Compute it.
+  \item Compute the sinking speed of a cell that has stopped
+        swimming.
+  \item Compare the time to sink \qty{1}{m} with the time to swim up
+        \qty{1}{m}.
+  \item The pond holds \qty{10}{\micro mol/L} of dissolved
+        $\mathrm{CO_2}$. Compute the maximal diffusive supply of
+        $\mathrm{CO_2}$ to a cell, in molecules per second.
+  \item A cell contains \qty{100}{pg} of carbon and doubles it in
+        one generation. Compute its mean carbon demand in molecules
+        per second, and the ratio of supply to demand.
+  \item Redo the comparison for a hypothetical cell of radius
+        \qty{50}{\micro m} with the same carbon density. Conclude.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Water and energy.}
+The cytoplasm holds \qty{100}{mmol/L} of solutes, the pond
+\qty{1}{mmol/L}. The membrane's hydraulic conductivity is $L_p =
+\qty{1e-14}{m.s^{-1}.Pa^{-1}}$ (water volume flux per unit area per
+unit pressure difference). Hydrolysing one ATP yields
+\qty{50}{kJ/mol}; fixing one carbon atom costs three ATP.
+\begin{enumerate}[resume]
+  \item Compute the osmotic pressure difference across the membrane.
+  \item Compute the volume of water entering the cell per second, in
+        \unit{\micro m^3/s}.
+  \item Without a \omterm{prop:b2:unicellular-diversity:osmoregulation}{contractile vacuole}, how long would the cell take
+        to double its volume?
+  \item Compute the minimal power needed to expel this water against
+        the osmotic pressure.
+  \item Convert it to ATP molecules per second and compare with the
+        ATP the cell spends on carbon fixation (question 18).
+  \item State the result: the cell's water influx, the time it would
+        take to burst, and the fraction of its energy that keeping dry
+        costs.
+\end{enumerate}
+\end{problem}

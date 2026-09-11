@@ -26,8 +26,8 @@ several volumes:
 
 The course is **pure biology** (life sciences only: cell, genetics,
 evolution, physiology, ecology, immunity, and so on — no geology or Earth
-science). The first three volumes are fully written; the last two
-university volumes exist as titled chapter placeholders, with the full
+science). The first four volumes are fully written; the last
+university volume exists as titled chapter placeholders, with the full
 five-book architecture in place.
 
 The style is concise and rigorous: courses built from **definitions,
@@ -44,7 +44,8 @@ in **TikZ figures**; equations stay sparse.
 | Primary & Middle School | Grades 1–9 | ✅ written in English (71 chapters, exercises, solutions, figures) |
 | High School | Grades 10–12 | ✅ written in English (36 chapters, exercises, weekend problems, solutions, figures) |
 | University Year 1 | Bachelor | ✅ written in English (29 chapters, exercises, weekend problems, solutions, figures) |
-| University Year 2–3 | Bachelor | 🚧 structure (27 + 27 chapter placeholders) |
+| University Year 2 | Bachelor | ✅ written in English (27 chapters, exercises, weekend problems, solutions, figures) |
+| University Year 3 | Bachelor | 🚧 structure (27 chapter placeholders) |
 
 ## Building the books
 

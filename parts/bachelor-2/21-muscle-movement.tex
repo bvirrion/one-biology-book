@@ -1,6 +1,554 @@
 \chapter{Muscle Contraction and Motor Function}\label{ch:b2:muscle-movement}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A sprinter leaves the blocks with a force on the track of three
+times her weight, developed in a fifth of a second by muscles that
+were slack a moment before. Nothing in the cell got shorter to do
+it: the filaments inside slid past each other, pulled by millions
+of molecular hands each taking a step of ten nanometres and letting
+go, ten times a second, paid for one ATP at a time. This chapter
+takes the \omterm{def:b2:cell-differentiation:myogenesis}{muscle fibre} built in \cref{ch:b2:cell-differentiation}
+and makes it work: the sliding of the filaments and the motor that
+drives them, the calcium switch that turns the motor on and off,
+the command from the nerve, the mechanics of force and speed, and
+the way the nervous system grades the whole from a \omterm{def:b2:muscle-movement:motorunit}{twitch} to a
+sprint.
 
-\emph{This chapter has not been written yet.}
+\section{The sliding filaments}
+
+\begin{proposition}[The sliding filament mechanism]\label{prop:b2:muscle-movement:sliding}
+\index{sliding filament}\index{sarcomere!contraction}
+When a \omterm{def:b2:cell-differentiation:myogenesis}{muscle fibre} shortens, its \omterm{def:b2:cell-differentiation:fibre}{sarcomeres} shorten
+(\cref{ch:b2:cell-differentiation}), but neither the thick filaments
+of myosin nor the thin filaments of actin change length: the thin
+filaments slide inward along the thick ones, the I band and the H
+zone narrow, and the Z discs approach. The overlap between the two
+sets of filaments is where force is generated, and a \omterm{def:b2:cell-differentiation:fibre}{sarcomere}
+generates force in proportion to the overlap: from a stretched
+length of \qty{3.6}{\micro m}, with no overlap and no force, the
+force rises linearly as the filaments overlap more, reaches a
+plateau near \qty{2.2}{\micro m} where every myosin head faces actin,
+and falls again below \qty{2.0}{\micro m} as the thin filaments
+collide and the thick ones hit the Z discs. The resting length of a
+muscle in the body sits on the plateau --- which is the first hint
+of how the force is made.
+\end{proposition}
+\begin{proof}[Evidence]
+A.~F.~Huxley and Niedergerke, and H.~E.~Huxley and Hanson (1954),
+measured the bands of single fibres and of isolated \omterm{def:b2:cell-differentiation:fibre}{myofibrils} by
+interference and phase microscopy as they shortened: the A band kept
+its length, the I band shrank, so the filaments slide. Gordon,
+Huxley and Julian (1966) held a single fibre at set lengths with a
+feedback device that kept one segment's \omterm{def:b2:cell-differentiation:fibre}{sarcomere} \omterm{thm:b2:neurons-synapses:cable}{length constant},
+and found the force to be proportional to the overlap of thick and
+thin filaments measured by electron microscopy --- the length--tension
+curve with its plateau and two linear limbs, exactly as the geometry
+of the filaments predicts.
+\end{proof}
+
+\begin{omfigure}
+\begin{minipage}[b]{0.5\linewidth}\centering
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  \foreach \y/\lab/\ov in {2.4/{relaxed, \qty{2.6}{\micro m}}/0.9, 1.2/{contracted, \qty{2.0}{\micro m}}/0.3} {
+    \begin{scope}[yshift=\y cm]
+      \draw[very thick, omThm] (0,-0.35) -- (0,0.35); \draw[very thick, omThm] (4.4-2*\ov+1.0,-0.35) -- (4.4-2*\ov+1.0,0.35);
+      \pgfmathsetmacro{\len}{4.4-2*\ov+1.0}
+      \foreach \dy in {-0.25,0.05,0.25} { \draw[thick, omDef] (0,\dy) -- (1.5,\dy); \draw[thick, omDef] (\len,\dy) -- (\len-1.5,\dy); }
+      \draw[line width=3pt, omExo!80!black] (\len/2-1.1,-0.1) -- (\len/2+1.1,-0.1);
+      \node[right] at (\len+0.15,0) {\lab};
+    \end{scope}
+  }
+  \node[align=center] at (2.7,0.1) {the filaments keep their lengths;\\the overlap grows as the Z discs approach};
+\end{tikzpicture}
+\end{minipage}\hfill
+\begin{minipage}[b]{0.48\linewidth}\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=\linewidth, height=4.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=1.2, xmax=3.8, ymin=0, ymax=1.15,
+  xlabel={sarcomere length (\unit{\micro m})}, ylabel={force (relative)},
+  xlabel style={font=\scriptsize, at={(axis description cs:0.5,-0.17)}, anchor=north},
+  ylabel style={font=\scriptsize},
+  tick label style={font=\scriptsize}, xtick={1.3,2.0,2.2,3.6}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef] coordinates {(1.3,0) (1.65,0.5) (2.0,1) (2.2,1) (3.6,0)};
+\node[font=\scriptsize, anchor=south] at (axis cs:2.1,1.02) {plateau};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:2.95,0.75) {overlap\\decreasing};
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+
+{\small Left: a \omterm{def:b2:cell-differentiation:fibre}{sarcomere} relaxed and contracted --- the thin
+filaments (blue) slide along the thick ones (grey) without changing
+length. Right: the length--tension curve: force is proportional to
+the overlap, maximal on the plateau where the muscle rests.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book4/ai/b4-21-sarcomere-tem.jpg}
+
+{\small \omterm{def:b2:cell-differentiation:fibre}{Myofibrils} under the electron microscope: the A bands of
+thick filaments, the I bands of thin filaments bisected by Z lines,
+and the mitochondria between the fibrils that pay for the sliding.}
+\end{omfigure}
+
+\section{The motor}
+
+\begin{proposition}[The cross-bridge cycle]\label{prop:b2:muscle-movement:crossbridge}
+\index{cross-bridge cycle}\index{myosin}\index{ATP!in contraction}
+Each thick filament bristles with some three hundred \emph{myosin
+heads}, and each head is a motor that walks along actin in a cycle
+of four steps. (1) With ATP bound, the head is detached from actin;
+it hydrolyses the ATP to ADP and phosphate and cocks itself into a
+strained, high-energy shape. (2) The cocked head binds an actin
+subunit, forming a \emph{cross-bridge}. (3) Phosphate is released
+and the head snaps to its relaxed shape, pulling the thin filament
+some \qty{10}{nm} toward the centre of the \omterm{def:b2:cell-differentiation:fibre}{sarcomere} --- the
+\emph{power stroke}; ADP leaves. (4) A new ATP binds and the head
+lets go of actin; without ATP it cannot let go, which is the rigor
+of death. The cycle takes about a twentieth of a second; a head
+spends most of it detached, so that at any instant only a fraction
+of the heads pull, and a filament sliding at speed is never dropped.
+Force is the sum of the pulls of the attached heads; shortening is
+their steps added up, half a micrometre per \omterm{def:b2:cell-differentiation:fibre}{sarcomere} per cycle at
+most; and the energy is one ATP per step per head, about
+\qty{50}{kJ/mol} --- \qty{8e-20}{J} per step, of which the head
+converts up to half into work.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \foreach \x/\lab/\ang/\att in {0/{1. ATP bound:\\detached; ATP\\hydrolysed, head cocked}/60/0, 3.6/{2. cocked head\\binds actin:\\cross-bridge}/60/1, 7.2/{3. phosphate released:\\power stroke,\\filament pulled \qty{10}{nm}}/20/1, 10.8/{4. ADP leaves, new\\ATP binds: head\\lets go}/20/0} {
+    \begin{scope}[xshift=\x cm]
+      \draw[thick, omDef] (0,2.2) -- (2.8,2.2); \foreach \i in {0.2,0.6,...,2.6} \fill[omDef!50] (\i,2.2) circle (0.14);
+      \draw[line width=3pt, omExo!80!black] (0,0.4) -- (2.8,0.4);
+      \draw[very thick, omThm] (1.4,0.4) -- (1.4,1.0);
+      \ifnum\att=1 \draw[very thick, omThm] (1.4,1.0) -- ++(\ang:1.15); \fill[omThm] (1.4,1.0) ++(\ang:1.15) circle (0.16); \else \draw[very thick, omThm] (1.4,1.0) -- ++(\ang:1.0); \fill[omThm] (1.4,1.0) ++(\ang:1.0) circle (0.16); \fi
+      \node[below, align=center] at (1.4,0.15) {\lab};
+    \end{scope}
+  }
+  \draw[->, thick, omDef] (7.9,2.55) -- (8.9,2.55); \node[omDef, above] at (8.4,2.6) {thin filament moves};
+\end{tikzpicture}
+
+{\small The \omterm{prop:b2:muscle-movement:crossbridge}{cross-bridge cycle}. A cocked myosin head (red) binds
+actin (blue), releases phosphate and pulls the thin filament through
+its power stroke, then binds a fresh ATP and lets go.}
+\end{omfigure}
+
+\begin{theorem}[Force, speed and power of a muscle]\label{thm:b2:muscle-movement:hill}
+\index{force--velocity curve}\index{muscle power}
+A muscle's force falls as it shortens faster, because the faster
+the filaments slide, the fewer heads are attached at any instant
+and the more of them are dragged past their stroke before they let
+go. Hill's relation describes it:
+\[
+(F + a)(v + b) = (F_0 + a)\,b,
+\]
+where $F_0$ is the isometric force (at $v = 0$), $v_{\max} =
+F_0 b/a$ the speed at no load, and $a$, $b$ constants ($a \approx
+F_0/4$). The power $Fv$ is zero at both ends and greatest at about a
+third of $v_{\max}$ and a third of $F_0$ --- which is why a cyclist
+changes gear and a sprinter's stride has a preferred rate. A human
+muscle develops about \qty{30}{N} per square centimetre of
+cross-section, shortens at up to ten lengths a second, and delivers
+some \qty{100}{W} per kilogram at its best.
+\end{theorem}
+\begin{proof}
+Hill's curve is empirical (1938), measured on isolated frog muscle
+as the shortening speed against the load it lifts; the hyperbola
+fits because the fraction of attached heads falls with sliding speed
+and each attached head's force falls as it is carried through its
+stroke. Power: with $F = (F_0 + a)b/(v + b) - a$, $Fv$ is zero at
+$v = 0$ and at $v_{\max}$; differentiating gives the maximum at
+$v = b(\sqrt{(F_0 + a)/a} - 1)$, which for $a = F_0/4$ is $v =
+1.24\,b = 0.31\,v_{\max}$, where $F = 0.31\,F_0$.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1.05, ymin=0, ymax=1.1,
+  xlabel={shortening speed $v/v_{\max}$}, ylabel={force $F/F_0$, power (relative)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.31,1}, xticklabels={0,0.31,1}, ytick={0,0.31,1}, yticklabels={0,0.31,1},
+  legend style={font=\scriptsize, at={(0.97,0.95)}, anchor=north east, draw=none},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:1, samples=100] {(1.25*0.25)/(x+0.25) - 0.25};
+\addlegendentry{force}
+\addplot[very thick, omThm, domain=0:1, samples=100] {10.4*x*((1.25*0.25)/(x+0.25) - 0.25)};
+\addlegendentry{power (scaled)}
+\draw[dashed, gray] (axis cs:0.31,0) -- (axis cs:0.31,1.0);
+\end{axis}
+\end{tikzpicture}
+
+{\small Hill's \omterm{thm:b2:muscle-movement:hill}{force--velocity curve} ($a = F_0/4$) and the power it
+implies: force falls as the muscle shortens faster, and power peaks
+at about a third of the maximal speed and a third of the isometric
+force.}
+\end{omfigure}
+
+\section{The switch: calcium}
+
+\begin{proposition}[Excitation--contraction coupling]\label{prop:b2:muscle-movement:coupling}
+\index{excitation--contraction coupling}\index{troponin}\index{tropomyosin}\index{sarcoplasmic reticulum}
+At rest the myosin heads cannot reach actin: the binding sites on
+the thin filament are covered by \emph{tropomyosin}, a rod lying
+in the groove of the actin helix, held there by \emph{troponin}.
+The switch is calcium. An \omterm{prop:b2:neurons-synapses:ap}{action potential} on the fibre's membrane
+runs down the \omterm{def:b2:cell-differentiation:fibre}{T tubules} into the interior and, at the junctions
+where a \omterm{def:b2:cell-differentiation:fibre}{T tubule} meets the \omterm{def:b2:cell-differentiation:fibre}{sarcoplasmic reticulum}, opens the
+reticulum's calcium release channels; calcium floods the \omterm{def:b2:cell-differentiation:fibre}{myofibrils},
+rising from \qty{0.1}{} to \qty{10}{\micro mol/L} in a millisecond,
+binds troponin, and troponin shifts tropomyosin off the binding
+sites: the heads attach, and the fibre contracts as long as the
+calcium stays. Pumps in the reticulum, burning ATP, take the
+calcium back within tens of milliseconds; tropomyosin re-covers the
+sites and the fibre relaxes. Relaxation is thus as active as
+contraction, and a muscle deprived of ATP can neither release its
+heads nor pump its calcium --- rigor mortis. In the \omterm{def:b2:heart:anatomy}{heart} the same
+switch is used, but with calcium entering from outside through the
+membrane's own channels to trigger the release, which is why the
+\omterm{def:b2:heart:anatomy}{heart}, and not skeletal muscle, is sensitive to the calcium in the
+\omterm{def:b2:blood-circulation:blood}{blood}.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, rounded corners, fill=omDef!15, align=center] (nerve) at (0,0) {motor nerve\\impulse};
+  \node[draw, rounded corners, fill=omDef!15, align=center] (nmj) at (3.0,0) {neuromuscular\\junction:\\acetylcholine};
+  \node[draw, rounded corners, fill=omDef!15, align=center] (ap) at (6.2,0) {muscle action\\potential, down\\the T tubules};
+  \node[draw, rounded corners, fill=omThm!15, align=center] (ca) at (9.4,0) {Ca$^{2+}$ released\\from the sarcoplasmic\\reticulum};
+  \node[draw, rounded corners, fill=omProp!20, align=center] (tn) at (12.6,0) {troponin binds Ca$^{2+}$,\\tropomyosin moves,\\heads attach};
+  \node[draw, rounded corners, fill=omExo!25, align=center] (off) at (9.4,-2.2) {pumps return Ca$^{2+}$ (ATP);\\tropomyosin re-covers actin:\\relaxation};
+  \draw[->, thick] (nerve) -- (nmj); \draw[->, thick] (nmj) -- (ap); \draw[->, thick] (ap) -- (ca); \draw[->, thick] (ca) -- (tn);
+  \draw[->, thick] (ca) -- (off);
+  \node[below, gray] at (1.5,-0.7) {\qty{0.6}{ms}}; \node[below, gray] at (4.6,-0.7) {\qty{1}{ms}}; \node[below, gray] at (7.8,-0.7) {\qty{1}{ms}};
+\end{tikzpicture}
+
+{\small From nerve impulse to force: the junction, the fibre's own
+\omterm{prop:b2:neurons-synapses:ap}{action potential}, the release of calcium, and the uncovering of the
+actin sites --- then the pumps that end it.}
+\end{omfigure}
+
+\section{Command and gradation}
+
+\begin{definition}[The motor unit]\label{def:b2:muscle-movement:motorunit}
+\index{motor unit}\index{twitch}\index{tetanus}\index{recruitment}
+A \emph{motor \omterm{def:b2:neurons-synapses:neuron}{neuron}} in the spinal cord sends its \omterm{def:b2:neurons-synapses:neuron}{axon} to a
+muscle and branches to innervate from a handful to a thousand
+fibres, scattered through the muscle; the \omterm{def:b2:neurons-synapses:neuron}{neuron} and its fibres are
+a \emph{motor unit}, the smallest quantity of force the nervous
+system can command. Every impulse in the \omterm{def:b2:neurons-synapses:neuron}{neuron} makes every fibre
+of the unit fire once and give a \emph{twitch}: a force that rises
+in some \qty{30}{ms} and decays in \qty{100}{ms}, because the
+calcium pulse is brief. Impulses in quick succession make twitches
+sum, since the calcium of one has not been pumped away when the
+next arrives; at some 30 to 50 impulses a second the force fuses
+into a smooth \emph{tetanus}, three to five times the twitch. The
+nervous system grades the force of a muscle in two ways: by the
+\emph{rate} at which each unit fires, and by the \emph{number} of
+units it recruits --- small, slow, fatigue-resistant units first
+(the \emph{size principle}), large fast ones last, only for the
+greatest efforts. A muscle in ordinary use is therefore never fully
+on: a fraction of its units fire, in rotation, and the rest rest.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.82\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1.0, ymin=0, ymax=4.2,
+  xlabel={time (s)}, ylabel={force (twitch $=$ 1)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.13)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.2,0.4,0.6,0.8,1}, ytick={0,1,2,3,4},
+  clip=false,
+]
+% single twitch
+\addplot[very thick, omDef, domain=0:0.2, samples=60] {(x<0.02)*0 + (x>=0.02)*4.5*(x-0.02)*exp(-(x-0.02)/0.03)*4.1};
+% summation at 10 Hz
+\addplot[very thick, omProp, domain=0.25:0.62, samples=200] {(x>=0.25)*4.5*4.1*(x-0.25)*exp(-(x-0.25)/0.03) + (x>=0.33)*4.5*4.1*(x-0.33)*exp(-(x-0.33)/0.03) + (x>=0.41)*4.5*4.1*(x-0.41)*exp(-(x-0.41)/0.03) + (x>=0.49)*4.5*4.1*(x-0.49)*exp(-(x-0.49)/0.03)};
+% tetanus at 50 Hz
+\addplot[very thick, omThm, domain=0.66:0.98, samples=100] {3.8*(1-exp(-(x-0.66)/0.06))};
+\node[font=\scriptsize, anchor=west] at (axis cs:0.09,0.7) {one impulse: twitch};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.44,2.2) {\qty{12}{Hz}: summation};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.82,3.85) {\qty{50}{Hz}: fused tetanus};
+\end{axis}
+\end{tikzpicture}
+
+{\small Grading force by rate. A single impulse gives a \omterm{def:b2:muscle-movement:motorunit}{twitch};
+impulses at a dozen a second sum into a rippling force; at fifty a
+second the force fuses into a \omterm{def:b2:muscle-movement:motorunit}{tetanus} several times the \omterm{def:b2:muscle-movement:motorunit}{twitch}.}
+\end{omfigure}
+
+\begin{proposition}[Reflexes and the spinal cord]\label{prop:b2:muscle-movement:reflex}
+\index{reflex arc}\index{muscle spindle}\index{stretch reflex}\index{reciprocal inhibition}
+The motor \omterm{def:b2:neurons-synapses:neuron}{neuron} is the \emph{final common path}: every command,
+from the cortex or from a reflex, ends on it. The simplest circuit
+is the \emph{\omterm{prop:b2:muscle-movement:reflex}{stretch reflex}} of \cref{ch:b2:neurons-synapses}:
+sensory endings wound round special fibres inside the muscle, the
+\emph{\omterm{prop:b2:muscle-movement:reflex}{muscle spindles}}, fire when the muscle is stretched, excite
+the motor \omterm{def:b2:neurons-synapses:neuron}{neurons} of the same muscle through one \omterm{def:b2:neurons-synapses:synapse}{synapse}, and
+inhibit those of the antagonist through an interneuron
+(\emph{\omterm{prop:b2:muscle-movement:reflex}{reciprocal inhibition}}), so that the muscle resists the
+stretch --- the basis of posture, since every sway is a stretch of
+some muscle. A second receptor, the tendon organ, fires when the
+muscle's force is high and inhibits its own motor \omterm{def:b2:neurons-synapses:neuron}{neurons}: a safety
+valve. Withdrawal from a painful stimulus is a reflex of several
+\omterm{def:b2:neurons-synapses:synapse}{synapses} that flexes the limb and, on the other side, extends the
+other one so that you do not fall. And the brain does not command
+muscles but movements: the cortex sends a plan, the cerebellum
+corrects it against what the spindles report, the basal ganglia
+release it, and the spinal cord's circuits, which can run a
+stepping rhythm on their own, execute it --- the subject of the
+Year 3 volume.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-21-frog-muscle-prep.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.44\linewidth]{images/book4/ai/b4-21-sprinter.jpg}
+
+{\small Left: the classical preparation --- a frog muscle, its
+nerve, stimulating electrodes and a lever writing on a smoked drum
+--- on which \omterm{def:b2:muscle-movement:motorunit}{twitch}, summation and \omterm{def:b2:muscle-movement:motorunit}{tetanus} were first recorded.
+Right: the same physiology at full stretch.}
+\end{omfigure}
+
+\section{Fuel and fatigue}
+
+\begin{proposition}[Paying for the work]\label{prop:b2:muscle-movement:energy}
+\index{creatine phosphate}\index{muscle fatigue}\index{oxygen debt}
+A fibre holds ATP for a second or two of full effort. The first
+reserve is \emph{\omterm{prop:b2:muscle-movement:energy}{creatine phosphate}}, which rephosphorylates ADP
+within milliseconds and lasts some ten seconds --- the sprinter's
+fuel. The second is \emph{glycolysis} of the fibre's glycogen,
+without oxygen, yielding two ATP per glucose and lactate: fast,
+enough for a minute or two, and self-limiting as acid and phosphate
+accumulate. The third is \emph{oxidative} metabolism of glucose and
+fatty acids in the mitochondria, thirty ATP per glucose, limited
+only by the oxygen the \omterm{def:b2:blood-circulation:blood}{blood} delivers
+(\cref{ch:b2:blood-pressure}): the marathon. Fast glycolytic fibres
+rely on the first two and tire in a minute; slow oxidative fibres,
+red with myoglobin and packed with mitochondria, run for hours.
+\emph{Fatigue} in a short effort is not the exhaustion of ATP ---
+which would leave the muscle in rigor --- but the accumulation of
+phosphate and protons, which weaken the cross-bridges and the
+calcium release; in a long effort it is the exhaustion of glycogen
+and, in the end, of the will. After the effort the muscle repays
+its \emph{\omterm{prop:b2:muscle-movement:energy}{oxygen debt}}: it restores \omterm{prop:b2:muscle-movement:energy}{creatine phosphate}, converts
+the lactate back (in the liver) and refills its stores, breathing
+hard for minutes after standing still.
+\end{proposition}
+
+\begin{example}[A hundred metres]\label{ex:b2:muscle-movement:sprint}
+Ten seconds of maximal effort by \qty{20}{kg} of leg muscle at
+\qty{100}{W/kg} is \qty{2}{kW} of mechanical power and, at
+\qty{25}{\%} efficiency, \qty{8}{kW} of ATP turnover --- some
+\qty{160}{mmol} of ATP a second, or \qty{80}{g} of ATP in the race.
+The muscle holds a few grams; \omterm{prop:b2:muscle-movement:energy}{creatine phosphate} supplies the first
+five seconds, glycolysis the rest, and the sprinter finishes with
+lactate at \qty{15}{mmol/L} in her \omterm{def:b2:blood-circulation:blood}{blood} and a debt she pays over
+the next quarter of an hour. A marathoner at \qty{300}{W} for two
+hours burns \qty{2}{MJ} of work, \qty{8}{MJ} of fuel --- a kilogram of
+glycogen and fat --- with oxygen delivered at \qty{4}{L/min} all the
+way, and the wall she hits at the thirtieth kilometre is the bottom
+of her glycogen.
+\end{example}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b2:muscle-movement:1}
+State the \omterm{prop:b2:muscle-movement:sliding}{sliding filament} mechanism and say which bands of the
+\omterm{def:b2:cell-differentiation:fibre}{sarcomere} change on contraction and which do not.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:muscle-movement:2}
+Give the four steps of the \omterm{prop:b2:muscle-movement:crossbridge}{cross-bridge cycle} and the role of ATP
+in each. Why does a muscle without ATP go stiff?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:muscle-movement:3}
+List the events from a motor nerve impulse to the attachment of
+myosin heads, with the time each takes.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b2:muscle-movement:4}
+Define \omterm{def:b2:muscle-movement:motorunit}{motor unit}, \omterm{def:b2:muscle-movement:motorunit}{twitch} and \omterm{def:b2:muscle-movement:motorunit}{tetanus}, and give the two ways the
+nervous system grades force.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:muscle-movement:5}
+A \omterm{def:b2:cell-differentiation:fibre}{sarcomere} of \qty{2.4}{\micro m} shortens to \qty{2.0}{\micro m} in
+\qty{50}{ms}. Compute the sliding speed of the thin filaments
+relative to the thick ones and, with a \qty{10}{nm} step, the number
+of cycles each attached head must perform per second.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:muscle-movement:6}
+A fibre of \qty{10}{cm} has \num{40000} \omterm{def:b2:cell-differentiation:fibre}{sarcomeres} in series and
+shortens by \qty{20}{\%} in \qty{0.1}{s}. Compute its shortening speed
+in lengths per second and in metres per second, and the speed of
+each \omterm{def:b2:cell-differentiation:fibre}{sarcomere}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:muscle-movement:7}
+With Hill's relation and $a = F_0/4$, $v_{\max} = 10$ lengths a
+second, compute the force (as a fraction of $F_0$) at 1, 3 and 6
+lengths a second, and the power at each. Where is the power greatest?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:muscle-movement:8}
+A quadriceps of \qty{80}{cm^2} cross-section at \qty{30}{N/cm^2}:
+compute its maximal isometric force. It acts \qty{5}{cm} from the
+knee joint on a lever whose foot is \qty{45}{cm} from the joint:
+what force can the foot exert?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b2:muscle-movement:9}
+A \omterm{def:b2:muscle-movement:motorunit}{twitch}'s calcium pulse lasts \qty{30}{ms}. Explain why impulses
+at \qty{10}{Hz} give a rippling force, at \qty{50}{Hz} a smooth
+\omterm{def:b2:muscle-movement:motorunit}{tetanus}, and why the tetanic force exceeds the \omterm{def:b2:muscle-movement:motorunit}{twitch}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:muscle-movement:10}
+A sprinter's \qty{20}{kg} of leg muscle delivers \qty{2}{kW} for
+\qty{10}{s} at \qty{25}{\%} efficiency. Compute the ATP used (\qty{50}{kJ/mol}),
+the \omterm{prop:b2:muscle-movement:energy}{creatine phosphate} needed to cover the first \qty{5}{s}, and
+the glucose fermented to cover the rest (2 ATP per glucose). What
+lactate concentration does that put into \qty{40}{L} of body water?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:muscle-movement:11}
+Predict the effect on contraction of: a drug that blocks the
+reticulum's calcium release channel; one that blocks its pump; a
+\omterm{def:b2:genome-diversification:mutation}{mutation} making troponin insensitive to calcium; the removal of
+calcium from the \omterm{def:b2:blood-circulation:blood}{blood}, for skeletal muscle and for the \omterm{def:b2:heart:anatomy}{heart}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b2:muscle-movement:12}
+``A muscle is a machine that converts chemical energy into force
+with the efficiency of a good engine and the control of a
+computer.'' Discuss the efficiency (a quarter to a half), what
+limits it, and what the nervous system's two ways of grading force
+buy that a single switch would not.
+\end{exercise}
+
+\section{Problem: The Physiology of a Jump}
+
+\begin{problem}[{Weekend problem --- a standing jump analysed from
+the sarcomere to the take-off: the sliding, the cross-bridges, the
+calcium switch, the force--velocity limit, the motor units and the
+fuel, ending on the number of cross-bridge strokes, the force at the
+take-off speed, and the ATP the jump costs}]
+\label{pb:b2:muscle-movement:1}
+A person of \qty{70}{kg} jumps \qty{40}{cm} straight up, raising the
+body's centre of mass by \qty{0.4}{m} during a push of \qty{0.3}{s}.
+The leg extensors (\qty{20}{kg} of muscle) have a combined
+cross-section of \qty{500}{cm^2} at \qty{30}{N/cm^2}; their fibres
+are \qty{12}{cm} long (\num{48000} \omterm{def:b2:cell-differentiation:fibre}{sarcomeres}) and shorten by
+\qty{4}{cm} during the push; the joints multiply the muscle's
+shortening by \num{10} at the foot and divide its force by the
+same factor. $v_{\max} = 8$ lengths a second, $a = F_0/4$. Each
+thick filament carries \num{300} myosin heads; there are $6\times
+10^{10}$ thick filaments per square centimetre of muscle; a stroke
+is \qty{10}{nm} and costs one ATP (\qty{8e-20}{J}, \qty{50}{kJ/mol});
+efficiency \qty{40}{\%}. The muscle holds \qty{5}{mmol/kg} of ATP and
+\qty{20}{mmol/kg} of \omterm{prop:b2:muscle-movement:energy}{creatine phosphate}. Fibres are \qty{60}{\micro
+m} across. \omterm{def:b2:muscle-movement:motorunit}{Motor units}: \num{800} per muscle group, from \num{50} to
+\num{2000} fibres each.
+
+\medskip
+\noindent\textbf{Part I --- The mechanics.}
+\begin{enumerate}
+  \item Compute the take-off speed needed to rise \qty{40}{cm}
+        ($v^{2} = 2gh$), and the kinetic energy at take-off.
+  \item Compute the mean force the legs exert on the ground during
+        the push (work over \qty{0.4}{m} equals the kinetic energy
+        plus the work against gravity), and compare with the weight.
+  \item Compute the maximal isometric force of the extensors and,
+        with the lever ratio of 10, the maximal foot force it could
+        give.
+  \item Compute the fibres' shortening speed in lengths per second
+        and as a fraction of $v_{\max}$.
+  \item With Hill's relation, compute the force available at that
+        speed as a fraction of $F_0$, and the foot force it gives.
+        Can the muscle alone do the jump? Where does the rest come
+        from?
+  \item Compute the mean mechanical power during the push and the
+        power per kilogram of extensor.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The cross-bridges.}
+\begin{enumerate}[resume]
+  \item How far does each \omterm{def:b2:cell-differentiation:fibre}{sarcomere} shorten, and how many
+        \qty{10}{nm} strokes must be made along each \omterm{def:b2:cell-differentiation:fibre}{half-sarcomere}
+        to slide its filaments that far?
+  \item Compute the sliding speed in each \omterm{def:b2:cell-differentiation:fibre}{half-sarcomere} and the
+        number of strokes per second a head would make if it were
+        attached continuously.
+  \item Compute the number of myosin heads in the extensors.
+  \item Compute the work the muscle itself does (its force at the
+        jump's speed times its shortening), the work per stroke at
+        \qty{40}{\%} efficiency, and the number of strokes needed.
+  \item How many strokes is that per head, against the number
+        available from question 7? Comment on the reserve.
+  \item Compute the ATP consumed by the jump, in moles and in grams
+        (\qty{507}{g/mol}), and check the efficiency from the energy
+        of that ATP.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The switch and the command.}
+\begin{enumerate}[resume]
+  \item The push takes \qty{0.3}{s} and the calcium pulse of one
+        impulse \qty{30}{ms}. What firing rate keeps the fibres in
+        \omterm{def:b2:muscle-movement:motorunit}{tetanus}, and how many impulses does each motor \omterm{def:b2:neurons-synapses:neuron}{neuron} send?
+  \item The free calcium rises from \qty{0.1}{} to \qty{10}{\micro
+        mol/L} in a fibre of \qty{5e-10}{L}. How many free calcium ions
+        is that, and how many pump cycles (two ions per ATP) does
+        taking them back cost?
+  \item Compute the number of fibres in the extensors and the
+        cross-bridge ATP per fibre per impulse, and compare with the
+        pump cost of question 14. The real cost of pumping is about
+        a quarter of the muscle's ATP: what does the free calcium
+        understate?
+  \item The nervous system recruits units by size. For the jump,
+        which units are recruited and in what order? What fraction
+        of the \num{800} would a gentle step use?
+  \item Explain why the force can be graded finely at low effort and
+        only coarsely near the maximum.
+  \item A person on a drug that blocks the \omterm{prop:b2:neurons-synapses:integration}{neuromuscular junction}
+        half-way: predict the \omterm{def:b2:muscle-movement:motorunit}{twitch}, the \omterm{def:b2:muscle-movement:motorunit}{tetanus} and the jump.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The fuel.}
+\begin{enumerate}[resume]
+  \item Compute the ATP stored in the extensors and compare with the
+        jump's consumption.
+  \item Compute the \omterm{prop:b2:muscle-movement:energy}{creatine phosphate} store and the number of jumps
+        it could pay for.
+  \item Ten jumps in a row: which fuel takes over, and what
+        accumulates?
+  \item The \omterm{def:b2:blood-circulation:blood}{blood} can deliver \qty{2}{L} of oxygen a minute to the
+        extensors (6 ATP per $\mathrm{O_2}$). What ATP turnover does
+        the jump's power require, and what oxygen supply would that
+        take? Conclude.
+  \item After the jumps the person breathes hard for a minute.
+        Compute the oxygen needed to resynthesise the \omterm{prop:b2:muscle-movement:energy}{creatine
+        phosphate} and ATP used (\qty{6}{ATP} per $\mathrm{O_2}$
+        molecule) and compare with the resting consumption of
+        \qty{250}{mL/min}.
+  \item Why does a jumper's muscle not go into rigor even though ATP
+        is turned over at such a rate?
+  \item State the result: the strokes per \omterm{def:b2:cell-differentiation:fibre}{half-sarcomere}, the force
+        fraction at the jump's speed, and the ATP the jump costs.
+\end{enumerate}
+\end{problem}
