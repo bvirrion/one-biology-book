@@ -1,6 +1,616 @@
 \chapter{Conservation Biology}\label{ch:b3:conservation-biology}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1813 Audubon watched a flock of passenger pigeons pass over
+Kentucky for three days, darkening the sky; there were perhaps five
+billion of them, a quarter of all the birds in North America. On
+1~September 1914 the last one, a female named Martha, died in the
+Cincinnati Zoo. The species was not rare when its decline began; it
+was harvested by the trainload, and its forests were cut, and a bird
+that bred only in immense colonies could not breed once the colonies
+had thinned below some size no one measured. In 1995 the kakapo, a
+flightless nocturnal parrot of New Zealand, was down to fifty-one
+birds; every one has since been named, weighed, fitted with a
+transmitter and, at the right moment, offered a supplementary meal,
+and there are two hundred and fifty. In the same year thirty-one grey
+wolves were released into Yellowstone, seventy years after the last
+native pack had been shot; within two decades the elk had moved, the
+willows had come back along the rivers, and the beavers with them.
+Conservation biology is the application of this book's population
+genetics, ecology and behaviour to a single practical question --- how
+to keep species from disappearing --- and its arithmetic is the
+arithmetic of small numbers.
 
-\emph{This chapter has not been written yet.}
+\section{Why small populations die}
+
+\begin{definition}[The risks of smallness]\label{def:b3:conservation-biology:small}
+\index{demographic stochasticity}\index{environmental stochasticity}\index{Allee effect}\index{extinction vortex}\index{minimum viable population}
+A large population declines when its death rate exceeds its birth
+rate; a small one can vanish without any change in either.
+\emph{Demographic stochasticity} is the chance that, among a few
+individuals, more happen to die than are born, or all the survivors are
+male: it matters below a few dozen. \emph{Environmental stochasticity}
+--- a bad winter, a drought, a disease --- strikes every individual at
+once, and a population of a few hundred that a large one would ride out
+can be wiped out; \emph{catastrophes} are its tail. The \emph{Allee
+effect} makes the per-capita growth rate fall at low density --- mates
+cannot be found, colonial breeders cannot nest, herds cannot defend
+their young, the passenger pigeon's flocks could not saturate the
+predators that took their squabs --- so that below a threshold density
+the population declines toward zero on its own. And below a few
+hundred, the genetic processes of the next section reduce fitness
+generation by generation. These feed one another: a smaller population
+loses variation, becomes less fertile, grows smaller, is likelier to
+be hit by chance, and loses more --- the \emph{extinction vortex}
+(Gilpin and Soul\'e, 1986). A \emph{minimum viable population} is the
+size above which the probability of extinction over a stated horizon
+(say \qty{5}{\%} in a century) is acceptable; it depends on the species'
+biology and on how variable its environment is, and is usually in the
+thousands.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, thick, rounded corners, fill=omThm!20, align=center] (small) at (0,0) {population\\becomes small};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (drift) at (3.4,1.6) {drift and inbreeding:\\variation lost, $F$ rises};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (fit) at (6.8,0) {fitness falls:\\fewer young, more disease};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (chance) at (3.4,-1.6) {demographic and environmental\\chance bite harder};
+  \node[draw, thick, rounded corners, fill=omProp!25, align=center] (allee) at (9.9,0) {Allee effect:\\growth rate negative};
+  \draw[->, very thick] (small) -- (drift); \draw[->, very thick] (drift) -- (fit); \draw[->, very thick] (fit) -- (chance); \draw[->, very thick] (chance) -- (small);
+  \draw[->, thick, omProp!80!black] (fit) -- (allee); \draw[->, thick, omProp!80!black] (allee.south) .. controls (9.9,-3) and (0,-3.4) .. (small.south);
+  \node[align=center, font=\tiny] at (3.4,0) {the extinction vortex:\\each turn shrinks the\\population and speeds the next};
+  \node[left, align=right, font=\tiny] at (-1.7,1.5) {habitat loss, harvest,\\invasive predators, disease\\push the population in};
+  \draw[->, thick, gray] (-1.6,1.2) -- (small.north west);
+\end{tikzpicture}
+
+{\small The \omterm{def:b3:conservation-biology:small}{extinction vortex}. An external blow makes a population
+small; smallness then loses variation, lowers fitness, exposes the
+population to chance, and makes it smaller still. Conservation's task
+is to break the loop before it closes.}
+\end{omfigure}
+
+\begin{theorem}[Effective population size]\label{thm:b3:conservation-biology:ne}
+\index{effective population size}\index{sex ratio}\index{harmonic mean}\index{inbreeding coefficient}\index{heterozygosity}
+The rate at which a population loses variation and accumulates
+inbreeding is governed not by its census size $N$ but by its
+\emph{effective size} $N_{e}$: the size of an ideal population ---
+constant, randomly mating, equal \omterm{thm:b3:conservation-biology:ne}{sex ratio}, Poisson family sizes --- that
+would lose heterozygosity at the same rate. Three departures from the
+ideal lower it. Unequal \omterm{thm:b3:conservation-biology:ne}{sex ratio}, with $N_{m}$ breeding males and
+$N_{f}$ females:
+\[
+N_{e} = \frac{4N_{m}N_{f}}{N_{m} + N_{f}} ;
+\]
+one male and a hundred females give $N_{e} \approx 4$. Fluctuating size
+over $t$ generations: $N_{e}$ is the \emph{\omterm{thm:b3:conservation-biology:ne}{harmonic mean}} of the
+generation sizes, $1/N_{e} = (1/t)\sum 1/N_{i}$, dominated by the
+smallest --- a population of a thousand that once passed through ten
+has $N_{e}$ near a hundred over that span. And variance in family size
+above Poisson lowers it further. In a population of effective size
+$N_{e}$ the \emph{\omterm{thm:b3:conservation-biology:ne}{inbreeding coefficient}} $F$ --- the probability that
+the two alleles at a locus in an individual are copies of one ancestral
+allele --- rises by $1/2N_{e}$ per generation,
+\[
+F_{t} = 1 - \Bigl(1 - \frac{1}{2N_{e}}\Bigr)^{t} \approx \frac{t}{2N_{e}},
+\qquad H_{t} = H_{0}\Bigl(1 - \frac{1}{2N_{e}}\Bigr)^{t} ,
+\]
+and the \emph{heterozygosity} $H$ decays at the same rate. Franklin's
+rule of thumb, ``50/500'': $N_{e} \ge 50$ keeps inbreeding below
+\qty{1}{\%} a generation, the rate animal breeders tolerate; $N_{e} \ge
+500$ lets mutation replace the variation drift removes. Since $N_{e}$
+is typically a tenth of the census size, the rule asks for populations
+of five hundred to five thousand.
+\end{theorem}
+\begin{proof}
+Two gametes drawn at random from the population are copies of the same
+parental allele with probability $1/2N$ in the ideal population, which
+is $F$'s increment; heterozygosity is $1 - F$ scaled, so each
+generation multiplies it by $(1 - 1/2N_{e})$, giving the exponential
+decay and, for $t \ll N_{e}$, the linear rise of $F$. \omterm{thm:b3:conservation-biology:ne}{Sex ratio}: half
+the genes come from each sex, so the chance two gametes share a
+parental allele is $\tfrac{1}{4}\cdot\tfrac{1}{2N_{m}} +
+\tfrac{1}{4}\cdot\tfrac{1}{2N_{f}}$ (a quarter of pairs are both
+paternal, a quarter both maternal); setting this equal to $1/2N_{e}$
+gives $1/N_{e} = 1/(4N_{m}) + 1/(4N_{f})$, the formula. Fluctuation:
+heterozygosity after $t$ generations is $H_{0}\prod(1 - 1/2N_{i})
+\approx H_{0}\exp(-\sum 1/2N_{i})$, equal to $H_{0}\exp(-t/2N_{e})$
+when $1/N_{e}$ is the average of the $1/N_{i}$. Inbreeding lowers
+fitness because it exposes recessive deleterious alleles as
+homozygotes --- \emph{inbreeding depression}, a fall of several per cent
+in survival or fecundity per \qty{10}{\%} of $F$ in most outbreeding
+species.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.46\linewidth, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1, ymin=0, ymax=1.05,
+  xlabel={fraction of breeders that are male}, ylabel={$N_{e}/N$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,0.1,0.5,0.9,1}, ytick={0.36,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.005:0.995, samples=100] {4*x*(1-x)};
+\draw[dashed, gray] (axis cs:0.1,0) -- (axis cs:0.1,0.36) -- (axis cs:0,0.36);
+\node[font=\scriptsize, omDef, anchor=south] at (axis cs:0.5,1.0) {equal sexes: $N_{e} = N$};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:0.12,0.2) {one male in ten\\breeding: $N_{e} = 0.36N$};
+\end{axis}
+\begin{axis}[
+  at={(0.5\linewidth,0)}, anchor=south west,
+  width=0.46\linewidth, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=100, ymin=0, ymax=1.05,
+  xlabel={generations}, ylabel={heterozygosity $H_{t}/H_{0}$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,25,50,75,100}, ytick={0.37,0.6,0.9,1},
+  yticklabels={0.37,0.6,0.9,1},
+  clip=false,
+]
+\addplot[very thick, omThm, domain=0:100, samples=60] {(1-1/20)^x};
+\addplot[very thick, omMeth!70!black, domain=0:100, samples=60] {(1-1/100)^x};
+\addplot[very thick, omDef, domain=0:100, samples=60] {(1-1/1000)^x};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:12,0.55) {$N_{e} = 10$};
+\node[font=\scriptsize, omMeth!70!black, anchor=south west] at (axis cs:50,0.62) {$N_{e} = 50$};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:60,0.95) {$N_{e} = 500$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Left: how a skewed \omterm{thm:b3:conservation-biology:ne}{sex ratio} shrinks the effective size --- a
+harem species with a tenth of the males breeding has an $N_{e}$ a third
+of its census. Right: heterozygosity decaying by $(1 - 1/2N_{e})$ per
+generation --- a population of ten loses most of its variation in a
+century, one of five hundred almost none.}
+\end{omfigure}
+
+\begin{proof}[Evidence]
+The Florida panther, down to some twenty-five animals in the 1990s,
+showed kinked tails, undescended testicles, heart defects and sperm of
+which \qty{90}{\%} were abnormal --- inbreeding depression made visible;
+eight females introduced from Texas in 1995 (\emph{genetic rescue})
+tripled the population and the defects receded. The wolves of Isle
+Royale, founded by a pair in 1949 and isolated, declined to two
+grossly inbred individuals by 2018 with spinal deformities in most
+skeletons examined. The greater prairie chicken of Illinois fell from
+thousands to fifty, and its egg hatching rate from \qty{93}{\%} to
+\qty{56}{\%}, recovering after birds were brought from other states.
+Museum skins and ancient DNA let the loss of heterozygosity be
+measured directly against the pre-decline population in each case.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.4\linewidth]{images/book5/martha.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.52\linewidth]{images/book5/ai/b5-27-cheetah.jpg}
+
+{\small Left: Martha, the last passenger pigeon, photographed in the
+Cincinnati Zoo in 1912; the species had numbered billions within
+living memory (photograph by Enno Meyer, public domain). Right: a
+cheetah --- a species that passed through a bottleneck some ten thousand
+years ago and whose individuals are so alike that skin grafts between
+unrelated animals are not rejected.}
+\end{omfigure}
+
+\section{Habitat: how much, and in what shape}
+
+\begin{proposition}[Species and area]\label{prop:b3:conservation-biology:area}
+\index{species--area relationship}\index{habitat fragmentation}\index{island biogeography}\index{corridor}\index{SLOSS debate}\index{edge effect}
+Across islands, and across habitat fragments that behave like islands,
+the number of species $S$ rises with area $A$ as a power law,
+\[
+S = c\,A^{z}, \qquad z \approx 0.15\text{--}0.35,
+\]
+the \emph{\omterm{prop:b3:conservation-biology:area}{species--area relationship}} (Arrhenius, 1921; MacArthur and
+Wilson's \omterm{prop:b3:conservation-biology:area}{island biogeography}, 1967, explained it as a balance of
+immigration and extinction, extinction being faster on small islands).
+With $z = 0.25$, losing \qty{90}{\%} of a habitat's area eventually loses
+$1 - 0.1^{0.25} = \qty{44}{\%}$ of its species; losing half loses
+\qty{16}{\%}. The loss is not immediate --- an \emph{extinction debt} is
+paid over decades as populations too small for their fragments dwindle
+--- and \emph{fragmentation} of a fixed area into pieces adds losses of
+its own: each fragment holds a smaller population, \emph{\omterm{prop:b3:conservation-biology:area}{edge effects}}
+(wind, heat, predators, weeds) penetrate hundreds of metres into
+forest, and species that need the interior lose more than the area
+accounts for. Whether a single large reserve or several small ones of
+the same total area saves more species (the \emph{SLOSS} debate) depends
+on the species: the large one holds larger populations and interior
+habitat, the small ones spread the risk of a catastrophe and sample
+more habitat types. \emph{Corridors} that connect fragments let
+individuals and genes move between them, turning isolated populations
+into a metapopulation whose parts can be recolonised after local
+extinction and rescued from inbreeding --- which is why the land
+between reserves has become as much the concern as the reserves.
+\end{proposition}
+\begin{proof}
+The power law is empirical, fitted on log--log axes to archipelagos,
+lakes, mountaintops and forest fragments the world over; the value of
+$z$ is lower for pieces of a mainland (immigration keeps species
+present) and higher for true islands. The fractional loss follows
+directly: $S'/S = (A'/A)^{z}$. \omterm{prop:b3:conservation-biology:area}{Island biogeography}'s mechanism was
+tested by Simberloff and Wilson (1969), who fumigated small mangrove
+islets in Florida, killing every arthropod, and watched species
+numbers return to their previous values within a year --- an
+equilibrium, with different species than before: the number is set by
+area and distance, the identities by chance.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{loglogaxis}[
+  width=0.6\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0.5, xmax=20000, ymin=5, ymax=300,
+  xlabel={area (km$^2$)}, ylabel={number of species},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={1,10,100,1000,10000}, xticklabels={1,10,100,1000,10000}, ytick={10,30,100,300}, yticklabels={10,30,100,300},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.5:20000, samples=40] {20*x^0.25};
+\addplot[only marks, mark=*, mark size=1.8pt, omDef!70!black] coordinates {(1,22) (3,24) (10,38) (30,44) (100,66) (300,80) (1000,110) (3000,150) (10000,190)};
+\draw[dashed, gray] (axis cs:10000,5) -- (axis cs:10000,200) -- (axis cs:0.5,200);
+\draw[dashed, gray] (axis cs:1000,5) -- (axis cs:1000,112.5) -- (axis cs:0.5,112.5);
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:1.2,215) {$S = c\,A^{0.25}$: slope $z$ on log axes};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:1200,40) {lose \qty{90}{\%} of the area:\\keep $0.1^{0.25} = \qty{56}{\%}$\\of the species};
+\end{loglogaxis}
+\end{tikzpicture}
+
+{\small The species--area law on logarithmic axes. Its slope is the
+exponent $z$; from it the eventual loss of species from a shrunken
+habitat can be read --- a tenth of the forest keeps about half the
+species, and not the tenth a linear guess would give.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book5/ai/b5-27-forest-fragments.jpg}
+
+{\small Forest fragments in farmland, seen from the air: each island
+holds a population smaller than the whole did, edged by a zone the
+interior species cannot use, and separated by fields the forest species
+cannot cross.}
+\end{omfigure}
+
+\section{Predicting and preventing}
+
+\begin{method}[Population viability analysis]\label{met:b3:conservation-biology:pva}
+\index{population viability analysis}\index{quasi-extinction}
+To estimate a population's risk of extinction and what would reduce it:
+(1) build a model of its dynamics --- a matrix of age- or stage-specific
+survival and fecundity, as in the Year~2 volume's demography, estimated
+from marked individuals over several years; (2) add stochasticity ---
+demographic, by drawing each individual's fate at random, and
+environmental, by drawing each year's rates from their observed
+variance, with occasional catastrophes; (3) add density dependence and
+the genetic decline of inbreeding where data allow; (4) simulate
+thousands of trajectories from the current size over the horizon of
+interest and record the fraction that fall below a \emph{quasi-extinction}
+threshold (a size from which recovery is judged impossible); (5) vary
+the inputs --- adult survival, juvenile survival, habitat area, a
+translocation of ten animals --- and see which change most reduces the
+risk; that is where effort should go. The output is a probability with
+wide uncertainty, not a prediction; its value is comparative, and it
+has repeatedly shown that adult survival, not fecundity, is the lever
+in long-lived species, which is why fishing lines kill albatross
+populations that lay one egg every two years faster than any loss of
+nests could.
+\end{method}
+
+\begin{proposition}[Time to extinction]\label{prop:b3:conservation-biology:time}
+\index{extinction time}
+For a population that fluctuates because the environment does, with
+mean growth rate $\bar r$ near zero and variance $\sigma^{2}$ in the
+annual growth rate, the log of population size performs a random walk
+with drift, and the expected time to extinction from size $N$ grows
+only as the \emph{logarithm} of $N$ when $\bar r < 0$ --- doubling the
+population adds a fixed number of years --- and as a \emph{power} of
+$N$ when $\bar r > 0$, with exponent $2\bar r/\sigma^{2} - 1$; under
+\omterm{def:b3:conservation-biology:small}{demographic stochasticity} alone it grows \emph{exponentially} with
+$N$, so that a population safe from demographic chance at a hundred
+can still be lost to environmental variance at ten thousand. The
+practical consequence is that reducing the variance of a population's
+growth --- buffering it against bad years with more habitat, more
+sites, a wider diet --- can do more for its persistence than raising
+its mean.
+\end{proposition}
+\admitted
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+  width=0.62\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=50, ymin=1, ymax=3000,
+  xlabel={years}, ylabel={population size},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,10,20,30,40,50}, ytick={1,10,100,1000}, yticklabels={1,10,100,1000},
+  clip=false,
+]
+\addplot[thick, omDef] coordinates {(0,200) (2,240) (4,190) (6,260) (8,300) (10,220) (12,180) (14,250) (16,330) (18,280) (20,350) (22,300) (24,260) (26,340) (28,420) (30,380) (32,450) (34,400) (36,520) (38,480) (40,560) (42,500) (44,600) (46,650) (48,610) (50,700)};
+\addplot[thick, omThm] coordinates {(0,200) (2,150) (4,180) (6,120) (8,90) (10,110) (12,70) (14,50) (16,60) (18,35) (20,40) (22,25) (24,18) (26,22) (28,12) (30,8) (32,9) (34,5) (36,3) (38,2) (40,1)};
+\addplot[thick, omMeth!70!black] coordinates {(0,200) (2,210) (4,170) (6,200) (8,140) (10,160) (12,120) (14,140) (16,90) (18,110) (20,80) (22,95) (24,60) (26,75) (28,50) (30,55) (32,40) (34,45) (36,30) (38,35) (40,28) (42,30) (44,22) (46,25) (48,20) (50,22)};
+\draw[dashed, gray] (axis cs:0,20) -- (axis cs:50,20); \node[font=\scriptsize, gray, anchor=north east] at (axis cs:49,18) {quasi-extinction threshold};
+\node[font=\scriptsize, omDef, anchor=west] at (axis cs:50.5,700) {$\bar r > 0$: persists};
+\node[font=\scriptsize, omMeth!70!black, anchor=west] at (axis cs:50.5,22) {$\bar r \approx 0$: drifting down};
+\node[font=\scriptsize, omThm, anchor=west] at (axis cs:40.5,1.3) {$\bar r < 0$: gone in 40 years};
+\end{semilogyaxis}
+\end{tikzpicture}
+
+{\small Three simulated trajectories from the same two hundred animals,
+differing only in mean growth rate; a viability analysis runs
+thousands of these and counts how many cross the threshold. The
+variance from year to year is what makes even the middle case a
+gamble.}
+\end{omfigure}
+
+\begin{definition}[The tools]\label{def:b3:conservation-biology:tools}
+\index{IUCN Red List}\index{invasive species}\index{ex situ conservation}\index{captive breeding}\index{reintroduction}\index{rewilding}\index{trophic cascade}
+The \emph{IUCN Red List} classifies species by quantitative criteria:
+a decline of \qty{30}{\%}, \qty{50}{\%} or \qty{80}{\%} over ten years or
+three generations, a range below \qty{20000}{}, \qty{5000}{} or
+\qty{100}{km^2}, a population below \qty{10000}{}, \qty{2500}{} or
+\qty{250}{} mature individuals, or a modelled extinction probability,
+place a species as Vulnerable, Endangered or Critically Endangered; a
+quarter of mammals and an eighth of birds qualify. The causes are
+habitat loss first, then over-harvest, \emph{invasive species}
+(predators and competitors carried to islands whose species had never
+met them: rats, cats and stoats have taken most of New Zealand's birds,
+a single brown tree snake species most of Guam's), pollution and
+climate change. The responses: protected areas covering a sixth of the
+land; the control or eradication of invaders (a hundred and fifty
+islands cleared of rats); \emph{ex situ} conservation --- seed banks
+holding a million accessions in a vault in the Arctic permafrost,
+frozen embryos, and \emph{captive breeding} with pedigrees managed to
+minimise kinship, which brought the California condor back from
+twenty-two birds in 1987 and the black-footed ferret from eighteen;
+\emph{reintroduction}, which succeeds about a third of the time and
+more often when the cause of the original loss has been removed; and
+\emph{rewilding}, the return of large animals and the processes they
+drive --- Yellowstone's wolves, whose predation and the fear of it moved
+the elk off the riverbanks and let willow, aspen, beaver and songbirds
+return, a \emph{trophic cascade} that runs from a carnivore to the shape
+of a river.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/kakapo-sirocco.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.46\linewidth]{images/book5/yellowstone-wolves-1996.jpg}
+
+{\small Left: Sirocco, a kakapo --- one of fifty-one survivors in 1995,
+now one of some two hundred and fifty, every one named and monitored on
+predator-free islands (photograph: Department of Conservation, New
+Zealand, CC BY 2.0). Right: wolves in Yellowstone in 1996, the first
+winter after their \omterm{def:b3:conservation-biology:tools}{reintroduction} (photograph: National Park Service,
+public domain).}
+\end{omfigure}
+
+\begin{example}[Three recoveries]\label{ex:b3:conservation-biology:recoveries}
+The kakapo: fifty-one birds in 1995, all moved to islands cleared of
+predators; every bird carries a transmitter, every nest is watched by
+camera, chicks are hand-reared when a mother fails, males are fed to
+bring them into breeding condition in the years the rimu trees fruit,
+and the pedigree is managed to keep the last Fiordland male's rare
+genes in the population; every kakapo's genome has been sequenced.
+Two hundred and fifty now, and a $N_{e}$ that the genomes put near a
+hundred. The whooping crane: fifteen birds in 1941, a single migratory
+flock, bred in captivity from eggs taken from wild nests, taught new
+migration routes behind ultralight aircraft, and now some eight
+hundred. The humpback whale: hunted to a few thousand, protected in
+1966, and past a hundred thousand, an increase near \qty{8}{\%} a year
+that shows what a long-lived animal does when the single cause of its
+decline is removed. Each recovery cost tens of millions and decades;
+the arithmetic of the chapter says why the effort had to be spent
+before the numbers reached the vortex, and why it was cheaper than any
+later rescue would have been.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book5/ai/b5-27-seed-vault.jpg}
+
+{\small A seed vault in permafrost: duplicates of a million crop and
+wild-plant accessions, kept at \qty{-18}{\celsius} against the loss of
+the collections they came from --- conservation as insurance, at the
+scale of a species' genome.}
+\end{omfigure}
+
+\begin{remark}[The arithmetic of keeping]\label{rem:b3:conservation-biology:remark}
+Every chapter of this course has ended in a number, and this one ends
+in several: an effective size, an \omterm{thm:b3:conservation-biology:ne}{inbreeding coefficient} rising by
+$1/2N_{e}$ a generation, an exponent $z$ that turns lost hectares into
+lost species, a probability of extinction over a century. They are
+crude --- the census is uncertain, the variance is guessed, the model
+is a caricature --- and they are what turns a sentiment about
+vanishing birds into a decision about which fifty hectares to buy and
+which eight animals to move. The biology is the same biology as the
+rest of the book: drift, selection, demography, behaviour, the
+dependence of a population on its habitat and of a habitat on its
+populations. What is new is only the urgency, and the fact that the
+experiment is being run once, without a control, on the species that
+are left.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:conservation-biology:1}
+Define \omterm{def:b3:conservation-biology:small}{demographic stochasticity}, \omterm{def:b3:conservation-biology:small}{environmental stochasticity} and the
+\omterm{def:b3:conservation-biology:small}{Allee effect}, and give one example of each from the chapter.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:conservation-biology:2}
+What is the \omterm{thm:b3:conservation-biology:ne}{effective population size}, and name three features of a
+real population that make it smaller than the census.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:conservation-biology:3}
+State the species--area law. If $z = 0.25$, what fraction of species
+does a habitat keep after losing half its area? Nine tenths? Ninety-nine
+hundredths?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:conservation-biology:4}
+Explain the 50/500 rule, and what each number protects against.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:conservation-biology:5}
+A herd of 200 elephant seals has 8 breeding males and 120 breeding
+females. Compute $N_{e}$ and the loss of heterozygosity per generation.
+How many generations to lose a quarter of it?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:conservation-biology:6}
+A population numbered 1000, 1000, 20, 1000, 1000 in five successive
+generations. Compute $N_{e}$ over the span, and the heterozygosity
+retained, and compare with a constant 1000.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:conservation-biology:7}
+Twenty-five Florida panthers with $N_{e} \approx 10$: inbreeding
+accumulated in 5 generations? If fitness falls \qty{5}{\%} for every
+\qty{10}{\%} of $F$, by how much has fitness fallen? What does adding
+eight unrelated females do to $F$ in the next generation?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:conservation-biology:8}
+Yellowstone: 31 wolves released in 1995--96, about 100 in the park by
+2003. Estimate $r$; how many would there be in 2020 if growth continued,
+and why did it not?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:conservation-biology:9}
+Classify by the IUCN criteria in the chapter: (a) a frog whose
+population fell \qty{60}{\%} in ten years; (b) a plant of 180 mature
+individuals; (c) a fish whose range is \qty{3000}{km^2}; (d) a bird of
+\num{30000} individuals declining \qty{10}{\%} a decade.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:conservation-biology:10}
+A population of $N$ pairs each producing, with probability $1/2$, two
+surviving offspring and otherwise none (\omterm{def:b3:conservation-biology:small}{demographic stochasticity}).
+Compute the probability that the whole population fails in one
+generation for $N = 2$, $5$, $10$, $20$, and comment on how
+demographic risk scales with $N$.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:conservation-biology:11}
+The species--area law with $z = 0.25$, and a forest cut into 10 equal
+isolated fragments. Compare the species expected in one fragment with
+a tenth of the original, and argue why the total across fragments is
+not simply the original --- what determines whether the fragments
+together hold more or fewer species than the whole did?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:conservation-biology:12}
+Why does adding a few migrants per generation ($m N_{e} \approx 1$)
+largely stop the loss of variation in a small population, and what does
+it cost in local adaptation? Use the balance between drift, $1/2N_{e}$,
+and the fraction of alleles replaced by migrants, $m$, to argue.
+\end{exercise}
+
+\section{Problem: Fifty and Five Hundred}
+
+\begin{problem}[{Weekend problem --- a recovery programme in numbers: the
+effective size of a rescued parrot population and its inbreeding, a
+genetic rescue, the species a shrinking forest will keep, the growth
+of reintroduced wolves, and the categories and costs, ending on $N_{e}$,
+the inbreeding after ten generations and the fraction of species kept}]
+\label{pb:b3:conservation-biology:1}
+Data: a parrot population of 60 adults, 20 males and 40 females, all
+breeding; generation time \qty{10}{yr}. Population history over the last
+five generations: 500, 100, 60, 51, 60. Inbreeding depression:
+fitness falls by \qty{6}{\%} for each \qty{0.1}{} of $F$. Rescue: 10
+unrelated birds added to 60. Forest: \qty{2000}{km^2} reduced to
+\qty{300}{km^2}, $z = 0.25$; species now 180. Wolves: 31 released, 100
+after 8 years, carrying capacity in the park about 120. Cost: four
+million dollars a year for the parrots.
+
+\medskip
+\noindent\textbf{Part I --- Effective size.}
+\begin{enumerate}
+  \item $N_{e}$ from the \omterm{thm:b3:conservation-biology:ne}{sex ratio} of the current 60. Compare with the
+        census.
+  \item Harmonic-mean $N_{e}$ over the five generations of history.
+        Which generation dominates?
+  \item Inbreeding accumulated over those five generations, using the
+        harmonic-mean $N_{e}$ (exact formula and linear approximation).
+  \item Fitness lost to that inbreeding.
+  \item Heterozygosity retained after the five generations, as a
+        fraction of the original.
+  \item If the population is now held at 60 with the current \omterm{thm:b3:conservation-biology:ne}{sex
+        ratio}, what $F$ will it reach in ten more generations, and what
+        fitness loss? How many years is that?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Rescue.}
+\begin{enumerate}[resume]
+  \item Ten unrelated birds join the 60. The fraction of alleles in the
+        next generation from the newcomers is about $10/70$; the
+        \omterm{thm:b3:conservation-biology:ne}{inbreeding coefficient} of offspring with one native and one
+        newcomer parent is $0$. Estimate the population's mean $F$ in
+        the next generation if mating is random.
+  \item Explain why $F$ falls at once but heterozygosity rises only as
+        the migrants' alleles spread, and why a second rescue may be
+        needed.
+  \item To reach $N_{e} = 500$ with an equal \omterm{thm:b3:conservation-biology:ne}{sex ratio}, how many adults
+        are needed? At $r = \qty{0.05}{yr^{-1}}$ from 70 birds, how many
+        years?
+  \item The programme removes eggs from poor mothers for hand-rearing,
+        raising the mean number of fledged chicks per pair but equalising
+        family sizes. Why does equalising family sizes \emph{raise}
+        $N_{e}$ above the census (toward $2N$)?
+  \item The last male of a distinct southern lineage is sterile in the
+        wild. Propose two interventions and their costs to the gene
+        pool.
+  \item At four million dollars a year over the 40 years to reach
+        $N_{e} = 500$, total cost, and cost per bird added. Is that expensive? Against
+        what?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Forest.}
+\begin{enumerate}[resume]
+  \item Fraction of species the forest will keep at \qty{300}{km^2};
+        expected number of species, and the extinction debt (species
+        present now that will be lost).
+  \item If instead the \qty{300}{km^2} were three isolated fragments of
+        \qty{100}{km^2}, species per fragment; total if the fragments
+        held entirely different species; total if identical. What
+        decides?
+  \item A corridor of \qty{20}{km^2} joins the three fragments. Treat
+        them as one area of \qty{320}{km^2}: species expected. Compare
+        with question~14's identical-species case.
+  \item The forest's largest predator needs \qty{50}{km^2} per pair and
+        an $N_{e}$ of 50 to persist. Can the whole \qty{300}{km^2} hold
+        it? Can a fragment? What does this say about area versus number
+        of species as a criterion?
+  \item Estimate how long the extinction debt takes to be paid if the
+        species lost have populations declining at \qty{3}{\%} a year
+        from 200 to a quasi-extinction threshold of 10.
+  \item Why does the species--area law underestimate the loss when
+        fragmentation adds \omterm{prop:b3:conservation-biology:area}{edge effects}, and overestimate it when the
+        surrounding land is partly usable?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Wolves and lists.}
+\begin{enumerate}[resume]
+  \item Wolves: $r$ from $31 \to 100$ in 8 years, and the doubling time.
+  \item Logistic growth toward $K = 120$: population after 8 years
+        under logistic rather than exponential growth, starting from 31
+        with the $r$ of question~19 (use $N(t) = K/[1 + (K/N_{0} -
+        1)\mathrm{e}^{-rt}]$). Which fits the observed 100 better, and what
+        does that say about density dependence in the first years?
+  \item The elk numbered \num{17000} in 1995 and \num{4000} in 2015.
+        Average annual rate of decline. How much of it can wolves eating
+        \num{20} elk each a year account for at 100 wolves?
+  \item Classify the parrot (60 mature individuals) and the pre-rescue
+        forest predator by the IUCN criteria.
+  \item Passenger pigeon: five billion in 1800, extinct in 1914. If the
+        decline was exponential from 1870, when there were still
+        billions, to one bird in 1914, what annual rate does that imply?
+        Why does the \omterm{def:b3:conservation-biology:small}{Allee effect} make the last decades faster than
+        exponential?
+  \item Explain in a paragraph why a PVA would have said the passenger
+        pigeon was safe in 1850, and what it would have missed.
+  \item Summarise: the current $N_{e}$ (question~1), $F$ after ten more
+        generations at 60 (question~6), and the fraction of species the
+        shrunken forest keeps (question~13).
+\end{enumerate}
+\end{problem}

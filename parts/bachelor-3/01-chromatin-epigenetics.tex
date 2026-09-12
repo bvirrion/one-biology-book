@@ -1,6 +1,794 @@
 \chapter{Chromatin and Epigenetics}\label{ch:b3:chromatin-epigenetics}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Two mice from the same litter, genetically identical down to the last
+base, sit side by side: one is slim and brown, the other plump and
+yellow, and it will become diabetic. A calico cat wears patches of
+orange and black although every cell of her skin carries the same two
+X chromosomes. A child inherits the same deleted stretch of chromosome
+15 as another child, and one has Prader--Willi syndrome while the other
+has Angelman syndrome --- the difference is only which parent the
+deletion came from. None of this is written in the DNA sequence. It is
+written \emph{on} it: in the way two metres of DNA are packed into a
+nucleus ten micrometres across, in the small chemical groups attached to
+the packing proteins and to the cytosines themselves, and in the
+machinery that copies those marks from a cell to its daughters. This
+chapter is about that second layer of information, its molecular
+carriers, and the honest limits of what it can remember.
 
-\emph{This chapter has not been written yet.}
+\section{Chromatin: DNA on a spool}
+
+\begin{definition}[Nucleosome and chromatin]\label{def:b3:chromatin-epigenetics:nucleosome}
+\index{nucleosome}\index{chromatin}\index{histone}\index{euchromatin}\index{heterochromatin}
+\emph{Chromatin} is the complex of DNA with proteins in which the
+genome exists in a eukaryotic nucleus. Its repeating unit is the
+\emph{nucleosome}: \qty{147}{bp} of DNA wound in $1.65$ left-handed
+turns around a \emph{histone} octamer --- two copies each of the small,
+very basic proteins H2A, H2B, H3 and H4 --- followed by a
+\emph{linker} of \qtyrange{20}{60}{bp} to the next nucleosome. A fifth
+histone, H1, binds the linker where it enters and leaves the core and
+helps the beads pack against one another. Each core histone carries an
+unstructured amino-terminal \emph{tail} of some \numrange{20}{40}
+residues that projects out of the particle. Chromatin that stains
+lightly, is loosely packed and is transcribed is \emph{euchromatin};
+densely packed, late-replicating and largely silent chromatin, at
+centromeres, telomeres and repeated sequences, is \emph{heterochromatin}.
+\end{definition}
+
+\begin{proof}[Evidence]
+Hewish and Burgoyne (1973) digested rat liver nuclei with an endogenous
+nuclease and found that the DNA came out not as a smear but as a ladder
+of fragments whose lengths were multiples of about \qty{200}{bp}: the
+DNA was protected at regular intervals and cut only between them.
+Kornberg (1974) showed that the protected unit was a particle of eight
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{histones} with about \qty{200}{bp}, and electron micrographs of gently
+spread \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin} showed the ``beads on a string''. Luger and
+colleagues (1997) solved the crystal structure of the core particle at
+\qty{2.8}{\angstrom}: \qty{147}{bp}, an octamer with the tails passing
+out between the DNA gyres.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % beads on a string
+  \foreach \x/\y in {0/0, 2.2/0.5, 4.4/0, 6.6/0.5, 8.8/0} {
+    \fill[omDef!30] (\x,\y) circle (0.42);
+    \draw[very thick, omThm!70!black] (\x,\y) circle (0.5);
+  }
+  \draw[very thick, omThm!70!black] (-1.1,-0.1) -- (0-0.47,-0.17);
+  \draw[very thick, omThm!70!black] (0.47,-0.17) -- (2.2-0.47,0.33);
+  \draw[very thick, omThm!70!black] (2.67,0.33) -- (4.4-0.47,-0.17);
+  \draw[very thick, omThm!70!black] (4.87,-0.17) -- (6.6-0.47,0.33);
+  \draw[very thick, omThm!70!black] (7.07,0.33) -- (8.8-0.47,-0.17);
+  \draw[very thick, omThm!70!black] (9.27,-0.17) -- (10.4,-0.1);
+  % tails
+  \foreach \x/\y in {0/0, 4.4/0, 8.8/0} { \draw[omProp, thick] (\x,\y+0.5) .. controls (\x-0.2,\y+0.9) .. (\x+0.1,\y+1.15); \draw[omProp, thick] (\x,\y-0.5) .. controls (\x+0.2,\y-0.9) .. (\x-0.1,\y-1.15); }
+  \foreach \x/\y in {2.2/0.5, 6.6/0.5} { \draw[omProp, thick] (\x,\y+0.5) .. controls (\x-0.2,\y+0.9) .. (\x+0.1,\y+1.15); }
+  % H1
+  \fill[omMeth!70!black] (1.55,0.05) circle (0.12); \fill[omMeth!70!black] (5.95,0.05) circle (0.12);
+  % labels
+  \node[above, align=center] at (2.2,1.75) {histone tails\\(acetylation, methylation)};
+  \node[below, align=center] at (4.4,-1.35) {core particle: octamer\\$+$ \qty{147}{bp}, $1.65$ turns};
+  \node[below, align=center] at (7.7,-0.55) {linker DNA\\\qtyrange{20}{60}{bp}};
+  \node[below] at (5.95,-0.1) {H1};
+  \draw[<->] (-0.5,-2.2) -- (2.2-0.5,-2.2) node[midway, below] {repeat $\approx \qty{200}{bp}$, \qty{11}{nm}};
+  \draw[gray] (-0.5,-1.95) -- (-0.5,-2.35); \draw[gray] (1.7,-1.95) -- (1.7,-2.35);
+\end{tikzpicture}
+
+{\small The \qty{10}{nm} fibre: \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome} cores (blue) on a continuous
+DNA (red), each bead a \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} octamer with its tails (orange) projecting
+out, linker \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} H1 (green) at the entry--exit point. About six
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} occupy the length that \qty{1200}{bp} of naked DNA would.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book5/ai/b5-01-nucleosomes.jpg}
+
+{\small \omterm{def:b3:chromatin-epigenetics:nucleosome}{Chromatin} at the molecular scale: the double helix wound around
+successive \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} cores, the ``beads on a string'' that the nuclease
+ladder revealed.}
+\end{omfigure}
+
+\begin{proposition}[Levels of compaction]\label{prop:b3:chromatin-epigenetics:compaction}
+\index{packing ratio}\index{chromatin loop}\index{topologically associating domain}
+The \emph{\omterm{prop:b3:chromatin-epigenetics:compaction}{packing ratio}} of a \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin} structure is the length of the
+DNA it contains divided by the length of the structure. Wrapping into
+the \qty{10}{nm} fibre gives a ratio of about $6$: the \qty{68}{nm} of a
+\qty{200}{bp} repeat is compressed into one \qty{11}{nm} bead. In the
+interphase nucleus the fibre is not wound into a regular thicker fibre,
+as textbooks long drew it, but folded into \emph{loops} of tens to
+hundreds of kilobases that are held at their bases by ring-shaped
+cohesin complexes and by the DNA-binding protein CTCF; the loops group
+into \emph{\omterm{prop:b3:chromatin-epigenetics:compaction}{topologically associating domains}} (TADs) of about a
+megabase within which a gene meets its regulators far more often than
+it meets anything outside. A mitotic chromosome, the most compact
+state, has a \omterm{prop:b3:chromatin-epigenetics:compaction}{packing ratio} near \num{10000}: the \qty{4}{cm} of DNA in
+an average human chromosome are folded into a rod \qty{4}{\micro m}
+long.
+\end{proposition}
+
+\begin{example}[Two metres in ten micrometres]\label{ex:b3:chromatin-epigenetics:two-metres}
+A human diploid nucleus holds $6.4\times 10^{9}$ base pairs. At
+\qty{0.34}{nm} per base pair that is \qty{2.2}{m} of double helix, in a
+nucleus about \qty{10}{\micro m} across. It is packed into
+$6.4\times 10^{9}/200 \approx 3.2\times 10^{7}$ \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes}, each
+carrying about \qty{108}{kDa} of \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} against \qty{96}{kDa} of DNA
+(\qty{147}{bp} at \qty{650}{Da} per pair): the nucleus contains roughly
+as much \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} as DNA by mass. The DNA itself, treated as a cylinder
+\qty{2}{nm} across, has a volume of only about \qty{7}{\micro m^3},
+some \qty{1}{\%} of a spherical nucleus of radius \qty{5}{\micro m};
+the packing problem is one of entanglement and access, not of room.
+\end{example}
+
+\section{The histone code}
+
+\begin{definition}[Histone modifications]\label{def:b3:chromatin-epigenetics:histone-code}
+\index{histone code}\index{acetylation}\index{histone methylation}\index{writer}\index{reader}\index{eraser}
+The residues of the \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} tails are covalently modified:
+\emph{acetylation} of lysines (which neutralises their positive charge
+and loosens the grip on DNA), \emph{methylation} of lysines and
+arginines (one, two or three methyl groups, with no change of charge),
+phosphorylation of serines, ubiquitination of lysines. A modification is
+named by \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone}, residue and group: H3K4me3 is \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} H3, lysine 4,
+trimethylated; H3K27ac is H3 lysine 27 acetylated. The \emph{\omterm{def:b3:chromatin-epigenetics:nucleosome}{histone}
+code} is the correlation between combinations of marks and the state
+of the underlying gene: H3K4me3 and H3K27ac at active promoters and
+enhancers, H3K36me3 along transcribed gene bodies, H3K9me3 on
+constitutive \omterm{def:b3:chromatin-epigenetics:nucleosome}{heterochromatin}, H3K27me3 on genes silenced during
+development. Enzymes that add a mark are \emph{writers} (\omterm{def:b3:chromatin-epigenetics:nucleosome}{histone}
+acetyltransferases, HATs; methyltransferases), enzymes that remove it
+are \emph{erasers} (\omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} deacetylases, HDACs; demethylases), and
+proteins that bind a mark and act on it are \emph{readers}: a
+\emph{bromodomain} binds acetyl-lysine, a \emph{chromodomain}
+methyl-lysine.
+\end{definition}
+
+\begin{proposition}[Marks are read, not merely felt]\label{prop:b3:chromatin-epigenetics:readers}
+\index{HP1}\index{Polycomb}\index{PRC2}\index{Trithorax}
+\omterm{def:b3:chromatin-epigenetics:histone-code}{Acetylation} acts partly by electrostatics --- an acetylated tail holds
+its DNA less tightly and the fibre opens --- but most marks act by
+recruiting \omterm{def:b3:chromatin-epigenetics:histone-code}{readers}. H3K9me3 is bound by the chromodomain of the
+\emph{\omterm{def:b3:chromatin-epigenetics:nucleosome}{heterochromatin} protein HP1}, which dimerises, bridges
+neighbouring \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} and recruits the very methyltransferase
+(SUV39H) that writes H3K9me3 on the next \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome}: the mark spreads
+along the fibre until it meets a boundary, and compacts what it
+covers. H3K27me3 is written by \emph{Polycomb repressive complex 2}
+(PRC2, catalytic subunit EZH2), read by PRC1, which ubiquitinates H2A
+and compacts the fibre, and the complex is itself stimulated by the
+mark it makes; the \emph{Trithorax} group of proteins writes the
+opposing H3K4me3 and keeps the developmental genes of a given cell type
+on. Each such loop --- \omterm{def:b3:chromatin-epigenetics:histone-code}{reader} recruits \omterm{def:b3:chromatin-epigenetics:histone-code}{writer} --- is a positive feedback
+that lets a state maintain itself once established, which is what a
+heritable mark needs.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % nucleosomes with tails
+  \foreach \x in {0,2,4,6} { \draw[thick, omDef, fill=omDef!20] (\x,0) circle (0.45); \draw[omProp, thick] (\x,0.45) -- (\x,1.15); }
+  % marks
+  \fill[omThm] (2,1.15) circle (0.11); \fill[omThm] (4,1.15) circle (0.11);
+  \fill[omMeth!80!black] (0,1.15) circle (0.11);
+  \node[left] at (-0.5,1.15) {ac};
+  \node[right, align=left] at (6.15,1.15) {me3};
+  % HP1 reader
+  \draw[thick, fill=omExo!30] (2.6,1.7) ellipse (0.5 and 0.25); \node at (2.6,1.7) {reader};
+  \draw[thick, fill=omExo!30] (4.2,2.35) ellipse (0.55 and 0.25); \node at (4.2,2.35) {writer};
+  \draw[->, thick] (2.9,1.9) -- (3.75,2.2);
+  \draw[->, thick, omThm] (4.6,2.15) .. controls (5.6,2.0) and (6.1,1.8) .. (6.05,1.3);
+  \node[right, align=left, font=\scriptsize] at (6.6,2.0) {spreads to the\\next nucleosome};
+  \draw[->, thick, gray] (2.2,1.3) -- (2.45,1.5);
+  % eraser
+  \draw[thick, fill=omExo!30] (0.6,2.2) ellipse (0.5 and 0.25); \node at (0.6,2.2) {eraser};
+  \draw[->, thick, omMeth!80!black] (0.3,2.0) -- (0.05,1.35);
+  % DNA
+  \draw[very thick, omThm!70!black] (-0.9,-0.3) -- (-0.45,-0.05) (0.45,-0.05) -- (1.55,-0.05) (2.45,-0.05) -- (3.55,-0.05) (4.45,-0.05) -- (5.55,-0.05) (6.45,-0.05) -- (7.2,-0.3);
+  \node[below, align=center] at (0,-0.6) {open: acetyl group\\removes a charge};
+  \node[below, align=center] at (5,-0.6) {closed: H3K9me3 read by HP1,\\which recruits the K9 methylase};
+\end{tikzpicture}
+
+{\small The writer--reader--eraser logic. A \omterm{def:b3:chromatin-epigenetics:histone-code}{reader} bound to a mark on
+one \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome} recruits the \omterm{def:b3:chromatin-epigenetics:histone-code}{writer} that puts the same mark on the next,
+so the state spreads and copies itself; \omterm{def:b3:chromatin-epigenetics:histone-code}{erasers} oppose it. Acetyl
+groups (green) open the fibre; H3K9me3 (red) closes it.}
+\end{omfigure}
+
+\begin{method}[Chromatin immunoprecipitation (ChIP)]\label{met:b3:chromatin-epigenetics:chip}
+\index{ChIP}\index{chromatin immunoprecipitation}
+To map where a mark or a protein sits on the genome: (1) cross-link
+proteins to DNA in living cells with formaldehyde; (2) shear the
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin} into fragments of a few hundred base pairs; (3) precipitate
+the fragments with an antibody against the mark (say H3K27me3) bound to
+beads; (4) reverse the cross-links and purify the DNA; (5) sequence it
+(ChIP-seq) and count reads along the genome: peaks are the places
+where the mark was. A control of input DNA without antibody sets the
+background. The resolution is that of the fragments, about one
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome}.
+\end{method}
+
+\begin{remark}[Code or correlation]\label{rem:b3:chromatin-epigenetics:code}
+The word ``code'' overstates the case. Many marks are consequences of
+transcription rather than causes of it (H3K36me3 is deposited by a
+methyltransferase riding with the polymerase), and removing a \omterm{def:b3:chromatin-epigenetics:histone-code}{writer}
+often changes expression far less than the mark's distribution
+suggests. What is well established is that a few marks --- H3K9me3,
+H3K27me3, and \omterm{def:b3:chromatin-epigenetics:methylation}{DNA methylation} below --- carry self-propagating
+silencing that outlives the signal that set it up.
+\end{remark}
+
+\section{DNA methylation and the copying of a mark}
+
+\begin{definition}[DNA methylation]\label{def:b3:chromatin-epigenetics:methylation}
+\index{DNA methylation}\index{CpG}\index{CpG island}\index{DNMT1}\index{maintenance methylation}\index{de novo methylation}
+In vertebrates a methyl group is added to carbon 5 of cytosine almost
+only in the dinucleotide \emph{CpG} (a C followed by a G on the same
+strand), a sequence that is its own complement, so that a methylated
+CpG is normally methylated on both strands. Some \qtyrange{70}{80}{\%}
+of the CpGs of a human cell are methylated, and methylated promoters
+are silent: the methyl groups are read by methyl-CpG-binding proteins
+(MeCP2, MBD1--4) that recruit HDACs and H3K9 methylases, and they
+block several transcription factors directly. The exceptions are the
+\emph{CpG islands}, stretches of about a kilobase, rich in G and C
+and in CpG, that sit at the promoters of most housekeeping genes and
+stay unmethylated in normal cells. The methyl group is written by
+\emph{DNA methyltransferases}: DNMT3A and DNMT3B perform \emph{de novo
+methylation} of unmethylated sites, and \emph{DNMT1}, which prefers a
+hemimethylated CpG --- one strand methylated, the other not --- performs
+\emph{maintenance methylation} behind the replication fork. Removal is
+passive, by replication without maintenance, or active, by the TET
+enzymes, which oxidise 5-methylcytosine to 5-hydroxymethylcytosine and
+beyond until base-excision repair replaces it with a plain cytosine.
+\end{definition}
+
+\begin{example}[Why the genome is short of CpG]\label{ex:b3:chromatin-epigenetics:cpg-deficit}
+The human genome is \qty{42}{\%} G$+$C, so if bases were independent a
+\omterm{def:b3:chromatin-epigenetics:methylation}{CpG} would occur with frequency $0.21\times 0.21 \approx 0.044$, about
+$2.8\times 10^{8}$ times in the diploid genome. The observed number is
+about $5.6\times 10^{7}$, one fifth of that. The reason is the mark
+itself: a methylated cytosine that loses its amino group becomes
+thymine, a normal base that repair cannot recognise as wrong, whereas
+an unmethylated cytosine deaminates to uracil, which is excised. Over
+evolutionary time methylated \omterm{def:b3:chromatin-epigenetics:methylation}{CpGs} have mutated into TpG and CpA, and
+only the unmethylated islands have kept their \omterm{def:b3:chromatin-epigenetics:methylation}{CpGs}. The mark has left
+its signature in the sequence.
+\end{example}
+
+\begin{theorem}[Maintenance of a methylation state through divisions]\label{thm:b3:chromatin-epigenetics:maintenance}
+\index{epigenetic memory}\index{Markov chain!methylation}
+Consider one \omterm{def:b3:chromatin-epigenetics:methylation}{CpG} site, followed along a lineage of cells. At each
+division the new strand's cytosine is methylated with probability
+$\mu$ if the template strand's cytosine is methylated (maintenance
+efficiency) and with probability $\delta$ if it is not (de novo rate).
+Let $p_{n}$ be the probability that the site is methylated after $n$
+divisions. Then
+\[
+p_{n+1} = \mu\, p_{n} + \delta\,(1 - p_{n}),
+\qquad
+p_{n} = p^{*} + (p_{0} - p^{*})\,(\mu - \delta)^{n},
+\qquad
+p^{*} = \frac{\delta}{1 - \mu + \delta}.
+\]
+Every site drifts toward the same equilibrium $p^{*}$, whatever its
+starting state, and the memory of the initial state decays
+geometrically with ratio $\mu - \delta$. A mark is remembered for
+about $1/(1 - \mu + \delta)$ divisions; faithful memory of a
+\emph{difference} between sites therefore requires $\mu$ very close to
+$1$ and $\delta$ very close to $0$, or a feedback that makes $\mu$ and
+$\delta$ depend on the state of the neighbourhood.
+\end{theorem}
+\begin{proof}
+The recurrence is the law of total probability over the two states of
+the template. Its fixed point solves $p^{*} = \mu p^{*} + \delta(1 -
+p^{*})$, giving $p^{*}(1 - \mu + \delta) = \delta$. Subtracting the
+fixed-point equation from the recurrence, $p_{n+1} - p^{*} = (\mu -
+\delta)(p_{n} - p^{*})$, which iterates to the closed form. Since
+$0 \le \delta \le \mu \le 1$, the ratio $\mu - \delta$ lies in $[0,1]$
+and the deviation shrinks; it is halved every $\ln 2 / (-\ln(\mu -
+\delta)) \approx \ln 2/(1 - \mu + \delta)$ divisions when $\mu -
+\delta$ is near $1$.
+\end{proof}
+
+\begin{example}[Numbers]\label{ex:b3:chromatin-epigenetics:maintenance-numbers}
+Measured values for mammalian cells are $\mu \approx 0.99$ and
+$\delta \approx 0.02$ per division at a typical \omterm{def:b3:chromatin-epigenetics:methylation}{CpG}. Then $p^{*} =
+0.02/0.03 \approx 0.67$, close to the genome-wide methylated fraction,
+and $\mu - \delta = 0.97$: a fully methylated site left to the
+machinery alone would be half-way back to the average after $\ln 2 /
+0.03 \approx 23$ divisions. A silenced promoter that stays silent for
+the hundreds of divisions of a lifetime therefore needs more than
+\omterm{def:b3:chromatin-epigenetics:methylation}{DNMT1}: the \omterm{def:b3:chromatin-epigenetics:methylation}{methyl-CpG} \omterm{def:b3:chromatin-epigenetics:histone-code}{readers} recruit H3K9 methylation and the H3K9
+\omterm{def:b3:chromatin-epigenetics:histone-code}{readers} recruit DNMT3, so that a dense island of marks raises its own
+$\mu$ toward $1$ and lowers the neighbouring $\delta$ toward $0$.
+Conversely, a cell that loses \omterm{def:b3:chromatin-epigenetics:methylation}{DNMT1} loses the mark passively: with
+$\mu = \delta = 0$ the fraction of methylated strands halves at each
+division.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % left: replication scheme
+  \begin{scope}
+    \draw[very thick, omThm!70!black] (0,1.2) -- (2.4,1.2); \draw[very thick, omThm!70!black] (0,0.9) -- (2.4,0.9);
+    \foreach \x in {0.5,1.2,1.9} { \fill[omDef] (\x,1.2) circle (0.09); \fill[omDef] (\x,0.9) circle (0.09); }
+    \node[above] at (1.2,1.3) {parental: both strands methylated};
+    \draw[->, thick] (1.2,0.75) -- (1.2,0.15) node[midway, right] {replication};
+    \draw[very thick, omThm!70!black] (0,-0.1) -- (2.4,-0.1); \draw[very thick, gray] (0,-0.4) -- (2.4,-0.4);
+    \foreach \x in {0.5,1.2,1.9} { \fill[omDef] (\x,-0.1) circle (0.09); \draw[omDef] (\x,-0.4) circle (0.09); }
+    \node[left] at (-0.1,-0.25) {hemimethylated};
+    \draw[->, thick] (1.2,-0.85) -- (1.2,-1.45) node[midway, right, align=left] {DNMT1, probability $\mu$\\per site};
+    \draw[very thick, omThm!70!black] (0,-1.7) -- (2.4,-1.7); \draw[very thick, gray] (0,-2.0) -- (2.4,-2.0);
+    \foreach \x in {0.5,1.9} { \fill[omDef] (\x,-1.7) circle (0.09); \fill[omDef] (\x,-2.0) circle (0.09); }
+    \fill[omDef] (1.2,-1.7) circle (0.09); \draw[omDef] (1.2,-2.0) circle (0.09);
+    \node[below, align=center] at (1.2,-2.1) {restored, one site missed:\\the daughter's new strand};
+  \end{scope}
+  % right: decay plot
+  \begin{scope}[xshift=5.0cm, yshift=-2.3cm]
+  \begin{axis}[
+    width=6.6cm, height=4.6cm, axis lines=left,
+    xmin=0, xmax=100, ymin=0, ymax=1.05,
+    xlabel={divisions $n$},
+    xlabel style={font=\scriptsize, at={(axis description cs:0.5,-0.1)}, anchor=north},
+    tick label style={font=\scriptsize}, xtick={0,25,50,75,100}, ytick={0,0.5,0.67,1},
+    yticklabels={0,0.5,$p^{*}$,1}, clip=false,
+  ]
+  \addplot[very thick, omDef, domain=0:100, samples=60] {0.6667 + 0.3333*0.97^x};
+  \addplot[very thick, omThm, domain=0:100, samples=60] {0.6667 - 0.6667*0.97^x};
+  \addplot[dashed, gray, domain=0:100, samples=2] {0.6667};
+  \addplot[thick, omMeth!80!black, domain=0:100, samples=60] {0.6667 + 0.3333*0.998^x};
+  \node[font=\scriptsize] at (axis cs:-9,1.1) {$p_{n}$};
+  \node[font=\scriptsize, omDef, anchor=south west] at (axis cs:45,0.82) {methylated start, $\mu = 0.99$};
+  \node[font=\scriptsize, omThm, anchor=north west] at (axis cs:50,0.30) {unmethylated start};
+  \node[font=\scriptsize, omMeth!80!black, anchor=south west] at (axis cs:30,1.02) {with feedback, $\mu = 0.999$};
+  \end{axis}
+  \end{scope}
+\end{tikzpicture}
+
+{\small Left: \omterm{def:b3:chromatin-epigenetics:methylation}{maintenance methylation}. After replication every \omterm{def:b3:chromatin-epigenetics:methylation}{CpG} is
+hemimethylated; \omterm{def:b3:chromatin-epigenetics:methylation}{DNMT1} copies the mark onto the new strand with
+probability $\mu$ per site. Right: the fate of a site over divisions
+for $\mu = 0.99$, $\delta = 0.02$ (blue from methylated, red from
+unmethylated) --- both converge on $p^{*} = 0.67$ --- and for a site
+whose neighbourhood feedback raises $\mu$ to $0.999$ (green).}
+\end{omfigure}
+
+\begin{method}[Reading methylation: bisulfite sequencing]\label{met:b3:chromatin-epigenetics:bisulfite}
+\index{bisulfite sequencing}
+Sequencing alone cannot see a methyl group. Treat denatured DNA with
+sodium bisulfite: unmethylated cytosine is deaminated to uracil, which
+reads as T after PCR, while 5-methylcytosine is protected and still
+reads as C. Sequence the converted DNA and compare with the reference:
+every C that remains C was methylated, every C that became T was not.
+Done genome-wide (whole-genome \omterm{met:b3:chromatin-epigenetics:bisulfite}{bisulfite sequencing}) this gives the
+methylation state of each of the $2.8\times 10^{7}$ \omterm{def:b3:chromatin-epigenetics:methylation}{CpGs} of a haploid
+genome at single-base resolution, as a fraction of the cells in the
+sample.
+\end{method}
+
+\section{X inactivation and genomic imprinting}
+
+\begin{definition}[X-chromosome inactivation]\label{def:b3:chromatin-epigenetics:x-inactivation}
+\index{X inactivation}\index{Barr body}\index{Xist}\index{dosage compensation}
+In female mammals one of the two X chromosomes of every somatic cell
+is transcriptionally silenced early in development, a form of
+\emph{dosage compensation} that equalises X-linked gene expression
+between XX females and XY males. The silenced chromosome is compacted
+into a dense body against the nuclear envelope, the \emph{Barr body}.
+The choice of which X to silence is random in the embryo proper and,
+once made, is inherited clonally by all descendants of the cell.
+Inactivation is initiated by \emph{Xist}, a \qty{17}{kb} non-coding RNA
+transcribed from the X-inactivation centre of the chromosome that will
+be silenced: it coats that chromosome in cis, recruits Polycomb (H3K27me3),
+the \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} variant macroH2A and finally \omterm{def:b3:chromatin-epigenetics:methylation}{DNA methylation} of the
+promoters, and the silence is thereafter maintained without Xist
+being needed for each division. About \qty{15}{\%} of human X-linked
+genes escape inactivation, in part or wholly.
+\end{definition}
+
+\begin{proof}[Evidence]
+Barr and Bertram (1949) noticed a dense body in the nuclei of female
+but not male cat neurons. Ohno (1959) showed it was one whole X
+chromosome, condensed. Lyon (1961) put the pieces together: female
+mice heterozygous for X-linked coat-colour genes have a mosaic coat of
+patches expressing one allele or the other, so each patch is a clone
+in which one X, always the same one, is silent; the same holds for the
+orange-and-black patches of a tortoiseshell or calico cat, whose orange
+gene is X-linked, and for the mosaic sweat glands of women carrying a
+mutant allele of an X-linked gene. A male calico cat is almost always
+XXY.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.42\linewidth]{images/book5/ai/b5-01-barr-body.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.5\linewidth]{images/book5/ai/b5-01-calico-cat.jpg}
+
+{\small Left: a female nucleus stained for DNA, with the compact
+inactive X --- the \omterm{def:b3:chromatin-epigenetics:x-inactivation}{Barr body} --- pressed against the nuclear edge.
+Right: a calico cat. Each orange or black patch is a clone of skin
+cells that silenced the same X chromosome; the white is a separate,
+autosomal, spotting gene.}
+\end{omfigure}
+
+\begin{definition}[Genomic imprinting]\label{def:b3:chromatin-epigenetics:imprinting}
+\index{genomic imprinting}\index{imprinting control region}\index{uniparental disomy}
+A gene is \emph{imprinted} when only one of its two alleles is
+expressed, and which one depends on the parent it came from: some
+genes are expressed only from the paternal copy, others only from the
+maternal. Mammals have some \numrange{100}{200} imprinted genes,
+clustered, each cluster governed by an \emph{imprinting control
+region} (ICR) that is methylated on one parental allele and not the
+other. The methylation is set in the germ line --- one pattern in
+sperm, another in eggs --- erased in the germ cells of the next
+generation and set again according to the sex of that individual. A
+child who receives both copies of a chromosome from the same parent
+(\emph{uniparental disomy}) therefore has the wrong dose of the
+imprinted genes on it although its sequence is entirely normal.
+\end{definition}
+
+\begin{proof}[Evidence]
+McGrath and Solter, and independently Surani, Barton and Norris (1984),
+made mouse zygotes carrying two maternal pronuclei, or two paternal
+ones, by transferring pronuclei between fertilised eggs. Neither kind
+developed to term, although each had two complete sets of chromosomes:
+the gynogenetic embryos formed a reasonable embryo with a poor
+placenta, the androgenetic ones a large placenta and almost no embryo.
+The two parental genomes are not equivalent and both are required.
+Cattanach and Kirk (1985) showed with chromosome-specific uniparental
+disomies that the non-equivalence is confined to particular regions of
+particular chromosomes, which are where the imprinted clusters were
+later found.
+\end{proof}
+
+\begin{example}[The \emph{Igf2}--\emph{H19} cluster]\label{ex:b3:chromatin-epigenetics:igf2}
+\emph{Igf2}, a fetal growth factor, is expressed from the paternal
+allele; its neighbour \emph{H19}, a non-coding RNA, from the maternal.
+Between them lies the ICR and, beyond \emph{H19}, a shared set of
+enhancers. On the maternal chromosome the ICR is unmethylated and binds
+CTCF, which acts as an insulator: the enhancers can reach \emph{H19}
+but not \emph{Igf2}. On the paternal chromosome the ICR is methylated
+(set in the sperm), CTCF cannot bind, and the enhancers reach across to
+\emph{Igf2}; the methylation also spreads to silence the \emph{H19}
+promoter. One mark, set in one germ line, decides both genes.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \foreach \yy/\lab/\ctcf in {1.6/maternal chromosome/1, -0.6/paternal chromosome/0} {
+    \draw[very thick, gray] (0,\yy) -- (9.4,\yy);
+    \node[left, align=right] at (-0.15,\yy) {\lab};
+    \draw[thick, fill=omDef!25] (1.0,\yy-0.2) rectangle (2.6,\yy+0.2); \node at (1.8,\yy) {\emph{Igf2}};
+    \draw[thick, fill=omProp!30] (4.2,\yy-0.2) rectangle (5.2,\yy+0.2); \node at (4.7,\yy) {ICR};
+    \draw[thick, fill=omDef!25] (6.2,\yy-0.2) rectangle (7.4,\yy+0.2); \node at (6.8,\yy) {\emph{H19}};
+    \foreach \x in {8.4,8.8,9.2} \fill[omMeth!70!black] (\x,\yy) circle (0.12);
+    \node[right] at (9.55,\yy) {enhancers};
+  }
+  % maternal: CTCF bound, enhancer -> H19
+  \draw[thick, fill=omExo!35] (4.7,2.15) ellipse (0.45 and 0.22); \node at (4.7,2.15) {CTCF};
+  \draw[->, thick, omMeth!70!black] (8.4,1.85) .. controls (7.8,2.5) and (7.2,2.5) .. (6.8,1.85);
+  \node[above] at (7.6,2.35) {on};
+  \draw[thick, omThm] (5.3,2.3) -- (5.3,0.9); \node[omThm, below] at (5.3,0.9) {insulator};
+  \node[omThm, above=1.0cm, align=center, font=\scriptsize] at (1.8,1.8) {\emph{Igf2} silent};
+  % paternal: ICR methylated
+  \foreach \x in {4.35,4.6,4.85,5.1} \fill[omThm] (\x,-0.95) circle (0.08);
+  \node[below, align=center] at (4.7,-1.05) {methylated:\\no CTCF};
+  \draw[->, thick, omMeth!70!black] (8.4,-0.35) .. controls (6.5,0.6) and (3.5,0.6) .. (1.8,-0.35);
+  \node[above] at (3.3,0.2) {on};
+  \foreach \x in {6.4,6.7,7.0,7.2} \fill[omThm] (\x,-0.95) circle (0.08);
+  \node[below] at (6.8,-1.05) {silenced};
+\end{tikzpicture}
+
+{\small Imprinting at \emph{Igf2}--\emph{H19}. Maternal allele: the
+unmethylated ICR binds CTCF, an insulator, so the downstream enhancers
+activate \emph{H19} only. Paternal allele: the ICR was methylated in the
+sperm, CTCF cannot bind, the enhancers reach \emph{Igf2}, and the
+methylation silences \emph{H19}.}
+\end{omfigure}
+
+\begin{example}[Prader--Willi and Angelman]\label{ex:b3:chromatin-epigenetics:pws}
+The same deletion of about \qty{5}{Mb} in chromosome 15 (region
+15q11--q13) causes \emph{Prader--Willi syndrome} --- poor muscle tone
+at birth, then insatiable appetite and obesity --- when it is on the
+paternal chromosome, and \emph{Angelman syndrome} --- severe
+intellectual disability, absent speech, a happy demeanour and seizures
+--- when on the maternal. The region carries paternally expressed
+genes (\emph{SNRPN} and a cluster of small RNAs) whose only active copy
+is lost in the first case, and the maternally expressed \emph{UBE3A},
+lost in the second. Maternal \omterm{def:b3:chromatin-epigenetics:imprinting}{uniparental disomy} of 15, with no deletion
+at all, also gives Prader--Willi: two maternal copies, silent for the
+paternal genes.
+\end{example}
+
+\begin{remark}[Why imprint at all]\label{rem:b3:chromatin-epigenetics:kinship}
+Imprinted genes are enriched for control of fetal growth and of
+placental nutrient transfer, with paternally expressed genes
+(\emph{Igf2}, \emph{Peg3}) tending to promote growth and maternally
+expressed ones (\emph{H19}, \emph{Igf2r}, \emph{Cdkn1c}) to restrain
+it. The \emph{kinship theory} reads this as a conflict: a father's
+genes gain from extracting more from a mother who may carry other
+males' offspring later, while the mother's genes gain from rationing
+across all her litters. Imprinting occurs in placental mammals and in
+flowering plants, whose endosperm is likewise fed by the mother, and
+not in birds or reptiles, which is what the theory predicts.
+\end{remark}
+
+\section{Epigenetic inheritance and its limits}
+
+\begin{definition}[Epigenetics]\label{def:b3:chromatin-epigenetics:epigenetics}
+\index{epigenetics}\index{epiallele}\index{reprogramming}
+\emph{Epigenetics} is the study of heritable changes in gene activity
+that are not changes in DNA sequence: states carried by \omterm{def:b3:chromatin-epigenetics:methylation}{DNA
+methylation}, \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} marks, or self-sustaining transcription-factor
+circuits, and copied through cell division. Two alleles of identical
+sequence but different stable epigenetic state are \emph{epialleles}.
+Inheritance through mitosis is the rule and is what makes a
+differentiated cell stay differentiated. Inheritance through meiosis,
+from parent to offspring, is the exception in mammals, because the
+marks are erased in two waves of \emph{reprogramming}: in the
+primordial germ cells, where imprints and most methylation are wiped
+and then set afresh according to sex, and again in the zygote and early
+embryo, where the paternal genome is actively demethylated by TET3 and
+the maternal passively, before the embryo's own patterns are laid down
+by DNMT3.
+\end{definition}
+
+\begin{example}[The agouti viable yellow mouse]\label{ex:b3:chromatin-epigenetics:agouti}
+In the $A^{vy}$ allele a retrotransposon has inserted upstream of the
+\emph{agouti} coat-colour gene. Where the transposon's promoter is
+unmethylated it drives \emph{agouti} constantly in every cell; the
+mouse is yellow, obese and prone to diabetes. Where it is methylated
+the gene follows its normal control and the mouse is brown
+(``pseudoagouti''). Genetically identical littermates range across the
+whole spectrum, and a yellow mother has more yellow pups than a brown
+one: the \omterm{def:b3:chromatin-epigenetics:epigenetics}{epiallele} is incompletely erased through the maternal germ
+line. Waterland and Jirtle (2003) fed pregnant $A^{vy}$ mothers a diet
+rich in methyl donors (folate, vitamin B\textsubscript{12}, choline,
+betaine) and shifted the pups' coats toward brown. The environment of
+one generation had set a mark that the next generation carried.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.62\linewidth]{images/book5/ai/b5-01-agouti-mice.jpg}
+
+{\small Two $A^{vy}$ littermates of identical genotype: a yellow, obese
+mouse in which the transposon upstream of \emph{agouti} is unmethylated
+and a brown pseudoagouti in which it is methylated.}
+\end{omfigure}
+
+\begin{proposition}[Where heritable epigenetic states are found]\label{prop:b3:chromatin-epigenetics:examples}
+\index{position-effect variegation}\index{vernalization}\index{paramutation}
+Three well-analysed systems illustrate the mechanisms above.
+\emph{\omterm{prop:b3:chromatin-epigenetics:examples}{Position-effect variegation}} in \emph{Drosophila}: a gene
+relocated by a chromosome rearrangement next to \omterm{def:b3:chromatin-epigenetics:nucleosome}{heterochromatin} is
+silenced in some cells and not others, giving a mottled eye; each
+patch is a clone, the silencing spreads from the \omterm{def:b3:chromatin-epigenetics:nucleosome}{heterochromatin} by the
+HP1 loop, and the genes whose mutation suppresses the variegation
+(\emph{Su(var)} genes) are HP1 and the H3K9 methyltransferase.
+\emph{Vernalization} in \emph{Arabidopsis}: weeks of winter cold
+silence the flowering repressor \emph{FLC} by Polycomb-deposited
+H3K27me3, the silence holds through months of spring growth and
+thousands of cell divisions, and it is reset in every generation so
+that each plant must experience its own winter. \emph{Paramutation} in
+maize: one allele of the \emph{b1} pigment gene, when it meets a
+particular other allele in a heterozygote, converts it to its own
+silent state, and the converted allele passes the state to its
+descendants for generations, through a small-RNA-directed methylation
+taken up in \cref{ch:b3:rna-regulation}. In each case the
+inheritance is mitotic and robust; transmission across generations is
+either actively reset (plants) or leaky and partial (mice).
+\end{proposition}
+
+\begin{remark}[The limits of transgenerational claims]\label{rem:b3:chromatin-epigenetics:limits}
+Claims that a grandparent's famine or stress is ``inherited
+epigenetically'' by human grandchildren are common and mostly
+unproven. Two waves of erasure stand between a somatic mark and a
+grandchild, the imprinted genes and a few transposons are the only
+documented survivors of erasure in mammals, and in human cohorts the
+effects of a shared environment, of the uterine environment, and of
+genetic differences are hard to separate from a mark carried in the
+germ line. The demonstrated cases --- $A^{vy}$, some transposon-linked
+\omterm{def:b3:chromatin-epigenetics:epigenetics}{epialleles}, RNA-mediated states in worms and plants --- are real,
+molecularly understood, and narrow. The chapter's theorem says why:
+without a feedback that pushes $\mu$ to $1$, a mark forgets itself in
+a few dozen divisions, and the germ line adds an active reset on top.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:chromatin-epigenetics:1}
+Give the composition of a \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome} core particle, the length of DNA
+it binds, and the typical linker length. Why did nuclease digestion of
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin} give a ladder of fragments rather than a smear?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:chromatin-epigenetics:2}
+A frog genome has $3.0\times 10^{9}$ base pairs per haploid set. How
+many \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} does a diploid nucleus contain, taking a repeat of
+\qty{190}{bp}, and how long is its DNA?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:chromatin-epigenetics:3}
+Decode H3K27me3, H4K16ac and H3S10ph. For each say whether it is
+associated with active or silent \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin}, and name a \omterm{def:b3:chromatin-epigenetics:histone-code}{reader} for the
+first.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:chromatin-epigenetics:4}
+Explain why a calico cat is almost always female, and what a male
+calico must be.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:chromatin-epigenetics:5}
+Compute the \omterm{prop:b3:chromatin-epigenetics:compaction}{packing ratio} of the \qty{10}{nm} fibre from the numbers of
+\cref{def:b3:chromatin-epigenetics:nucleosome} (repeat \qty{200}{bp},
+bead \qty{11}{nm}), and the ratio needed to fit the \qty{4}{cm} of DNA
+of an average human chromosome into a mitotic chromatid
+\qty{4}{\micro m} long. By what further factor must the fibre be folded?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:chromatin-epigenetics:6}
+In the model of \cref{thm:b3:chromatin-epigenetics:maintenance} with
+$\mu = 0.98$ and $\delta = 0.01$, find $p^{*}$ and the number of
+divisions after which a site that started methylated has lost half of
+its excess over $p^{*}$. Repeat for $\mu = 0.999$, $\delta = 0.001$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:chromatin-epigenetics:7}
+A ChIP-seq experiment on liver cells gives an H3K4me3 peak and an
+H3K27ac peak at the promoter of gene $A$, a broad H3K27me3 domain over
+gene $B$, and H3K9me3 over gene $C$. Predict the transcriptional state
+of each, and say which of $B$ and $C$ is more likely to be switched on
+in another cell type and why.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:chromatin-epigenetics:8}
+A woman carries a deletion of the \emph{UBE3A} region on one chromosome
+15 but is healthy. Her father carried the same deletion and was
+healthy too. What syndrome, if any, is each of her children at risk of,
+and with what probability? What if the deletion had come from her
+mother?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:chromatin-epigenetics:9}
+Predict the consequence, in a female mouse embryo, of deleting the
+\emph{\omterm{def:b3:chromatin-epigenetics:x-inactivation}{Xist}} gene from one X chromosome; from both. Predict what a
+\emph{\omterm{def:b3:chromatin-epigenetics:x-inactivation}{Xist}} transgene inserted into an autosome does to that autosome.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:chromatin-epigenetics:10}
+Explain, with \cref{ex:b3:chromatin-epigenetics:cpg-deficit}, why \omterm{def:b3:chromatin-epigenetics:methylation}{CpG
+islands} have kept their \omterm{def:b3:chromatin-epigenetics:methylation}{CpGs} while the rest of the genome has lost
+four fifths of them, and what this implies about the methylation state
+of islands in the germ line over evolutionary time. Why does the
+argument fail for a gene methylated only in liver?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:chromatin-epigenetics:11}
+Show, using the writer--reader loop of
+\cref{prop:b3:chromatin-epigenetics:readers}, how a domain of H3K9me3
+can be stable through replication although each division dilutes the
+marked \omterm{def:b3:chromatin-epigenetics:nucleosome}{histones} twofold with new unmarked ones. What determines where
+the domain stops spreading? Propose an experiment to test your account.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:chromatin-epigenetics:12}
+A study reports that the grandchildren of people who lived through a
+famine have altered methylation at a growth gene and a higher body
+mass. List the alternative explanations that must be excluded before
+concluding that a methylation mark was transmitted through the germ
+line, and say what experiment in mice would settle the question.
+\end{exercise}
+
+\section{Problem: The Memory of a Silenced Gene}
+
+\begin{problem}[{Weekend problem --- a human genome packed into its
+nucleus, a methylation mark followed through divisions, a calico cat
+read as a clonal map, and an imprinted region's diseases counted,
+ending on the number of divisions a mark survives without feedback and
+the size of the cell population that chose its X}]
+\label{pb:b3:chromatin-epigenetics:1}
+Data: a human diploid nucleus holds $6.4\times 10^{9}$ base pairs, at
+\qty{0.34}{nm} and \qty{650}{Da} per pair; the \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosome} repeat is
+\qty{200}{bp}, a \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} octamer weighs \qty{108}{kDa}, and a core
+particle is a disc \qty{11}{nm} across and \qty{5.5}{nm} thick. The
+nucleus is a sphere of diameter \qty{10}{\micro m}. The genome is
+\qty{42}{\%} G$+$C. Methylation at an ordinary \omterm{def:b3:chromatin-epigenetics:methylation}{CpG}: $\mu = 0.99$,
+$\delta = 0.02$ per division.
+
+\medskip
+\noindent\textbf{Part I --- Packing.}
+\begin{enumerate}
+  \item Compute the total length of DNA in the nucleus and the number
+        of \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes}.
+  \item Compute the total mass of \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} (octamers only) and of DNA,
+        in picograms ($\qty{1}{Da} = \qty{1.66e-24}{g}$).
+  \item Compute the volume of the nucleus and the total volume of the
+        core particles, treated as cylinders. What fraction of the
+        nucleus do they fill?
+  \item If the \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} were laid end to end as a \qty{10}{nm}
+        fibre, how long would the fibre be, and what is the \omterm{prop:b3:chromatin-epigenetics:compaction}{packing
+        ratio} relative to naked DNA?
+  \item The fibre is folded into loops of \qty{200}{kb} anchored by
+        cohesin. How many loops, and how many \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} per loop?
+  \item Under the independence assumption, how many \omterm{def:b3:chromatin-epigenetics:methylation}{CpG} dinucleotides
+        would the diploid genome contain? The observed number is
+        $5.6\times 10^{7}$. What fraction has been lost, and by what
+        mutational mechanism?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- A mark through divisions.}
+\begin{enumerate}[resume]
+  \item Write the recurrence for $p_{n}$ and compute $p^{*}$.
+  \item A promoter \omterm{def:b3:chromatin-epigenetics:methylation}{CpG} is fully methylated at $n = 0$. Compute $p_{n}$
+        after $10$, $50$ and $200$ divisions.
+  \item After how many divisions is the excess $p_{n} - p^{*}$ halved?
+        A tissue stem cell divides about once a week: how many years is
+        that?
+  \item A drug inhibits \omterm{def:b3:chromatin-epigenetics:methylation}{DNMT1} completely ($\mu = 0$) and DNMT3 as well
+        ($\delta = 0$). Show that the fraction of methylated strands in
+        the population halves at each division, and find the number of
+        divisions to bring \qty{80}{\%} methylation below \qty{5}{\%}.
+  \item In a silenced island the \omterm{def:b3:chromatin-epigenetics:methylation}{methyl-CpG} \omterm{def:b3:chromatin-epigenetics:histone-code}{readers} recruit H3K9
+        methylation, which recruits DNMT3, so that within the island
+        $\mu = 0.9995$ and $\delta = 0.0005$. Recompute the half-life
+        of the excess, in divisions and in years at one division a
+        week.
+  \item Explain in one sentence why the result of question 12 and not
+        that of question 9 is what a lifelong silenced gene requires,
+        and what kind of molecular arrangement produces it.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The calico map.}
+\begin{enumerate}[resume]
+  \item A cat is heterozygous for the X-linked orange gene. Explain
+        why her coat has orange and black patches and what one patch
+        represents.
+  \item \omterm{def:b3:chromatin-epigenetics:x-inactivation}{X inactivation} occurred when the cells destined to form the
+        skin numbered $N$. Each chose an X at random. What is the
+        probability that all $N$ chose the same one, giving a
+        single-colour cat?
+  \item No such single-coloured heterozygote has been documented
+        among perhaps a billion cats; take the probability as
+        $10^{-9}$ and estimate $N$.
+  \item The cat's skin surface is about \qty{0.3}{m^2} and her patches
+        average \qty{15}{cm^2}. Estimate the number of patches, and
+        explain why it is larger than $N$.
+  \item An XXY tomcat is also calico. How many Barr bodies do his
+        cells show? How many in an XXX female and in an XY male?
+  \item A gene that escapes inactivation is present in two active
+        copies in females and one in males. Give one reason such
+        escape may be tolerated and one situation where it matters.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Chromosome 15.}
+\begin{enumerate}[resume]
+  \item Prader--Willi syndrome affects about one birth in
+        \num{15000}; \qty{70}{\%} of cases are a de novo deletion of
+        the paternal 15q11--q13 and \qty{25}{\%} a maternal \omterm{def:b3:chromatin-epigenetics:imprinting}{uniparental
+        disomy}. Compute the birth frequency of each cause.
+  \item Angelman syndrome has about the same frequency; \qty{70}{\%}
+        are maternal deletions, \qty{5}{\%} paternal disomies and
+        \qty{10}{\%} point mutations of \emph{UBE3A}. Why are point
+        mutations a cause of Angelman but almost never of Prader--Willi?
+  \item A father carries a balanced translocation that gives
+        \qty{20}{\%} of his sperm a 15q11--q13 deletion. What fraction
+        of his children have Prader--Willi, and what fraction Angelman?
+  \item \omterm{def:b3:chromatin-epigenetics:imprinting}{Uniparental disomy} arises when a trisomic zygote loses one
+        chromosome. If a trisomy-15 zygote loses one of its three
+        chromosomes at random, and the trisomy came from the mother
+        (two maternal copies), what is the probability that the
+        survivor has maternal disomy? Which syndrome?
+  \item The Prader--Willi genes are paternally expressed and the
+        Angelman gene maternally. Using the kinship theory, say which
+        of the two syndromes' symptoms (feeding difficulty at birth
+        versus voracious appetite) fit the theory and which are
+        harder to fit.
+  \item A method is proposed to treat Angelman by reactivating the
+        silent paternal \emph{UBE3A}. Its silence is due to a paternally
+        expressed antisense RNA. Propose the molecular target and say
+        why the therapy would not disturb the other imprinted genes.
+  \item Summarise: the half-life of a mark without feedback
+        (question~9) and with it (question~11), in divisions; and the
+        founder population $N$ of the calico coat (question~15).
+\end{enumerate}
+\end{problem}

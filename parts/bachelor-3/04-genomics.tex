@@ -1,6 +1,578 @@
 \chapter{Genomics and Sequencing}\label{ch:b3:genomics}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+The first complete genome of a free-living organism, the \qty{1.8}{Mb}
+of a bacterium, was published in 1995 after a year's work by a team of
+forty. The human genome, \num{3.2} billion base pairs, took an
+international consortium thirteen years and about three billion
+dollars and was declared finished in 2003. Today a bench-top machine
+\omterm{def:b3:genomics:ngs}{reads} a human genome overnight for a few hundred dollars, a hospital
+sequences the tumour of a patient to choose a drug, and a museum
+extracts and \omterm{def:b3:genomics:ngs}{reads} the genome of a forty-thousand-year-old bone. The
+technology that made this possible, the mathematics that turns
+millions of short \omterm{def:b3:genomics:ngs}{reads} into a genome, and what the finished genomes
+have taught about the size, content and history of our DNA are the
+subject of this chapter. The chapter after it takes up the algorithms
+that compare the sequences once they are in hand.
 
-\emph{This chapter has not been written yet.}
+\section{Reading DNA}
+
+\begin{definition}[Sequencing by chain termination]\label{def:b3:genomics:sanger}
+\index{Sanger sequencing}\index{dideoxynucleotide}\index{chain termination}
+\emph{Sanger sequencing} copies a single-stranded template from a primer
+with DNA polymerase in the presence of the four normal nucleotides and
+a small proportion of \emph{dideoxynucleotides}, which lack the 3$'$
+hydroxyl and so terminate the chain wherever they are incorporated.
+Each dideoxynucleotide carries a different fluorescent dye. The
+product is a mixture of fragments, one for every position of the
+template, each ending in a base of known identity; separated by size
+in a capillary of gel, they pass a detector in order of length, and
+the sequence of colours is the sequence of the template. A run \omterm{def:b3:genomics:ngs}{reads}
+\qtyrange{700}{900}{bp} with an error rate below $10^{-3}$; it remains
+the method for verifying a construct or a single gene.
+\end{definition}
+
+\begin{proof}[Evidence]
+Sanger, Nicklen and Coulson published the method in 1977 and used it
+that year to \omterm{def:b3:genomics:ngs}{read} the \qty{5386}{bp} of the phage $\phi$X174 --- the
+first complete DNA genome --- and in 1981 the \qty{16569}{bp} of the
+human mitochondrion. Fleischmann and colleagues (1995) \omterm{def:b3:genomics:ngs}{read} the
+\qty{1.83}{Mb} of \emph{Haemophilus influenzae} by breaking the whole
+genome into random fragments, sequencing \num{24000} of them and
+assembling the \omterm{def:b3:genomics:ngs}{reads} by computer --- the \emph{whole-genome shotgun}
+strategy that every later project scaled up.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.30\linewidth]{images/book5/sanger.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.30\linewidth]{images/book5/ai/b5-04-sanger-gel.jpg}
+
+{\small Left: Frederick Sanger, who devised the first practical methods
+for reading proteins and DNA and received a Nobel prize for each. Right:
+an autoradiograph of a sequencing gel from the pre-capillary era, one
+lane per base, the sequence \omterm{def:b3:genomics:ngs}{read} upward from the ladder of bands.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % template and primer
+  \draw[very thick, omDef] (0,3.0) -- (6,3.0); \node[left] at (-0.1,3.0) {template 3$'$};
+  \node[right] at (6.05,3.0) {5$'$};
+  \foreach \x/\b in {0.6/T,1.2/G,1.8/A,2.4/C,3.0/T,3.6/T,4.2/G,4.8/C} \node[above, omDef] at (\x,3.05) {\b};
+  \draw[very thick, omProp] (0,2.6) -- (0.3,2.6); \node[left] at (-0.1,2.6) {primer};
+  % terminated products
+  \foreach \i/\len/\col/\b in {1/0.6/omDef/A, 2/1.2/omMeth/C, 3/1.8/omThm/T, 4/2.4/omExo/G, 5/3.0/omDef/A, 6/3.6/omDef/A, 7/4.2/omMeth/C, 8/4.8/omExo/G} {
+    \draw[very thick, omProp] (0,2.6-0.32*\i) -- (\len-0.15,2.6-0.32*\i);
+    \fill[\col] (\len-0.05,2.6-0.32*\i) circle (0.1);
+    \node[right, \col] at (\len+0.05,2.6-0.32*\i) {dd\b};
+  }
+  \node[below, align=center] at (2.4,-0.25) {one product for every position, each ending\\in a fluorescent dideoxy base};
+  % capillary readout
+  \draw[->, thick] (6.5,1.3) -- (7.4,1.3) node[midway, above] {size};
+  \draw[thick] (7.6,0.0) rectangle (11.6,2.6);
+  \foreach \i/\col in {1/omDef, 2/omMeth, 3/omThm, 4/omExo, 5/omDef, 6/omDef, 7/omMeth, 8/omExo} {
+    \draw[very thick, \col] (7.6+0.45*\i,0.1) .. controls (7.6+0.45*\i-0.15,0.1) and (7.6+0.45*\i-0.1,1.6) .. (7.6+0.45*\i,1.6) .. controls (7.6+0.45*\i+0.1,1.6) and (7.6+0.45*\i+0.15,0.1) .. (7.6+0.45*\i+0.3,0.1);
+  }
+  \foreach \i/\b in {1/A, 2/C, 3/T, 4/G, 5/A, 6/A, 7/C, 8/G} \node[above] at (7.6+0.45*\i,1.7) {\b};
+  \node[below] at (9.6,-0.05) {shortest $\to$ longest: the sequence, read in colour};
+\end{tikzpicture}
+
+{\small Chain-termination sequencing. A dideoxy base ends the copy at
+every position where it is incorporated; the fragments, one per length,
+are separated by size and the colour of each terminal base is \omterm{def:b3:genomics:ngs}{read} in
+order.}
+\end{omfigure}
+
+\begin{definition}[Massively parallel sequencing]\label{def:b3:genomics:ngs}
+\index{sequencing by synthesis}\index{read}\index{long-read sequencing}\index{nanopore}
+Second-generation instruments read millions to billions of fragments
+at once. In \emph{sequencing by synthesis} the fragments, with
+adapters ligated to their ends, are bound to a glass flow cell and
+amplified in place into clusters of identical molecules; the clusters
+are then extended one base per cycle with fluorescent, reversibly
+blocked nucleotides, imaged, unblocked, and extended again, so that
+each cycle adds one base to every cluster's \emph{read}. Reads are
+\qtyrange{100}{300}{bp}, usually from both ends of a fragment
+(\emph{paired ends}), with an error rate of about $10^{-3}$ per base,
+and one run yields up to $10^{12}$ bases. Third-generation
+\emph{long-read} instruments read single molecules without
+amplification: by watching one polymerase incorporate fluorescent
+nucleotides in real time, or by threading the DNA through a protein
+\emph{nanopore} and recording the ionic current, which each sequence of
+bases modulates in its own way. Reads of \qtyrange{10}{100}{kb} and
+more span the repeats that short reads cannot, at a higher raw error
+rate that consensus reduces.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-04-flowcell.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-04-nanopore.jpg}
+
+{\small Left: a flow cell, the glass slide on which billions of DNA
+clusters are grown and \omterm{def:b3:genomics:ngs}{read} one base per cycle. Right: a pocket-sized
+\omterm{def:b3:genomics:ngs}{nanopore} sequencer reading single molecules as changes in an ionic
+current.}
+\end{omfigure}
+
+\begin{theorem}[Coverage and gaps in a shotgun project]\label{thm:b3:genomics:lander-waterman}
+\index{coverage}\index{Lander--Waterman}\index{contig}
+Let $N$ \omterm{def:b3:genomics:ngs}{reads} of length $L$ be taken at random positions along a
+genome of length $G$, and let $c = NL/G$ be the \emph{coverage}, the
+average number of \omterm{def:b3:genomics:ngs}{reads} covering a base. Then a given base is covered
+by a number of \omterm{def:b3:genomics:ngs}{reads} that is Poisson with mean $c$: the fraction of
+the genome left unsequenced is
+\[
+P(\text{uncovered}) = e^{-c},
+\]
+and if two \omterm{def:b3:genomics:ngs}{reads} are recognised as overlapping only when they share at
+least $T$ bases, so that $\theta = T/L$, the expected number of
+\emph{contigs} (islands of overlapping \omterm{def:b3:genomics:ngs}{reads}) is
+\[
+\text{contigs} = N\,e^{-c(1-\theta)},
+\]
+and their mean length is $L\,\bigl(e^{c(1-\theta)} - 1\bigr)/c + L\theta$,
+approximately.
+\end{theorem}
+\begin{proof}
+\omterm{def:b3:genomics:ngs}{Read} start points fall at random with density $N/G$ per base. A base
+is covered by the \omterm{def:b3:genomics:ngs}{reads} that start in the $L$ bases before it; the
+number of starts in a window of length $L$ is Poisson with mean $LN/G
+= c$, and the probability of none is $e^{-c}$. A \omterm{def:b3:genomics:ngs}{read} is the rightmost
+of its contig if no other \omterm{def:b3:genomics:ngs}{read} starts within the $L - T = L(1-\theta)$
+bases after its own start (a \omterm{def:b3:genomics:ngs}{read} starting later would overlap it by
+less than $T$ and not be joined); that probability is $e^{-c(1-\theta)}$,
+and since each contig has exactly one rightmost \omterm{def:b3:genomics:ngs}{read}, the expected
+number of contigs is $N e^{-c(1-\theta)}$. The mean contig length
+follows from $G$ divided by the number of contigs, corrected for the
+uncovered fraction.
+\end{proof}
+
+\begin{example}[How much is enough]\label{ex:b3:genomics:coverage}
+At $c = 5$ the unsequenced fraction is $e^{-5} = 0.7\,\%$ --- for a
+\qty{3.2}{Gb} genome, twenty million bases in some tens of thousands of
+gaps. At $c = 10$ it is $4.5\times 10^{-5}$, \qty{150}{kb} in total.
+Human genomes are routinely sequenced at $c = 30$ not because of
+coverage gaps ($e^{-30} \approx 10^{-13}$) but because each base must
+be \omterm{def:b3:genomics:ngs}{read} several times on each of the two chromosomes to call a
+heterozygous variant with confidence against an error rate of $10^{-3}$
+per \omterm{def:b3:genomics:ngs}{read}. Bacterial genomes are sequenced at $c = 50$--$100$ for the
+same reason and because it is cheap. The formula also shows what
+coverage cannot fix: a repeat longer than a \omterm{def:b3:genomics:ngs}{read} is a place where the
+overlap graph branches, and no amount of short \omterm{def:b3:genomics:ngs}{reads} resolves it. That
+is what long \omterm{def:b3:genomics:ngs}{reads} are for.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=12, ymin=0.000001, ymax=1, ymode=log,
+  xlabel={coverage $c$}, ylabel={fraction},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10,12},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:12, samples=40] {exp(-x)};
+\addplot[very thick, omThm, domain=0.3:12, samples=40] {exp(-x*0.8)*x/12};
+\node[font=\scriptsize, omDef, anchor=north west] at (axis cs:0.3,0.002) {uncovered fraction $e^{-c}$};
+\node[font=\scriptsize, omThm, anchor=south west] at (axis cs:5.5,0.03) {contigs per read $\times\, c/12$, $\theta = 0.2$};
+\end{axis}
+\end{tikzpicture}
+
+{\small The two Lander--Waterman quantities against coverage: the
+fraction of the genome never \omterm{def:b3:genomics:ngs}{read} falls as $e^{-c}$, and the number of
+contigs (here scaled per \omterm{def:b3:genomics:ngs}{read}) peaks at low coverage and then falls as
+the islands merge.}
+\end{omfigure}
+
+\section{From reads to a genome}
+
+\begin{definition}[Assembly and annotation]\label{def:b3:genomics:assembly}
+\index{assembly}\index{scaffold}\index{N50}\index{annotation}\index{reference genome}
+\emph{Assembly} reconstructs a genome from its \omterm{def:b3:genomics:ngs}{reads} by overlap: in an
+\emph{overlap graph} each \omterm{def:b3:genomics:ngs}{read} is a node joined to the \omterm{def:b3:genomics:ngs}{reads} it
+overlaps; in a \emph{de Bruijn graph}, used for billions of short
+\omterm{def:b3:genomics:ngs}{reads}, every $k$-mer (subsequence of length $k$) is a node and the
+genome is a path through them. Both are broken by repeats longer than
+the \omterm{def:b3:genomics:ngs}{read}, which give branching paths. Contigs are ordered and oriented
+into \emph{scaffolds} by paired-end \omterm{def:b3:genomics:ngs}{reads} and long-range information
+(long \omterm{def:b3:genomics:ngs}{reads}, optical maps, chromosome-contact maps), and the
+scaffolds are placed on chromosomes. Assembly quality is summarised by
+the \emph{N50}: the contig length such that half of the assembled
+bases lie in contigs at least that long. \emph{Annotation} then finds
+the genes: in bacteria, open reading frames longer than chance; in
+eukaryotes, by combining sequence signals (splice sites, promoters,
+codon bias), homology to known proteins, and transcripts sequenced
+from RNA. The result, for a species, is a \emph{reference genome} to
+which every later \omterm{def:b3:genomics:ngs}{read} from that species is aligned rather than
+assembled anew.
+\end{definition}
+
+\begin{method}[From a sample to variants]\label{met:b3:genomics:pipeline}
+\index{variant calling}
+For a resequencing study of an individual against a reference: (1)
+extract DNA, fragment it to \qtyrange{300}{500}{bp}, ligate adapters
+(the \emph{library}); (2) sequence to the coverage required (30$\times$
+for a human genome, 100$\times$ for an exome, which captures the
+\qty{1.5}{\%} of the genome that codes for protein); (3) align each
+\omterm{def:b3:genomics:ngs}{read} to the reference, tolerating mismatches; (4) at each position
+count the bases in the \omterm{def:b3:genomics:ngs}{reads}: a position where about half the \omterm{def:b3:genomics:ngs}{reads}
+disagree with the reference is a heterozygous \emph{variant}, where
+nearly all disagree a homozygous one, where a few disagree an error;
+(5) filter by depth, base quality and strand balance; (6) annotate each
+variant with its effect on any gene (synonymous, missense, nonsense,
+splice, frameshift) and its frequency in population databases; (7) for
+a diagnosis, keep the rare variants predicted damaging in genes
+consistent with the phenotype, and confirm by \omterm{def:b3:genomics:sanger}{Sanger sequencing}.
+\end{method}
+
+\section{What genomes look like}
+
+\begin{proposition}[Genome size and gene number]\label{prop:b3:genomics:sizes}
+\index{C-value paradox}\index{genome size}
+\omterm{prop:b3:genomics:sizes}{Genome sizes} span a factor of $10^{5}$ among eukaryotes ---
+\qty{12}{Mb} for yeast, \qty{100}{Mb} for the worm, \qty{140}{Mb} for
+the fly, \qty{3.2}{Gb} for a human, \qty{16}{Gb} for an onion,
+\qty{130}{Gb} for a lungfish, \qty{150}{Gb} for the lily \emph{Paris
+japonica} --- while gene numbers span barely a factor of $10$:
+\num{6000} in yeast, \num{20000} in the worm, \num{14000} in the fly,
+about \num{20000} protein-coding genes in a human, \num{40000} in rice.
+This is the \emph{C-value paradox}: \omterm{prop:b3:genomics:sizes}{genome size} does not measure
+complexity, and neither does gene number. What varies is the non-coding
+content --- introns, transposable elements, satellite repeats --- and
+the number of proteins a genome can produce is multiplied far beyond
+its gene count by alternative splicing (\cref{ch:b3:rna-regulation})
+and by regulation, which is where the complexity of an organism is
+mostly written. Bacterial genomes, by contrast, are compact and their
+size does track gene number: about one gene per kilobase, \qty{88}{\%}
+coding in \emph{E.~coli}.
+\end{proposition}
+
+\begin{example}[The human genome by content]\label{ex:b3:genomics:content}
+Of the \qty{3.2}{Gb}: protein-coding exons, \qty{1.5}{\%}; introns
+and untranslated regions of genes, about \qty{35}{\%}; transposable
+elements and their fossils, about \qty{45}{\%} --- LINE-1 retrotransposons
+\qty{17}{\%}, Alu elements \qty{10}{\%} (over a million copies of a
+\qty{300}{bp} sequence), endogenous retroviruses \qty{8}{\%}; segmental
+duplications \qty{5}{\%}; simple repeats and satellites, including the
+centromeres, about \qty{5}{\%}; the rest unique non-coding sequence,
+where the regulatory elements live. Some \numrange{100}{200} genes
+still encode active LINE-1 machinery, and new insertions occur about
+once in every twenty births. About \qty{8}{\%} of the genome is under
+detectable purifying selection --- far more than the exons --- and
+most of that is regulatory.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}]
+  \def\w{12}
+  % stacked bar: fractions
+  \fill[omThm] (0,0) rectangle (0.18,0.7);
+  \fill[omDef!60] (0.18,0) rectangle (4.38,0.7);
+  \fill[omProp!70] (4.38,0) rectangle (6.42,0.7);
+  \fill[omProp!45] (6.42,0) rectangle (7.62,0.7);
+  \fill[omProp!25] (7.62,0) rectangle (9.78,0.7);
+  \fill[omMeth!50] (9.78,0) rectangle (10.38,0.7);
+  \fill[gray!45] (10.38,0) rectangle (10.98,0.7);
+  \fill[gray!15] (10.98,0) rectangle (12,0.7);
+  \draw[thick] (0,0) rectangle (12,0.7);
+  % labels above/below with leaders
+  \draw (0.09,0.7) -- (0.09,1.1); \node[above, align=center] at (0.5,1.1) {exons\\\qty{1.5}{\%}};
+  \node[above] at (2.3,0.75) {introns, UTRs of genes: \qty{35}{\%}};
+  \node[below, align=center] at (5.4,-0.05) {LINE-1\\\qty{17}{\%}};
+  \node[below, align=center] at (7.0,-0.05) {Alu\\\qty{10}{\%}};
+  \node[below, align=center] at (8.7,-0.05) {other transposons,\\retroviruses \qty{18}{\%}};
+  \node[above, align=center] at (10.1,0.75) {segmental\\duplications \qty{5}{\%}};
+  \node[below, align=center] at (10.7,-0.05) {satellites\\\qty{5}{\%}};
+  \draw[gray] (11.5,0.72) -- (12.0,1.05); \node[above, align=center] at (12.3,1.05) {other unique\\non-coding};
+  \draw[decorate, decoration={brace, amplitude=4pt, mirror}] (4.38,-1.0) -- (9.78,-1.0) node[midway, below=4pt] {transposable-element derived: \qty{45}{\%}};
+\end{tikzpicture}
+
+{\small The human genome by content, to scale. The protein-coding exons
+(red) are a sliver; nearly half of the genome descends from
+transposable elements.}
+\end{omfigure}
+
+\begin{definition}[Comparative genomics]\label{def:b3:genomics:comparative}
+\index{ortholog}\index{paralog}\index{synteny}\index{conserved non-coding element}\index{whole-genome duplication}
+Genes in two species descended from one gene in their common ancestor
+are \emph{orthologs}; genes within a species descended from a
+duplication are \emph{paralogs}. Blocks of chromosome in which gene
+order is conserved between species are \emph{syntenic}; synteny lets a
+gene be located in one genome from its position in another and reveals
+the rearrangements that separate two karyotypes (about \num{1000}
+between human and mouse). Sequences conserved across distant species
+that code for no protein --- \emph{conserved non-coding elements},
+some ultraconserved to the base over \qty{200}{bp} between human and
+fish --- are mostly enhancers of developmental genes. \emph{Whole-genome
+duplications} have marked the history of lineages: two rounds at the
+origin of vertebrates (the four Hox clusters of mammals against the one
+of invertebrates), one in the ancestor of salmonids, one in the yeast
+lineage, several in flowering plants; the duplicate genes are mostly
+lost over tens of millions of years, and the survivors diverge in
+function.
+\end{definition}
+
+\begin{example}[Human and chimpanzee]\label{ex:b3:genomics:chimp}
+Aligned single-copy sequence differs between human and chimpanzee by
+\qty{1.2}{\%} of bases --- some \num{35} million substitutions --- and
+by insertions and deletions that together amount to another
+\qty{3}{\%} of each genome. Two humans differ at about one base in a
+thousand, some \numrange{4}{5} million sites, plus a few thousand
+structural variants; two chimpanzees, whose population has been larger
+for longer, at rather more. A child carries about \num{70} new
+mutations absent from both parents, four fifths of them from the
+father, and the number rises by about two per year of paternal age ---
+the arithmetic of \cref{ch:b3:dna-repair} applied to the many divisions
+of spermatogenesis.
+\end{example}
+
+\section{Genomes and traits}
+
+\begin{definition}[Genome-wide association]\label{def:b3:genomics:gwas}
+\index{genome-wide association study}\index{single-nucleotide polymorphism}\index{polygenic score}
+A \emph{single-nucleotide polymorphism} (SNP) is a position at which
+two bases each occur in at least \qty{1}{\%} of a population; about
+ten million are common in humans. A \emph{genome-wide association
+study} (GWAS) genotypes hundreds of thousands of SNPs in thousands of
+people with a disease and thousands without, and asks at each SNP
+whether one allele is more frequent in the cases. Because a million
+tests are made, a result counts only below a significance threshold of
+about $5\times 10^{-8}$ ($0.05$ divided by the million effectively
+independent tests). Associated SNPs mark a region, not a causal
+variant, since neighbouring alleles travel together (linkage
+disequilibrium) over tens of kilobases. For most common diseases the
+associated alleles each shift risk by a few percent and lie mostly in
+regulatory sequence; their combined effect, summed over thousands of
+SNPs as a \emph{polygenic score}, explains a fraction of the
+heritability and predicts risk about as well as family history.
+\end{definition}
+
+\begin{remark}[What genomics has and has not delivered]\label{rem:b3:genomics:delivered}
+Sequencing has been decisive where a single gene has a large effect:
+several thousand Mendelian diseases have their gene, and sequencing the
+exome of a child with an undiagnosed disorder yields a diagnosis in
+about a third of cases. Cancer genomes reveal which drivers a tumour
+carries and which drugs may work (\cref{ch:b3:cancer-biology});
+pathogen genomes trace outbreaks strain by strain
+(\cref{ch:b3:bacteriology}); ancient genomes have rewritten human
+prehistory, showing that people outside Africa carry about \qty{2}{\%}
+Neanderthal DNA. For common diseases --- diabetes, heart disease,
+schizophrenia --- genomics has delivered thousands of small effects and
+few mechanisms, and the promise of prediction from a genome for a
+healthy person remains modest. The genome is a parts list; the
+biology of how the parts interact is not \omterm{def:b3:genomics:ngs}{read} off it.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:genomics:1}
+Explain why a \omterm{def:b3:genomics:sanger}{dideoxynucleotide} terminates a growing DNA chain, and why
+a Sanger reaction must contain both normal and dideoxy forms of each
+nucleotide.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:genomics:2}
+A run produces $4\times 10^{8}$ paired \omterm{def:b3:genomics:ngs}{reads} of $2\times \qty{150}{bp}$.
+What coverage does that give of a \qty{3.2}{Gb} human genome? Of a
+\qty{5}{Mb} bacterial genome?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:genomics:3}
+Define contig, \omterm{def:b3:genomics:assembly}{scaffold} and \omterm{def:b3:genomics:assembly}{N50}. An \omterm{def:b3:genomics:assembly}{assembly} of \qty{100}{Mb} has ten
+contigs of \qty{8}{Mb} and \num{2000} of \qty{10}{kb}. What is its \omterm{def:b3:genomics:assembly}{N50}?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:genomics:4}
+State the C-value paradox with two examples, and say what mostly
+accounts for the excess DNA of large genomes.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:genomics:5}
+Using \cref{thm:b3:genomics:lander-waterman}, find the coverage needed
+to leave at most one base in a million unsequenced, and the expected
+number of contigs for a \qty{5}{Mb} genome \omterm{def:b3:genomics:ngs}{read} at $c = 8$ with
+\qty{150}{bp} \omterm{def:b3:genomics:ngs}{reads} and a minimum overlap of \qty{30}{bp}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:genomics:6}
+A heterozygous variant is covered by $30$ \omterm{def:b3:genomics:ngs}{reads}. Assuming each \omterm{def:b3:genomics:ngs}{read}
+shows either allele with probability $1/2$, what is the probability
+that fewer than $8$ \omterm{def:b3:genomics:ngs}{reads} show the variant allele (so that it might be
+mistaken for errors)? Use a normal approximation with mean $15$ and
+standard deviation $\sqrt{7.5}$. Why is $30\times$ the standard?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:genomics:7}
+A genome has a repeat of \qty{6}{kb} present in \num{500} copies.
+Explain why an \omterm{def:b3:genomics:assembly}{assembly} from \qty{150}{bp} \omterm{def:b3:genomics:ngs}{reads} collapses it, what the
+resulting graph looks like, and what \omterm{def:b3:genomics:ngs}{read} length would resolve it.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:genomics:8}
+Two humans differ at one base in a thousand. How many differences in
+their exomes (\qty{48}{Mb} of coding sequence)? If two thirds of coding
+differences are synonymous or benign and the rest alter a protein, how
+many protein-altering variants does one person carry relative to
+another?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:genomics:9}
+A GWAS tests $10^{6}$ SNPs at threshold $p < 5\times 10^{-8}$. How
+many false positives are expected if no SNP is truly associated? A SNP
+allele raises the risk of a disease with frequency \qty{2}{\%} to
+\qty{2.3}{\%}. Explain why such an effect is undetectable in a study of
+a thousand people and useless for an individual, yet may still point
+to a mechanism.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:genomics:10}
+Bacterial genomes are about \qty{88}{\%} coding; the human genome
+\qty{1.5}{\%}. Give three hypotheses --- population genetic, structural
+and regulatory --- for the difference, and for each a genomic
+observation that supports or undermines it.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:genomics:11}
+Derive the Lander--Waterman contig count for \omterm{def:b3:genomics:ngs}{reads} of two different
+lengths mixed: $N_{1}$ short \omterm{def:b3:genomics:ngs}{reads} of length $L_{1}$ and $N_{2}$ long
+\omterm{def:b3:genomics:ngs}{reads} of length $L_{2}$, overlaps counted with the same minimum $T$.
+(Treat each \omterm{def:b3:genomics:ngs}{read} as the rightmost of its contig if no \omterm{def:b3:genomics:ngs}{read} of either
+kind starts within its own length minus $T$.) Show that a few long
+\omterm{def:b3:genomics:ngs}{reads} reduce the contig count more than the same number of bases in
+short \omterm{def:b3:genomics:ngs}{reads}.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:genomics:12}
+The four Hox clusters of mammals are argued to descend from one
+cluster by two rounds of \omterm{def:b3:genomics:comparative}{whole-genome duplication} at the base of the
+vertebrates. State what pattern of \omterm{def:b3:genomics:comparative}{paralogs} across the genome, and
+what pattern in the genomes of lampreys and of the invertebrate
+chordates, that hypothesis predicts, and how one would distinguish it
+from two independent duplications of the cluster alone.
+\end{exercise}
+
+\section{Problem: Two Genomes on One Machine}
+
+\begin{problem}[{Weekend problem --- a bacterium and a human sequenced on
+the same run: the reads shared out, the coverage and the gaps computed,
+the contigs counted, the heterozygous variants called against the
+error rate, the content of the human genome weighed, and an association
+study sized, ending on the contig count at low coverage, the coverage
+that makes a variant call safe and the number of new mutations in a
+child}]
+\label{pb:b3:genomics:1}
+Data: one run yields $6\times 10^{8}$ \omterm{def:b3:genomics:ngs}{reads} of \qty{150}{bp}. A
+bacterial genome is \qty{4.6}{Mb}; the human genome \qty{3.2}{Gb}
+(haploid). Minimum overlap $T = \qty{30}{bp}$. Error rate $10^{-3}$
+per base per \omterm{def:b3:genomics:ngs}{read}. Human coding sequence \qty{48}{Mb}; the genome is
+\qty{45}{\%} transposon-derived, with $1.1$ million Alu copies of
+\qty{300}{bp}. Two humans differ at one site in \num{1000}. Mutation
+rate $1.2\times 10^{-8}$ per base per generation.
+
+\medskip
+\noindent\textbf{Part I --- The bacterium.}
+\begin{enumerate}
+  \item The bacterium is given \qty{0.2}{\%} of the run. How many
+        \omterm{def:b3:genomics:ngs}{reads}, and what coverage?
+  \item What fraction of its genome is unsequenced? How many bases is
+        that?
+  \item Compute $\theta$ and the expected number of contigs.
+  \item An earlier pilot used only \num{30000} \omterm{def:b3:genomics:ngs}{reads}. Coverage,
+        uncovered fraction, and contig number?
+  \item The genome contains \num{7} copies of a \qty{5}{kb} rRNA
+        operon. Explain what happens to them in the \omterm{def:b3:genomics:assembly}{assembly} and how
+        many contig ends this alone produces.
+  \item The bacterium has about one gene per kilobase. How many genes,
+        and, if \qty{88}{\%} of the genome is coding, what is the mean
+        gene length?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The human.}
+\begin{enumerate}[resume]
+  \item The rest of the run goes to one human genome. Coverage of the
+        diploid genome per haploid copy (that is, total bases divided
+        by \qty{3.2}{Gb})?
+  \item At a heterozygous site each of the two alleles is covered by
+        about half the \omterm{def:b3:genomics:ngs}{reads}. With the coverage of question 7, what is
+        the expected number of \omterm{def:b3:genomics:ngs}{reads} showing each allele?
+  \item An error shows a wrong base in a \omterm{def:b3:genomics:ngs}{read} with probability
+        $10^{-3}$. At a homozygous site covered by $c$ \omterm{def:b3:genomics:ngs}{reads}, what is
+        the expected number of \omterm{def:b3:genomics:ngs}{reads} showing any particular wrong base
+        ($10^{-3}/3$ each)? Why does a rule ``call a variant if at
+        least $3$ \omterm{def:b3:genomics:ngs}{reads} and at least \qty{20}{\%} of \omterm{def:b3:genomics:ngs}{reads} show it''
+        reject errors at this coverage?
+  \item How many heterozygous sites does one human carry (half of the
+        differences between two random genomes lie in each, roughly:
+        take one site in \num{1500})? How many in coding sequence?
+  \item The \omterm{def:b3:genomics:ngs}{reads} are aligned to a reference. Explain why \omterm{def:b3:genomics:ngs}{reads} from
+        Alu elements often align to the wrong copy and what
+        consequence this has for calling variants inside them.
+  \item A child is sequenced with both parents. How many new mutations
+        do you expect? How many \omterm{def:b3:genomics:ngs}{reads} in the child, at this coverage,
+        must show a variant absent from \emph{both} parents for it to
+        be believed, and why is the parents' coverage as important as
+        the child's?
+  \item A clinical laboratory captures the exome (\qty{48}{Mb}) and
+        sequences it at $100\times$. How many \omterm{def:b3:genomics:ngs}{reads} does that take, and
+        why is it cheaper per patient than a genome at $28\times$
+        although its coverage is higher?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The content of a genome.}
+\begin{enumerate}[resume]
+  \item What fraction of the human genome is Alu, and what fraction of
+        the \omterm{def:b3:genomics:ngs}{reads} of question 7 come from Alu elements?
+  \item The reference is \qty{3.2}{Gb} but a diploid cell holds
+        \qty{6.4}{Gb}; and a \qty{16}{Gb} onion has about \num{60000}
+        genes. What is the coding fraction of the onion genome, if its
+        genes average \qty{1.5}{kb} of coding sequence?
+  \item Human and chimpanzee differ at \qty{1.2}{\%} of aligned bases.
+        How many substitutions is that in \qty{2.9}{Gb} of alignable
+        sequence? Split evenly between the two lineages over $6.5$
+        million years, what mutation rate per base per year does this
+        imply, and per generation of $25$ years? Compare with the
+        direct measurement given in the data.
+  \item Two vertebrate genome duplications should give up to four
+        copies of each ancestral gene. Humans have about \num{20000}
+        genes and the invertebrate chordate \emph{Ciona} about
+        \num{16000}. What fraction of the duplicates has been lost, on
+        the hypothesis that the ancestor had \num{16000}?
+  \item Explain why gene number is a poor measure of organismal
+        complexity, with the alternative splicing count of
+        \cref{ch:b3:rna-regulation} as one argument.
+  \item \qty{8}{\%} of the genome is under purifying selection but only
+        \qty{1.5}{\%} codes for protein. What is the rest likely to
+        be, and how would you test one candidate element?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- An association study.}
+\begin{enumerate}[resume]
+  \item $10^{6}$ SNPs are tested. State the Bonferroni threshold for a
+        family-wise error of $0.05$, and the expected number of false
+        positives at $p < 10^{-5}$.
+  \item A disease has prevalence \qty{1}{\%}. A risk allele of frequency
+        $0.3$ raises the odds by \qty{5}{\%}. Compute the disease risk
+        of a carrier of two copies, of one copy and of none, taking the
+        non-carrier risk as \qty{0.9}{\%}. (Multiply the odds.)
+  \item Two hundred such alleles are found. Explain what a \omterm{def:b3:genomics:gwas}{polygenic
+        score} is, and why the score of a person in the top \qty{1}{\%}
+        may correspond to a several-fold risk although each allele
+        does almost nothing.
+  \item Explain why a SNP that reaches significance is usually not the
+        causal variant, and what experiment would identify the causal
+        one in the region.
+  \item An ancient genome from a \num{40000}-year-old bone is sequenced
+        at $c = 0.5$. What fraction of it is \omterm{def:b3:genomics:ngs}{read}? Why can this still
+        answer questions about population history that a modern genome
+        alone cannot?
+  \item Summarise: the number of contigs in the pilot \omterm{def:b3:genomics:assembly}{assembly}
+        (question~4), the coverage per haploid genome that gives about
+        $15$ \omterm{def:b3:genomics:ngs}{reads} per allele (question~7--8), and the number of new
+        mutations in a child (question~12).
+\end{enumerate}
+\end{problem}

@@ -1,6 +1,672 @@
 \chapter{Renal Physiology and Osmoregulation}\label{ch:b3:renal-osmoregulation}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Your kidneys filter a hundred and eighty litres of plasma a day ---
+your whole blood volume every half hour --- and return all but a litre
+and a half of it, having taken out the urea, adjusted the salt, the
+acid and the water to within a per cent of what the body needs, and
+kept every gram of glucose. A kangaroo rat in the desert never drinks
+at all: it lives on the water its metabolism makes from dry seeds and
+excretes a urine five times more concentrated than sea water. A
+marine fish drinks constantly and pumps the salt out through its
+gills; a freshwater fish never drinks and pumps salt in. The problem
+they all solve is the same: to hold the composition of the fluid
+around the cells constant while eating, drinking and breathing
+disturb it, and to discard nitrogen without discarding too much
+water. This chapter treats the mammalian kidney as the worked
+example --- filtration, the arithmetic of clearance, the countercurrent
+trick that concentrates urine, and the hormones that set the
+dials --- and then the range of solutions across the animals.
 
-\emph{This chapter has not been written yet.}
+\section{The problem}
+
+\begin{definition}[Osmoregulation]\label{def:b3:renal-osmoregulation:problem}
+\index{osmolarity}\index{osmotic pressure}\index{extracellular fluid}\index{osmoconformer}\index{osmoregulator}
+The \emph{osmolarity} of a solution is its total concentration of
+dissolved particles (in osmoles per litre); it sets the \emph{osmotic
+pressure}, $\Pi = cRT$ for dilute solutions, which drives water across
+any membrane that passes water but not solute. A mammal's body fluids
+sit at about \qty{300}{mOsm/L} --- \qty{40}{\%} of body mass inside the
+cells, \qty{20}{\%} outside, the \emph{extracellular fluid} of which a
+quarter is plasma --- and cells swell or shrink within seconds if the
+outside changes, since their membranes pass water freely. An
+\emph{osmoconformer} (most marine invertebrates, sharks) keeps its
+fluids at the osmolarity of the sea and regulates only their
+composition; an \emph{osmoregulator} (vertebrates, insects,
+freshwater animals) holds its osmolarity constant against the
+environment, which costs energy in proportion to the gradient. The
+second task, coupled to the first, is to dispose of the nitrogen of
+protein breakdown: as \emph{ammonia} into abundant water (fish), as
+\emph{urea}, soluble and non-toxic but needing water to carry it
+(mammals), or as \emph{uric acid}, a paste excreted almost dry (birds,
+reptiles, insects).
+\end{definition}
+
+\section{The nephron and filtration}
+
+\begin{definition}[The nephron]\label{def:b3:renal-osmoregulation:nephron}
+\index{nephron}\index{glomerulus}\index{proximal tubule}\index{loop of Henle}\index{collecting duct}
+Each human kidney holds about a million \emph{nephrons}. Blood enters
+a \emph{glomerulus}, a tuft of capillaries inside Bowman's capsule, whose
+walls --- fenestrated endothelium, basement membrane, and the slit
+diaphragms between the podocytes' feet --- pass water and every solute
+below about \qty{60}{kDa} but hold back the proteins and cells. The
+filtrate flows through the \emph{proximal tubule}, which reabsorbs two
+thirds of the water and salt and all the glucose and amino acids; down
+and up the \emph{loop of Henle}, which reaches into the medulla and
+builds the concentration gradient of the next section; through the
+\emph{distal tubule}, where salt is adjusted; and into the
+\emph{collecting duct}, where the final water content is set by
+vasopressin as the duct passes through the medulla to the pelvis. The
+blood that leaves the glomerulus enters a second capillary bed around
+the tubules, which takes up what they reabsorb.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % cortex/medulla background
+  \fill[omDef!6] (-0.5,0) rectangle (11.5,3.6); \fill[omProp!8] (-0.5,-3.4) rectangle (11.5,0);
+  \node[right, gray] at (-0.4,3.4) {cortex}; \node[right, gray] at (-0.4,-3.2) {medulla};
+  % glomerulus
+  \draw[thick, omThm, fill=omThm!20] (0.8,2.6) circle (0.55); \node[below, align=center] at (0.25,2.0) {glomerulus:\\filtration,\\\qty{180}{L/day}};
+  % proximal tubule
+  \draw[very thick, omDef] (1.35,2.6) .. controls (2.2,3.3) and (2.8,2.0) .. (3.2,2.6) .. controls (3.5,3.1) and (3.9,2.2) .. (4.2,2.6);
+  \node[below, align=center] at (2.65,2.05) {proximal tubule:\\\qty{67}{\%} of Na$^{+}$ and water,\\all glucose, amino acids,\\HCO$_3^-$};
+  % loop of Henle
+  \draw[very thick, omDef] (4.2,2.6) -- (4.2,-2.8) arc[start angle=180, end angle=360, radius=0.4] -- (5.0,2.6);
+  \node[left, align=right] at (4.1,-1.0) {descending limb:\\water leaves};
+  \node[right, align=left] at (5.1,-1.6) {ascending limb:\\NaCl pumped out,\\no water};
+  \node[right, align=left, omProp!80!black] at (5.1,-0.2) {\qty{25}{\%} of Na$^{+}$};
+  % distal tubule
+  \draw[very thick, omDef] (5.0,2.6) .. controls (5.4,3.2) and (6.0,2.0) .. (6.4,2.6) .. controls (6.8,3.1) .. (7.2,2.6);
+  \node[above, align=center] at (6.0,3.1) {distal tubule: Na$^{+}$ (aldosterone),\\Ca$^{2+}$, K$^{+}$ secretion};
+  % collecting duct
+  \draw[very thick, omMeth!70!black] (7.2,2.6) -- (7.8,2.6) -- (7.8,-3.2);
+  \node[right, align=left] at (7.9,-1.2) {collecting duct:\\water (vasopressin,\\aquaporin-2),\\urea, H$^{+}$;\\\qty{1.5}{L/day} out};
+  \draw[->, thick, omMeth!70!black] (7.8,-3.2) -- (7.8,-3.6);
+  % osmolarity scale on the right
+  \foreach \y/\c in {2.6/300, 0.0/600, -1.4/900, -2.8/1200} { \node[left, omProp!80!black, font=\tiny] at (11.4,\y) {\c\ mOsm}; }
+  \draw[->, omProp!80!black] (11.4,2.9) -- (11.4,-3.1); \node[above, omProp!80!black, font=\tiny, align=center] at (11.4,3.0) {interstitial\\osmolarity};
+\end{tikzpicture}
+
+{\small A \omterm{def:b3:renal-osmoregulation:nephron}{nephron} laid out. Filtration in the cortex; bulk reabsorption
+in the \omterm{def:b3:renal-osmoregulation:nephron}{proximal tubule}; the \omterm{def:b3:renal-osmoregulation:nephron}{loop of Henle} dipping into the medulla,
+where the interstitium grows saltier with depth; the \omterm{def:b3:renal-osmoregulation:nephron}{collecting duct}
+passing back through that gradient, giving up water if vasopressin
+allows.}
+\end{omfigure}
+
+\begin{theorem}[Filtration and clearance]\label{thm:b3:renal-osmoregulation:clearance}
+\index{Starling forces}\index{glomerular filtration rate}\index{clearance}\index{inulin}\index{creatinine}
+The filtrate flows across the glomerular wall at a rate set by the
+\emph{\omterm{thm:b3:renal-osmoregulation:clearance}{Starling forces}}: the hydrostatic pressure of the capillary
+$P_{\text{GC}}$ pushes fluid out, the hydrostatic pressure in Bowman's
+space $P_{\text{BS}}$ and the oncotic pressure of the plasma proteins
+$\pi_{\text{GC}}$ pull it back, and
+\[
+\text{GFR} = K_{f}\,\bigl(P_{\text{GC}} - P_{\text{BS}} - \pi_{\text{GC}}\bigr)
+\approx K_{f}\,(55 - 15 - 30)\ \unit{mmHg} = K_{f}\times \qty{10}{mmHg},
+\]
+the \emph{\omterm{thm:b3:renal-osmoregulation:clearance}{glomerular filtration rate}}, about \qty{125}{mL/min} in an
+adult. For any substance $x$ with plasma concentration $P_{x}$, urine
+concentration $U_{x}$ and urine flow $V$, the \emph{clearance}
+\[
+C_{x} = \frac{U_{x}\,V}{P_{x}}
+\]
+is the volume of plasma cleared of $x$ per unit time. If $x$ is freely
+filtered and neither reabsorbed nor secreted (inulin, and nearly so
+creatinine), $C_{x} = \text{GFR}$; if it is completely removed from the
+plasma passing the kidney (para-aminohippurate at low dose), $C_{x}$
+equals the renal plasma flow; a clearance below the GFR means net
+reabsorption, above it net secretion, and the filtered load $\text{GFR}
+\times P_{x}$ minus the excretion $U_{x}V$ is the amount reabsorbed.
+\end{theorem}
+\begin{proof}
+Filtration is ultrafiltration through a porous wall: flow is
+proportional to the net pressure across it, and the net pressure is
+the outward hydrostatic minus the inward hydrostatic and oncotic
+pressures (Starling), the oncotic pressure of the filtrate being
+negligible since it holds no protein. Clearance: in unit time the
+kidney excretes $U_{x}V$ of $x$; the plasma volume that contained this
+amount is $U_{x}V/P_{x}$. For a substance that is only filtered, what
+is excreted is what was filtered, $\text{GFR}\times P_{x} = U_{x}V$,
+whence $C_{x} = \text{GFR}$. For one wholly extracted, all the $x$ in
+the plasma flowing through, $\text{RPF}\times P_{x}$, is excreted,
+whence $C_{x} = \text{RPF}$. Mass balance gives the reabsorbed amount.
+\end{proof}
+
+\begin{example}[Clearances in numbers]\label{ex:b3:renal-osmoregulation:numbers}
+Inulin infused to a plasma level of \qty{1}{mg/mL} appears in urine at
+\qty{125}{mg/mL} with a flow of \qty{1}{mL/min}: $C = 125\times 1/1 =
+\qty{125}{mL/min}$, the GFR, \qty{180}{L/day}. Para-aminohippurate
+gives \qty{650}{mL/min}, the plasma flow; with a haematocrit of $0.45$
+the renal blood flow is \qty{1.2}{L/min}, a fifth of the cardiac
+output for \qty{0.5}{\%} of the body mass, and the filtration fraction
+$125/650 = 0.19$. Urea: plasma \qty{5}{mmol/L}, urine \qty{300}{mmol/L}
+at \qty{1}{mL/min} --- clearance \qty{60}{mL/min}, half the GFR, so half
+the filtered urea is reabsorbed. Glucose: clearance zero at normal
+plasma levels, every molecule of the \qty{180}{g} filtered a day
+returned. Creatinine, made by muscle at a constant rate and only
+filtered, is the clinic's measure of GFR: when the GFR halves the
+plasma creatinine doubles, without any collection of urine.
+\end{example}
+
+\begin{method}[Measuring kidney function]\label{met:b3:renal-osmoregulation:gfr}
+\index{GFR measurement}
+(1) For a research value, infuse inulin to a steady plasma level,
+collect timed urine, measure both, and compute $UV/P$. (2) In the
+clinic, measure the plasma creatinine and estimate the GFR from it
+with a formula that corrects for age, sex and body size; the estimate
+is what the stages of chronic kidney disease are defined by (a GFR
+below \qty{60}{mL/min} for three months). (3) Test the filter's
+selectivity by measuring albumin in the urine --- normally under
+\qty{30}{mg/day}; more means a leaking barrier, the earliest sign of
+diabetic kidney damage. (4) Test the concentrating ability by
+withholding water overnight and measuring the urine \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}, which
+should exceed \qty{800}{mOsm/L}; failure to concentrate with a normal
+GFR points to the \omterm{def:b3:renal-osmoregulation:nephron}{collecting duct} or to vasopressin.
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=800, ymin=0, ymax=700,
+  xlabel={plasma glucose (mg/dL)}, ylabel={mg/min},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,100,200,300,400,600,800}, ytick={0,200,375,600},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:800, samples=2] {1.25*x};
+\addplot[very thick, omMeth!70!black, domain=0:200, samples=2] {1.25*x};
+\addplot[very thick, omMeth!70!black, smooth] coordinates {(200,250) (250,300) (300,340) (350,365) (400,375) (800,375)};
+\addplot[very thick, omThm, domain=0:180, samples=2] {0};
+\addplot[very thick, omThm, smooth] coordinates {(180,0) (250,12) (300,35) (350,72) (400,125) (800,625)};
+\draw[dashed, gray] (axis cs:180,0) -- (axis cs:180,700); \node[font=\scriptsize, gray, anchor=north west] at (axis cs:185,560) {threshold};
+\draw[dashed, gray] (axis cs:0,375) -- (axis cs:800,375);
+\node[font=\scriptsize, omDef, anchor=south east] at (axis cs:480,620) {filtered: GFR $\times$ P};
+\node[font=\scriptsize, omMeth!70!black, anchor=south west, align=left] at (axis cs:660,395) {reabsorbed:\\$T_{m} = \qty{375}{mg/min}$};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:520,300) {excreted};
+\end{axis}
+\end{tikzpicture}
+
+{\small The glucose titration curve. The filtered load rises with the
+plasma level; the transporters of the \omterm{def:b3:renal-osmoregulation:nephron}{proximal tubule} reabsorb all of
+it up to their maximum $T_{m}$; above the threshold, at about
+\qty{180}{mg/dL} (\qty{10}{mmol/L}), glucose spills into the urine ---
+the sugar in the urine of untreated diabetes.}
+\end{omfigure}
+
+\section{Concentrating the urine}
+
+\begin{proposition}[The countercurrent multiplier]\label{prop:b3:renal-osmoregulation:countercurrent}
+\index{countercurrent multiplication}\index{single effect}\index{vasopressin}\index{aquaporin}\index{urea recycling}
+The \omterm{def:b3:renal-osmoregulation:nephron}{loop of Henle} builds a gradient of \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} from \qty{300}{mOsm/L}
+at the cortex to \qty{1200}{mOsm/L} at the tip of the medulla, without
+any cell pumping against more than a fraction of it. The thick
+ascending limb pumps NaCl out of its fluid into the interstitium and
+is impermeable to water, so at each level it makes the interstitium
+about \qty{200}{mOsm/L} saltier than its own contents --- the
+\emph{\omterm{prop:b3:renal-osmoregulation:countercurrent}{single effect}}. The descending limb is permeable to water and
+equilibrates with the interstitium, so the fluid flowing down grows
+saltier as it descends and delivers to the bend a fluid already
+concentrated, which the ascending limb then pumps from; the fluid
+flowing up grows more dilute than the interstitium at every level and
+leaves the loop at \qty{100}{mOsm/L}, hypotonic. Countercurrent flow
+converts a small transverse effect into a large longitudinal gradient:
+the saltiest fluid at the bend was made from fluid that was already
+salty, stage upon stage. The \omterm{def:b3:renal-osmoregulation:nephron}{collecting duct} then runs down through
+this gradient. Without \emph{vasopressin} (antidiuretic hormone) its
+wall is impermeable to water and a litre or more of dilute urine
+leaves each hour; with it, \emph{aquaporin-2} channels are inserted into
+the luminal membrane, water leaves down the gradient into the
+medulla, and the urine reaches the \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} of the tip,
+\qty{1200}{mOsm/L}. Urea, reabsorbed from the inner duct and trapped in
+the medulla, supplies half the tip's \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}, and the vasa recta,
+themselves in countercurrent, remove the reabsorbed water without
+washing the gradient away.
+\end{proposition}
+
+\begin{proof}[Evidence]
+Wirz, Hargitay and Kuhn (1951) froze rat kidneys and measured the
+melting point of the fluid in slices from cortex to papilla: the
+\omterm{def:b3:renal-osmoregulation:problem}{osmolarity} rose steadily with depth, reaching the urine's value at the
+tip --- the gradient the theory of the countercurrent multiplier (Kuhn,
+a physical chemist, 1942) had required. Micropuncture of the tubules
+(Gottschalk, 1959) then found the fluid at the bend of the loop
+hypertonic and that leaving the ascending limb hypotonic, with the
+\omterm{def:b3:renal-osmoregulation:nephron}{collecting duct}'s fluid matching the interstitium at each level when
+vasopressin was present. The desert rodents with the longest loops had
+the steepest gradients and the most concentrated urine.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % loop
+  \draw[very thick, omDef] (0,3.2) -- (0,-0.4) arc[start angle=180, end angle=360, radius=0.7] -- (1.4,3.2);
+  \draw[very thick, omDef] (0.35,3.2) -- (0.35,-0.4) arc[start angle=180, end angle=360, radius=0.35] -- (1.05,3.2);
+  % interstitial osmolarity bands
+  \foreach \y/\c/\col in {2.8/300/10, 2.0/500/25, 1.2/700/40, 0.4/900/55, -0.4/1100/70, -1.0/1200/80} { \fill[omProp!\col, opacity=0.5] (-2.2,\y-0.4) rectangle (-0.2,\y+0.4); \node[left, font=\tiny] at (-2.25,\y) {\c}; }
+  \node[left, align=right, font=\tiny] at (-2.25,3.35) {interstitium\\(mOsm/L)};
+  % arrows: water out of descending, NaCl out of ascending
+  \foreach \y in {2.4,1.6,0.8,0.0} { \draw[->, thick, omDef!70!black] (0.15,\y) -- (-0.4,\y); }
+  \node[left, omDef!70!black, font=\tiny] at (-0.45,2.4) {H$_2$O};
+  \foreach \y in {2.4,1.6,0.8,0.0} { \draw[->, thick, omThm] (1.25,\y) -- (1.9,\y); }
+  \node[right, omThm, font=\tiny] at (1.5,2.85) {NaCl pumped};
+  % fluid osmolarity labels inside limbs
+  \node[above] at (0.17,3.25) {\qty{300}{} in}; \node[above] at (1.22,3.25) {\qty{100}{} out};
+  \node[font=\tiny] at (0.7,-1.35) {1200 at the bend};
+  \node[below, align=center] at (0.2,-1.7) {descending limb: water leaves,\\fluid concentrates; ascending limb:\\salt leaves, fluid dilutes};
+  % collecting duct
+  \draw[very thick, omMeth!70!black] (4.2,3.2) -- (4.2,-1.4); \node[above, align=center] at (4.2,3.25) {collecting duct};
+  \foreach \y in {2.4,1.6,0.8,0.0,-0.8} { \draw[->, thick, omMeth!70!black] (4.1,\y) -- (3.5,\y); }
+  \node[right, align=left, font=\tiny] at (4.3,1.2) {with vasopressin:\\aquaporin-2 inserted,\\water leaves down\\the gradient};
+  \node[below, align=center] at (4.2,-1.5) {urine to\\\qty{1200}{mOsm/L}};
+  % single effect note
+  \node[right, align=left] at (6.4,2.6) {the single effect: the ascending limb\\keeps the interstitium $\sim\qty{200}{mOsm/L}$\\above its own fluid at every level;\\countercurrent flow stacks the effects\\into a gradient of \qty{900}{mOsm/L}\\from cortex to papilla};
+\end{tikzpicture}
+
+{\small The countercurrent multiplier. Salt pumped from the ascending
+limb makes the interstitium hypertonic; water drawn from the descending
+limb concentrates the fluid before it reaches the pump; flow in
+opposite directions stacks a small transverse difference into a
+fourfold gradient, which the \omterm{def:b3:renal-osmoregulation:nephron}{collecting duct} uses to concentrate the
+urine when vasopressin opens it to water.}
+\end{omfigure}
+
+\begin{proposition}[The arithmetic of water]\label{prop:b3:renal-osmoregulation:water}
+\index{obligatory water loss}\index{free-water clearance}
+A body that must excrete a daily solute load $S$ (about
+\qty{600}{mOsm}, mostly urea and salt) at a maximal urine \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}
+$U_{\max}$ needs a minimum urine volume $V_{\min} = S/U_{\max}$: for a
+human, $600/1200 = \qty{0.5}{L}$ a day, the \emph{obligatory} water
+loss, to which the lungs and skin add about \qty{0.9}{L}. Drinking
+sea water (about \qty{1000}{mOsm/L}, nearly all salt) supplies a litre
+of water with \qty{1000}{mOsm} of salt that must be excreted; at
+$U_{\max}$ that takes $1000/1200 = \qty{0.83}{L}$ of urine, but the
+salt is excreted with a urea load as well, and the net gain is close
+to zero or negative: a shipwrecked sailor who drinks sea water
+dehydrates faster than one who does not. The \emph{\omterm{prop:b3:renal-osmoregulation:water}{free-water
+clearance}}, $V - U_{\text{osm}}V/P_{\text{osm}}$, is the volume of
+solute-free water the kidney adds to or removes from the body per unit
+time: positive in a water load (dilute urine), negative in
+dehydration.
+\end{proposition}
+\begin{proof}
+Solute leaves only in urine (sweat aside), at concentration at most
+$U_{\max}$, so $S = U V \le U_{\max}V$ gives $V \ge S/U_{\max}$. For sea
+water: a litre brings \qty{1000}{mOsm}; excreting them at
+\qty{1200}{mOsm/L} takes \qty{0.83}{L}, leaving \qty{0.17}{L}, before
+counting the day's own \qty{600}{mOsm} of metabolic solute, whose
+excretion consumes it. \omterm{prop:b3:renal-osmoregulation:water}{Free-water clearance}: the urine of volume $V$
+and \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} $U_{\text{osm}}$ contains solute $U_{\text{osm}}V$ that
+would occupy $U_{\text{osm}}V/P_{\text{osm}}$ at plasma \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}; the
+rest of the volume is water in excess of that, removed from the body.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.66\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=1300, ymin=0, ymax=12,
+  xlabel={urine osmolarity (mOsm/L)}, ylabel={urine volume (L/day)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={50,300,600,1200}, ytick={0.5,2,6,12},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=50:1300, samples=100] {600/x};
+\draw[dashed, gray] (axis cs:300,0) -- (axis cs:300,2); \draw[dashed, gray] (axis cs:1200,0) -- (axis cs:1200,0.5);
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:350,3.5) {$V = S/U$ with $S = \qty{600}{mOsm/day}$};
+\node[font=\scriptsize, anchor=west, align=left] at (axis cs:1210,1.7) {maximal concentration:\\\qty{0.5}{L}};
+\node[font=\scriptsize, anchor=south west] at (axis cs:60,9) {maximal dilution (\qty{50}{mOsm/L}): \qty{12}{L}};
+\end{axis}
+\end{tikzpicture}
+
+{\small The volume of urine needed to carry a day's solute, against its
+concentration. From the most dilute urine the kidney can make to the
+most concentrated, the volume ranges over a factor of twenty-four;
+vasopressin chooses the point.}
+\end{omfigure}
+
+\section{Regulation}
+
+\begin{definition}[The controls]\label{def:b3:renal-osmoregulation:controls}
+\index{renin--angiotensin--aldosterone system}\index{aldosterone}\index{atrial natriuretic peptide}\index{osmoreceptor}\index{tubuloglomerular feedback}
+Two variables are regulated separately: the \emph{volume} of the
+\omterm{def:b3:renal-osmoregulation:problem}{extracellular fluid}, which is a matter of how much sodium the body
+holds, and its \emph{\omterm{def:b3:renal-osmoregulation:problem}{osmolarity}}, which is a matter of water. Volume:
+cells of the juxtaglomerular apparatus, where the distal tubule
+touches its own \omterm{def:b3:renal-osmoregulation:nephron}{glomerulus}'s arteriole, release \emph{renin} when
+arterial pressure or tubular salt falls; renin cleaves angiotensin I
+from a plasma protein, converting enzyme makes \emph{angiotensin II},
+which constricts arterioles, stimulates thirst, and releases
+\emph{aldosterone} from the adrenal cortex, which over hours makes the
+distal tubule and \omterm{def:b3:renal-osmoregulation:nephron}{collecting duct} reabsorb sodium (through the channel
+ENaC) and secrete potassium. The stretched atria release
+\emph{natriuretic peptide}, which does the opposite. \omterm{def:b3:renal-osmoregulation:problem}{Osmolarity}:
+\emph{osmoreceptors} in the hypothalamus sense a rise of \qty{1}{\%} and
+release vasopressin from the posterior pituitary within minutes, and
+drive thirst; a fall shuts it off. The kidney also regulates itself:
+\emph{tubuloglomerular feedback} constricts the arteriole of a
+\omterm{def:b3:renal-osmoregulation:nephron}{nephron} whose distal salt delivery is too high, holding each
+\omterm{def:b3:renal-osmoregulation:nephron}{nephron}'s filtration to what its tubule can handle. And acid--base:
+the \omterm{def:b3:renal-osmoregulation:nephron}{proximal tubule} recovers the filtered bicarbonate, the \omterm{def:b3:renal-osmoregulation:nephron}{collecting
+duct} secretes protons against a thousandfold gradient and excretes
+them buffered on phosphate and, above all, as ammonium made from
+glutamine --- the body's route for disposing of the acid of a
+protein-rich diet.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, thick, rounded corners, fill=omThm!20, align=center] (low) at (0,0) {low arterial pressure\\or low tubular NaCl};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (ren) at (3.6,0) {juxtaglomerular\\cells release renin};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (ang) at (7.4,0) {angiotensin I $\to$ II\\(converting enzyme)};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (ald) at (11.0,1.2) {aldosterone:\\Na$^{+}$ retained, K$^{+}$ lost};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (vc) at (11.0,-0.3) {arterioles constrict};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (th) at (11.0,-1.8) {thirst, vasopressin};
+  \draw[->, thick] (low) -- (ren); \draw[->, thick] (ren) -- (ang);
+  \draw[->, thick] (ang) -- (ald.west); \draw[->, thick] (ang) -- (vc.west); \draw[->, thick] (ang) -- (th.west);
+  \node[draw, thick, rounded corners, fill=omProp!25, align=center] (res) at (6.8,-2.6) {volume and pressure restored};
+  \draw[->, thick] (ald.east) -- ++(0.4,0) |- (res.east); \draw[thick] (vc.east) -- ++(0.4,0); \draw[thick] (th.east) -- ++(0.4,0);
+  \draw[-|, thick, omThm] (res.south) -- ++(0,-0.6) -| (low.south) node[pos=0.3, below, font=\tiny] {negative feedback};
+  \node[draw, thick, rounded corners, fill=gray!15, align=center, font=\tiny] (anp) at (2.4,-2.6) {stretched atria: natriuretic\\peptide, the opposite};
+  \draw[-|, thick, gray!60!black] (anp.east) -- (res.west);
+\end{tikzpicture}
+
+{\small The renin--angiotensin--aldosterone loop, the slow controller of
+the body's sodium and hence its extracellular volume. Angiotensin II
+acts on vessels, adrenal, brain and kidney at once; natriuretic
+peptide from the stretched heart opposes it.}
+\end{omfigure}
+
+\begin{example}[Two days]\label{ex:b3:renal-osmoregulation:two-days}
+A day without water: the plasma \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} rises from $290$ toward
+\qty{295}{mOsm/L}, vasopressin rises within minutes, the \omterm{def:b3:renal-osmoregulation:nephron}{collecting
+ducts} open to water, the urine concentrates to \qty{1200}{mOsm/L} and
+falls to half a litre; the person is thirsty; the volume lost is
+mostly from the cells, whose water follows the extracellular salt.
+A litre of water drunk at once: \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} falls \qty{1}{\%},
+vasopressin falls to nothing within twenty minutes, the ducts close,
+and over the next two hours the kidney passes a litre of urine at
+\qty{50}{mOsm/L}. A haemorrhage of a litre: pressure falls, renin
+and vasopressin both rise (volume overrides \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}), the
+arterioles constrict, sodium and water are kept, and over a day the
+plasma volume is refilled --- with fluid drawn from the interstitium and
+then drunk. Diabetes insipidus, the absence of vasopressin or of its
+receptor, produces \qty{15}{L} of dilute urine a day and a thirst to
+match; kidney failure, the absence of filtration, leaves a body that
+must be filtered by a machine three times a week, through a membrane
+whose clearance is a fraction of two kidneys'.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-20-kidney-section.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-20-nephron-cast.jpg}
+
+{\small Left: renal cortex in section --- a \omterm{def:b3:renal-osmoregulation:nephron}{glomerulus} in its capsule
+among the profiles of proximal and distal tubules. Right: a vascular
+cast of the cortex, each ball of yarn a \omterm{def:b3:renal-osmoregulation:nephron}{glomerulus} with its afferent
+and efferent vessels among the peritubular capillaries.}
+\end{omfigure}
+
+\section{Other animals, other solutions}
+
+\begin{definition}[Osmoregulation across the animals]\label{def:b3:renal-osmoregulation:comparative}
+\index{Malpighian tubule}\index{salt gland}\index{chloride cell}\index{metabolic water}\index{relative medullary thickness}
+Freshwater fish live in a medium a tenth the \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} of their blood:
+water floods in through the gills, salt leaks out, and they excrete a
+copious dilute urine and take salt up actively through the gills'
+\emph{chloride cells}, never drinking. Marine teleosts, whose blood is
+a third the sea's \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}, lose water through the gills, drink sea
+water, and pump the salt out through the same chloride cells reversed,
+keeping the urine scant; sharks instead hold their blood iso-osmotic
+with the sea by retaining urea (and trimethylamine oxide to stabilise
+their proteins against it), and excrete excess salt through a rectal
+gland. Sea birds and marine reptiles carry \emph{salt glands} above
+the eyes that secrete a brine twice as salty as the sea, letting an
+albatross drink from the ocean. Insects filter through
+\emph{Malpighian tubules} driven by active potassium secretion rather
+than blood pressure, and reabsorb water in the rectum so completely
+that a desert beetle's droppings are dry. Among mammals the
+concentrating power scales with the length of the loops relative to
+the kidney's size (the \emph{relative medullary thickness}): a beaver
+manages \qty{500}{mOsm/L}, a human \num{1200}, a camel \num{3000}, the
+kangaroo rat \num{5500} --- which lets it live on the \emph{metabolic
+water} released when its food is oxidised, about \qty{0.6}{g} of water
+per gram of starch, with a nose that recovers the water from each
+exhaled breath by countercurrent cooling.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book5/ai/b5-20-kangaroo-rat.jpg}
+
+{\small A kangaroo rat, which never drinks: long loops of Henle, a urine
+five times as concentrated as sea water, a cool nose that condenses the
+water of each breath, and a diet whose oxidation makes all the water
+it needs.}
+\end{omfigure}
+
+\begin{remark}[The kidney as a design problem]\label{rem:b3:renal-osmoregulation:design}
+The mammalian kidney filters forty times the plasma volume a day only
+to take nearly all of it back: an extravagant design, whose point is
+that filtering everything and reabsorbing selectively is simpler than
+secreting selectively every waste that might appear. Its cost is the
+\qty{7}{\%} of the resting metabolism spent pumping sodium back, and
+its vulnerability is the delicate filter, which fails slowly under
+high pressure and high glucose. Its cleverness is the countercurrent
+loop, a device also found in the swim bladders of deep fish, the legs
+of wading birds and the noses of desert rodents, by which a small,
+affordable local difference is stacked into a large one --- the same
+idea, in each case, that a gradient can be built from flow.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:renal-osmoregulation:1}
+Name the segments of the \omterm{def:b3:renal-osmoregulation:nephron}{nephron} in order and state one thing each
+does.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:renal-osmoregulation:2}
+Define clearance. A substance has plasma concentration
+\qty{2}{mg/mL}, urine concentration \qty{100}{mg/mL} and the urine flow
+is \qty{1.5}{mL/min}. Compute its clearance and say whether it is
+reabsorbed, secreted or neither, if the GFR is \qty{120}{mL/min}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:renal-osmoregulation:3}
+Why does a freshwater fish never drink and a marine fish drink
+continuously? What do the gills do in each?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:renal-osmoregulation:4}
+What is the \omterm{prop:b3:renal-osmoregulation:countercurrent}{single effect} of the \omterm{def:b3:renal-osmoregulation:nephron}{loop of Henle}, which limb produces
+it, and why must the two limbs differ in their permeability to water?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:renal-osmoregulation:5}
+Glomerular capillary pressure \qty{60}{mmHg}, Bowman's space
+\qty{18}{mmHg}, plasma oncotic pressure \qty{28}{mmHg} at the afferent
+end rising to \qty{35}{mmHg} at the efferent end. Compute the net
+filtration pressure at each end and explain why filtration may stop
+before the end of the capillary. What does that imply for the effect
+of plasma flow on GFR?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:renal-osmoregulation:6}
+A patient's creatinine clearance is \qty{40}{mL/min}. Plasma sodium is
+\qty{140}{mmol/L}, urine sodium \qty{70}{mmol/L}, urine flow
+\qty{1}{mL/min}. Compute the filtered load of sodium, the excretion,
+the fraction reabsorbed, and the sodium clearance.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:renal-osmoregulation:7}
+A person eats a diet producing \qty{900}{mOsm} of solute a day and can
+concentrate to \qty{1200}{mOsm/L}. Minimum urine volume? If kidney
+disease lowers the maximum to \qty{400}{mOsm/L}, how much must they
+drink to stay in balance, allowing \qty{0.9}{L} of insensible loss?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:renal-osmoregulation:8}
+Predict the urine volume and \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}, the plasma sodium and the
+state of thirst in (a) diabetes insipidus, (b) inappropriate secretion
+of vasopressin by a \omterm{def:b3:cancer-biology:hallmarks}{tumour}, (c) \omterm{def:b3:renal-osmoregulation:controls}{aldosterone} excess, (d) a diet with no
+salt for a week.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:renal-osmoregulation:9}
+Compute the \omterm{prop:b3:renal-osmoregulation:water}{free-water clearance} for urine of \qty{100}{mOsm/L} at
+\qty{6}{mL/min} and for urine of \qty{1000}{mOsm/L} at
+\qty{0.6}{mL/min}, with plasma at \qty{300}{mOsm/L}. Interpret each.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:renal-osmoregulation:10}
+Model the loop as $n$ stages in which the ascending fluid at each
+stage is \qty{200}{mOsm/L} below the interstitium and the descending
+fluid equals it, with the fluid entering at \qty{300}{mOsm/L}. Argue
+that the steady-state \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} at the bend can approach $300 +
+200n$, so that the gradient is limited by the loop's length and the
+pump's \omterm{prop:b3:renal-osmoregulation:countercurrent}{single effect}, and say what sets $n$ physically.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:renal-osmoregulation:11}
+A kangaroo rat eats \qty{5}{g} of dry seed a day, \qty{80}{\%} starch,
+oxidised to CO$_{2}$ and water (\qty{0.6}{g} water per gram of starch).
+It must excrete \qty{3}{mOsm} of solute a day at \qty{5500}{mOsm/L},
+and loses \qty{1.5}{g} of water a day by evaporation from a nose that
+recovers \qty{70}{\%} of the water in its breath. Balance its water
+budget and say whether it survives without drinking.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:renal-osmoregulation:12}
+Dialysis passes blood along one side of a membrane and dialysate along
+the other, in countercurrent. Explain why countercurrent flow clears
+more than parallel flow, estimate the clearance of a machine that
+removes urea from \qty{300}{mL/min} of blood with \qty{70}{\%}
+efficiency, and compare with two kidneys over a week if the machine
+runs four hours three times a week.
+\end{exercise}
+
+\section{Problem: Eighteen Buckets a Day}
+
+\begin{problem}[{Weekend problem --- a day's filtrate followed from the
+glomerulus to the bladder: the Starling pressures, the clearances of
+four substances, the glucose threshold, the water budget from maximal
+dilution to sea water, and a desert rodent's balance, ending on the
+GFR, the obligatory urine volume and the net water a litre of sea water
+yields}]
+\label{pb:b3:renal-osmoregulation:1}
+Data: $K_{f} = \qty{12.5}{mL/min/mmHg}$; $P_{\text{GC}} = \qty{55}{mmHg}$,
+$P_{\text{BS}} = \qty{15}{mmHg}$, $\pi_{\text{GC}} = \qty{30}{mmHg}$.
+Plasma: inulin \qty{0.5}{mg/mL}, creatinine \qty{0.01}{mg/mL}, urea
+\qty{5}{mmol/L}, glucose \qty{5}{mmol/L}, para-aminohippurate
+\qty{0.02}{mg/mL}, Na$^{+}$ \qty{140}{mmol/L}, \omterm{def:b3:renal-osmoregulation:problem}{osmolarity}
+\qty{290}{mOsm/L}. Urine flow \qty{1}{mL/min}: inulin \qty{62.5}{mg/mL},
+creatinine \qty{1.3}{mg/mL}, urea \qty{250}{mmol/L}, glucose $0$,
+para-aminohippurate \qty{13}{mg/mL}, Na$^{+}$ \qty{100}{mmol/L},
+\omterm{def:b3:renal-osmoregulation:problem}{osmolarity} \qty{600}{mOsm/L}. Haematocrit $0.45$. Glucose $T_{m} =
+\qty{375}{mg/min}$ (\qty{2.1}{mmol/min}). Daily solute \qty{600}{mOsm};
+$U_{\max} = \qty{1200}{mOsm/L}$, $U_{\min} = \qty{50}{mOsm/L}$;
+insensible loss \qty{0.9}{L/day}; sea water \qty{1000}{mOsm/L}.
+
+\medskip
+\noindent\textbf{Part I --- The filter.}
+\begin{enumerate}
+  \item Compute the net filtration pressure and the GFR.
+  \item Convert the GFR to litres per day. How many times is the plasma
+        volume (\qty{3}{L}) filtered?
+  \item Compute the inulin clearance and compare it with the GFR.
+        Compute the creatinine clearance; why is it slightly larger?
+  \item Compute the para-aminohippurate clearance (the renal plasma
+        flow), the renal blood flow, and the filtration fraction.
+  \item The efferent arteriole constricts, raising $P_{\text{GC}}$ to
+        \qty{60}{mmHg}. New GFR? Why do drugs that block angiotensin II
+        lower the GFR a little in a healthy kidney and protect a
+        diabetic one?
+  \item Protein appears in the urine at \qty{3}{g/day}. Which layer of
+        the filter has failed, and what happens to the plasma oncotic
+        pressure and to the tissues if it continues?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Handling.}
+\begin{enumerate}[resume]
+  \item Urea: filtered load, excretion, fraction reabsorbed, and
+        clearance.
+  \item Sodium: filtered load per day in moles and grams, excretion,
+        and the fraction reabsorbed. How many kilograms of salt would
+        be lost in a day if nothing were reabsorbed?
+  \item Glucose: filtered load in mmol/min and in grams per day; is any
+        excreted? At what plasma glucose does the filtered load reach
+        $T_{m}$ (the threshold)?
+  \item A diabetic has plasma glucose \qty{20}{mmol/L}. Glucose excreted
+        per minute and per day in grams, and the extra urine volume if
+        each \qty{300}{mOsm} of glucose carries \qty{1}{L} at the
+        prevailing concentration. Explain the thirst and the weight
+        loss of untreated diabetes.
+  \item Reabsorbing sodium costs one ATP per three Na$^{+}$. How many
+        moles of ATP a day does the kidney spend on sodium, and how
+        many kilojoules (\qty{50}{kJ/mol})? Compare with a resting
+        \qty{7}{MJ/day}.
+  \item Explain why the kidney filters and reabsorbs rather than
+        secreting each waste, in terms of what the tubule would need to
+        recognise.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Water.}
+\begin{enumerate}[resume]
+  \item Osmolar clearance $U_{\text{osm}}V/P_{\text{osm}}$ from the
+        data, and the \omterm{prop:b3:renal-osmoregulation:water}{free-water clearance}. Is the person conserving or
+        shedding water?
+  \item Minimum urine volume for the daily solute; maximum (at
+        $U_{\min}$); the total daily water need at the minimum, with
+        insensible loss.
+  \item A litre of sea water is drunk. How much urine is needed to
+        excrete its salt at $U_{\max}$, and what is the net water gain
+        before the day's own solute is counted? After?
+  \item Vasopressin is absent (diabetes insipidus) and the urine stays
+        at $U_{\min}$. Daily urine volume for the same solute, and the
+        water that must be drunk each day to keep balance.
+  \item Beer at \qty{20}{mOsm/L}: how much can be drunk per day before
+        the kidney, at $U_{\min}$, can no longer excrete the water?
+        (Water in excess of what the solute can carry at $U_{\min}$
+        accumulates.)
+  \item After a night without water the plasma \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} is
+        \qty{298}{mOsm/L}. By what per cent has it risen, and what does
+        the hypothalamus do? Estimate the water deficit if the total
+        body water is \qty{42}{L} and solute is unchanged.
+  \item Explain why a marathon runner who drinks \qty{6}{L} of water
+        while sweating salt can develop a dangerously low plasma sodium,
+        and what the kidney would need to do to prevent it.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The desert.}
+\begin{enumerate}[resume]
+  \item A kangaroo rat excretes \qty{3}{mOsm} a day at \qty{5500}{mOsm/L}.
+        Urine volume? Compare with the volume a human kidney would
+        need for the same solute at its own maximum.
+  \item Its food yields \qty{2.4}{g} of \omterm{def:b3:renal-osmoregulation:comparative}{metabolic water} a day and it
+        loses \qty{1.6}{g} by breathing and \qty{0.3}{g} in faeces.
+        Balance the budget with the urine of question 20.
+  \item A camel concentrates to \qty{3000}{mOsm/L} and tolerates losing
+        \qty{25}{\%} of its body water. For a \qty{500}{kg} camel with
+        \qty{65}{\%} water, how much can it lose, and how many days does
+        that cover at a loss of \qty{5}{L/day}?
+  \item A marine bird eats \qty{200}{g} of fish and drinks \qty{100}{mL}
+        of sea water a day, taking in \qty{150}{mmol} of NaCl. Its \omterm{def:b3:renal-osmoregulation:comparative}{salt
+        gland} secretes at \qty{800}{mmol/L}. How much brine does it
+        produce, and why is the gland better than the kidney (which in
+        birds concentrates to only \qty{600}{mOsm/L}) for this?
+  \item A freshwater fish of \qty{100}{g} gains \qty{30}{\%} of its body
+        mass in water a day through its gills. How much urine must it
+        make, at what \omterm{def:b3:renal-osmoregulation:problem}{osmolarity} relative to its blood, and what would
+        happen to its salt without active uptake?
+  \item Summarise: the GFR (question~1), the obligatory urine volume
+        (question~14), and the net water from a litre of sea water after
+        the day's solute is counted (question~15).
+\end{enumerate}
+\end{problem}

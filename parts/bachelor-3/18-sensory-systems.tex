@@ -1,6 +1,673 @@
 \chapter{Sensory Systems}\label{ch:b3:sensory-systems}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+On a dark night a human eye can detect a flash of a few photons ---
+the smallest amount of light that physics allows to be detected at all.
+The ear hears a sound that moves the eardrum by less than the diameter
+of a hydrogen atom, and tells a tone from another that differs by a
+fifth of a per cent. A dog follows a trail of a few molecules per
+cubic centimetre; a shark finds a flatfish under the sand by the
+electric field of its heartbeat. Every sense begins with a cell that
+converts one kind of energy into a change of membrane potential, and
+every sense ends as spikes in a nerve; between the two lie the
+problems that this chapter treats: how a receptor amplifies a single
+molecule or photon into a signal a neuron can read, how a range of a
+trillionfold in intensity is squeezed into a rate of a few hundred
+spikes a second, how a mechanical wave is sorted by frequency, how
+ten thousand smells are told apart with four hundred receptors, and
+how the brain, which never receives anything but spikes, knows which
+sense they came from.
 
-\emph{This chapter has not been written yet.}
+\section{Principles common to every sense}
+
+\begin{definition}[Transduction, coding and adaptation]\label{def:b3:sensory-systems:principles}
+\index{sensory transduction}\index{receptor potential}\index{labelled line}\index{receptive field}\index{adaptation!sensory}\index{lateral inhibition}
+A \emph{sensory receptor cell} contains a \emph{transduction} mechanism
+--- a protein or cascade --- that converts a stimulus (a photon, a
+molecule, a displacement, heat, an electric field) into a change of
+membrane conductance and hence a \emph{receptor potential}, graded with
+the stimulus; the cell, or the neuron it synapses on, turns this into a
+train of action potentials whose rate encodes intensity. The
+\emph{modality} of a signal is given not by the spikes, which are
+identical in every nerve, but by the wire they travel on and where it
+ends in the brain: a \emph{labelled line}. A sensory neuron responds to
+stimuli within a \emph{receptive field} --- a patch of skin, a region of
+the visual field, a band of frequencies --- and neighbouring fields
+sharpen one another by \emph{lateral inhibition}, each neuron
+suppressing its neighbours so that edges and contrasts are exaggerated.
+Most receptors \emph{adapt}: their response to a maintained stimulus
+declines, so that they report change rather than level, and their
+working range shifts to sit around the prevailing background.
+\end{definition}
+
+\begin{theorem}[Weber, Fechner and Stevens]\label{thm:b3:sensory-systems:weber}
+\index{Weber's law}\index{Fechner's law}\index{Stevens' power law}
+Weber's observation (1834) is that the smallest detectable change
+$\Delta I$ in a stimulus of intensity $I$ is a fixed fraction of it:
+$\Delta I/I = k$, with $k$ about $0.02$ for weight, $0.08$ for
+brightness, $0.1$ for loudness. If each just-noticeable difference is
+counted as one unit of sensation $S$, then $\mathrm{d}S = \mathrm{d}I/
+(kI)$ and
+\[
+S = \frac{1}{k}\ln\frac{I}{I_{0}} ,
+\]
+where $I_{0}$ is the threshold: sensation grows as the logarithm of the
+stimulus (Fechner, 1860), which is why intensities are measured in
+\omterm{def:b3:sensory-systems:cochlea}{decibels} and magnitudes, and why a candle added to a candle is
+noticed and a candle added to a floodlight is not. Direct scaling
+experiments, in which subjects assign numbers to sensations, give
+instead a power law $S \propto I^{n}$ (Stevens, 1957), with $n \approx
+0.3$ for loudness and brightness, $1$ for line length, and $3.5$ for
+electric shock; a logarithm and a small power are nearly
+indistinguishable over a few decades, and the two laws agree on the
+essential: the nervous system compresses.
+\end{theorem}
+\begin{proof}
+From $\Delta I = kI$ for one unit of $S$, the increment of sensation
+per increment of stimulus is $\mathrm{d}S/\mathrm{d}I = 1/(kI)$;
+integrating from the threshold $I_{0}$, where $S = 0$, gives $S = (1/k)
+\ln(I/I_{0})$. The power law is the alternative assumption that a fixed
+\emph{ratio} of stimuli produces a fixed \emph{ratio} of sensations,
+$\mathrm{d}S/S = n\,\mathrm{d}I/I$, whose integral is $S \propto I^{n}$;
+for $n \to 0$ with suitable scaling it tends to the logarithm.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.6cm,
+  xmode=log,
+  xmin=1, xmax=1e6, ymin=0, ymax=15,
+  xlabel={stimulus intensity $I/I_{0}$}, ylabel={sensation $S$ (arbitrary)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, ytick={0,5,10,15},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=1:1e6, samples=100] {ln(x)};
+\addplot[very thick, omThm, domain=1:1e6, samples=100] {0.235*x^0.3 - 0.235};
+\addplot[very thick, omMeth!70!black, domain=1:1e6, samples=100] {0.5*x^0.24 - 0.5};
+\node[font=\scriptsize, omDef, anchor=north west] at (axis cs:2,10.2) {Fechner: $S = \ln(I/I_{0})$};
+\node[font=\scriptsize, omThm, anchor=south east] at (axis cs:9e5,0.4) {Stevens: $S \propto I^{0.3}$};
+\node[font=\scriptsize, omMeth!70!black, anchor=north west] at (axis cs:2,12.5) {Stevens: $S \propto I^{0.24}$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Compression of a million-fold range of intensity into a
+sensation that grows slowly: Fechner's logarithm and \omterm{thm:b3:sensory-systems:weber}{Stevens' power laws}
+with small exponents are hard to tell apart over a few decades, and
+both say that the senses report ratios, not differences.}
+\end{omfigure}
+
+\section{Vision}
+
+\begin{definition}[The retina]\label{def:b3:sensory-systems:retina}
+\index{retina}\index{rod}\index{cone}\index{phototransduction}\index{rhodopsin}\index{ganglion cell}\index{centre--surround}
+The \emph{retina} is a sheet of brain at the back of the eye, three
+layers of cells with the photoreceptors, paradoxically, at the back,
+against the pigment epithelium. \emph{Rods} --- $10^{8}$ per eye, one
+pigment, \emph{rhodopsin} --- serve dim light and saturate in daylight;
+\emph{cones} --- $6\times 10^{6}$, three pigments peaking in the blue,
+green and red, packed into the fovea --- serve daylight, colour and
+acuity. \emph{Phototransduction} is a cascade: a photon isomerises the
+retinal chromophore of one rhodopsin; the activated rhodopsin turns on
+hundreds of molecules of the G~protein transducin, each of which
+activates a phosphodiesterase that destroys cyclic GMP; the fall in
+cGMP closes the cation channels that the cGMP held open in the dark,
+the inward ``dark current'' stops, and the cell \emph{hyperpolarises} ---
+light turns a photoreceptor off, and it releases less glutamate. In the
+dark the cell is depolarised and releasing continuously. The signal
+passes to \emph{bipolar cells} (of ON and OFF types, which invert or
+preserve it) and on to the \emph{\omterm{def:b3:nervous-systems:comparative}{ganglion} cells}, a million per eye,
+whose axons form the optic nerve --- a hundredfold compression.
+Horizontal and amacrine cells connect laterally, and their inhibition
+gives each \omterm{def:b3:nervous-systems:comparative}{ganglion} cell a \emph{centre--surround} \omterm{def:b3:sensory-systems:principles}{receptive field}:
+excited by light in a central disc and inhibited by light in the ring
+around it (or the reverse), so that the retina reports local contrast
+and edges rather than absolute light.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % cascade boxes with amplification numbers
+  \node[draw, thick, rounded corners, fill=omProp!30, align=center] (ph) at (0,0) {1 photon};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (rh) at (2.6,0) {1 rhodopsin*\\(metarhodopsin II)};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (tr) at (5.6,0) {$\sim 500$ transducins\\activated};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (pde) at (8.6,0) {$\sim 500$ PDE active:\\$\sim 10^{5}$ cGMP hydrolysed};
+  \node[draw, thick, rounded corners, fill=omThm!20, align=center] (ch) at (5.6,-2.0) {$\sim 200$ cation channels close;\\dark current falls by \qty{1}{pA}};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (out) at (1.4,-2.0) {hyperpolarisation of \qty{1}{mV};\\less glutamate released};
+  \draw[->, thick] (ph) -- (rh); \draw[->, thick] (rh) -- (tr); \draw[->, thick] (tr) -- (pde);
+  \draw[->, thick] (pde.south) |- (ch.east); \draw[->, thick] (ch) -- (out);
+  \node[below, font=\tiny, align=center] at (7.1,-2.8) {each step multiplies; the whole cascade is shut off within \qty{200}{ms} by\\rhodopsin kinase, arrestin and the GTPase of transducin, then reset};
+\end{tikzpicture}
+
+{\small \omterm{def:b3:sensory-systems:retina}{Phototransduction} as an amplifier. One absorbed photon closes
+hundreds of channels through two catalytic stages, a gain of about a
+million in molecules --- enough for a single photon to produce a
+measurable current in a \omterm{def:b3:sensory-systems:retina}{rod}.}
+\end{omfigure}
+
+\begin{theorem}[Counting photons: the frequency of seeing]\label{thm:b3:sensory-systems:hecht}
+\index{single-photon detection}\index{frequency-of-seeing curve}\index{Poisson!photon counting}
+A flash that delivers on average $a$ absorbed photons to a patch of
+\omterm{def:b3:sensory-systems:retina}{rods} delivers, on any one presentation, a number $k$ that is Poisson
+distributed: $P(k) = e^{-a}a^{k}/k!$. If the observer reports seeing
+the flash whenever at least $n$ photons are absorbed, the probability
+of seeing is
+\[
+P_{\text{see}}(a) = 1 - \sum_{k=0}^{n-1} e^{-a}\,\frac{a^{k}}{k!} ,
+\]
+a curve that rises from $0$ to $1$ as $a$ increases, and whose
+\emph{steepness} on a logarithmic scale of $a$ depends only on $n$:
+the larger the threshold count, the steeper the curve. Fitting
+the measured \omterm{thm:b3:sensory-systems:hecht}{frequency-of-seeing curve} therefore gives $n$ without
+knowing how many of the delivered photons were actually absorbed.
+\end{theorem}
+\begin{proof}
+Photons from a weak, steady source arrive independently at random, and
+the number absorbed in a short flash from a mean of $a$ is Poisson
+(the limit of a binomial with many photons each absorbed with small
+probability). Seeing requires $k \ge n$, whose probability is one
+minus the sum of the first $n$ Poisson terms. Scaling the source by a
+factor $c$ multiplies $a$ by $c$ and shifts the curve along the $\log a$
+axis without changing its shape, so the shape identifies $n$: for $n =
+1$, $P = 1 - e^{-a}$ rises over two decades of $a$; for $n = 6$ it
+rises over less than one.
+\end{proof}
+
+\begin{proof}[Evidence]
+Hecht, Shlaer and Pirenne (1942) sat observers in the dark for half
+an hour, then flashed a tiny green spot on the \omterm{def:b3:sensory-systems:retina}{retina}'s rod-rich
+periphery for a millisecond, hundreds of times at several intensities,
+and recorded the fraction of flashes seen. The threshold flash
+contained, at the cornea, some $90$ photons, of which (after
+reflection, absorption in the eye's media and the $20\,\%$ chance of a
+photon that reaches a \omterm{def:b3:sensory-systems:retina}{rod} being absorbed by \omterm{def:b3:sensory-systems:retina}{rhodopsin}) about $5$--$14$
+were absorbed. The \omterm{thm:b3:sensory-systems:hecht}{frequency-of-seeing curves} had the steepness of
+$n = 5$ to $7$: the observer said ``yes'' when about six \omterm{def:b3:sensory-systems:retina}{rods}, out of
+the five hundred under the spot, had each caught a single photon. A
+\omterm{def:b3:sensory-systems:retina}{rod} detects one photon; the brain demands a few in coincidence, to
+keep the false alarms from the \omterm{def:b3:sensory-systems:retina}{rods}' spontaneous isomerisations ---
+one per \omterm{def:b3:sensory-systems:retina}{rod} per forty seconds --- below the rate of the stars.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.6cm,
+  xmode=log,
+  xmin=0.1, xmax=100, ymin=0, ymax=1.05,
+  xlabel={mean absorbed photons per flash, $a$}, ylabel={probability of seeing},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0.1:100, samples=120] {1-exp(-x)};
+\addplot[very thick, omProp, domain=0.1:100, samples=120] {1-exp(-x)*(1+x+x^2/2)};
+\addplot[very thick, omThm, domain=0.1:100, samples=120] {1-exp(-x)*(1+x+x^2/2+x^3/6+x^4/24+x^5/120)};
+\node[font=\scriptsize, omDef, anchor=north west] at (axis cs:0.12,0.95) {$n = 1$};
+\node[font=\scriptsize, omProp, anchor=north west] at (axis cs:1.1,0.5) {$n = 3$};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:5.5,0.45) {$n = 6$};
+\end{axis}
+\end{tikzpicture}
+
+{\small \omterm{thm:b3:sensory-systems:hecht}{Frequency-of-seeing curves} for thresholds of one, three and
+six absorbed photons. The steeper the curve, the more photons must
+coincide; Hecht's observers gave curves like the red one.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-18-retina-section.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-18-compound-eye.jpg}
+
+{\small Left: a section of the \omterm{def:b3:sensory-systems:retina}{retina}, the photoreceptors (green) at
+the back, then the bipolar and horizontal cells, then the \omterm{def:b3:sensory-systems:retina}{ganglion
+cells} (red) whose axons leave for the brain. Right: a fly's compound
+eye, hundreds of separate lenses each with its own receptors --- a
+different solution to the same problem.}
+\end{omfigure}
+
+\section{Hearing and balance}
+
+\begin{definition}[The cochlea]\label{def:b3:sensory-systems:cochlea}
+\index{cochlea}\index{basilar membrane}\index{tonotopy}\index{hair cell}\index{stereocilia}\index{tip link}\index{decibel}
+Sound is a pressure wave; the ear's problem is to detect pressure
+changes of a few tens of micropascals in air and to sort them by
+frequency. The eardrum and the three middle-ear bones concentrate the
+force from the drum's \qty{55}{mm^2} onto the \qty{3}{mm^2} of the oval
+window, raising the pressure some twentyfold --- the impedance match
+between air and the fluid of the inner ear, without which most of the
+sound would reflect. Inside the \emph{cochlea}, a coiled tube
+\qty{35}{mm} long, the pressure wave travels along the \emph{basilar
+membrane}, which is narrow and stiff at the base and wide and floppy at
+the apex; each frequency makes the membrane vibrate most at one place
+--- high frequencies near the base, low near the apex --- a
+\emph{tonotopic} map that the brain reads as pitch. On the membrane sit
+the \emph{hair cells}: \num{3500} inner hair cells in a single row,
+each crowned with a bundle of \emph{stereocilia} joined tip to tip by
+fine \emph{tip links}; bending the bundle toward its tallest \omterm{def:b3:cytoskeleton-motility:cilia}{cilium}
+stretches the links and pulls open cation channels within microseconds,
+without any second messenger, and potassium flows in from the
+endolymph, whose unusual composition and $+\qty{80}{mV}$ potential give
+a driving force of \qty{150}{mV}. The inner hair cells signal the
+auditory nerve; the \num{12000} outer hair cells, driven by the same
+motion, contract and lengthen with the sound through the motor protein
+prestin and pump energy back into the membrane's vibration --- an
+amplifier that sharpens tuning a hundredfold and is what fails in most
+deafness. Intensity is measured in \emph{decibels}: $L = 10\log_{10}
+(I/I_{0})$, with $I_{0} = \qty{1e-12}{W/m^2}$ the threshold of hearing;
+the ear works over \qty{120}{dB}, a trillionfold in intensity.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % unrolled cochlea
+  \begin{scope}
+    \draw[thick, omDef, fill=omDef!10] (0,0.9) -- (7,1.4) -- (7,-1.4) -- (0,-0.9) -- cycle;
+    \draw[very thick, omProp] (0,0.15) -- (7,-0.15); \draw[very thick, omProp] (0,-0.15) -- (7,0.15);
+    \node[above] at (0.8,1.05) {base: narrow, stiff}; \node[above] at (6.2,1.5) {apex: wide, floppy};
+    \node[left, align=right] at (-0.1,0) {oval window\\(from the stirrup)};
+    \foreach \x/\f in {0.9/\qty{16}{kHz}, 2.3/\qty{4}{kHz}, 3.8/\qty{1}{kHz}, 5.4/\qty{250}{Hz}, 6.6/\qty{60}{Hz}} { \draw[omThm, thick] (\x,-0.55) -- (\x,0.55); \node[below, omThm] at (\x,-0.65) {\f}; }
+    \node[below, align=center] at (3.5,-1.7) {basilar membrane (orange): each frequency\\vibrates most at one place --- tonotopy};
+  \end{scope}
+  % hair cell mechanism
+  \begin{scope}[xshift=8.2cm, yshift=-0.6cm]
+    \draw[thick, fill=omMeth!20] (0,0) rectangle (1.6,1.2); \node[below] at (0.8,-0.05) {hair cell};
+    \foreach \x/\h in {0.35/0.6, 0.65/0.85, 0.95/1.1, 1.25/1.35} \draw[very thick, omMeth!70!black] (\x,1.2) -- (\x,1.2+\h);
+    \foreach \x/\h/\xx/\hh in {0.35/0.6/0.65/0.85, 0.65/0.85/0.95/1.1, 0.95/1.1/1.25/1.35} \draw[omThm, thick] (\x,1.2+\h) -- (\xx,1.2+\hh-0.1);
+    \draw[->, thick] (1.9,2.3) -- (2.4,2.3) node[right, align=left, font=\tiny] {bend toward the tallest:\\tip links stretch, channels\\open in $\unit{\micro s}$; K$^{+}$ enters\\(\qty{150}{mV} drive)};
+    \node[above, align=center] at (0.8,2.7) {stereocilia joined\\by tip links (red)};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Left: the \omterm{def:b3:sensory-systems:cochlea}{cochlea} unrolled --- the \omterm{def:b3:sensory-systems:cochlea}{basilar membrane} grades from
+stiff to floppy, and each frequency peaks at its own place. Right: a
+hair bundle, whose \omterm{def:b3:sensory-systems:cochlea}{tip links} open the transduction channels
+mechanically when the bundle is bent.}
+\end{omfigure}
+
+\begin{proof}[Evidence]
+Von B\'ek\'esy (1940s) opened the \omterm{def:b3:sensory-systems:cochlea}{cochleas} of cadavers, sprinkled
+silver particles on the \omterm{def:b3:sensory-systems:cochlea}{basilar membrane} and watched under
+stroboscopic light as pure tones set up a travelling wave whose peak
+lay nearer the base the higher the tone --- the place code, for which
+he received the Nobel prize in 1961. Hudspeth (1980s) pushed a single
+hair bundle with a glass fibre and recorded the current: it flowed
+within \qty{10}{\micro s} of the push, far too fast for any enzyme
+cascade, in proportion to how far the bundle moved toward its tallest
+row, and it vanished when the \omterm{def:b3:sensory-systems:cochlea}{tip links} were cut with a calcium
+chelator. Gating is mechanical --- the link pulls the channel open ---
+which is why hearing is the fastest of the senses and why its
+transducer is destroyed by the loud sounds that snap the links.
+\end{proof}
+
+\begin{example}[The ear's numbers]\label{ex:b3:sensory-systems:ear-numbers}
+At the threshold of hearing the \omterm{def:b3:sensory-systems:cochlea}{basilar membrane} moves about
+\qty{0.1}{nm} and the pressure amplitude is \qty{20}{\micro Pa}, a
+two-billionth of atmospheric; at \qty{120}{dB} the pressure is a
+million times greater and the membrane's motion tens of nanometres. A
+young ear hears from \qty{20}{Hz} to \qty{20}{kHz} and separates tones
+\qty{0.3}{\%} apart, the discrimination of the place code sharpened by
+the outer \omterm{def:b3:sensory-systems:cochlea}{hair cells}. The auditory nerve's \num{30000} fibres fire in
+step with the pressure wave up to about \qty{4}{kHz} (phase locking),
+carrying timing to a precision of tens of microseconds, from which the
+brain computes a sound's direction from the difference in arrival at
+the two ears --- as little as \qty{10}{\micro s}. The balance organs use
+the same \omterm{def:b3:sensory-systems:cochlea}{hair cells}: in the \emph{semicircular canals} the fluid's
+inertia bends them when the head turns (angular acceleration), and in
+the otolith organs a layer of calcium carbonate crystals loads them
+with gravity and linear acceleration.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.54\linewidth]{images/book5/ai/b5-18-cochlea-hair-cells.jpg}
+
+{\small The organ of Corti from above: three rows of outer \omterm{def:b3:sensory-systems:cochlea}{hair cells}
+with V-shaped bundles, one row of inner \omterm{def:b3:sensory-systems:cochlea}{hair cells}. Each bundle's \omterm{def:b3:sensory-systems:cochlea}{tip
+links} open the channels; the outer cells amplify, the inner cells
+report.}
+\end{omfigure}
+
+\section{Chemical senses}
+
+\begin{definition}[Olfaction and taste]\label{def:b3:sensory-systems:chemical}
+\index{olfactory receptor}\index{combinatorial code}\index{glomerulus}\index{taste}
+Smell begins in a patch of epithelium at the top of the nose, where
+some ten million \emph{olfactory sensory neurons} each express one
+\emph{olfactory receptor} gene out of about $400$ in humans (\num{1100}
+in a mouse, the largest gene family in either genome) --- G-protein-
+coupled receptors that bind odorant molecules in a pocket and, through
+cyclic AMP, open a channel. Each receptor binds several odorants and
+each odorant binds several receptors, so an odour is a
+\emph{combinatorial code}, a pattern of activity across the $400$
+receptor types, and a change of one carbon in a molecule changes the
+pattern and the smell. All the neurons expressing one receptor send
+their axons to the same one or two \emph{glomeruli} in the olfactory
+bulb, so the bulb holds a map in which each odour is a spatial
+pattern of active glomeruli, read by the cortex without passing
+through the \omterm{def:b3:nervous-systems:plan}{thalamus}. Taste is simpler: five modalities, each a
+\omterm{def:b3:sensory-systems:principles}{labelled line} from its own receptor cells --- sweet, umami and bitter
+through G-protein-coupled receptors (one sweet receptor, one umami,
+some twenty-five bitter), salt through a sodium channel, sour through
+a proton channel --- and the rest of what we call flavour is smell,
+reaching the nose through the back of the mouth.
+\end{definition}
+
+\begin{proof}[Evidence]
+Buck and Axel (1991) reasoned that odorant receptors would be
+G-protein-coupled receptors expressed only in the olfactory epithelium,
+and found by PCR with degenerate \omterm{def:b3:genetic-engineering:pcr}{primers} a family of hundreds of
+such genes, expressed there and nowhere else --- the receptors for
+smell, unknown for a century. In-situ hybridisation showed one receptor
+per neuron and the convergence of like neurons on single glomeruli;
+Malnic, Buck and colleagues (1999) recorded single neurons and showed
+that each odorant activated several receptor types and each receptor
+several odorants --- the \omterm{def:b3:sensory-systems:chemical}{combinatorial code}. Bushdid and colleagues
+(2014) asked subjects to discriminate mixtures and estimated that
+humans can tell apart more than a trillion odours, far beyond the
+few thousand of common belief.
+\end{proof}
+
+\begin{proposition}[The capacity of a combinatorial code]\label{prop:b3:sensory-systems:combinatorial}
+\index{combinatorial code!capacity}
+With $R$ receptor types each either active or silent, an odour can be
+represented by any of $2^{R}$ patterns; with $R = 400$ that is
+$10^{120}$, and even if only patterns with exactly $10$ active types
+are considered there are $\binom{400}{10} \approx 3\times 10^{20}$.
+Discrimination is limited not by the code but by the noise of the
+receptors and by the brain's reading: a labelled-line code with one
+receptor per odour would allow $400$ smells, a combinatorial one
+allows more than there are molecules to smell. The cost is that a
+single receptor tells the brain little on its own; the pattern must be
+read as a whole, which is what the glomerular map and the olfactory
+cortex do.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % receptor rows, odorant columns
+  \foreach \i/\lab in {1/receptor A, 2/receptor B, 3/receptor C, 4/receptor D, 5/receptor E} \node[left] at (-0.1,-0.7*\i) {\lab};
+  \foreach \j/\lab in {1/hexanol, 2/heptanol, 3/octanol, 4/limonene} \node[above, rotate=0] at (1.2*\j-0.6,-0.35) {\lab};
+  \foreach \i/\j/\v in {1/1/100, 1/2/30, 2/1/60, 2/2/100, 2/3/50, 3/2/40, 3/3/100, 3/4/20, 4/3/70, 5/4/100, 1/4/30} \fill[omThm!\v] (1.2*\j-1.15,-0.7*\i-0.3) rectangle (1.2*\j-0.05,-0.7*\i+0.3);
+  \foreach \i in {1,...,5} \foreach \j in {1,...,4} \draw[gray!50] (1.2*\j-1.15,-0.7*\i-0.3) rectangle (1.2*\j-0.05,-0.7*\i+0.3);
+  \node[below, align=center] at (2.1,-4.1) {each odorant activates a set of receptors,\\each receptor a set of odorants:\\the smell is the column};
+  % glomerular map
+  \begin{scope}[xshift=9.2cm, yshift=-2.2cm]
+    \draw[thick, omDef!60, fill=omDef!8] (0,0) ellipse (2.6 and 1.7); \node[above] at (0,1.75) {olfactory bulb: glomeruli};
+    \foreach \p in {(-1.8,0.6),(-1.0,1.0),(-0.2,0.7),(0.8,1.0),(1.7,0.5),(-1.6,-0.4),(-0.6,-0.6),(0.4,-0.3),(1.3,-0.7),(0.1,0.2)} \draw[omDef!70, fill=omDef!25] \p circle (0.25);
+    \fill[omThm!80] (-1.0,1.0) circle (0.25); \fill[omThm!50] (0.4,-0.3) circle (0.25); \fill[omThm!80] (1.7,0.5) circle (0.25);
+    \node[below, align=center] at (0,-1.8) {all neurons of one receptor type\\converge on one glomerulus: an odour is\\a spatial pattern (red) that the cortex reads};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The \omterm{def:b3:sensory-systems:chemical}{combinatorial code} of smell. Left: a receptor-by-odorant
+matrix, in which each odour is a pattern down a column. Right: the
+pattern laid out on the glomeruli of the bulb.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.40\linewidth]{images/book5/ai/b5-18-olfactory-epithelium.jpg}
+
+{\small The olfactory epithelium: sensory neurons (green) with ciliated
+dendrites at the surface, where odorants bind, and axons bundling
+below toward the bulb. Each neuron expresses one receptor gene of the
+four hundred.}
+\end{omfigure}
+
+\section{Touch, temperature, pain and the senses we lack}
+
+\begin{definition}[Somatosensation]\label{def:b3:sensory-systems:somato}
+\index{mechanoreceptor}\index{Piezo channel}\index{TRP channel}\index{nociceptor}\index{proprioception}
+The skin holds several kinds of \emph{mechanoreceptor}, each an axon
+ending in its own capsule: Merkel cells for fine pressure and texture
+(slowly adapting, small fields), Meissner corpuscles for light touch
+and slip (rapidly adapting), Pacinian corpuscles deep in the skin for
+vibration (very rapidly adapting, huge fields), Ruffini endings for
+stretch. The transducer in most of them is \emph{Piezo2}, a giant
+ion channel with a propeller of blades that opens when the membrane
+is stretched; without it touch and the sense of body position are
+lost, and the same channel in the lungs and bladder senses their
+filling. \emph{Temperature} is sensed by channels of the TRP family
+tuned to different ranges --- TRPV1, opened by heat above
+\qty{43}{\celsius} and by capsaicin, which is why chilli is ``hot'';
+TRPM8, opened by cold and by menthol --- and \emph{pain} by free nerve
+endings, the \emph{nociceptors}, that respond to damaging heat,
+pressure or chemicals (protons, ATP, bradykinin) and whose thresholds
+are lowered by \omterm{def:b3:innate-immunity:inflammation}{inflammation} (\cref{ch:b3:innate-immunity}).
+\emph{Proprioception}, the sense of where the limbs are, comes from
+the muscle spindles and tendon organs of \cref{ch:b3:nervous-systems}
+and from Piezo2 in joint capsules. The density of receptors sets
+acuity: two points \qty{2}{mm} apart are told apart on a fingertip,
+\qty{40}{mm} apart on the back.
+\end{definition}
+
+\begin{method}[Measuring a sense]\label{met:b3:sensory-systems:psychophysics}
+\index{psychophysics}\index{threshold}\index{two-point discrimination}
+To characterise a sensory channel: (1) find the \emph{absolute
+threshold} by presenting stimuli of graded intensity many times and
+fitting the fraction detected --- the intensity detected half the time
+--- as Hecht did; (2) find the \emph{difference threshold} at several
+intensities and check \omterm{thm:b3:sensory-systems:weber}{Weber's law}; (3) map the \emph{spatial acuity} with
+two stimuli at varying separation (the two-point test on skin, a
+grating on the \omterm{def:b3:sensory-systems:retina}{retina}); (4) map the \emph{temporal acuity} with flicker
+or clicks (a flicker fuses at about \qty{60}{Hz} in daylight vision);
+(5) in an animal, record from single afferent fibres while applying
+the same stimuli and match the neural to the behavioural thresholds
+--- the psychophysics and the physiology should agree, and where they
+do not the difference is what the brain adds.
+\end{method}
+
+\begin{remark}[Other animals, other senses]\label{rem:b3:sensory-systems:others}
+Every sense here has a version an animal has pushed further, and there
+are senses we lack. Sharks and rays sense the microvolt fields of a
+prey's heartbeat through jelly-filled canals; electric fish read
+distortions of their own field to see in the dark. Pit vipers image
+warm prey with infrared-sensitive pits; bats and dolphins echolocate,
+timing echoes of their own calls to a few microseconds and steering the
+call's frequency to track a moth; bees see ultraviolet and the
+polarisation of skylight and navigate by it; migratory birds and
+turtles sense the Earth's magnetic field by a mechanism still argued
+over. A dog's nose has forty times our receptor neurons and a third
+of its brain to read them; an owl hears a mouse under snow. The
+principles do not change --- a transducer, a \omterm{def:b3:sensory-systems:principles}{labelled line}, a code,
+compression, a map --- and the variety is what evolution has done with
+them.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:sensory-systems:1}
+Explain how the brain knows whether a train of spikes comes from the
+eye or the ear, given that the spikes are identical.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:sensory-systems:2}
+Why does light hyperpolarise a photoreceptor, and what is the dark
+current?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:sensory-systems:3}
+A whisper is \qty{20}{dB}, a conversation \qty{60}{dB}, a rock concert
+\qty{110}{dB}. Compute the intensity of each in W/m$^{2}$ and the
+ratio between the loudest and the softest.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:sensory-systems:4}
+State the five \omterm{def:b3:sensory-systems:chemical}{taste} modalities and their receptor types, and explain
+why a cold blocks the ``\omterm{def:b3:sensory-systems:chemical}{taste}'' of food.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:sensory-systems:5}
+Weber's fraction for weight is $0.02$. Starting from a \qty{100}{g}
+weight, how many just-noticeable steps lie between it and
+\qty{10}{kg}? Use Fechner's formula and check by counting steps of
+factor $1.02$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:sensory-systems:6}
+Using \cref{thm:b3:sensory-systems:hecht}, compute $P_{\text{see}}$ for
+$a = 2$, $6$ and $12$ absorbed photons with a threshold of $n = 6$.
+At what $a$ is the flash seen half the time? If \qty{10}{\%} of photons
+at the cornea are absorbed, how many must the flash deliver?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:sensory-systems:7}
+The middle ear concentrates force from \qty{55}{mm^2} onto
+\qty{3}{mm^2} with a lever of $1.3$. By what factor is the pressure
+raised, and in \omterm{def:b3:sensory-systems:cochlea}{decibels}? Why is the ear of a person with fused
+middle-ear bones (otosclerosis) duller by tens of \omterm{def:b3:sensory-systems:cochlea}{decibels}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:sensory-systems:8}
+Explain why the transduction current of a \omterm{def:b3:sensory-systems:cochlea}{hair cell} appears within
+microseconds while that of a photoreceptor takes tens of
+milliseconds, and what each sense gains from its design.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:sensory-systems:9}
+A mouse has \num{1100} receptor types and a human $400$. If an odour
+activates about \qty{5}{\%} of the types, how many patterns of exactly
+that size are available to each (use $\binom{R}{k}$ with $k = 0.05R$,
+and Stirling's approximation $\ln\binom{R}{k} \approx R\,H(k/R)$ with
+$H(p) = -p\ln p - (1-p)\ln(1-p)$)?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:sensory-systems:10}
+A \omterm{def:b3:sensory-systems:retina}{rod} isomerises a \omterm{def:b3:sensory-systems:retina}{rhodopsin} spontaneously once every \qty{40}{s} in
+the dark. In a patch of $500$ \omterm{def:b3:sensory-systems:retina}{rods} observed for a \qty{0.1}{s} window,
+what is the mean number of spontaneous events, and the probability
+that six or more occur by chance? Explain why the brain sets the
+threshold at about six and not at one.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:sensory-systems:11}
+The auditory nerve locks its spikes to the sound's phase up to
+\qty{4}{kHz}, with a jitter of about \qty{20}{\micro s}. Sound travels
+at \qty{340}{m/s} and the ears are \qty{20}{cm} apart. What is the
+largest interaural delay, what angular resolution does a
+\qty{10}{\micro s} discrimination give near the midline, and why does
+the place code, not timing, serve above \qty{4}{kHz}?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:sensory-systems:12}
+\omterm{def:b3:sensory-systems:principles}{Lateral inhibition} makes a uniform grey field next to a dark one look
+lighter at the border. Model a row of receptors each excited by its own
+light $I_{i}$ and inhibited by a fraction $w$ of each neighbour's,
+$r_{i} = I_{i} - w(I_{i-1} + I_{i+1})$, and compute the response across
+a step from $I = 1$ to $I = 2$ with $w = 0.2$. What does the \omterm{def:b3:sensory-systems:retina}{retina} gain
+and what does it lose by this?
+\end{exercise}
+
+\section{Problem: A Candle Seen from Afar}
+
+\begin{problem}[{Weekend problem --- a candle's photons counted into
+a distant eye, the flash's detection computed from Poisson statistics
+and the rod's amplifier, a concert's decibels turned into eardrum
+motion and hair-cell current, and a nose's code enumerated, ending on
+the distance at which the candle is seen, the pressure at the eardrum
+and the patterns a nose can form}]
+\label{pb:b3:sensory-systems:1}
+Data: a candle emits about \qty{0.01}{W} of visible light, at
+\qty{550}{nm} (photon energy $3.6\times 10^{-19}$ J). A dark-adapted
+pupil is \qty{7}{mm} across; \qty{10}{\%} of photons entering the eye
+are absorbed by \omterm{def:b3:sensory-systems:retina}{rhodopsin}; the eye integrates over \qty{0.1}{s}; the
+threshold is $6$ absorbed photons. Each absorbed photon closes $200$
+channels and reduces the dark current by \qty{1}{pA} for \qty{0.2}{s};
+a \omterm{def:b3:sensory-systems:retina}{rod}'s dark current is \qty{30}{pA}. Sound: $I_{0} =
+\qty{1e-12}{W/m^2}$; the eardrum has area \qty{55}{mm^2}; a hair bundle
+of \qty{5}{\micro m} height at threshold deflects by \qty{0.3}{nm}.
+Olfaction: $R = 400$ receptors; a \omterm{def:b3:sensory-systems:cochlea}{hair cell}'s transduction current is
+\qty{100}{pA} at saturation.
+
+\medskip
+\noindent\textbf{Part I --- Photons.}
+\begin{enumerate}
+  \item How many photons per second does the candle emit?
+  \item At distance $d$ the photons are spread over a sphere of area
+        $4\pi d^{2}$. How many enter the pupil per second at
+        \qty{1}{km}? At \qty{10}{km}?
+  \item How many are absorbed in one integration window at each
+        distance? Is the candle seen (threshold $6$)?
+  \item Find the distance at which the mean absorbed number in a window
+        equals $6$. With Poisson statistics, what fraction of windows
+        exceed threshold there?
+  \item At the distance of question 4, what is the probability that a
+        given \qty{0.1}{s} window contains no photon at all? Why does a
+        faint star seem to flicker?
+  \item Under a full moon the same \omterm{def:b3:sensory-systems:retina}{rods} absorb $10^{4}$ photons per
+        window from the sky. Explain why the candle at \qty{10}{km} is
+        then invisible although it delivers the same photons.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The \omterm{def:b3:sensory-systems:retina}{rod}'s amplifier.}
+\begin{enumerate}[resume]
+  \item One photon closes $200$ channels and reduces the current by
+        \qty{1}{pA}. What current does one channel carry, and how many
+        cations per second is that ($e = \qty{1.6e-19}{C}$)?
+  \item What fraction of the dark current does one photon remove? How
+        many simultaneous photons would shut the \omterm{def:b3:sensory-systems:retina}{rod} down completely
+        (saturation)?
+  \item The response lasts \qty{0.2}{s}. How many cations does one
+        photon prevent from entering? What is the gain in charge per
+        photon?
+  \item In daylight $10^{5}$ photons a second reach a \omterm{def:b3:sensory-systems:retina}{rod}. What happens
+        to it, and why are \omterm{def:b3:sensory-systems:retina}{cones}, which adapt and saturate less, the
+        daylight receptors?
+  \item \omterm{def:b3:sensory-systems:retina}{Cones} need about $100$ photons to signal. Explain in terms of
+        the trade between sensitivity and speed why \omterm{def:b3:sensory-systems:retina}{cones} respond in
+        \qty{20}{ms} and \omterm{def:b3:sensory-systems:retina}{rods} in \qty{200}{ms}.
+  \item A \omterm{def:b3:sensory-systems:retina}{rhodopsin} isomerises spontaneously once in \qty{40}{s}. Over
+        the $10^{8}$ \omterm{def:b3:sensory-systems:retina}{rods} of an eye, how many false photons per second
+        does the \omterm{def:b3:sensory-systems:retina}{retina} generate, and why does that not blind the dark
+        eye with noise? (Think of the threshold and the \omterm{def:b3:sensory-systems:principles}{receptive
+        field}.)
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- \omterm{def:b3:sensory-systems:cochlea}{Decibels}.}
+\begin{enumerate}[resume]
+  \item A concert at \qty{110}{dB}: intensity in W/m$^{2}$ and power
+        falling on one eardrum.
+  \item How much acoustic energy does the eardrum receive in a two-hour
+        concert? Compare with the energy of a falling raindrop
+        (\qty{1e-4}{J}).
+  \item The threshold of hearing at \qty{0}{dB}: power on the eardrum
+        and energy per \qty{10}{ms} --- compare with the energy of one
+        visible photon.
+  \item The hair bundle deflects \qty{0.3}{nm} at threshold on a height
+        of \qty{5}{\micro m}. What angle is that, in degrees? Compare
+        the deflection with the diameter of a hydrogen atom
+        (\qty{0.1}{nm}).
+  \item Prolonged exposure above \qty{85}{dB} damages \omterm{def:b3:sensory-systems:cochlea}{hair cells}, and
+        \omterm{def:b3:sensory-systems:cochlea}{hair cells} do not regenerate in mammals. Two hours at
+        \qty{110}{dB} deliver as much energy as how many hours at
+        \qty{85}{dB}?
+  \item The range of hearing is \qty{120}{dB}. How many just-noticeable
+        steps of loudness is that, if Weber's fraction for intensity is
+        about $0.25$ (one \omterm{def:b3:sensory-systems:cochlea}{decibel})?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The code of smell.}
+\begin{enumerate}[resume]
+  \item With $400$ receptors each on or off, how many patterns? Write
+        the answer as a power of ten.
+  \item If an odour typically activates $20$ receptors, how many
+        distinct such patterns are there ($\binom{400}{20}$, use
+        Stirling or logarithms)?
+  \item Two odorants share $15$ of their $20$ receptors. Propose a
+        measure of their distance in the code and explain why they
+        smell alike.
+  \item Humans discriminate about a trillion odours. What fraction of
+        the patterns of question 20 is that, and what limits the number
+        far below the code's capacity?
+  \item A mouse with \num{1100} receptors: how many more patterns of
+        $20$ than a human, as a power of ten?
+  \item A mutation deletes one receptor gene. Predict its effect on
+        the ability to smell in general and on the perception of one
+        odorant that binds that receptor strongly (specific anosmia).
+  \item Summarise: the distance at which the candle is seen
+        (question~4), the acoustic energy on the eardrum at threshold
+        in \qty{10}{ms} (question~15), and the number of twenty-receptor
+        patterns a human nose can form (question~20).
+\end{enumerate}
+\end{problem}

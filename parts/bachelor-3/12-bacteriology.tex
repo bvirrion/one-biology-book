@@ -1,6 +1,699 @@
 \chapter{Bacteriology: Growth, Physiology and Genetics}\label{ch:b3:bacteriology}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A single \emph{Escherichia coli} cell in warm broth divides every
+twenty minutes. Left unchecked, its descendants would outweigh the
+Earth in two days; in fact they stop within hours, when the sugar runs
+out, and sit for weeks in a state that survives starvation. A related
+bacterium, given a wound and a few hours, becomes a hundred million
+cells and a fever; a hundred years ago it killed a third of the
+patients it infected, and since 1941 a mould's poison against it has
+saved more lives than any other drug --- while the bacteria, over the
+same eighty years, have evolved ways round every \omterm{def:b3:bacteriology:antibiotics}{antibiotic} made.
+Bacteria were the organisms in which genes were first shown to be
+DNA, in which gene regulation was first understood, and from which
+the tools of \cref{ch:b3:genetic-engineering} were taken. This chapter
+treats them as organisms: their envelope, the arithmetic of their
+growth in a flask and in a continuous culture, the way a population
+senses its own density, the traffic of genes between cells, and the
+chemistry and evolution of \omterm{def:b3:bacteriology:antibiotics}{antibiotics} and resistance.
 
-\emph{This chapter has not been written yet.}
+\section{The bacterial cell}
+
+\begin{definition}[The envelope]\label{def:b3:bacteriology:envelope}
+\index{peptidoglycan}\index{Gram-positive}\index{Gram-negative}\index{outer membrane}\index{lipopolysaccharide}\index{endospore}
+Every bacterium but a few is enclosed in a wall of \emph{peptidoglycan}:
+chains of alternating N-acetylglucosamine and N-acetylmuramic acid,
+cross-linked by short peptides into a single molecule that surrounds
+the cell and resists the turgor pressure --- several atmospheres ---
+of the cytoplasm. \emph{Gram-positive} bacteria have a thick wall of
+\numrange{20}{80}{nm}, many layers, threaded with teichoic acids;
+\emph{Gram-negative} bacteria have a thin wall of one or two layers
+and, outside it, a second lipid bilayer, the \emph{outer membrane},
+whose outer leaflet is \emph{lipopolysaccharide} (LPS, endotoxin ---
+the molecule that the innate immune system of
+\cref{ch:b3:innate-immunity} recognises and that causes septic shock),
+enclosing a periplasm. Porins in the outer membrane admit small
+molecules and exclude many \omterm{def:b3:bacteriology:antibiotics}{antibiotics}. Outside may lie a polysaccharide
+capsule against phagocytes, flagella for swimming
+(\cref{ch:b3:cytoskeleton-motility}) and pili for attachment and
+\omterm{def:b3:bacteriology:hgt}{conjugation}. Inside, the chromosome --- one circular molecule of
+\qtyrange{1}{10}{Mb} in most species --- is folded into a nucleoid
+without a membrane, alongside \omterm{def:b3:genetic-engineering:tools}{plasmids}. Some genera (\emph{Bacillus},
+\emph{Clostridium}) can enclose a copy of the chromosome in a thick
+coat as an \emph{endospore}, dehydrated and metabolically inert, which
+survives boiling, radiation and centuries of drought and germinates
+when nutrients return.
+\end{definition}
+
+\begin{method}[The Gram stain]\label{met:b3:bacteriology:gram}
+\index{Gram stain}
+The oldest test in the bacteriological laboratory (Gram, 1884) still
+decides the first choice of \omterm{def:b3:bacteriology:antibiotics}{antibiotic}. (1) Smear and heat-fix the
+sample; (2) stain with crystal violet, then with iodine, which forms a
+large insoluble complex with the dye inside the cells; (3) wash with
+alcohol: the thick \omterm{def:b3:bacteriology:envelope}{peptidoglycan} of \omterm{def:b3:bacteriology:envelope}{Gram-positives}, dehydrated by the
+alcohol, traps the complex and the cells stay purple, while the thin
+wall of \omterm{def:b3:bacteriology:envelope}{Gram-negatives} lets it out; (4) counter-stain with safranin,
+which colours the now colourless \omterm{def:b3:bacteriology:envelope}{Gram-negatives} pink. Shape and
+arrangement --- cocci in clusters (staphylococci) or chains
+(streptococci), rods, spirals --- narrow the identification further,
+and a purple coccus in clusters from an abscess is a staphylococcus
+before any culture has grown.
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-12-gram-stain.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-12-endospores.jpg}
+
+{\small Left: a \omterm{met:b3:bacteriology:gram}{Gram stain} --- purple \omterm{def:b3:bacteriology:envelope}{Gram-positive} cocci in clusters,
+pink \omterm{def:b3:bacteriology:envelope}{Gram-negative} rods. Right: \emph{Bacillus} cells stained for
+\omterm{def:b3:bacteriology:envelope}{endospores}, the bright green ovals inside pink cells and free spores
+beside them.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % Gram-positive
+  \begin{scope}
+    \fill[omDef!15] (0,0) rectangle (4.5,0.4); \draw[thick, omDef] (0,0) -- (4.5,0); \draw[thick, omDef] (0,0.4) -- (4.5,0.4);
+    \fill[omProp!40] (0,0.5) rectangle (4.5,2.0); \foreach \y in {0.7,0.95,1.2,1.45,1.7} \draw[omProp!80!black, thin] (0,\y) -- (4.5,\y);
+    \foreach \x in {0.6,1.6,2.6,3.6} \draw[omMeth!70!black, thick] (\x,0.5) -- (\x,2.3);
+    \node[below] at (2.25,-0.1) {cytoplasmic membrane};
+    \node[right, align=left] at (4.6,1.25) {thick peptidoglycan\\(\qtyrange{20}{80}{nm})}; \node[right, omMeth!70!black] at (4.6,2.2) {teichoic acids};
+    \node[above, font=\small\bfseries] at (2.25,2.5) {Gram-positive};
+  \end{scope}
+  % Gram-negative
+  \begin{scope}[xshift=8.6cm]
+    \fill[omDef!15] (0,0) rectangle (4.5,0.4); \draw[thick, omDef] (0,0) -- (4.5,0); \draw[thick, omDef] (0,0.4) -- (4.5,0.4);
+    \fill[omProp!40] (0,0.75) rectangle (4.5,1.05); \draw[omProp!80!black, thin] (0,0.9) -- (4.5,0.9);
+    \fill[omDef!15] (0,1.5) rectangle (4.5,1.9); \draw[thick, omDef] (0,1.5) -- (4.5,1.5); \draw[thick, omDef] (0,1.9) -- (4.5,1.9);
+    \foreach \x in {0.4,0.9,1.4,1.9,2.4,2.9,3.4,3.9} \draw[omThm, thick] (\x,1.9) -- (\x,2.35);
+    \draw[thick, fill=white] (2.0,1.45) rectangle (2.5,1.95); \node[below, font=\tiny] at (2.25,1.45) {porin};
+    \node[below] at (2.25,-0.1) {cytoplasmic membrane};
+    \node[right] at (4.6,0.9) {thin peptidoglycan}; \node[right] at (4.6,1.7) {outer membrane}; \node[right, omThm] at (4.6,2.25) {LPS (endotoxin)};
+    \node[right, font=\tiny] at (4.6,1.27) {periplasm};
+    \node[above, font=\small\bfseries] at (2.25,2.5) {Gram-negative};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The two envelopes. \omterm{def:b3:bacteriology:envelope}{Gram-positives} wrap the membrane in many
+layers of \omterm{def:b3:bacteriology:envelope}{peptidoglycan}; \omterm{def:b3:bacteriology:envelope}{Gram-negatives} have a thin layer and an \omterm{def:b3:bacteriology:envelope}{outer
+membrane} of \omterm{def:b3:bacteriology:envelope}{lipopolysaccharide} pierced by porins, which keeps many
+\omterm{def:b3:bacteriology:antibiotics}{antibiotics} out and makes the endotoxin that causes septic shock.}
+\end{omfigure}
+
+\section{Growth}
+
+\begin{theorem}[Exponential growth, the Monod law and the chemostat]\label{thm:b3:bacteriology:monod}
+\index{exponential growth!bacteria}\index{Monod equation}\index{chemostat}\index{dilution rate}
+A population of $N$ cells dividing with generation time $T$ grows as
+$N(t) = N_{0}\,2^{t/T} = N_{0}e^{\mu t}$ with specific growth rate $\mu =
+\ln 2/T$. The rate depends on the limiting nutrient $S$ by the
+\emph{Monod law}
+\[
+\mu(S) = \mu_{\max}\,\frac{S}{K_{S} + S},
+\]
+saturating at $\mu_{\max}$ and half-maximal at $S = K_{S}$. In a
+\emph{chemostat} --- a vessel of volume $V$ into which fresh medium of
+nutrient concentration $S_{0}$ flows at rate $F$, and out of which
+culture leaves at the same rate, with \omterm{thm:b3:bacteriology:monod}{dilution rate} $D = F/V$ --- the
+steady state has
+\[
+\mu(S^{*}) = D,\qquad S^{*} = \frac{K_{S}D}{\mu_{\max} - D},\qquad
+X^{*} = Y\,(S_{0} - S^{*}),
+\]
+where $X$ is the cell density and $Y$ the yield (cells made per unit of
+nutrient). The experimenter sets the growth rate by turning a pump;
+the culture responds by adjusting the nutrient it leaves behind. If $D$
+exceeds $\mu(S_{0})$ the cells cannot keep up and are washed out.
+\end{theorem}
+\begin{proof}
+Cells: $\mathrm{d}X/\mathrm{d}t = \mu(S)X - DX$, growth minus outflow;
+at steady state with $X^{*} > 0$, $\mu(S^{*}) = D$, and inverting the
+Monod law gives $S^{*}$. Nutrient: $\mathrm{d}S/\mathrm{d}t = D(S_{0} -
+S) - \mu(S)X/Y$, inflow minus outflow minus consumption; at steady
+state, with $\mu = D$, $D(S_{0} - S^{*}) = DX^{*}/Y$, whence $X^{*}$.
+The steady state exists only if $S^{*} < S_{0}$, that is $D <
+\mu(S_{0})$; beyond that the only steady state is $X = 0$, washout.
+Stability: if $X$ rises above $X^{*}$ it consumes more, $S$ falls below
+$S^{*}$, $\mu$ falls below $D$ and $X$ declines --- a negative feedback
+through the nutrient.
+\end{proof}
+
+\begin{example}[A culture in numbers]\label{ex:b3:bacteriology:numbers}
+\emph{E.~coli} in rich medium at \qty{37}{\celsius}: $T = \qty{20}{min}$,
+$\mu = \qty{2.1}{h^{-1}}$. From one cell, $2^{36}$ after twelve hours
+--- $7\times 10^{10}$ cells, about \qty{70}{mg}, which is where a
+\qty{100}{mL} flask stops for want of oxygen and sugar; the ``mass of
+the Earth in two days'' is $2^{144}\approx 10^{43}$ cells, and the
+arithmetic shows only that exponential growth never lasts. In a
+chemostat on glucose with $\mu_{\max} = \qty{1.0}{h^{-1}}$, $K_{S} =
+\qty{0.01}{g/L}$, $S_{0} = \qty{1}{g/L}$ and $Y = \qty{0.5}{g}$ of cells
+per gram of glucose, a \omterm{thm:b3:bacteriology:monod}{dilution rate} of \qty{0.5}{h^{-1}} leaves $S^{*}
+= 0.01\times 0.5/0.5 = \qty{0.01}{g/L}$ of glucose and holds $X^{*} =
+\qty{0.495}{g/L}$ of cells, dividing every \qty{83}{min}, indefinitely.
+The chemostat is how the physiology of a fixed growth rate is studied,
+and how thousands of generations of evolution are run in a bottle.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=6.6cm, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=14, ymin=1e6, ymax=1e10, ymode=log,
+  xlabel={hours}, ylabel={cells per mL},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={0,4,8,12},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:1.5, samples=2] {1e6};
+\addplot[very thick, omDef, domain=1.5:7.5, samples=40] {1e6*2^((x-1.5)/0.5)};
+\addplot[very thick, omDef, domain=7.5:12, samples=2] {4.1e9};
+\addplot[very thick, omDef, domain=12:14, samples=10] {4.1e9*exp(-0.15*(x-12))};
+\node[font=\scriptsize, anchor=south] at (axis cs:0.8,1.2e6) {lag};
+\node[font=\scriptsize, anchor=west] at (axis cs:2.5,3e8) {exponential: $T = \qty{30}{min}$};
+\node[font=\scriptsize, anchor=north] at (axis cs:10,3.5e9) {stationary};
+\node[font=\scriptsize, anchor=north] at (axis cs:12.8,2.2e9) {death};
+\end{axis}
+\begin{axis}[
+  at={(7.8cm,0)}, anchor=south west,
+  width=6.6cm, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=0.1, ymin=0, ymax=1.1,
+  xlabel={glucose $S$ (g/L)}, ylabel={$\mu$ (h$^{-1}$)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={0,0.01,0.05,0.1}, xticklabels={0,$K_S$,0.05,0.1}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omThm, domain=0:0.1, samples=60] {x/(0.01+x)};
+\addplot[dashed, gray, domain=0:0.1, samples=2] {1};
+\addplot[dashed, gray] coordinates {(0.01,0) (0.01,0.5)}; \addplot[dashed, gray] coordinates {(0,0.5) (0.01,0.5)};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:0.045,0.6) {Monod: $\mu = \mu_{\max}S/(K_{S}+S)$};
+\node[font=\scriptsize, gray, anchor=south east] at (axis cs:0.1,1.01) {$\mu_{\max}$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Left: a batch culture --- a lag while enzymes are induced,
+exponential growth, a \omterm{def:b3:bacteriology:phases}{stationary phase} when the nutrient is spent, and
+slow death. Right: the Monod law, growth rate against limiting
+nutrient, with $K_{S}$ the concentration for half-maximal growth.}
+\end{omfigure}
+
+\begin{definition}[Phases and states]\label{def:b3:bacteriology:phases}
+\index{lag phase}\index{stationary phase}\index{sporulation}\index{sigma factor}
+In a fresh flask (a \emph{batch culture}) the cells first pause --- the
+\emph{lag phase}, while they induce the enzymes the new medium needs
+--- then grow exponentially, then stop when a nutrient is exhausted or
+a waste accumulates: the \emph{stationary phase}, in which the cells
+shrink, thicken their envelope, condense their nucleoid around
+protective proteins, switch on stress genes through the alternative
+sigma factor RpoS, and can survive for months; a death phase follows
+in which most cells lyse and a few live on the remains. Some species
+answer starvation with a developmental programme: \emph{Bacillus
+subtilis} divides asymmetrically and the larger cell engulfs the
+smaller and builds the spore around it, a sequence of eight hours
+controlled by a cascade of \emph{sigma factors} --- the subunits that
+direct RNA polymerase to one set of promoters --- alternating between
+the two compartments, the first bacterial example of differentiation
+and of cell-to-cell signalling through a wall.
+\end{definition}
+
+\section{Sensing one another}
+
+\begin{definition}[Quorum sensing]\label{def:b3:bacteriology:quorum}
+\index{quorum sensing}\index{autoinducer}\index{two-component system}
+Bacteria detect their own density by \emph{quorum sensing}: each cell
+secretes a small signal molecule, an \emph{autoinducer} --- acylated
+homoserine lactones in \omterm{def:b3:bacteriology:envelope}{Gram-negatives}, short peptides in \omterm{def:b3:bacteriology:envelope}{Gram-positives}
+--- at a constant rate; the concentration in the medium rises with the
+number of cells, and when it crosses a threshold it binds a receptor
+that switches on a set of genes, among them the synthase of the
+autoinducer itself (hence the name). The genes so controlled are the
+ones that pay only in company: light in \emph{Vibrio fischeri},
+virulence factors in \emph{Staphylococcus aureus} and
+\emph{Pseudomonas aeruginosa}, biofilm matrix, competence for DNA
+uptake, and the killing of neighbours. Most bacterial sensing runs
+through \emph{two-component systems}: a membrane histidine kinase that
+detects a stimulus and phosphorylates a cytoplasmic response regulator,
+which binds DNA --- a cell has dozens, for phosphate, osmolarity,
+oxygen, and the autoinducers of other species.
+\end{definition}
+
+\begin{proof}[Evidence]
+Nealson, Platt and Hastings (1970) grew the luminous marine bacterium
+\emph{Vibrio fischeri} from a dilute inoculum and found that the cells
+made no light until they reached a density of some $10^{7}$ per
+millilitre, then all lit up together; medium in which a dense culture
+had grown, sterilised and added to a dilute culture, switched the light
+on at once. The cells were counting a secreted substance, not time or
+nutrient. The substance was identified as an acyl-homoserine lactone
+(Eberhard, 1981), and the genes --- \emph{luxI} for the synthase,
+\emph{luxR} for the receptor, and the luciferase operon they control ---
+were cloned into \emph{E.~coli}, which then glowed when crowded. In
+the squid that houses the bacterium at $10^{10}$ per millilitre, the
+light organ shines; in the sea, where the bacteria are dilute, they are
+dark and save the cost.
+\end{proof}
+
+\begin{proposition}[A density threshold]\label{prop:b3:bacteriology:threshold}
+\index{quorum sensing!threshold}
+Let each of $N$ cells in a volume $V$ secrete \omterm{def:b3:bacteriology:quorum}{autoinducer} at rate $p$
+molecules per second, and let the molecule be lost (degraded or
+diluted) with first-order rate $k$. The concentration approaches
+$A^{*} = pN/(kV)$, proportional to the cell density $N/V$, with a
+time constant $1/k$; the receptor switches on when $A^{*}$ reaches its
+threshold $A_{\text{thr}}$, that is at the density
+\[
+\left(\frac{N}{V}\right)_{\text{thr}} = \frac{k\,A_{\text{thr}}}{p}.
+\]
+In an enclosed space --- a squid's light organ, an abscess, the mucus
+of a lung --- $k$ is small because the signal is not carried away, so
+the threshold density is reached by fewer cells; in open water it is
+never reached. The cell therefore measures not its numbers but its
+numbers per unit of the volume it shares, which is what matters for
+any cooperative act, and the positive feedback of the \omterm{def:b3:bacteriology:quorum}{autoinducer} on
+its own synthase makes the switch sharp: once a few cells cross the
+threshold, their extra output pushes the rest across.
+\end{proposition}
+\begin{proof}
+$\mathrm{d}A/\mathrm{d}t = pN/V - kA$ has the steady state $A^{*} =
+pN/(kV)$ and relaxes to it as $e^{-kt}$. Setting $A^{*} = A_{\text{thr}}$
+and solving for $N/V$ gives the threshold density.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-12-quorum-glow.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-12-antibiotic-disks.jpg}
+
+{\small Left: a dense culture of \emph{Vibrio fischeri} glowing, beside
+a dilute one that is dark --- the same cells, above and below their
+quorum. Right: a disk-diffusion test; the diameter of each clear zone
+measures the bacterium's sensitivity to the \omterm{def:b3:bacteriology:antibiotics}{antibiotic} on that disc,
+and the disc with no zone marks a resistance.}
+\end{omfigure}
+
+\section{The traffic of genes}
+
+\begin{definition}[Horizontal gene transfer]\label{def:b3:bacteriology:hgt}
+\index{transformation}\index{transduction}\index{conjugation}\index{plasmid!resistance}\index{mobile genetic element}\index{pangenome}
+Bacteria reproduce clonally but exchange genes by three routes.
+\emph{Transformation}: uptake of naked DNA from the environment by a
+competent cell --- the route by which Griffith's pneumococci acquired
+their capsule and Avery showed that the transforming principle was DNA
+(1944). \emph{Transduction}: a phage that packages a piece of host DNA
+and injects it into the next host (\cref{ch:b3:virology}).
+\emph{Conjugation}: transfer of a \omterm{def:b3:genetic-engineering:tools}{plasmid} through a pilus and a
+mating bridge from a donor carrying it to a recipient, demonstrated by
+Lederberg and Tatum (1946) with auxotrophic strains of \emph{E.~coli}
+that produced prototrophic recombinants only when mixed. Conjugative
+\omterm{def:b3:genetic-engineering:tools}{plasmids} carry their own transfer genes; many also carry resistance
+genes, often clustered in \emph{integrons} and flanked by transposons,
+so that a single mating can transfer resistance to five \omterm{def:b3:bacteriology:antibiotics}{antibiotics}
+at once, across species. The consequence is that a bacterial species
+has a core genome shared by all strains and an accessory genome that
+varies --- a \emph{pangenome}: two \emph{E.~coli} strains may differ by
+a fifth of their genes, and pathogenic strains differ from harmless
+ones mainly by acquired islands of virulence genes. The genes of the
+Year~2 volume's mutation chapter arise by mutation; the genes of this
+one mostly arrive.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % transformation
+  \begin{scope}
+    \draw[thick, fill=omDef!15] (0,0) ellipse (1.0 and 0.55);
+    \draw[omThm, very thick] (-1.9,0.6) .. controls (-1.5,0.8) .. (-1.2,0.5); \draw[->, omThm, thick] (-1.2,0.5) -- (-0.7,0.25);
+    \node[below, align=center] at (0,-0.7) {transformation:\\naked DNA taken up\\by a competent cell};
+  \end{scope}
+  % transduction
+  \begin{scope}[xshift=4.6cm]
+    \draw[thick, fill=omDef!15] (0,0) ellipse (1.0 and 0.55);
+    \draw[thick, fill=omProp!40] (-1.3,1.0) -- (-1.0,1.3) -- (-0.7,1.0) -- (-1.0,0.7) -- cycle; \draw[thick] (-1.0,0.7) -- (-0.9,0.35);
+    \draw[omThm, very thick] (-1.1,1.15) -- (-0.9,0.85);
+    \node[below, align=center] at (0,-0.7) {transduction:\\a phage carries a piece\\of the last host's DNA};
+  \end{scope}
+  % conjugation
+  \begin{scope}[xshift=9.6cm]
+    \draw[thick, fill=omDef!15] (-1.3,0) ellipse (0.9 and 0.5); \draw[thick, fill=omDef!15] (1.3,0) ellipse (0.9 and 0.5);
+    \draw[very thick, omMeth!70!black] (-0.4,0) -- (0.4,0);
+    \draw[omThm, very thick] (-1.5,0) circle (0.25); \draw[->, omThm, thick] (-1.25,0) -- (1.0,0);
+    \node[below, align=center] at (0,-0.7) {conjugation:\\a plasmid crosses\\a mating bridge};
+  \end{scope}
+\end{tikzpicture}
+
+{\small The three routes of horizontal transfer. Genes for resistance,
+virulence and metabolism move between cells --- and between species ---
+faster than mutation could make them.}
+\end{omfigure}
+
+\begin{proof}[Evidence]
+Robert Koch (1876--1884) established that a specific bacterium causes a
+specific disease: he isolated \emph{Bacillus anthracis} from sick
+animals, grew it in pure culture on solid medium (the agar plate and
+the single colony are his laboratory's inventions), showed that the
+culture reproduced anthrax in healthy animals and could be re-isolated
+from them --- the postulates that still define a pathogen --- and went
+on to the tubercle bacillus and the cholera vibrio. Alexander Fleming
+(1928) noticed that a mould contaminating a plate of staphylococci had
+cleared a zone around itself; the substance, penicillin, was purified
+and shown to cure infections by Florey and Chain (1940--1941), and
+within a decade resistant staphylococci carrying a penicillin-destroying
+enzyme were common in hospitals --- a warning Fleming himself gave in
+his Nobel lecture.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.30\linewidth]{images/book5/koch.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.56\linewidth]{images/book5/fleming.jpg}
+
+{\small Robert Koch, who proved that particular bacteria cause
+particular diseases and invented the methods for growing them (Wellcome
+Collection, CC~BY~4.0). Right: Alexander Fleming in his laboratory
+with plates of the mould whose product became penicillin (U.S. Navy
+archive, public domain).}
+\end{omfigure}
+
+\section{Antibiotics and resistance}
+
+\begin{definition}[Antibiotics]\label{def:b3:bacteriology:antibiotics}
+\index{antibiotic}\index{beta-lactam}\index{selective toxicity}\index{minimum inhibitory concentration}
+An \emph{antibiotic} is a molecule that kills bacteria or stops their
+growth at concentrations harmless to the host, by acting on a target
+the host lacks or has in a different form --- \emph{selective
+toxicity}. The targets are few. The cell wall: \emph{$\beta$-lactams}
+(penicillins, cephalosporins, carbapenems) mimic the terminal
+D-Ala-D-Ala of the \omterm{def:b3:bacteriology:envelope}{peptidoglycan} peptide and acylate the enzymes that
+cross-link it, so that the growing wall is weak and the cell bursts
+under its own turgor; vancomycin binds the D-Ala-D-Ala itself. The
+ribosome, whose bacterial form differs from the eukaryotic: aminoglycosides
+(the small subunit, causing misreading), tetracyclines (blocking tRNA
+entry), macrolides and chloramphenicol (the large subunit's exit
+tunnel and peptidyl transferase). DNA gyrase and topoisomerase~IV:
+the quinolones. RNA polymerase: rifampicin. Folate synthesis, which
+animals do not do: sulfonamides and trimethoprim. The membrane: the
+polymyxins, a last resort. The \emph{minimum inhibitory concentration}
+(MIC) is the lowest concentration of a drug that prevents visible
+growth of a strain; a strain is called resistant when its MIC exceeds
+the concentration the drug reaches in the patient.
+\end{definition}
+
+\begin{method}[Measuring susceptibility]\label{met:b3:bacteriology:mic}
+\index{disk diffusion}\index{broth dilution}
+Two tests. \emph{\omterm{met:b3:bacteriology:mic}{Broth dilution}}: inoculate a fixed number of cells
+(about $5\times 10^{5}$ per millilitre) into a row of tubes or wells
+containing the \omterm{def:b3:bacteriology:antibiotics}{antibiotic} in twofold steps, incubate overnight, and
+read the first clear well: that concentration is the MIC. \emph{\omterm{met:b3:bacteriology:mic}{Disk
+diffusion}}: spread the strain on an agar plate, place paper discs
+loaded with known amounts of several \omterm{def:b3:bacteriology:antibiotics}{antibiotics}, incubate; the drug
+diffuses outward, its concentration falling with distance, and growth
+is inhibited out to the radius where the concentration equals the MIC,
+so that the diameter of the clear zone --- read against calibrated
+tables --- gives the susceptibility for each disc on one plate. Both
+tests take a day; sequencing the genome for known resistance genes and
+mutations takes the same day and is beginning to replace them.
+\end{method}
+
+\begin{definition}[Resistance]\label{def:b3:bacteriology:resistance}
+\index{antibiotic resistance}\index{beta-lactamase}\index{efflux pump}\index{MRSA}
+A bacterium resists an \omterm{def:b3:bacteriology:antibiotics}{antibiotic} by one of five means. It destroys the
+drug: \emph{$\beta$-lactamases} hydrolyse the $\beta$-lactam ring, and
+the extended-spectrum and carbapenemase variants now destroy the
+newest ones. It alters the target: a mutation in the ribosomal protein
+or gyrase that the drug binds, or, in MRSA (methicillin-resistant
+\emph{Staphylococcus aureus}), an acquired gene for a cross-linking
+enzyme that $\beta$-lactams do not bind; vancomycin resistance replaces
+the terminal D-Ala with D-lactate, which the drug does not recognise.
+It pumps the drug out with \emph{efflux pumps}, often broad in
+specificity. It stops the drug getting in, by losing a porin. Or it
+bypasses the blocked step with an alternative enzyme. Target mutations
+arise by chance in the patient at rates of $10^{-8}$ to $10^{-6}$ per
+division and are selected during treatment; the enzymes and pumps are
+mostly acquired on \omterm{def:b3:genetic-engineering:tools}{plasmids} from the vast reservoir of soil and gut
+bacteria, in which they evolved over ages against the \omterm{def:b3:bacteriology:antibiotics}{antibiotics} that
+fungi and other bacteria make. Persisters --- dormant cells that
+survive a drug without being genetically resistant --- explain relapses
+after treatment that should have worked.
+\end{definition}
+
+\begin{proposition}[Why resistance is inevitable and combination is the answer]\label{prop:b3:bacteriology:selection}
+\index{resistance!selection}\index{combination therapy!antibiotics}
+An infection of $10^{9}$ cells treated with a drug against which
+resistance mutations arise at $10^{-8}$ per division already contains
+about ten resistant cells; the drug kills the rest and the ten take
+over --- the arithmetic of \cref{ch:b3:cancer-biology} exactly, since a
+bacterial population and a \omterm{def:b3:cancer-biology:hallmarks}{tumour} are both evolving clones under
+selection. Two drugs with independent targets face a doubly resistant
+cell at $10^{-16}$ per division, which a billion cells do not contain.
+This is why tuberculosis, whose lesions hold $10^{8}$--$10^{9}$ bacilli,
+has been treated with three or four drugs at once since the 1950s and
+why monotherapy of it produced resistance within months; it is also
+why every use of an \omterm{def:b3:bacteriology:antibiotics}{antibiotic}, on a patient or in a feedlot, selects
+resistance somewhere, and why the rate of new \omterm{def:b3:bacteriology:antibiotics}{antibiotics} --- none of a
+new class against \omterm{def:b3:bacteriology:envelope}{Gram-negatives} since the 1960s --- is the measure
+against which the losses are counted. The remedies are those of any
+evolutionary contest: use less, combine, finish the course so that
+partially resistant cells do not survive to breed, and find new
+targets.
+\end{proposition}
+
+\begin{example}[The mutant selection window]\label{ex:b3:bacteriology:window}
+A strain has MIC \qty{1}{mg/L}; its first-step resistant mutants, present
+at one in $10^{7}$, have MIC \qty{8}{mg/L}. A dose that holds the drug
+at \qty{4}{mg/L} kills the wild type and leaves the mutants to grow
+without competition: the concentration range between the MIC of the
+wild type and that of the mutants is the \emph{mutant selection
+window}, and a treatment that sits in it breeds resistance. A dose
+above \qty{8}{mg/L} kills both; too low a dose, or a course stopped when
+the patient feels better and the drug level is falling through the
+window, is how a resistant population is made. The same logic sets the
+regimens of tuberculosis treatment: six months, four drugs, at doses
+above every single-step mutant's MIC.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=24, ymin=0.25, ymax=32, ymode=log,
+  xlabel={hours after a dose}, ylabel={drug in plasma (mg/L)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,6,12,18,24}, ytick={0.5,1,2,4,8,16}, yticklabels={0.5,1,2,4,8,16},
+  clip=false,
+]
+\fill[omThm!15] (axis cs:0,1) rectangle (axis cs:24,8);
+\addplot[very thick, omDef, domain=0:24, samples=60] {16*exp(-0.15*x)};
+\addplot[dashed, gray, domain=0:24, samples=2] {1}; \addplot[dashed, gray, domain=0:24, samples=2] {8};
+\node[font=\scriptsize, gray, anchor=south west] at (axis cs:0.3,1.05) {MIC of the wild type};
+\node[font=\scriptsize, gray, anchor=south east] at (axis cs:23.7,8.4) {MIC of the first-step mutant};
+\node[font=\scriptsize, omThm!70!black, anchor=west] at (axis cs:13,3.5) {mutant selection window};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:2,13) {plasma level after a dose};
+\end{axis}
+\end{tikzpicture}
+
+{\small The mutant selection window. A drug level above the mutants'
+MIC kills everything; between the two MICs (shaded) it kills the wild
+type and selects the mutants. A dose whose level falls through the
+window for hours, or a course stopped early, breeds resistance.}
+\end{omfigure}
+
+\begin{remark}[Most bacteria are not pathogens]\label{rem:b3:bacteriology:most}
+The bacteria of this chapter's clinic are a tiny minority. Of the
+estimated million species, a few hundred cause human disease; the rest
+run the cycles of nitrogen, sulfur and carbon (the Year~2 volume), fix
+the nitrogen of every legume, digest the cellulose in every ruminant,
+and make up the microbiomes of \cref{ch:b3:microbiomes}, whose loss
+under \omterm{def:b3:bacteriology:antibiotics}{antibiotic} treatment is a cost of every course. The \omterm{def:b3:bacteriology:antibiotics}{antibiotics}
+themselves are their molecules --- weapons and signals evolved among
+soil bacteria and fungi long before there were hospitals --- and so
+are most of the resistance genes.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:bacteriology:1}
+Describe the \omterm{def:b3:bacteriology:envelope}{Gram-positive} and \omterm{def:b3:bacteriology:envelope}{Gram-negative} envelopes and explain why
+the \omterm{met:b3:bacteriology:gram}{Gram stain} distinguishes them.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:bacteriology:2}
+A culture of $10^{3}$ cells per millilitre reaches $10^{9}$ in
+\qty{8}{h} of exponential growth. Find the number of generations, the
+generation time and $\mu$.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:bacteriology:3}
+Name the three routes of horizontal gene transfer and give the classic
+experiment that demonstrated each.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:bacteriology:4}
+Give the target of penicillin, of streptomycin, of ciprofloxacin and of
+rifampicin, and say why each is selectively toxic.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:bacteriology:5}
+A chemostat has $\mu_{\max} = \qty{0.8}{h^{-1}}$, $K_{S} =
+\qty{0.02}{g/L}$, $S_{0} = \qty{2}{g/L}$, $Y = 0.4$. Compute $S^{*}$ and
+$X^{*}$ at $D = 0.2$, $0.6$ and $0.79$ h$^{-1}$, and the \omterm{thm:b3:bacteriology:monod}{dilution rate}
+at which washout begins.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:bacteriology:6}
+Using \cref{prop:b3:bacteriology:threshold}, compare the threshold
+density for \omterm{def:b3:bacteriology:quorum}{quorum sensing} in a squid light organ ($k =
+\qty{0.01}{h^{-1}}$) and in flowing sea water ($k = \qty{10}{h^{-1}}$),
+with $p = 100$ molecules per cell per hour and $A_{\text{thr}} =
+\qty{10}{nmol/L}$ ($6\times 10^{12}$ molecules per litre).
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:bacteriology:7}
+A disc-diffusion plate shows zones of $25$, $12$ and \qty{0}{mm} for
+three drugs. Interpret each, and explain why a zone diameter can be
+converted into an MIC.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:bacteriology:8}
+Explain how a single \omterm{def:b3:bacteriology:hgt}{conjugation} event can make a sensitive
+\emph{Klebsiella} resistant to five \omterm{def:b3:bacteriology:antibiotics}{antibiotics}, and why resistance
+genes are so often found together on \omterm{def:b3:genetic-engineering:tools}{plasmids}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:bacteriology:9}
+A patient has $10^{9}$ bacteria and takes a drug against which
+resistance arises at $10^{-7}$ per division. Compute the expected
+resistant cells at the start; then with two independent drugs. Why are
+persisters a different problem?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:bacteriology:10}
+Show that the chemostat steady state is stable: perturb $X$ slightly
+above $X^{*}$ and follow the signs of $\mathrm{d}S/\mathrm{d}t$ and
+$\mathrm{d}X/\mathrm{d}t$. Then explain why two species competing for
+one nutrient in a chemostat cannot coexist at steady state, and which
+one wins at a given $D$.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:bacteriology:11}
+The \omterm{def:b3:bacteriology:quorum}{autoinducer} induces its own synthase. Modify the model of
+\cref{prop:b3:bacteriology:threshold} so that $p$ jumps from $p_{0}$ to
+$p_{1} \gg p_{0}$ when $A > A_{\text{thr}}$, and show that the system
+can have two stable states over a range of densities (hysteresis):
+a population that has switched on stays on at a density where a naive
+population would be off. What is the biological use of that?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:bacteriology:12}
+Explain the mutant selection window and use it to argue for or against
+each of: (a) high doses for short courses; (b) low doses for long
+courses; (c) stopping when symptoms resolve; (d) \omterm{thm:b3:cancer-biology:goldie-coldman}{combination therapy}.
+\end{exercise}
+
+\section{Problem: A Chemostat and a Clinic}
+
+\begin{problem}[{Weekend problem --- a culture grown in a flask and held
+in a chemostat, a luminous bacterium counted to its quorum, and an
+infection treated against the arithmetic of resistance, ending on the
+cells in the chemostat, the density at which the light comes on and the
+odds that a two-drug course meets a resistant cell}]
+\label{pb:b3:bacteriology:1}
+Data: \emph{E.~coli} at \qty{37}{\celsius}, $T = \qty{20}{min}$; a cell
+weighs \qty{1}{pg}. Chemostat: $V = \qty{1}{L}$, $F = \qty{0.5}{L/h}$,
+$\mu_{\max} = \qty{1.0}{h^{-1}}$, $K_{S} = \qty{0.01}{g/L}$, $S_{0} =
+\qty{2}{g/L}$ glucose, $Y = 0.5$. \emph{Vibrio}: $p = 500$ \omterm{def:b3:bacteriology:quorum}{autoinducer}
+molecules per cell per hour, $A_{\text{thr}} = 6\times 10^{12}$
+molecules per litre (\qty{10}{nmol/L}), $k = \qty{0.05}{h^{-1}}$ in the
+light organ. Infection: $10^{9}$ cells; resistance to drug A at
+$10^{-8}$ per division, to drug B at $10^{-7}$; wild-type MIC of A
+\qty{1}{mg/L}, first-step mutant \qty{8}{mg/L}; a dose gives
+\qty{16}{mg/L} falling with half-life \qty{4}{h}.
+
+\medskip
+\noindent\textbf{Part I --- The flask.}
+\begin{enumerate}
+  \item One cell in \qty{100}{mL} of broth. How many cells after
+        \qty{6}{h} of exponential growth, and what density per mL?
+  \item The broth supports at most $2\times 10^{9}$ cells per mL. When
+        does growth stop, and what is the culture's mass of cells?
+  \item How long would it take the descendants of one cell to reach
+        the mass of the Earth ($6\times 10^{27}$ g)? Comment.
+  \item The \omterm{def:b3:bacteriology:phases}{lag phase} lasts \qty{1}{h} when cells from \omterm{def:b3:bacteriology:phases}{stationary phase}
+        are inoculated into fresh medium, and almost nothing when
+        exponential cells are used. Explain.
+  \item Compute $\mu$ from $T$. If the medium is switched to a sugar on
+        which $T = \qty{60}{min}$, what is $\mu$, and by what factor
+        does the number of cells after \qty{6}{h} fall?
+  \item A sample of the stationary culture is spread on a plate and
+        gives $200$ colonies from \qty{0.1}{mL} of a $10^{-6}$ dilution.
+        What is the viable count, and why might it differ from a
+        microscope count?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The chemostat.}
+\begin{enumerate}[resume]
+  \item Compute the \omterm{thm:b3:bacteriology:monod}{dilution rate} $D$ and the generation time the
+        culture is forced to adopt.
+  \item Compute $S^{*}$ and $X^{*}$ (in g/L and cells per mL).
+  \item How many cells leave the vessel per hour? How many generations
+        does the culture go through in a month?
+  \item The pump is turned up to $F = \qty{0.95}{L/h}$. New $S^{*}$ and
+        $X^{*}$? What happens at $F = \qty{1.1}{L/h}$?
+  \item A mutant appears with $\mu_{\max} = \qty{1.2}{h^{-1}}$ and the
+        same $K_{S}$. At $D = 0.5$, what $S^{*}$ does it need, and what
+        happens to the original strain? (Use
+        \cref{exo:b3:bacteriology:10}.)
+  \item A month's run is $700$ generations. If a beneficial mutation
+        arises at $10^{-9}$ per division and the vessel holds $10^{12}$
+        cells, how many beneficial mutations arise per generation?
+        What does this say about evolution in a chemostat?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- The quorum.}
+\begin{enumerate}[resume]
+  \item Compute the threshold cell density for light in the light
+        organ, in cells per mL.
+  \item The light organ holds \qty{1}{\micro L} of bacteria at $10^{10}$
+        per mL. By what factor is the \omterm{def:b3:bacteriology:quorum}{autoinducer} above threshold?
+  \item In sea water the signal is swept away with $k = \qty{20}{h^{-1}}$.
+        Threshold density? Compare with the $10^{2}$ cells per mL of
+        the open sea.
+  \item After the squid expels \qty{90}{\%} of the bacteria at dawn,
+        how long until the remaining $10^{9}$ per mL, dividing every
+        \qty{2}{h}, restore $10^{10}$ per mL? Does the light go out
+        meanwhile?
+  \item Each glowing cell spends about \qty{20}{\%} of its energy on
+        light. Why is a dark cell in the sea favoured, and why not in
+        the organ?
+  \item A pathogen uses the same system to delay its toxins until it
+        is numerous. Propose a drug strategy that exploits this and say
+        why it might select resistance more slowly than an \omterm{def:b3:bacteriology:antibiotics}{antibiotic}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The clinic.}
+\begin{enumerate}[resume]
+  \item Expected number of cells resistant to A at the start of
+        treatment; to B; to both.
+  \item Probability that no cell resistant to A exists; to both.
+  \item After the dose, when does the drug level fall to \qty{8}{mg/L},
+        and to \qty{1}{mg/L}? How long per dose does it spend in the
+        mutant selection window?
+  \item If the drug is given every \qty{12}{h}, what fraction of the
+        time is the level in the window, and what does that predict
+        over a ten-day course with A alone?
+  \item Suggest a dosing change that keeps the level above
+        \qty{8}{mg/L} throughout (compute the interval or the dose
+        needed), and state its cost.
+  \item One cell in $10^{4}$ is a persister, dormant and untouched by
+        any concentration of either drug. How many survive the course,
+        what happens when the drug is withdrawn, and what does this
+        imply for the length of treatment?
+  \item Summarise: the cells per mL in the chemostat (question~8), the
+        light threshold density (question~13), and the probability that
+        the two-drug course meets no resistant cell (question~20).
+\end{enumerate}
+\end{problem}

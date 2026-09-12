@@ -1,6 +1,697 @@
 \chapter{Membrane Traffic and Protein Sorting}\label{ch:b3:membrane-traffic}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+A cell of the pancreas makes some ten million molecules of digestive
+enzyme a minute, packs them into granules, and releases them into a
+duct on a signal from the gut --- without ever letting a molecule of
+trypsin loose in its own cytoplasm. A liver cell takes cholesterol out
+of the blood by swallowing the particles that carry it, whole, at a
+rate of thousands a minute, and returns each receptor to the surface
+for the next. A newly made protein destined for the mitochondrion, the
+nucleus, the \omterm{def:b3:membrane-traffic:endocytosis}{lysosome}, the membrane or the outside world reaches its
+address among a dozen compartments with an error rate that would
+shame a postal service. This chapter is about the sorting: the signals
+written into proteins, the machines that read them, the vesicles that
+carry membrane and cargo between compartments, the \omterm{def:b3:membrane-traffic:coats}{coats} that shape the
+vesicles and the proteins that make them fuse with the right target, and
+the two-way traffic --- secretion out, endocytosis in --- that a
+eukaryotic cell keeps up every second of its life.
 
-\emph{This chapter has not been written yet.}
+\section{Signals and addresses}
+
+\begin{definition}[Sorting signals]\label{def:b3:membrane-traffic:signals}
+\index{sorting signal}\index{signal peptide}\index{nuclear localisation signal}\index{presequence}
+A \emph{sorting signal} is a segment of a protein, or a modification of
+it, read by a receptor that delivers the protein to one compartment.
+The \emph{signal peptide}, a stretch of \numrange{15}{30} residues at
+the amino terminus with a hydrophobic core, sends a protein into the
+endoplasmic reticulum as it is being made; from there the default
+route leads through the Golgi to the plasma membrane or the outside,
+and further signals divert to the \omterm{def:b3:membrane-traffic:endocytosis}{lysosome} (a phosphorylated sugar) or
+back to the reticulum (the carboxy-terminal sequence KDEL). A
+\emph{nuclear localisation signal}, a short basic patch such as
+PKKKRKV, is bound by importins that carry the folded protein through
+the nuclear pore; a mitochondrial \emph{presequence}, an amphipathic
+helix of \numrange{20}{50} residues, is recognised by receptors on the
+outer membrane and threaded, unfolded, through translocases of both
+membranes; peroxisomal enzymes end in SKL. Proteins with none of these
+stay in the cytosol. Every signal was found the same way: deleting it
+leaves the protein in the cytosol, grafting it onto a cytosolic protein
+sends that protein to the compartment.
+\end{definition}
+
+\begin{proof}[Evidence]
+Blobel and Dobberstein (1975) translated the messenger RNA of an
+antibody light chain in a cell-free system. Without membranes the
+product was longer by about twenty residues than the secreted protein;
+with fragments of endoplasmic reticulum added \emph{during} translation,
+the product had the secreted size and was protected from added
+protease --- it was inside the vesicles --- whereas membranes added
+after translation did nothing. The extra amino-terminal segment, the
+\omterm{def:b3:membrane-traffic:signals}{signal peptide}, is needed to enter the reticulum, is removed inside it,
+and works only while the chain is being made: the \emph{signal
+hypothesis}, confirmed in every detail when the receptor (the
+signal-recognition particle, Walter and Blobel 1981) and the channel
+(Sec61) were purified.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % ER membrane
+  \fill[omDef!15] (0,0) rectangle (12,-1.6);
+  \draw[very thick, omDef] (0,0) -- (12,0); \draw[very thick, omDef] (0,-0.35) -- (12,-0.35);
+  \node[right, omDef!70!black] at (0.1,-1.3) {ER lumen};
+  \node[right] at (0.1,2.9) {cytosol};
+  % stage 1: ribosome with emerging signal peptide + SRP
+  \draw[thick, fill=gray!25] (1.4,1.6) circle (0.5); \draw[thick, fill=gray!25] (1.4,0.95) ellipse (0.62 and 0.3);
+  \draw[very thick, omThm] (1.4,0.65) -- (1.4,0.2) -- (1.9,0.1);
+  \draw[thick, fill=omProp!40] (2.1,0.35) ellipse (0.35 and 0.2); \node[above right] at (2.2,0.5) {SRP};
+  \node[below, align=center] at (1.7,-1.7) {1. signal peptide emerges;\\SRP binds, translation pauses};
+  % stage 2: docking at SRP receptor and translocon
+  \draw[->, thick] (3.2,1.2) -- (4.2,1.2);
+  \draw[thick, fill=gray!25] (5.6,1.75) circle (0.5); \draw[thick, fill=gray!25] (5.6,1.1) ellipse (0.62 and 0.3);
+  \draw[thick, fill=omMeth!40] (5.2,0.0) rectangle (5.45,-0.35); \draw[thick, fill=omMeth!40] (5.75,0.0) rectangle (6.0,-0.35);
+  \node[below, align=center] at (5.9,-1.7) {2. SRP receptor docks it\\on Sec61; SRP leaves};
+  \draw[very thick, omThm] (5.6,0.8) -- (5.6,-0.2);
+  \draw[thick, fill=omProp!40] (4.7,0.15) ellipse (0.3 and 0.18); \node[above] at (4.7,0.33) {SRP receptor};
+  % stage 3: translocation, cleavage, glycosylation
+  \draw[->, thick] (7.2,1.2) -- (8.2,1.2);
+  \draw[thick, fill=gray!25] (9.6,1.75) circle (0.5); \draw[thick, fill=gray!25] (9.6,1.1) ellipse (0.62 and 0.3);
+  \draw[thick, fill=omMeth!40] (9.2,0.0) rectangle (9.45,-0.35); \draw[thick, fill=omMeth!40] (9.75,0.0) rectangle (10.0,-0.35);
+  \draw[very thick, omThm] (9.6,0.8) -- (9.6,-0.5) .. controls (9.6,-1.0) and (10.3,-1.1) .. (10.6,-0.7);
+  \draw[omThm, thick] (10.9,-0.9) -- (11.2,-0.9); \node[right, font=\tiny] at (11.0,-1.15) {signal cut};
+  \fill[omExo] (10.3,-1.0) circle (0.07); \fill[omExo] (10.45,-1.12) circle (0.07); \node[below, font=\tiny] at (10.2,-1.15) {sugars};
+  \node[below, align=center] at (10.0,-1.7) {3. chain crosses as it is made;\\signal cut, sugars added};
+\end{tikzpicture}
+
+{\small The signal hypothesis. A \omterm{def:b3:membrane-traffic:signals}{signal peptide} at the start of the
+nascent chain is bound by the signal-recognition particle, which pauses
+translation and docks the ribosome on the Sec61 channel; the chain then
+crosses the membrane as it is synthesised, the signal is cut off in the
+lumen, and sugars are added.}
+\end{omfigure}
+
+\begin{proposition}[Membrane proteins and topology]\label{prop:b3:membrane-traffic:topology}
+\index{stop-transfer sequence}\index{membrane topology}
+A hydrophobic stretch of about twenty residues in the middle of a
+chain being translocated acts as a \emph{stop-transfer} sequence: the
+channel opens sideways and releases it into the bilayer as a
+transmembrane helix, with the part already translocated in the lumen
+and the rest made into the cytosol. A second such stretch restarts
+translocation, and a protein with $n$ alternating signals ends with
+$n$ membrane-spanning helices. The orientation set in the reticulum is
+never changed: what faces the lumen of the reticulum faces the lumen of
+the Golgi and of every vesicle after it, and the \emph{outside} of the
+cell after fusion with the plasma membrane. Hence sugars, added only in
+the lumen, are always on the extracellular face of a surface protein,
+and the topology of a receptor can be read from where its glycosylation
+sites lie.
+\end{proposition}
+
+\begin{method}[Pulse--chase]\label{met:b3:membrane-traffic:pulse-chase}
+\index{pulse--chase}\index{autoradiography}
+To follow a population of newly made molecules through the cell: (1)
+expose the cells briefly (the \emph{pulse}, a few minutes) to a
+radioactive or otherwise tagged precursor --- tritiated leucine for
+proteins; (2) replace it with an excess of unlabelled precursor (the
+\emph{chase}), so that no new label is incorporated; (3) fix samples of
+cells at intervals and locate the label by autoradiography in electron
+micrographs, or by isolating the compartments and counting; (4) plot
+the fraction of label in each compartment against time. The order in
+which compartments fill and empty is the route; the timing gives the
+residence time in each. Palade's laboratory (1960s) applied it to the
+pancreatic acinar cell and found the label in the rough reticulum at
+\qty{3}{min}, in the Golgi at \qty{20}{min}, in condensing vacuoles and
+granules at \qty{40}{min}, and in the duct after an hour and on a
+signal: the secretory pathway, laid out in time.
+\end{method}
+
+\begin{theorem}[Sequential compartments and the pulse--chase curves]\label{thm:b3:membrane-traffic:pulse-chase}
+\index{compartment model}
+Let a pulse of labelled protein leave compartment $A$ for $B$ with
+first-order rate $k_{1}$ and leave $B$ for $C$ with rate $k_{2}$, $C$
+retaining it. With all the label in $A$ at $t = 0$,
+\[
+A(t) = e^{-k_{1}t},\qquad
+B(t) = \frac{k_{1}}{k_{2} - k_{1}}\bigl(e^{-k_{1}t} - e^{-k_{2}t}\bigr),
+\qquad
+C(t) = 1 - A - B,
+\]
+and the label in $B$ peaks at $t^{*} = \ln(k_{2}/k_{1})/(k_{2} - k_{1})$.
+The mean residence time in $A$ is $1/k_{1}$ and in $B$ is $1/k_{2}$,
+whatever the order of the two rates.
+\end{theorem}
+\begin{proof}
+$\mathrm{d}A/\mathrm{d}t = -k_{1}A$ gives the exponential. For $B$,
+$\mathrm{d}B/\mathrm{d}t = k_{1}A - k_{2}B = k_{1}e^{-k_{1}t} - k_{2}B$;
+try $B = \beta(e^{-k_{1}t} - e^{-k_{2}t})$: the derivative is
+$\beta(-k_{1}e^{-k_{1}t} + k_{2}e^{-k_{2}t})$ and $-k_{2}B = \beta(-k_{2}
+e^{-k_{1}t} + k_{2}e^{-k_{2}t})$, so the equation requires $\beta(k_{2}
+- k_{1})e^{-k_{1}t} = k_{1}e^{-k_{1}t}$, $\beta = k_{1}/(k_{2} -
+k_{1})$, and $B(0) = 0$ as required. Setting $\mathrm{d}B/\mathrm{d}t =
+0$: $k_{1}e^{-k_{1}t} = k_{2}e^{-k_{2}t}$, whence $t^{*}$. The mean time
+a molecule spends in a compartment it leaves at rate $k$ is $\int_{0}^{
+\infty} t\,k e^{-kt}\,\mathrm{d}t = 1/k$.
+\end{proof}
+
+\begin{example}[Palade's cell in numbers]\label{ex:b3:membrane-traffic:palade}
+Take $k_{1} = \qty{0.1}{min^{-1}}$ (ten minutes in the reticulum) and
+$k_{2} = \qty{0.05}{min^{-1}}$ (twenty in the Golgi). The Golgi peaks at
+$t^{*} = \ln 2/0.05 = \qty{13.9}{min}$, holding then $B = 2(e^{-1.39} -
+e^{-0.69}) = 2(0.25 - 0.50)\cdot(-1) = 0.50$: half the label. At
+\qty{40}{min}, $A = 0.018$, $B = 2(0.018 - 0.135) \to 0.23$, $C = 0.75$:
+three quarters of the protein has reached the granules. The observed
+curves of Palade's laboratory have this shape, and fitting them was
+how the residence times were first measured.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=80, ymin=0, ymax=1.05,
+  xlabel={minutes after the pulse}, ylabel={fraction of label},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,20,40,60,80}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:80, samples=80] {exp(-0.1*x)};
+\addplot[very thick, omProp, domain=0:80, samples=80] {2*(exp(-0.05*x)-exp(-0.1*x))};
+\addplot[very thick, omMeth!70!black, domain=0:80, samples=80] {1-exp(-0.1*x)-2*(exp(-0.05*x)-exp(-0.1*x))};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:4,0.62) {reticulum, $A$};
+\node[font=\scriptsize, omProp, anchor=south] at (axis cs:14,0.53) {Golgi, $B$};
+\node[font=\scriptsize, omMeth!70!black, anchor=north west] at (axis cs:45,0.72) {granules, $C$};
+\end{axis}
+\end{tikzpicture}
+
+{\small Pulse--chase curves from the two-rate model with $k_{1} =
+\qty{0.1}{min^{-1}}$ and $k_{2} = \qty{0.05}{min^{-1}}$: the label leaves
+the reticulum exponentially, passes through the Golgi with a peak at
+\qty{14}{min}, and accumulates in the granules.}
+\end{omfigure}
+
+\section{The endoplasmic reticulum: folding, sugars and quality}
+
+\begin{definition}[N-glycosylation and quality control]\label{def:b3:membrane-traffic:glycosylation}
+\index{N-glycosylation}\index{calnexin cycle}\index{ER-associated degradation}\index{unfolded protein response}
+As the chain enters the lumen a preassembled oligosaccharide of
+fourteen sugars (two N-acetylglucosamines, nine mannoses, three
+glucoses) is transferred from a lipid carrier onto asparagines in the
+sequence Asn-X-Ser/Thr --- \emph{N-glycosylation}. The three glucoses
+are then trimmed one by one, and the trimming is a folding clock: a
+protein still carrying one glucose is held by the \omterm{def:b3:structural-biology:chaperones}{chaperone} calnexin;
+a protein whose last glucose has been removed but which is not yet
+folded is re-glucosylated by an enzyme that recognises exposed
+hydrophobic patches, and returns to calnexin --- the \emph{calnexin
+cycle}. Proteins that fail repeatedly are pulled back into the cytosol,
+ubiquitinated and destroyed by the proteasome: \emph{ER-associated
+degradation} (ERAD). When unfolded proteins accumulate faster than
+they can be folded or destroyed, sensors in the reticulum membrane
+launch the \emph{unfolded protein response}: translation is slowed,
+\omterm{def:b3:structural-biology:chaperones}{chaperone} genes induced, the reticulum expanded, and, if the stress
+persists, the cell killed. The commonest mutation of cystic fibrosis
+($\Delta$F508 in CFTR) makes a channel that would work but folds too
+slowly, is caught by ERAD and never reaches the surface; drugs that
+help it fold are now a treatment.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book5/ai/b5-08-pancreas-acinar.jpg}
+
+{\small A pancreatic acinar cell in the electron microscope: stacked
+rough endoplasmic reticulum studded with ribosomes fills the base,
+the Golgi lies above the nucleus, and dense secretory granules of
+digestive enzyme are packed under the apical surface, waiting for a
+signal.}
+\end{omfigure}
+
+\section{Vesicles: budding, targeting, fusion}
+
+\begin{definition}[Coats and vesicle budding]\label{def:b3:membrane-traffic:coats}
+\index{coated vesicle}\index{COPII}\index{COPI}\index{clathrin}\index{small GTPase}
+A transport vesicle is shaped by a \emph{coat} of proteins assembled on
+the cytosolic face of a membrane, which curves the membrane into a bud
+of \qtyrange{60}{100}{nm}, collects cargo through receptors that span
+the membrane, and is shed after the vesicle pinches off. Three coats
+serve the main routes: \emph{COPII} for vesicles leaving the reticulum
+for the Golgi, \emph{COPI} for the return traffic from the Golgi to the
+reticulum and between Golgi cisternae, and \emph{clathrin} --- a
+three-legged protein that polymerises into a cage of hexagons and
+pentagons --- for vesicles leaving the trans-Golgi for \omterm{def:b3:membrane-traffic:endocytosis}{endosomes} and for
+endocytosis at the plasma membrane, where adaptor proteins link the
+cage to the receptors being internalised. Each coat is recruited by a
+\emph{small GTPase} (Sar1 for COPII, Arf1 for COPI and clathrin) that
+inserts into the membrane in its GTP form and, on hydrolysing GTP after
+budding, lets the coat fall off. Retrieval signals keep the compartments
+distinct: escaped reticulum proteins carrying KDEL are bound in the
+Golgi by a receptor and carried back in COPI vesicles.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-08-clathrin-cage.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-08-golgi-tem.jpg}
+
+{\small Left: a \omterm{def:b3:membrane-traffic:coats}{clathrin} cage, the polyhedral lattice of three-legged
+units that shapes an endocytic vesicle (cut away to show the membrane
+inside). Right: a Golgi stack in the electron microscope, a pile of
+flattened cisternae with vesicles budding from the rims.}
+\end{omfigure}
+
+\begin{definition}[Targeting and fusion]\label{def:b3:membrane-traffic:fusion}
+\index{Rab GTPase}\index{SNARE}\index{membrane fusion}\index{synaptotagmin}
+A vesicle finds its target by two layers of recognition. \emph{Rab
+GTPases} --- some sixty in a human cell, each on the membranes of one
+compartment --- recruit long tethering proteins that catch an incoming
+vesicle carrying the matching Rab. Then the \emph{SNAREs} act: a
+v-SNARE on the vesicle and t-SNAREs on the target, helical proteins
+anchored in their membranes, wind around each other from their distal
+ends toward the membranes, and the energy of the four-helix bundle they
+form pulls the two bilayers together until they fuse. Each SNARE pairing
+is specific, a second check on the address. After fusion the bundle
+is pried apart by the ATPase NSF for reuse. Fusion can be made to wait
+for a signal: in the nerve terminal the SNAREs are held half-zipped by
+complexin until \emph{synaptotagmin}, binding calcium that enters when
+an action potential arrives, completes the zippering in under a
+millisecond --- the release of neurotransmitter treated in the Year~2
+volume. The neurotoxins of tetanus and botulism are proteases that
+cleave SNAREs.
+\end{definition}
+
+\begin{proof}[Evidence]
+Novick and Schekman (1980) isolated temperature-sensitive yeast
+mutants that stopped secreting at \qty{37}{\celsius} and accumulated
+protein in whichever compartment their defect blocked --- reticulum,
+Golgi or vesicles piled under the surface; the $23$ \emph{sec} genes
+defined the steps and, cloned, turned out to encode the \omterm{def:b3:membrane-traffic:coats}{coats}, the
+GTPases and the \omterm{def:b3:membrane-traffic:fusion}{SNAREs}. Rothman reconstituted transport between Golgi
+cisternae in a test tube with purified membranes, cytosol and ATP,
+and from it purified NSF and the \omterm{def:b3:membrane-traffic:fusion}{SNAREs}; the two approaches converged
+on the same proteins, and the yeast and mammalian machines proved to be
+the same.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % three stages left to right
+  \foreach \x/\gap/\lab in {0/1.2/{1. tethered by Rab}, 4.4/0.55/{2. SNAREs zipper}, 8.8/0.0/{3. fusion, cargo released}} {
+    % target membrane
+    \draw[very thick, omDef] (\x,0) -- (\x+3.4,0); \draw[very thick, omDef] (\x,-0.3) -- (\x+3.4,-0.3);
+    \node[below, align=center] at (\x+1.7,-0.45) {\lab};
+  }
+  % stage 1 vesicle
+  \draw[very thick, omProp] (1.7,1.2+0.8) circle (0.8); \draw[very thick, omProp] (1.7,1.2+0.8) circle (0.6);
+  \draw[omThm, thick] (1.4,1.25) -- (1.4,0.35); \draw[omThm, thick] (2.0,1.25) -- (2.0,0.35);
+  \draw[omMeth!70!black, thick] (1.7,1.2) -- (1.7,0.6); \draw[omMeth!70!black, thick] (1.7,0.6) -- (1.7,0.0);
+  \draw[thick, fill=omExo!40] (0.7,0.9) ellipse (0.25 and 0.2); \node[left] at (0.45,0.9) {Rab};
+  \draw[thick, omExo!70!black] (0.95,0.9) .. controls (1.1,0.5) .. (1.2,0.05); \node[left, font=\tiny] at (0.9,0.4) {tether};
+  \node[right, font=\tiny] at (2.05,0.8) {SNAREs};
+  % stage 2 vesicle closer, helices twisted
+  \draw[very thick, omProp] (6.1,0.55+0.8) circle (0.8); \draw[very thick, omProp] (6.1,0.55+0.8) circle (0.6);
+  \draw[omThm, very thick] (5.85,0.6) .. controls (6.2,0.5) and (5.9,0.3) .. (6.1,0.05);
+  \draw[omMeth!70!black, very thick] (6.35,0.6) .. controls (6.0,0.5) and (6.3,0.3) .. (6.1,0.05);
+  \node[right, font=\tiny, align=left] at (6.6,0.35) {four-helix bundle\\pulls the membranes\\together};
+  % stage 3 fused omega shape
+  \draw[very thick, omProp] (9.7,0) .. controls (9.7,1.5) and (11.3,1.5) .. (11.3,0);
+  \draw[very thick, omProp] (9.9,-0.3) .. controls (9.9,1.1) and (11.1,1.1) .. (11.1,-0.3);
+  \foreach \p in {(10.5,-0.9),(10.2,-1.1),(10.8,-1.15)} \fill[omExo] \p circle (0.06);
+  \draw[->, omExo, thick] (10.5,0.5) -- (10.5,-0.6);
+  \node[right, font=\tiny, align=left] at (11.4,0.8) {NSF later\\unzips the\\SNAREs};
+\end{tikzpicture}
+
+{\small Fusion in three steps. A Rab on the vesicle and a tether on the
+target bring the two membranes within reach; the vesicle and target
+\omterm{def:b3:membrane-traffic:fusion}{SNAREs} (red and green) zipper into a four-helix bundle that drags the
+bilayers together; they fuse and the cargo enters the target
+compartment.}
+\end{omfigure}
+
+\begin{proposition}[The Golgi]\label{prop:b3:membrane-traffic:golgi}
+\index{Golgi apparatus}\index{cisternal maturation}\index{mannose-6-phosphate}
+The Golgi is a stack of four to eight flattened cisternae, cis face
+toward the reticulum, trans face toward the plasma membrane, each
+cisterna housing a different set of enzymes that trim and rebuild the
+sugars of passing glycoproteins and add O-linked sugars, sulfate and
+phosphate. Cargo advances chiefly by \emph{\omterm{prop:b3:membrane-traffic:golgi}{cisternal maturation}}: a new
+cisterna forms at the cis face from arriving vesicles, moves through
+the stack as the ones before it do, and matures as \omterm{def:b3:membrane-traffic:coats}{COPI} vesicles carry
+each cisterna's enzymes backward to the younger one behind it; at the
+trans face it breaks up into vesicles bound for their destinations.
+There the sorting is decided: lysosomal hydrolases, tagged in the cis
+Golgi with \emph{mannose-6-phosphate}, are bound by their receptor and
+packed into \omterm{def:b3:membrane-traffic:coats}{clathrin} vesicles for the \omterm{def:b3:membrane-traffic:endocytosis}{endosome}; regulated secretory
+proteins aggregate at the mildly acid pH into condensing granules;
+everything else leaves in the constitutive stream for the surface. In
+I-cell disease the phosphorylating enzyme is missing, the hydrolases
+are secreted instead of delivered, and the \omterm{def:b3:membrane-traffic:endocytosis}{lysosomes} fill with
+undigested material.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % plasma membrane top
+  \draw[very thick, omDef] (0,4.2) -- (12,4.2); \node[above] at (6,4.25) {plasma membrane \quad (outside above)};
+  % ER
+  \draw[thick, fill=omDef!12] (0.3,0.0) rectangle (4.0,0.9); \node at (2.15,0.45) {endoplasmic reticulum};
+  % Golgi stack
+  \foreach \y in {1.5,1.85,2.2,2.55} \draw[thick, fill=omProp!25] (4.8,\y) ellipse (1.4 and 0.13);
+  \node[right] at (6.3,1.5) {cis}; \node[left] at (3.35,2.55) {trans};
+  \node[right] at (6.3,2.05) {Golgi stack};
+  % ER -> Golgi (COPII)
+  \draw[->, thick, omMeth!70!black] (3.9,0.95) -- (4.5,1.4); \node[right, omMeth!70!black, font=\tiny] at (4.35,1.02) {COPII};
+  % Golgi -> ER (COPI)
+  \draw[->, thick, omThm] (3.6,1.42) -- (2.9,0.95); \node[left, omThm, font=\tiny] at (2.95,1.3) {COPI, KDEL retrieval};
+  % trans Golgi -> PM constitutive
+  \draw[->, thick, omMeth!70!black] (5.6,2.7) -- (7.6,4.1); \node[left, font=\tiny, align=right] at (6.4,3.6) {constitutive\\secretion};
+  % trans -> secretory granule -> PM regulated
+  \draw[->, thick, omMeth!70!black] (4.6,2.7) -- (4.0,3.3); \draw[thick, fill=omExo!50] (3.8,3.5) circle (0.22); \draw[->, thick, omMeth!70!black] (3.8,3.75) -- (3.8,4.1);
+  \node[left, font=\tiny, align=right] at (3.55,3.5) {secretory granule:\\regulated, on a signal};
+  % trans -> endosome/lysosome (clathrin, M6P)
+  \draw[->, thick, omProp!80!black] (6.0,2.62) -- (8.25,2.62); \node[above, font=\tiny] at (7.1,2.67) {clathrin, M6P receptor};
+  \draw[thick, fill=omProp!20] (8.8,2.7) circle (0.5); \node at (8.8,2.7) {\tiny endosome};
+  \draw[->, thick, omProp!80!black] (9.25,2.4) -- (10.2,1.95); \draw[thick, fill=omThm!25] (10.7,1.6) circle (0.5); \node at (10.7,1.6) {\tiny lysosome};
+  % endocytosis from PM to endosome
+  \draw[->, thick, omDef] (9.6,4.15) -- (9.1,3.2); \node[right, font=\tiny, align=left] at (9.5,3.7) {endocytosis\\(clathrin pits)};
+  % recycling endosome -> PM
+  \draw[->, thick, omDef] (8.5,3.2) -- (8.0,4.15); \node[left, font=\tiny] at (8.3,3.3) {recycling};
+  % lysosome inputs autophagy
+  \draw[->, thick, gray] (11.9,0.6) -- (11.1,1.3); \node[below, font=\tiny, align=center] at (11.9,0.55) {autophagosome\\(cytoplasm, organelles)};
+\end{tikzpicture}
+
+{\small The map of membrane traffic. Outward (green): reticulum to Golgi
+in \omterm{def:b3:membrane-traffic:coats}{COPII} vesicles, Golgi to surface either constitutively or through
+granules that wait for a signal. Backward (red): \omterm{def:b3:membrane-traffic:coats}{COPI} vesicles return
+escaped reticulum proteins. Down (orange): lysosomal enzymes tagged with
+mannose-6-phosphate go to the \omterm{def:b3:membrane-traffic:endocytosis}{endosome} and \omterm{def:b3:membrane-traffic:endocytosis}{lysosome}. Inward (blue):
+endocytosis from the surface, with most receptors recycled.}
+\end{omfigure}
+
+\section{Endocytosis and the lysosome}
+
+\begin{definition}[Endocytosis]\label{def:b3:membrane-traffic:endocytosis}
+\index{receptor-mediated endocytosis}\index{endosome}\index{lysosome}\index{autophagy}
+\emph{Receptor-mediated endocytosis} concentrates a ligand bound to
+surface receptors into clathrin-coated pits, which pinch off (the
+GTPase dynamin constricts the neck) as vesicles of about \qty{100}{nm}
+--- a thousand per minute in a fibroblast, turning over the whole
+surface membrane in an hour. The vesicles fuse into \emph{early
+endosomes}, whose lumen is acidified to pH~6 by a proton pump; most
+ligands release their receptors there, the receptors return to the
+surface in recycling vesicles, and the ligand travels on as the
+endosome matures into a late endosome (pH~5.5) and fuses with a
+\emph{lysosome}: a compartment at pH~4.5--5 holding some sixty
+hydrolases --- proteases, nucleases, lipases, glycosidases --- active
+only at that pH, so that a leak into the neutral cytosol does little
+harm. The lysosome also digests the cell's own material delivered by
+\emph{autophagy}: a double membrane grows around a portion of cytoplasm
+or a worn-out organelle, closes into an autophagosome, and fuses with
+the lysosome; the products are returned to the cytosol. Autophagy is
+induced by starvation (it recycles a cell's own substance for energy)
+and clears aggregates and damaged mitochondria; its failure is
+implicated in neurodegeneration.
+\end{definition}
+
+\begin{proof}[Evidence]
+Brown and Goldstein (1970s) followed low-density lipoprotein (LDL),
+the particle that carries cholesterol in blood, into cultured
+fibroblasts. LDL bound saturably to some \num{20000} surface sites per
+cell, was internalised within minutes into coated pits, and its
+cholesterol was released in \omterm{def:b3:membrane-traffic:endocytosis}{lysosomes} and switched off the cell's own
+cholesterol synthesis. Fibroblasts from patients with familial
+hypercholesterolaemia bound no LDL (receptor absent) or bound it but
+did not internalise it (a mutation in the receptor's cytosolic tail
+that prevents its capture by \omterm{def:b3:membrane-traffic:coats}{clathrin} adaptors): the disease was a
+defect of endocytosis, the receptor's tail contained the internalisation
+signal, and the recycling receptor --- each making hundreds of round
+trips --- was established as the general mechanism of uptake.
+\end{proof}
+
+\begin{proposition}[Uptake through recycling receptors]\label{prop:b3:membrane-traffic:uptake}
+\index{receptor recycling}
+Let a cell have $R$ receptors in all, of which $S$ are at the surface
+and $R - S$ inside on their way back. A surface receptor is occupied
+with probability $\theta = [L]/(K_{d} + [L])$, an occupied receptor is
+internalised at rate $k_{i}$, and an internalised receptor returns at
+rate $k_{r}$. At steady state the flux of ligand into the cell is
+\[
+J = \frac{R\,k_{i}k_{r}\,\theta}{k_{r} + k_{i}\theta},
+\]
+which saturates, as the ligand concentration rises, at $J_{\max} =
+R\,k_{i}k_{r}/(k_{i} + k_{r})$: the uptake of a cell is limited not by
+its receptors alone but by how fast it can bring them back.
+\end{proposition}
+\begin{proof}
+Surface receptors are lost at rate $k_{i}\theta S$ and regained at rate
+$k_{r}(R - S)$; at steady state these balance, so $S = R\,k_{r}/(k_{r}
++ k_{i}\theta)$. Each internalisation carries one ligand, so $J =
+k_{i}\theta S$, which gives the formula. As $\theta \to 1$ the flux
+tends to $R\,k_{i}k_{r}/(k_{r} + k_{i})$ --- the receptors cycle as fast
+as the two rates allow, with a fraction $k_{r}/(k_{i} + k_{r})$ of them
+at the surface at any moment.
+\end{proof}
+
+\begin{example}[Cholesterol by the particle]\label{ex:b3:membrane-traffic:ldl}
+A fibroblast with $R = \num{20000}$ LDL receptors, an internalisation
+time of \qty{5}{min} ($k_{i} = \qty{0.2}{min^{-1}}$) and a return time
+of \qty{10}{min} ($k_{r} = \qty{0.1}{min^{-1}}$) takes up, at saturating
+LDL, $J_{\max} = \num{20000}\times 0.2\times 0.1/0.3 \approx 1300$
+particles per minute, with a third of its receptors at the surface at
+any moment; each particle brings some \num{1500} molecules of
+cholesterol, two million a minute, enough to build about a tenth of a
+square micrometre of membrane. A heterozygote for familial
+hypercholesterolaemia, with half the receptors, takes up half as much;
+blood cholesterol doubles, and heart disease comes twenty years early.
+The statins raise $R$ by starving the liver cell of its own
+cholesterol.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.4cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=10, ymin=0, ymax=1500,
+  xlabel={LDL concentration, $[L]/K_{d}$}, ylabel={particles per minute},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,2,4,6,8,10}, ytick={0,500,1000,1333}, yticklabels={0,500,1000,$J_{\max}$},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:10, samples=60] {20000*0.2*0.1*(x/(1+x))/(0.1+0.2*(x/(1+x)))};
+\addplot[very thick, omThm, domain=0:10, samples=60] {10000*0.2*0.1*(x/(1+x))/(0.1+0.2*(x/(1+x)))};
+\addplot[dashed, gray, domain=0:10, samples=2] {1333};
+\node[font=\scriptsize, omDef, anchor=north west] at (axis cs:4,900) {$R = \num{20000}$};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:4,560) {$R = \num{10000}$ (heterozygote)};
+\end{axis}
+\end{tikzpicture}
+
+{\small Uptake of LDL through recycling receptors, from the formula of
+the proposition with $k_{i} = \qty{0.2}{min^{-1}}$ and $k_{r} =
+\qty{0.1}{min^{-1}}$: saturating with ligand, and halved when half the
+receptors are missing.}
+\end{omfigure}
+
+\begin{remark}[One membrane, many compartments]\label{rem:b3:membrane-traffic:one-membrane}
+Every membrane of the secretory and endocytic system is, topologically,
+one membrane: the lumen of the reticulum is continuous, through
+vesicles, with the outside of the cell, and a lipid or protein made in
+the reticulum can reach the surface without ever crossing a bilayer.
+What keeps the compartments distinct is not walls but traffic ---
+selective packaging out, selective retrieval back, and a specific pair
+of recognition molecules at every fusion. The compartments are steady
+states of flows, like the pools of a river, and a cell that stops
+trafficking loses its geography within hours.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:membrane-traffic:1}
+Give the signal and the destination for each: a stretch of twenty
+hydrophobic residues at the amino terminus; PKKKRKV; an amphipathic
+amino-terminal helix; KDEL at the carboxy terminus; a
+mannose-6-phosphate on the sugars.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:membrane-traffic:2}
+Describe the three key observations of the Blobel--Dobberstein
+experiment and what each showed.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:membrane-traffic:3}
+Name the \omterm{def:b3:membrane-traffic:coats}{coat} and the direction of transport for: reticulum to Golgi;
+Golgi to reticulum; trans-Golgi to \omterm{def:b3:membrane-traffic:endocytosis}{endosome}; plasma membrane to
+\omterm{def:b3:membrane-traffic:endocytosis}{endosome}.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:membrane-traffic:4}
+Why are the sugars of a plasma-membrane protein always on the outside
+of the cell?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:membrane-traffic:5}
+In the model of \cref{thm:b3:membrane-traffic:pulse-chase} with $k_{1}
+= \qty{0.2}{min^{-1}}$ and $k_{2} = \qty{0.05}{min^{-1}}$, find when
+the Golgi label peaks and how much is there at the peak; then the
+fraction in granules at \qty{60}{min}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:membrane-traffic:6}
+A membrane protein has hydrophobic stretches of $22$ residues at
+positions 30, 90, 150 and 210 and an amino-terminal \omterm{def:b3:membrane-traffic:signals}{signal peptide}.
+Draw or describe its topology: how many helices, and which side each
+segment between them faces. Where can it be glycosylated?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:membrane-traffic:7}
+Using \cref{prop:b3:membrane-traffic:uptake} with $R = \num{30000}$,
+$k_{i} = \qty{0.25}{min^{-1}}$, $k_{r} = \qty{0.05}{min^{-1}}$, compute
+$J_{\max}$ and the fraction of receptors at the surface at saturation.
+What single change would double the uptake?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:membrane-traffic:8}
+Predict the fate of lysosomal hydrolases, and the phenotype, in (a)
+a cell lacking the mannose-6-phosphate receptor, (b) a cell lacking
+the phosphotransferase that adds the tag, (c) a cell treated with a
+drug that neutralises endosomal pH.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:membrane-traffic:9}
+The JD mutation in the LDL receptor changes a tyrosine in the cytosolic
+tail. Cells binding LDL normally fail to take it up. Explain the
+mechanism, and predict where the receptors are found on the cell
+surface relative to coated pits.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:membrane-traffic:10}
+Solve the pulse--chase model for the case $k_{1} = k_{2} = k$ (the
+formula of the theorem is singular there): show that $B(t) = kt\,e^{-kt}$
+and find the peak. Then explain why measuring only the granule
+fraction $C(t)$ cannot determine both rates separately.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:membrane-traffic:11}
+A fibroblast internalises \num{1000} \omterm{def:b3:membrane-traffic:coats}{clathrin} vesicles of \qty{100}{nm}
+diameter per minute and has a surface of \qty{3000}{\micro m^2}. How
+long to internalise the equivalent of the whole surface? Why does the
+cell not shrink, and what does the balance imply about the rate of
+exocytosis and the volume of fluid taken in per hour?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:membrane-traffic:12}
+Botulinum toxin cleaves a \omterm{def:b3:membrane-traffic:fusion}{SNARE} in motor nerve terminals; tetanus
+toxin cleaves the same \omterm{def:b3:membrane-traffic:fusion}{SNARE} in inhibitory interneurons of the spinal
+cord. Explain why the first causes flaccid and the second spastic
+paralysis, and why a toxin that blocks fusion is useful in medicine at
+tiny doses.
+\end{exercise}
+
+\section{Problem: A Pancreatic Cell's Day}
+
+\begin{problem}[{Weekend problem --- a secretory cell's throughput
+counted in molecules, vesicles and square micrometres, its
+pulse--chase curves solved, a liver cell's cholesterol uptake computed
+through recycling receptors, and a lysosome acidified proton by proton,
+ending on the time of the Golgi peak, the vesicles budding per minute
+and the LDL particles taken up per hour}]
+\label{pb:b3:membrane-traffic:1}
+Data: an acinar cell makes $10^{7}$ enzyme molecules per minute, each
+\qty{25}{kDa}, \qty{4}{nm} across. Transport vesicles are spheres of
+\qty{70}{nm} diameter; a granule is a sphere of \qty{1}{\micro m}.
+Membrane area per lipid molecule \qty{0.7}{nm^2}, two leaflets. The
+cell's reticulum has an area of \qty{6000}{\micro m^2}. Pulse--chase:
+$k_{1} = \qty{0.1}{min^{-1}}$, $k_{2} = \qty{0.05}{min^{-1}}$. A liver
+cell: $R = \num{50000}$ LDL receptors, $k_{i} = \qty{0.2}{min^{-1}}$,
+$k_{r} = \qty{0.1}{min^{-1}}$, $K_{d} = \qty{2}{nmol/L}$, plasma LDL
+particle concentration \qty{2}{nmol/L}; \num{1500} cholesterol molecules
+per particle.
+A \omterm{def:b3:membrane-traffic:endocytosis}{lysosome}: sphere of \qty{0.5}{\micro m}, pH from $7.2$ to $4.7$,
+buffering capacity such that $50$ protons must be pumped for each one
+that stays free; a proton pump moves $200$ protons per second.
+
+\medskip
+\noindent\textbf{Part I --- Throughput.}
+\begin{enumerate}
+  \item What mass of enzyme does the cell make per minute, and per day?
+        Compare with the cell's own protein content, about
+        \qty{300}{pg}.
+  \item How many enzyme molecules fit in a vesicle if they fill
+        \qty{30}{\%} of its volume (sphere of \qty{4}{nm})? How many
+        vesicles per minute leave the reticulum?
+  \item How much membrane area do those vesicles carry per minute, and
+        in how long would they consume the whole reticulum if none came
+        back?
+  \item How many lipid molecules is that per minute? What must the
+        cell do to keep its reticulum?
+  \item How many enzyme molecules fit in a granule at the same packing,
+        and how many granules does the cell fill per hour?
+  \item A meal empties $300$ granules in ten minutes by fusion with
+        the apical membrane, adding their membrane to a surface of
+        \qty{50}{\micro m^2}. By what factor does the apical surface
+        grow, and what must follow?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Timing.}
+\begin{enumerate}[resume]
+  \item With the given rates, when does the Golgi label peak, and what
+        fraction is there?
+  \item What fraction of a pulse is in the reticulum, Golgi and
+        granules at \qty{30}{min}?
+  \item Mean residence times in the two compartments? What is the mean
+        total time from synthesis to granule?
+  \item A drug slows exit from the Golgi to $k_{2} = \qty{0.01}{min^{-1}}$.
+        New peak time and peak fraction; what does the Golgi look like
+        in the microscope?
+  \item Explain why the Golgi peak fraction is $k_{1}/k_{2}$ raised to a
+        power (give the power) and hence always below $1$.
+  \item If the reticulum step were much faster than the Golgi step,
+        what would $B(t)$ approach? Interpret.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Cholesterol.}
+\begin{enumerate}[resume]
+  \item Compute $\theta$ at the plasma LDL concentration, and the
+        uptake $J$ in particles per minute and per hour.
+  \item How many cholesterol molecules per hour? The cell's membranes
+        hold $5\times 10^{9}$ cholesterol molecules; how long to replace
+        them all from LDL alone?
+  \item Compute the fraction of receptors at the surface, and the
+        number of round trips each receptor makes in its \qty{20}{h}
+        lifetime.
+  \item A heterozygote has $R = \num{25000}$: recompute $J$. Plasma LDL
+        rises until uptake matches production: by what factor, if
+        $\theta$ is well below saturation?
+  \item A statin doubles $R$ in the heterozygote's liver cells. What
+        happens to plasma LDL, on the same reasoning?
+  \item Explain why the receptor-null homozygote, with plasma LDL five
+        times normal, is still worse off than the arithmetic of question
+        16 alone suggests.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Acid.}
+\begin{enumerate}[resume]
+  \item Compute the \omterm{def:b3:membrane-traffic:endocytosis}{lysosome}'s volume in litres and the number of free
+        protons at pH $7.2$ and at pH $4.7$.
+  \item How many protons must be pumped in all, with the buffering?
+        How long does that take with $50$ pumps?
+  \item The pump moves protons in against the gradient. What
+        electrical problem arises, and how is it solved (think of a
+        counter-ion)?
+  \item Why are the hydrolases made active only at pH~5, and what does
+        this protect?
+  \item Why does the LDL receptor let go of LDL at pH~6 while the
+        mannose-6-phosphate receptor lets go of its cargo at the same
+        pH --- what must both proteins have in common?
+  \item Chloroquine is a weak base that crosses membranes uncharged
+        and is trapped once protonated. By what factor does it
+        concentrate in a \omterm{def:b3:membrane-traffic:endocytosis}{lysosome} at pH $4.7$ relative to the cytosol at
+        pH $7.2$ (the ratio of proton concentrations), and what does
+        that do to the \omterm{def:b3:membrane-traffic:endocytosis}{lysosome}?
+  \item Summarise: the Golgi peak time (question~7), the vesicles
+        leaving the reticulum per minute (question~2), and the LDL
+        particles taken up per hour (question~13).
+\end{enumerate}
+\end{problem}

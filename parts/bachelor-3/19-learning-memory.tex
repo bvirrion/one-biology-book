@@ -1,6 +1,701 @@
 \chapter{Neural Plasticity, Learning and Memory}\label{ch:b3:learning-memory}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1953 a surgeon removed the inner part of both temporal lobes of a
+young man with intractable epilepsy. The seizures abated; the patient,
+known for fifty years as H.M., never formed another lasting memory of
+an event. He could hold a conversation, learn to trace a star in a
+mirror as well as anyone --- and each day deny ever having seen the
+task --- and he remembered his childhood. Memory, it turned out, was not
+one thing, and the making of new memories of events depended on a
+structure the size of a thumb. What changes in a brain when it learns
+is the oldest question of neuroscience, and its answer, worked out in
+a sea slug with twenty thousand neurons and in slices of rat
+\omterm{def:b3:learning-memory:kinds}{hippocampus}, is that synapses change their strength according to what
+passes through them --- a rule Donald Hebb guessed in 1949 and a
+molecule, the \omterm{prop:b3:learning-memory:nmda}{NMDA receptor}, turned out to implement. This chapter
+treats that rule and its machinery, the circuits that use it to store
+places and events, the mathematics that says what such a system can
+learn and how much it can hold, and the reward signal that tells it
+what is worth learning.
 
-\emph{This chapter has not been written yet.}
+\section{Kinds of memory and where they live}
+
+\begin{definition}[Forms of learning and memory]\label{def:b3:learning-memory:kinds}
+\index{habituation}\index{sensitisation}\index{conditioning}\index{declarative memory}\index{procedural memory}\index{consolidation}\index{hippocampus}
+The simplest learning is \emph{non-associative}: \emph{habituation},
+a declining response to a repeated harmless stimulus, and
+\emph{sensitisation}, an enhanced response after a harmful one.
+\emph{Associative} learning links two events: in \emph{classical
+conditioning} (Pavlov) a neutral stimulus that predicts a reward or
+punishment comes to elicit the response; in \emph{operant
+conditioning} an action that is rewarded is repeated. Human memory
+divides into \emph{declarative} memory --- facts and events, consciously
+recalled, dependent on the \emph{hippocampus} and the medial temporal
+lobe --- and \emph{non-declarative} memory --- skills and habits
+(striatum, \omterm{def:b3:nervous-systems:plan}{cerebellum}), conditioned fear (amygdala), priming (cortex)
+--- expressed in performance without recollection. A memory is held
+first in a labile short-term form, lasting seconds to hours, and is
+\emph{consolidated} over hours to years into a stable long-term form
+that no longer needs the hippocampus and resides in the cortex.
+\end{definition}
+
+\begin{proof}[Evidence]
+Scoville and Milner (1957) reported H.M.: after removal of both
+hippocampi and the neighbouring cortex, his intelligence and his
+memories from before the operation were largely intact, his working
+memory normal for as long as he attended to something, but he could
+form no new memory of any event or fact. He learned motor skills at a
+normal rate over days while denying having practised --- so skill
+memory did not need the \omterm{def:b3:learning-memory:kinds}{hippocampus} --- and he remembered the remote
+past better than the years just before surgery, so the \omterm{def:b3:learning-memory:kinds}{hippocampus} was
+needed to lay down and for a time to hold declarative memories, not to
+store them for ever. Monkeys and rats with matching lesions showed the
+same dissociation, and the study of a single patient reorganised the
+field.
+\end{proof}
+
+\section{Hebb's rule and its molecule}
+
+\begin{definition}[Hebbian plasticity, LTP and LTD]\label{def:b3:learning-memory:ltp}
+\index{Hebb's rule}\index{long-term potentiation}\index{long-term depression}\index{spike-timing-dependent plasticity}
+Hebb (1949) proposed that when a presynaptic neuron repeatedly takes
+part in firing a postsynaptic one, the connection between them is
+strengthened --- ``cells that fire together wire together''.
+\emph{Long-term potentiation} (LTP) is its experimental form: a brief
+burst of high-frequency stimulation of a pathway leaves the synapses
+it activated stronger for hours in a slice and for weeks in an
+animal. LTP is \emph{input-specific} (only the stimulated synapses
+change), \emph{associative} (a weak input paired with a strong one to
+the same cell is potentiated) and needs \emph{\omterm{def:b3:structural-biology:allostery}{cooperativity}} among
+inputs to depolarise the cell. \emph{Long-term depression} (LTD) is its
+opposite, produced by prolonged low-frequency activity. In
+\emph{spike-timing-dependent plasticity} the sign is set by order: a
+presynaptic spike a few milliseconds \emph{before} the postsynaptic
+one strengthens the synapse, one just \emph{after} weakens it, within
+a window of about \qty{20}{ms} on either side --- so that a synapse
+learns to predict, not merely to correlate.
+\end{definition}
+
+\begin{proposition}[The NMDA receptor as coincidence detector]\label{prop:b3:learning-memory:nmda}
+\index{NMDA receptor}\index{AMPA receptor}\index{CaMKII}\index{CREB}\index{dendritic spine}
+At excitatory synapses glutamate acts on two receptors. The
+\emph{AMPA} receptor opens on binding and carries the ordinary
+synaptic current. The \emph{NMDA} receptor binds glutamate but is
+blocked at resting potential by a magnesium ion in its pore; only when
+the postsynaptic membrane is depolarised --- by many inputs at once, or
+by a back-propagating action potential --- is the magnesium expelled
+and the channel conducts, letting in calcium. The \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} thus
+opens only when presynaptic release (glutamate) coincides with
+postsynaptic activity (depolarisation): it is Hebb's ``and'' gate in a
+single protein. The calcium that enters a \emph{\omterm{prop:b3:learning-memory:nmda}{dendritic spine}}
+activates the kinase \emph{CaMKII}, which phosphorylates \omterm{prop:b3:learning-memory:nmda}{AMPA receptors}
+and drives more of them into the synapse from a reserve --- the synapse
+is stronger within minutes (early LTP). A large, slow calcium rise
+instead activates the phosphatase calcineurin, which removes \omterm{prop:b3:learning-memory:nmda}{AMPA
+receptors}: LTD. Potentiation lasting more than a few hours (late LTP)
+needs new protein: kinases reach the nucleus, the transcription factor
+\emph{CREB} switches on genes, and the spine grows and may split ---
+the same requirement for gene expression that separates short-term
+from long-term memory in every animal studied.
+\end{proposition}
+
+\begin{proof}[Evidence]
+Bliss and L\o mo (1973) stimulated the perforant path into the
+rabbit \omterm{def:b3:learning-memory:kinds}{hippocampus} with a train of pulses and found the evoked
+response enlarged for hours afterwards --- the first LTP. Collingridge
+(1983) showed that a blocker of the \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} (AP5) prevented the
+induction of LTP but not the ordinary synaptic response; Morris (1986)
+infused AP5 into the \omterm{def:b3:learning-memory:kinds}{hippocampus} of rats and found that they could no
+longer learn the position of a hidden platform in a pool of water while
+swimming and seeing normally; and mice in which the \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} was
+deleted only in the \omterm{def:b3:learning-memory:hippocampus}{CA1} region of the \omterm{def:b3:learning-memory:kinds}{hippocampus} lacked both LTP there
+and spatial memory. The same receptor, in the same place, was necessary
+for the synaptic change and the learning.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % presynaptic terminal
+  \draw[thick, omDef, fill=omDef!12] (0,2.2) .. controls (0,3.4) and (4,3.4) .. (4,2.2) -- (4,1.7) -- (0,1.7) -- cycle;
+  \node at (2,2.8) {presynaptic terminal};
+  \foreach \p in {(0.8,2.0),(1.6,2.1),(2.6,2.0),(3.3,2.1)} \draw[thick, fill=omDef!40] \p circle (0.17);
+  \foreach \p in {(1.2,1.45),(2.0,1.5),(2.9,1.42)} \fill[omProp] \p circle (0.06);
+  \node[right, omProp] at (3.3,1.45) {glutamate};
+  % postsynaptic spine
+  \draw[thick, omMeth!70!black, fill=omMeth!10] (-0.6,1.1) -- (4.4,1.1) -- (4.4,-1.2) -- (-0.6,-1.2) -- cycle;
+  \node at (0.6,-0.9) {dendritic spine};
+  % AMPA
+  \draw[thick, fill=omMeth!45] (0.2,0.85) rectangle (0.6,1.35); \node[below, align=center] at (0.1,0.8) {AMPA:\\Na$^{+}$ in};
+  \draw[->, thick] (0.4,1.7) -- (0.4,0.95);
+  % NMDA with Mg
+  \draw[thick, fill=omThm!35] (2.4,0.85) rectangle (2.9,1.35); \fill[gray!70] (2.65,1.1) circle (0.09); \node[right, font=\tiny] at (2.95,1.1) {Mg$^{2+}$ block};
+  \node[below, align=center] at (2.65,0.8) {NMDA: needs glutamate\\\emph{and} depolarisation};
+  \draw[->, thick, omThm] (2.65,0.15) -- (2.65,-0.5) node[below] {Ca$^{2+}$};
+  % downstream
+  \node[draw, rounded corners, fill=omThm!15, font=\tiny] (cam) at (5.6,0.3) {CaMKII};
+  \draw[->, thick] (2.9,-0.5) -- (cam);
+  \node[draw, rounded corners, fill=omMeth!25, font=\tiny, align=center] (ampa) at (8.2,1.0) {more AMPA receptors\\inserted: early LTP (minutes)};
+  \node[draw, rounded corners, fill=omMeth!25, font=\tiny, align=center] (creb) at (8.2,-0.5) {CREB, new proteins,\\spine growth: late LTP (hours+)};
+  \draw[->, thick] (cam) -- (ampa.west); \draw[->, thick] (cam) -- (creb.west);
+  \node[draw, rounded corners, fill=omDef!15, font=\tiny, align=center] (ltd) at (8.2,-1.8) {slow, small Ca$^{2+}$: calcineurin,\\AMPA removed: LTD};
+  \draw[->, thick, dashed] (2.9,-0.7) .. controls (4.5,-1.6) .. (ltd.west);
+\end{tikzpicture}
+
+{\small The \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} as Hebb's gate. Glutamate alone opens \omterm{prop:b3:learning-memory:nmda}{AMPA
+receptors}; the NMDA channel conducts only when the spine is also
+depolarised and its magnesium leaves. The calcium that then enters sets
+the synapse's future: a fast large rise strengthens it, a slow small
+one weakens it.}
+\end{omfigure}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=6.6cm, height=5.2cm,
+  axis x line=bottom, axis y line=left,
+  xmin=-20, xmax=120, ymin=0, ymax=220,
+  xlabel={minutes}, ylabel={synaptic response (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={0,30,60,90,120}, ytick={0,100,200},
+  clip=false,
+]
+\addplot[only marks, mark=*, mark size=1pt, omDef] coordinates {(-18,100) (-15,98) (-12,102) (-9,99) (-6,101) (-3,100) (2,195) (5,180) (8,172) (11,168) (15,165) (20,162) (30,160) (40,158) (50,157) (60,156) (70,156) (80,155) (90,155) (100,154) (110,154) (120,154)};
+\addplot[only marks, mark=o, mark size=1pt, gray] coordinates {(-18,100) (-12,101) (-6,99) (2,102) (8,100) (15,101) (30,100) (45,99) (60,101) (75,100) (90,100) (105,101) (120,100)};
+\draw[->, thick, omThm] (axis cs:0,215) -- (axis cs:0,200); \node[font=\scriptsize, omThm, anchor=south] at (axis cs:0,216) {tetanus};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:35,168) {stimulated pathway: LTP};
+\node[font=\scriptsize, gray, anchor=north west] at (axis cs:35,95) {control pathway: unchanged};
+\end{axis}
+\begin{axis}[
+  at={(7.6cm,0)}, anchor=south west,
+  width=6.6cm, height=5.2cm,
+  axis x line=middle, axis y line=middle,
+  xmin=-60, xmax=60, ymin=-60, ymax=100,
+  xlabel={$t_{\text{pre}} - t_{\text{post}}$ (ms)}, ylabel={$\Delta w$ (\%)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.06)}, anchor=north}, ylabel style={font=\small, at={(axis description cs:0.5,1.02)}, anchor=south},
+  tick label style={font=\scriptsize}, xtick={-40,-20,20,40}, ytick={-40,40,80},
+  clip=false,
+]
+\addplot[very thick, omMeth!70!black, domain=-60:-0.5, samples=60] {80*exp(x/15)};
+\addplot[very thick, omThm, domain=0.5:60, samples=60] {-45*exp(-x/25)};
+\node[font=\scriptsize, omMeth!70!black, anchor=south east] at (axis cs:-8,62) {pre before post: LTP};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:8,-22) {post before pre: LTD};
+\end{axis}
+\end{tikzpicture}
+
+{\small Left: \omterm{def:b3:learning-memory:ltp}{long-term potentiation} --- after a brief tetanus the
+stimulated pathway's response stays enlarged for hours while an
+unstimulated pathway to the same cells is unchanged (input
+specificity). Right: the spike-timing window --- the synapse
+strengthens if the presynaptic spike leads and weakens if it lags.}
+\end{omfigure}
+
+\begin{theorem}[What a Hebbian synapse learns]\label{thm:b3:learning-memory:hebb}
+\index{Hebbian learning!principal component}\index{Oja's rule}
+Let a neuron receive inputs $\mathbf{x} = (x_{1},\dots,x_{n})$ through
+weights $\mathbf{w}$ and respond linearly, $y = \mathbf{w}\cdot\mathbf{x}$.
+\omterm{def:b3:learning-memory:ltp}{Hebb's rule}, $\Delta\mathbf{w} = \eta\, y\,\mathbf{x}$, gives on average
+over the inputs
+\[
+\langle\Delta\mathbf{w}\rangle = \eta\,C\,\mathbf{w}, \qquad C =
+\langle\mathbf{x}\mathbf{x}^{\mathsf{T}}\rangle ,
+\]
+where $C$ is the correlation matrix of the inputs. The weights grow
+without bound, and grow fastest along the eigenvector of $C$ with the
+largest eigenvalue: the synapse comes to detect the pattern of input
+that is most often present --- the \emph{principal component} of its
+inputs. With a term that penalises large weights, \emph{Oja's rule}
+$\Delta\mathbf{w} = \eta\, y\,(\mathbf{x} - y\,\mathbf{w})$, the weight
+vector converges to that eigenvector normalised to unit length, and the
+neuron becomes a stable detector of the dominant correlation in what it
+sees.
+\end{theorem}
+\begin{proof}
+Substituting $y = \mathbf{w}\cdot\mathbf{x} = \mathbf{x}^{\mathsf{T}}
+\mathbf{w}$ into \omterm{def:b3:learning-memory:ltp}{Hebb's rule} gives $\Delta\mathbf{w} = \eta\,\mathbf{x}
+\mathbf{x}^{\mathsf{T}}\mathbf{w}$, whose average over inputs (with
+$\mathbf{w}$ changing slowly) is $\eta C\mathbf{w}$. $C$ is symmetric and
+positive semi-definite, so it has orthogonal eigenvectors $\mathbf{e}_{k}$
+with eigenvalues $\lambda_{k} \ge 0$; writing $\mathbf{w} = \sum_{k}
+a_{k}\mathbf{e}_{k}$, each component obeys $\Delta a_{k} = \eta\lambda_{k}
+a_{k}$ and grows as $(1 + \eta\lambda_{k})^{t}$, so the component along
+the largest eigenvalue comes to dominate the direction of $\mathbf{w}$
+while its length diverges. Oja's rule averages to $\eta(C\mathbf{w} -
+(\mathbf{w}^{\mathsf{T}}C\mathbf{w})\mathbf{w})$; at a fixed point
+$C\mathbf{w} = (\mathbf{w}^{\mathsf{T}}C\mathbf{w})\mathbf{w}$, so
+$\mathbf{w}$ is an eigenvector with $\lambda = \mathbf{w}^{\mathsf{T}}
+C\mathbf{w} = \lambda|\mathbf{w}|^{2}$, hence $|\mathbf{w}| = 1$; the
+fixed point along the largest eigenvalue is the stable one (a
+perturbation toward another eigenvector shrinks, since that
+eigenvector's eigenvalue is smaller), which is admitted here.
+\end{proof}
+
+\begin{example}[Two inputs]\label{ex:b3:learning-memory:two-inputs}
+A neuron receives two inputs that are usually active together, so $C =
+\begin{pmatrix} 1 & 0.8 \\ 0.8 & 1\end{pmatrix}$. The eigenvectors are
+$(1,1)/\sqrt{2}$ with eigenvalue $1.8$ and $(1,-1)/\sqrt{2}$ with
+eigenvalue $0.2$. Starting from $\mathbf{w} = (1, 0)$, \omterm{def:b3:learning-memory:ltp}{Hebb's rule} after
+many small steps turns $\mathbf{w}$ toward $(1,1)$: the neuron learns to
+respond to the two inputs \emph{together}, and to ignore the rare
+occasions on which only one fires --- it has extracted the correlation.
+With Oja's rule the weights settle at $(0.71, 0.71)$. This is the sense
+in which Hebbian synapses learn what goes together, and it is why the
+associative property of LTP, pairing a weak input with a strong one,
+follows from the rule.
+\end{example}
+
+\section{A slug that learns}
+
+\begin{proposition}[Sensitisation in \emph{Aplysia}]\label{prop:b3:learning-memory:aplysia}
+\index{Aplysia}\index{presynaptic facilitation}\index{cAMP}\index{PKA}
+The sea slug \emph{Aplysia} withdraws its gill when its siphon is
+touched, a reflex of a few dozen identifiable neurons. A shock to the
+tail \emph{sensitises} it: the withdrawal to a light touch is enhanced,
+for minutes after one shock and for weeks after several. Kandel and
+colleagues (1970s--1990s) traced the change to the synapse between the
+siphon's sensory neuron and the gill's motor neuron. The tail shock
+excites an \omterm{def:b3:nervous-systems:cells}{interneuron} that releases serotonin onto the sensory
+neuron's terminal; serotonin raises cyclic AMP, which activates
+protein kinase A, which phosphorylates and closes a potassium channel;
+the terminal's action potentials broaden, more calcium enters, and more
+transmitter is released per spike --- \emph{\omterm{prop:b3:learning-memory:aplysia}{presynaptic facilitation}},
+a covalent change lasting minutes. Repeated shocks send the kinase to
+the nucleus, where it activates CREB, which switches on genes that
+build new synaptic terminals: the long-term memory is more synapses,
+and it is blocked by inhibitors of protein synthesis given during
+training but not afterwards. \emph{\omterm{def:b3:learning-memory:kinds}{Habituation}} is the opposite,
+a depression of the same synapse; and \emph{classical \omterm{def:b3:learning-memory:kinds}{conditioning}},
+pairing the touch with the shock, enhances facilitation at the
+synapses that were active just before the serotonin arrived --- a
+Hebbian coincidence implemented presynaptically, by an adenylyl
+cyclase that is stimulated by calcium and serotonin together.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, thick, rounded corners, fill=omDef!20, minimum width=2cm] (sn) at (0,0) {siphon sensory neuron};
+  \node[draw, thick, rounded corners, fill=omMeth!25, minimum width=2cm] (mn) at (6.2,0) {gill motor neuron};
+  \node[draw, thick, rounded corners, fill=omProp!30, align=center] (in) at (2.8,2.4) {facilitating interneuron\\(serotonin)};
+  \node[left] at (-2.1,0) {touch}; \draw[->, thick] (-2.0,0) -- (sn);
+  \draw[->, very thick] (sn) -- (mn) node[pos=0.45, below, align=center, font=\tiny] {the synapse\\that changes};
+  \draw[->, thick] (mn) -- (8.4,0) node[right] {gill withdraws};
+  \node[above] at (2.8,3.1) {tail shock}; \draw[->, thick] (2.8,3.05) -- (in);
+  \draw[->, thick, omProp] (in) -- (2.8,0.25);
+  \node[right, align=left, font=\tiny] at (6.6,1.6) {serotonin $\to$ cAMP $\to$ PKA $\to$ K$^{+}$ channel closed\\$\to$ broader spike, more Ca$^{2+}$, more transmitter (minutes)\\repeated: PKA $\to$ CREB $\to$ new terminals (weeks)};
+\end{tikzpicture}
+
+{\small The \omterm{def:b3:learning-memory:kinds}{sensitisation} circuit of \emph{Aplysia}. Serotonin from an
+\omterm{def:b3:nervous-systems:cells}{interneuron} acts on the sensory terminal, and the same synapse carries
+the short-term memory as a phosphorylated channel and the long-term
+memory as new terminals.}
+\end{omfigure}
+
+\begin{omfigure}
+\includegraphics[width=0.46\linewidth]{images/book5/ai/b5-19-aplysia.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-19-dendritic-spines.jpg}
+
+{\small Left: \emph{Aplysia californica}, whose few and large neurons
+let the synapse of a memory be found and recorded. Right: a dendrite
+studded with spines, each the postsynaptic side of one excitatory
+synapse and each a compartment whose calcium decides its own fate.}
+\end{omfigure}
+
+\section{Circuits for places and events}
+
+\begin{definition}[The hippocampal circuit]\label{def:b3:learning-memory:hippocampus}
+\index{dentate gyrus}\index{CA3}\index{CA1}\index{place cell}\index{grid cell}\index{pattern completion}\index{replay}
+Cortical input reaches the \omterm{def:b3:learning-memory:kinds}{hippocampus} through the entorhinal cortex
+and passes through three stages: the \emph{dentate gyrus}, whose
+granule cells outnumber their inputs and fire sparsely (separating
+similar patterns); \emph{CA3}, whose pyramidal cells connect
+recurrently to one another, each receiving thousands of synapses from
+others --- an \emph{autoassociative} network that can complete a stored
+pattern from a fragment; and \emph{CA1}, which compares the CA3 output
+with the direct input and returns the result to the cortex. In a rat
+exploring an arena, a hippocampal pyramidal cell fires only when the
+animal is in one place --- a \emph{place cell} (O'Keefe, 1971) --- and a
+few hundred of them map the arena; in the entorhinal cortex upstream,
+\emph{grid cells} (Moser, 2005) fire at the vertices of a hexagonal
+lattice covering the space, a coordinate system from which place fields
+are built. During sleep and rest the sequences of place cells that
+fired during a run are \emph{replayed} at high speed, and blocking the
+replay impairs the memory of the run: the \omterm{def:b3:learning-memory:kinds}{hippocampus} rehearses the
+day's paths to the cortex.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % trisynaptic loop
+  \node[draw, thick, rounded corners, fill=gray!15, align=center] (ec) at (0,0) {entorhinal cortex\\(grid cells)};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (dg) at (3.2,1.4) {dentate gyrus:\\pattern separation};
+  \node[draw, thick, rounded corners, fill=omProp!30, align=center] (ca3) at (7.2,1.4) {CA3, recurrent:\\pattern completion};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (ca1) at (7.2,-1.4) {CA1:\\compares, outputs};
+  \draw[->, thick] (ec) -- (dg); \draw[->, thick] (dg) -- (ca3); \draw[->, thick] (ca3) -- (ca1); \draw[->, thick] (ca1) -- (ec) node[pos=0.3, below, sloped, font=\tiny] {back to cortex};
+  \draw[->, thick, dashed] (ec) -- (ca1.north west) node[pos=0.7, above, sloped, font=\tiny] {direct path};
+  \draw[->, thick, omProp!80!black] (ca3.north) .. controls (6.6,2.6) and (7.8,2.6) .. (ca3.north east) node[pos=0.5, above, font=\tiny] {recurrent collaterals};
+  % place field map
+  \begin{scope}[xshift=10.4cm, yshift=-0.2cm]
+    \draw[thick] (0,0) rectangle (3,2.4); \node[below] at (1.5,-0.05) {arena, seen from above};
+    \foreach \p/\c in {(0.7,1.8)/omThm, (2.1,1.9)/omDef, (1.4,0.9)/omMeth, (2.5,0.6)/omProp} { \fill[\c!60] \p circle (0.32); \fill[\c!90] \p circle (0.16); }
+    \node[above] at (1.5,2.45) {four place cells' firing fields};
+  \end{scope}
+\end{tikzpicture}
+
+{\small Left: the hippocampal loop --- separation in the \omterm{def:b3:learning-memory:hippocampus}{dentate gyrus},
+storage and completion in the recurrent \omterm{def:b3:learning-memory:hippocampus}{CA3}, comparison in \omterm{def:b3:learning-memory:hippocampus}{CA1}. Right:
+each \omterm{def:b3:learning-memory:hippocampus}{place cell} fires in one region of an arena; together they map the
+space.}
+\end{omfigure}
+
+\begin{proposition}[How much an autoassociative network holds]\label{prop:b3:learning-memory:capacity}
+\index{Hopfield network}\index{memory capacity}
+A network of $N$ neurons, each connected to all the others with
+Hebbian weights $w_{ij} \propto \sum_{\mu}\xi_{i}^{\mu}\xi_{j}^{\mu}$
+summed over the stored binary patterns $\xi^{\mu}$, retrieves a stored
+pattern from a corrupted or partial cue by settling into it as an
+attractor (Hopfield, 1982). It does so reliably for up to about $P
+\approx 0.14N$ random patterns; beyond that the patterns interfere and
+retrieval collapses. A rat's \omterm{def:b3:learning-memory:hippocampus}{CA3}, with some $3\times 10^{5}$ pyramidal
+cells, could on this estimate hold some $4\times 10^{4}$ patterns ---
+the order of the distinct places or episodes an animal meets in a
+season --- and its sparse firing (a few per cent of cells active in any
+pattern) raises the capacity further. \omterm{def:b3:learning-memory:hippocampus}{Pattern completion} from a cue is
+what lets a smell or a corner recall a whole scene; the price is that
+similar memories merge, which the \omterm{def:b3:learning-memory:hippocampus}{dentate gyrus}'s separation resists.
+\end{proposition}
+\admitted
+
+\begin{method}[Testing memory and its mechanism]\label{met:b3:learning-memory:tests}
+\index{Morris water maze}\index{fear conditioning}\index{engram}
+(1) A spatial task: the \omterm{met:b3:learning-memory:tests}{Morris water maze} --- a rat swims in opaque
+water to a platform hidden at a fixed place, learns its position from
+the room's cues over days, and is tested by the time spent searching
+the right quadrant when the platform is removed; hippocampal lesions,
+NMDA blockers and the loss of LTP each abolish the learning. (2) An
+associative task: \omterm{met:b3:learning-memory:tests}{fear conditioning} --- a tone paired with a foot shock
+comes to elicit freezing; the memory depends on the amygdala, and a
+context-specific version on the \omterm{def:b3:learning-memory:kinds}{hippocampus}. (3) A mechanism test:
+block the candidate (a drug, a \omterm{def:b3:genetic-engineering:transgenic}{knockout} restricted to one region and
+time) and show that learning fails while perception and movement do
+not. (4) The engram: label the neurons active during learning with a
+light-sensitive channel (\cref{ch:b3:nervous-systems}) and later
+reactivate them with light --- the animal freezes in a safe context, as
+if remembering; silencing them blocks recall. Memory is in identifiable
+cells and their synapses, and can be switched on and off.
+\end{method}
+
+\begin{omfigure}
+\includegraphics[width=0.56\linewidth]{images/book5/ai/b5-19-hippocampus-section.jpg}
+
+{\small A section through the rodent \omterm{def:b3:learning-memory:kinds}{hippocampus}: the curved band of
+pyramidal cells (green) from \omterm{def:b3:learning-memory:hippocampus}{CA3} to \omterm{def:b3:learning-memory:hippocampus}{CA1} and the interlocking \omterm{def:b3:learning-memory:hippocampus}{dentate
+gyrus} (red). Every spatial memory of the animal passes through this
+loop.}
+\end{omfigure}
+
+\section{Reward, prediction and the plasticity of a lifetime}
+
+\begin{proposition}[Learning by prediction error]\label{prop:b3:learning-memory:rescorla}
+\index{Rescorla--Wagner rule}\index{prediction error}\index{dopamine}
+Let $V$ be the value an animal attaches to a cue and $\lambda$ the
+reward that follows it. The Rescorla--Wagner rule (1972) says that on
+each trial the value changes by a fraction $\alpha$ of the
+\emph{\omterm{prop:b3:learning-memory:rescorla}{prediction error}}:
+\[
+\Delta V = \alpha\,(\lambda - V), \qquad
+V_{n} = \lambda\bigl(1 - (1-\alpha)^{n}\bigr) ,
+\]
+so learning is fast at first and slows as the prediction improves,
+stops when the reward is fully predicted, and reverses (extinction)
+when the reward is withheld. When two cues are presented together they
+share one prediction, so a cue that adds nothing to a prediction
+already made is not learned (\emph{blocking}). Schultz (1997) recorded
+dopamine neurons of the midbrain in monkeys and found that they fire
+to an unexpected reward, fall silent to a fully predicted one, and dip
+below baseline when a predicted reward fails to arrive: they broadcast
+$\lambda - V$, the \omterm{prop:b3:learning-memory:rescorla}{prediction error} itself, to the striatum and cortex,
+where dopamine gates plasticity at the synapses that were recently
+active. Learning what predicts reward is Hebbian plasticity with a
+third factor that says whether the outcome was better or worse than
+expected --- and drugs of abuse, by driving dopamine directly,
+counterfeit a permanent ``better than expected''.
+\end{proposition}
+\begin{proof}
+The recursion $V_{n+1} = V_{n} + \alpha(\lambda - V_{n})$ gives
+$\lambda - V_{n+1} = (1-\alpha)(\lambda - V_{n})$, so the error shrinks
+geometrically, $\lambda - V_{n} = (1-\alpha)^{n}\lambda$ from $V_{0} =
+0$, whence the formula. For two cues $A$ and $B$ presented together
+the prediction is $V_{A} + V_{B}$; if $A$ was trained first to
+$V_{A} = \lambda$, the error on compound trials is zero and $B$
+acquires nothing.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=6.6cm, height=5.0cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=25, ymin=0, ymax=1.1,
+  xlabel={trial $n$}, ylabel={$V_{n}/\lambda$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.14)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={0,5,10,15,20,25}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=0:12, samples=13] {1-0.8^x};
+\addplot[very thick, omDef, domain=12:25, samples=14] {(1-0.8^12)*0.8^(x-12)};
+\draw[dashed, gray] (axis cs:12,0) -- (axis cs:12,1.05);
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:0.5,0.98) {reward given:\\acquisition};
+\node[font=\scriptsize, anchor=north west, align=left] at (axis cs:14,0.98) {reward withheld:\\extinction};
+\end{axis}
+\begin{axis}[
+  at={(7.6cm,0)}, anchor=south west,
+  width=6.6cm, height=5.0cm,
+  ybar, bar width=14pt,
+  axis x line=bottom, axis y line=left,
+  ymin=-1.2, ymax=1.5,
+  symbolic x coords={unexpected reward, predicted reward, reward omitted},
+  xtick=data, ytick={-1,0,1}, yticklabels={dip,baseline,burst},
+  ylabel={dopamine firing},
+  x tick label style={font=\scriptsize, align=center, text width=1.9cm}, ylabel style={font=\small}, tick label style={font=\scriptsize},
+  clip=false,
+]
+\addplot[fill=omThm!50, draw=omThm] coordinates {(unexpected reward,1.2) (predicted reward,0.05) (reward omitted,-1.0)};
+\end{axis}
+\end{tikzpicture}
+
+{\small Left: the Rescorla--Wagner learning curve with $\alpha = 0.2$
+--- geometric approach to the reward's value, then extinction when the
+reward stops. Right: dopamine neurons report the \omterm{prop:b3:learning-memory:rescorla}{prediction error} --- a
+burst for a surprise, nothing for a predicted reward, a dip when a
+predicted reward is missed.}
+\end{omfigure}
+
+\begin{definition}[Critical periods and the diseases of plasticity]\label{def:b3:learning-memory:critical}
+\index{critical period}\index{ocular dominance}\index{addiction}\index{Alzheimer's disease}
+Plasticity is greatest in windows of development. Hubel and Wiesel
+(1960s) covered one eye of a kitten for a few weeks after birth: the
+visual cortex, normally driven by both eyes in alternating columns,
+became driven almost entirely by the open eye, and the deprived eye
+stayed functionally blind for life --- while the same deprivation in an
+adult cat changed nothing. Such \emph{critical periods}, for vision,
+for language, for the songs of birds, close when inhibitory circuits
+mature and the extracellular matrix stiffens, and they can be reopened
+a little by drugs and training. Plasticity's pathologies are of dose
+and target: \emph{addiction} is learning driven by a counterfeit
+\omterm{prop:b3:learning-memory:rescorla}{prediction error}, which builds habits that outlast the pleasure;
+post-traumatic stress is a fear memory over-consolidated by stress
+hormones; and \emph{Alzheimer's disease} begins where \omterm{def:b3:learning-memory:kinds}{declarative memory}
+begins, in the entorhinal cortex and \omterm{def:b3:learning-memory:kinds}{hippocampus}, with the loss of
+synapses --- which tracks the dementia better than any plaque count ---
+before the loss of neurons.
+\end{definition}
+
+\begin{remark}[What memory is made of]\label{rem:b3:learning-memory:what}
+A memory is not a recording but a change in the strengths and numbers
+of synapses, distributed over the cells that were active when it was
+made, laid down by a rule that strengthens what fires together, gated
+by a signal that says whether the outcome mattered, and rehearsed in
+sleep until the cortex holds it on its own. The rule is Hebb's, the
+gate is the \omterm{prop:b3:learning-memory:nmda}{NMDA receptor}, the signal is dopamine, the rehearsal is
+\omterm{def:b3:learning-memory:hippocampus}{replay}, and the mathematics says what such a system can hold and why
+it confuses the similar. Every experiment that has switched a memory
+on or off --- by a blocker, a gene, a light --- has found it in those
+synapses, in those cells. H.M. died in 2008; his brain, sectioned and
+imaged, showed the lesion that had taught the field, and no more.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:learning-memory:1}
+Distinguish declarative from non-declarative memory with H.M.'s
+performance, and name a brain region for each of four kinds of
+non-declarative memory.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:learning-memory:2}
+State Hebb's postulate and the three properties of LTP that follow
+from it.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:learning-memory:3}
+Explain why the \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} is a coincidence detector, and what
+happens to LTP when its blocker AP5 is applied before, and after, the
+tetanus.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:learning-memory:4}
+In \emph{Aplysia}, what distinguishes short-term from long-term
+\omterm{def:b3:learning-memory:kinds}{sensitisation} at the molecular level, and what experiment shows it?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:learning-memory:5}
+With $\alpha = 0.3$, how many trials until $V$ reaches \qty{90}{\%} of
+$\lambda$? If the reward is then withheld, how many trials until $V$
+falls below \qty{10}{\%}? Why are acquisition and extinction symmetric
+in this model, and are they in animals?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:learning-memory:6}
+Two inputs have $C = \begin{pmatrix}1 & 0.5\\ 0.5 & 1\end{pmatrix}$.
+Find the eigenvectors and eigenvalues, and say toward which direction
+\omterm{def:b3:learning-memory:ltp}{Hebb's rule} turns the weights and what the neuron then detects. Apply
+Oja's rule for one step from $\mathbf{w} = (1,0)$ with input $\mathbf{x}
+= (1,1)$ and $\eta = 0.1$.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:learning-memory:7}
+A spine has a volume of \qty{0.1}{fL}. Entry of $500$ calcium ions
+raises its free concentration by how much (in $\unit{\micro mol/L}$),
+if \qty{95}{\%} are immediately bound by buffers? Compare with the
+resting \qty{0.1}{\micro mol/L} and with the $K_{d}$ of CaMKII's
+activator calmodulin, about \qty{1}{\micro mol/L}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:learning-memory:8}
+Explain blocking with the Rescorla--Wagner rule and give the dopamine
+recording that corresponds to each stage.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:learning-memory:9}
+Predict the results of (a) \omterm{prop:b3:learning-memory:nmda}{NMDA receptor} deletion restricted to \omterm{def:b3:learning-memory:hippocampus}{CA1},
+(b) a protein-synthesis inhibitor given during training, (c) the same
+inhibitor given a day later, (d) optogenetic reactivation of the
+dentate-gyrus cells that were active during a \omterm{met:b3:learning-memory:tests}{fear conditioning}, in a
+new context.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:learning-memory:10}
+Show that under \omterm{def:b3:learning-memory:ltp}{Hebb's rule} alone the length of $\mathbf{w}$ grows
+without bound, and that Oja's rule has $|\mathbf{w}| = 1$ at any fixed
+point. Why is unbounded growth a biological problem, and what
+mechanisms (synaptic scaling, LTD, sleep) might correspond to the
+normalising term?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:learning-memory:11}
+A rat's \omterm{def:b3:learning-memory:hippocampus}{CA3} has $3\times 10^{5}$ cells; a human's about $2\times 10^{6}$.
+Estimate the Hopfield capacity of each. Why is the estimate a poor
+measure of how many memories a person holds, and what does the
+\omterm{def:b3:learning-memory:kinds}{hippocampus}'s role in \omterm{def:b3:learning-memory:kinds}{consolidation} add to the picture?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:learning-memory:12}
+Kittens deprived of one eye's vision for weeks lose that eye's cortical
+territory; adults do not. Explain with Hebbian competition why the
+open eye wins, why binocular deprivation has a smaller effect than
+monocular, and what closes the \omterm{def:b3:learning-memory:critical}{critical period}.
+\end{exercise}
+
+\section{Problem: A Synapse That Remembers}
+
+\begin{problem}[{Weekend problem --- a memory followed from calcium in a
+spine to a rat in a maze: the calcium arithmetic of induction, a
+Hebbian neuron converging on what its inputs share, a learning curve
+timed by prediction error, and the capacity of a hippocampus, ending
+on the calcium concentration that induces LTP, the trials a rat needs
+and the patterns its CA3 can hold}]
+\label{pb:b3:learning-memory:1}
+Data: a spine of volume \qty{0.08}{fL}; each NMDA channel carries
+$10^{3}$ Ca$^{2+}$ per opening of \qty{50}{ms}; a synapse has $10$ \omterm{prop:b3:learning-memory:nmda}{NMDA
+receptors}; \qty{98}{\%} of entering calcium is buffered; resting free
+calcium \qty{0.1}{\micro mol/L}; CaMKII is activated above
+\qty{2}{\micro mol/L} free calcium, calcineurin between $0.3$ and
+\qty{1}{\micro mol/L}. Hebb: two inputs with $C = \begin{pmatrix}1 &
+0.6\\ 0.6 & 1\end{pmatrix}$, $\eta = 0.1$. Rescorla--Wagner: $\alpha =
+0.15$. Capacity: rat \omterm{def:b3:learning-memory:hippocampus}{CA3} $3\times 10^{5}$ cells, $P = 0.14N$; a rat
+explores $20$ new places a day.
+
+\medskip
+\noindent\textbf{Part I --- Calcium.}
+\begin{enumerate}
+  \item All ten \omterm{prop:b3:learning-memory:nmda}{NMDA receptors} open once. How many calcium ions enter,
+        how many stay free, and what concentration rise is that in the
+        spine?
+  \item Is CaMKII activated? What if only two receptors open
+        (glutamate released but the spine barely depolarised)?
+  \item With two receptors open, which enzyme is in its range, and
+        what happens to the synapse? Explain how one ion can produce
+        both LTP and LTD.
+  \item Calcium is pumped out with a time constant of \qty{20}{ms}.
+        Why must inputs arrive within tens of milliseconds to sum
+        their calcium, and how does this set the spike-timing window?
+  \item A spine is \qty{0.5}{\micro m} from its neighbour on the
+        dendrite. Explain why buffering and the spine's narrow neck
+        keep the calcium signal in one spine, and why that matters for
+        input specificity.
+  \item The magnesium block is relieved at about \qty{-30}{mV}. A
+        single AMPA synapse depolarises the spine by \qty{5}{mV} from
+        \qty{-70}{mV}. How many synchronous inputs (or what else) are
+        needed to unblock \omterm{prop:b3:learning-memory:nmda}{NMDA receptors}? What does this say about
+        \omterm{def:b3:structural-biology:allostery}{cooperativity}?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- A Hebbian neuron.}
+\begin{enumerate}[resume]
+  \item Find the eigenvalues and eigenvectors of $C$.
+  \item Starting from $\mathbf{w} = (1, 0)$, apply the averaged Hebb
+        rule $\mathbf{w} \leftarrow \mathbf{w} + \eta C\mathbf{w}$ for
+        three steps. What is the angle of $\mathbf{w}$ to the $(1,1)$
+        direction after each?
+  \item After many steps, what is the ratio $w_{2}/w_{1}$, and what
+        happens to $|\mathbf{w}|$?
+  \item Apply Oja's averaged rule $\mathbf{w} \leftarrow \mathbf{w} +
+        \eta\,(C\mathbf{w} - (\mathbf{w}^{\mathsf{T}}C\mathbf{w})
+        \mathbf{w})$ for one step from $(0.8, 0.8)$. Toward what does
+        it move?
+  \item The neuron now responds to the two inputs together. If input 2
+        alone fires (rare), what is $y$ relative to the joint case,
+        with $\mathbf{w} = (0.71, 0.71)$?
+  \item Explain in one sentence how the associativity of LTP (a weak
+        input paired with a strong one is strengthened) is this
+        theorem in action.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Learning curve.}
+\begin{enumerate}[resume]
+  \item With $\alpha = 0.15$, compute $V_{n}/\lambda$ after $5$, $10$
+        and $20$ trials.
+  \item How many trials to reach \qty{95}{\%} of $\lambda$?
+  \item A rat learns a maze in about this many trials. If the reward is
+        doubled, does the model predict faster learning in trials? What
+        changes?
+  \item Cue A is trained to asymptote, then A and B are presented
+        together with the same reward for $20$ trials. What is $V_{B}$?
+        What do the dopamine neurons do on the compound trials?
+  \item The reward now follows B alone. Describe the first trial's
+        \omterm{prop:b3:learning-memory:rescorla}{prediction error} and dopamine response, and the course of
+        $V_{B}$.
+  \item A drug raises dopamine regardless of outcome. Using the rule,
+        explain why the actions preceding the drug are learned as if
+        rewarded, whatever their consequences.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- The \omterm{def:b3:learning-memory:kinds}{hippocampus}.}
+\begin{enumerate}[resume]
+  \item Hopfield capacity of the rat's \omterm{def:b3:learning-memory:hippocampus}{CA3}.
+  \item At $20$ new places a day, how long before the capacity is
+        reached? What must happen for the animal to go on learning?
+  \item \omterm{def:b3:learning-memory:kinds}{Consolidation} transfers memories to the cortex over weeks.
+        Explain why a slow transfer protects old cortical memories
+        (catastrophic interference) and why the \omterm{def:b3:learning-memory:kinds}{hippocampus} is a
+        temporary store.
+  \item If \qty{3}{\%} of \omterm{def:b3:learning-memory:hippocampus}{CA3} cells are active in any pattern, how many
+        cells encode one place, and how many patterns could be
+        distinguished if patterns were required to share fewer than
+        half their cells? (Argue qualitatively why sparse coding raises
+        capacity.)
+  \item \omterm{def:b3:learning-memory:hippocampus}{Replay} during sleep compresses a \qty{10}{s} run into
+        \qty{0.5}{s}. If the spike-timing window is \qty{20}{ms}, what
+        separation between \omterm{def:b3:learning-memory:hippocampus}{place cells}' firing in the run becomes
+        Hebbian in the \omterm{def:b3:learning-memory:hippocampus}{replay}? Why might this be the point of
+        compression?
+  \item The maze memory survives a hippocampal lesion made a month
+        after training but not one made a day after. Interpret, with
+        H.M.'s pattern of loss.
+  \item Summarise: the free calcium concentration after ten NMDA
+        openings (question~1), the trials to \qty{95}{\%} learning
+        (question~14), and the rat's \omterm{def:b3:learning-memory:hippocampus}{CA3} capacity (question~19).
+\end{enumerate}
+\end{problem}

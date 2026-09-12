@@ -18,11 +18,11 @@ collège SVT biology parts, Book 2 the lycée S SVT biology parts, Books
 of old and current programmes), Book 5 the rest of a licence de biologie
 (L3 + L1/L2 gaps).
 
-**Current state: Books 1, 2, 3 and 4 written in English (2026-08-28,
-2026-09-02, 2026-09-04 and 2026-09-10); Books 1, 2 and 3 all ship in the
-seven target languages (2026-09-04, 2026-09-05 and 2026-09-06); Book 4 is
-English only; Book 5 is a titled placeholder**
-(chapter architecture in place, no chapter written).
+**Current state: all five books written in English (Books 1–4 on
+2026-08-28, 2026-09-02, 2026-09-04 and 2026-09-10; Book 5 on
+2026-09-11); Books 1, 2 and 3 all ship in the seven target languages
+(2026-09-04, 2026-09-05 and 2026-09-06); Books 4 and 5 are English
+only.**
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -116,6 +116,43 @@ English only; Book 5 is a titled placeholder**
   anchor=north`); a three-panel TikZ row wider than the text needs
   `\resizebox{\linewidth}{!}{…}`; a `\qty{120}{/}` time or pressure pair
   prints without its slash (write `$120/80$~mmHg`).
+
+- **Book 5** (University Biology, Year 3): 27 chapters + 27 solutions
+  files, 365 pp, written 2026-09-11 on the Book 3/4 calibration: exactly
+  12 exercises ramped 4×★, 5×★★, 3×★★★, plus one 25-question weekend
+  `problem` (Parts I–IV with `[resume]`) ending on a named quantified
+  result (a GFR, a loop gain, an auxin trapping ratio, a decay length,
+  a Hayflick count, a mutation rate, an ESS frequency, an effective
+  size); every exercise and problem has a keyed solution
+  (`tools/check_problem_numbering.py` passes). Year-3 register: 34
+  `theorem`s with Year-3 derivations (the methylation Markov chain,
+  Lander–Waterman, Needleman–Wunsch, the MWC curve, treadmilling, the
+  Monod chemostat, the cable equation at steady state, Weber–Fechner,
+  Oja's rule, clearance and the countercurrent multiplier, the linear
+  insulin–glucose loop and its damped return, chemiosmotic auxin
+  trapping, the synthesis–diffusion–decay gradient, the Hayflick count,
+  the neutral rate and Kimura's fixation probability, the marginal
+  value theorem, Hamilton's rule, effective population size), 53
+  `\begin{proof}[Evidence]` classic experiments, the rest `\admitted`
+  as such (Book 5 is the last volume: no forward pointers). 177
+  figures: 116 TikZ/pgfplots schematics, 91 AI illustrations
+  (`images/book5/ai/`, prompts in `PROMPTS.md`, JPEG) and 14
+  free-license photographs (`images/book5/`, records in `CREDITS.md`),
+  all credited in `frontmatter/image-credits-book5.tex`. ~2,670
+  generated `\omterm` links; `tools/term_config/book5_en.py` is curated
+  with a 28-word STOP list (one-word terms that carry a second sense in
+  another chapter: "read", "domain", "fold", "seed", "niche",
+  "tolerance", "vector", "coat", "rod", "imprinting", "positive
+  selection"… — STOP keeps each in its own chapter) and `EXTRA_PROTECT`
+  regexes for "its own complement", "anterior transformation",
+  "alignment of interests". Same math level guard and chemistry
+  convention as Book 4. Gotchas met: pgfplots `symbolic y coords` cannot
+  contain parentheses; a `\foreach` list item with a comma needs braces;
+  `(1-exp(-tiny))` loses precision in pgf math (use the linear
+  approximation); two `axis` environments side by side must sum to well
+  under `\linewidth` (0.58 + 0.33 fits, 0.62 + 0.36 does not); the Codex
+  image generator's usage limit again stalled the run for hours
+  (detached `batch.sh` with a 30-min retry loop, grey stubs meanwhile).
 
 `CONTRIBUTING.md` holds the authoritative style/structure conventions;
 `THEME.md` documents the One Course cover brand. Read both before writing
@@ -408,9 +445,9 @@ prefer diagrams over equations; SI units where relevant.
   both help); a **free-of-rights photograph** for a specific real thing a
   reader would want to see as it is — a named scientist, a landmark
   specimen, a famous organism or landscape. The infrastructure is in
-  place for Books 1–4 (`images/book<N>/` with `CREDITS.md`,
+  place for all five books (`images/book<N>/` with `CREDITS.md`,
   `images/book<N>/ai/PROMPTS.md`, an Image Credits page in `frontmatter/`
-  inputted by each entry file); Book 5 copies that shape.
+  inputted by each entry file).
 - **AI illustrations are JPEG, never PNG** (`images/book<N>/ai/*.jpg`,
   made with `ffmpeg -i x.png -q:v 3 -pix_fmt yuvj420p x.jpg`, the HTML
   reader's own recipe; then delete the PNG). A lossless PNG costs ~2–4 MB

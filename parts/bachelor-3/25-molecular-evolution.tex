@@ -1,6 +1,656 @@
 \chapter{Molecular Evolution and Phylogenomics}\label{ch:b3:molecular-evolution}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+In 1968 Motoo Kimura did a sum that unsettled a field. Comparing the
+haemoglobins, cytochromes and other proteins of mammals whose common
+ancestors were dated by fossils, he found that amino acids had been
+replaced at a rate of roughly one substitution per site per billion
+years --- which, over a mammalian genome and a generation, came to a
+new substitution fixed in the population every two years or so. Haldane
+had shown a decade earlier that natural selection can fix at most about
+one substitution per three hundred generations before the cost in
+lost offspring becomes unpayable. The arithmetic left one way out:
+most of the changes that accumulate in DNA are not driven by selection
+at all, but are neutral, fixed by chance in finite populations, at a
+rate that --- as this chapter's first theorem shows --- is simply the
+mutation rate. The \omterm{thm:b3:molecular-evolution:neutral}{neutral theory} became the null hypothesis of
+molecular evolution, the baseline against which selection is detected;
+the \omterm{prop:b3:molecular-evolution:clock}{molecular clock} became a way of dating what fossils could not;
+and the genomes sequenced since have given the tools to see, gene by
+gene, where selection has acted, how new genes are born from old, and
+why the tree of a gene is not always the tree of its species.
 
-\emph{This chapter has not been written yet.}
+\section{Drift, mutation and the neutral rate}
+
+\begin{theorem}[The neutral substitution rate]\label{thm:b3:molecular-evolution:neutral}
+\index{neutral theory}\index{substitution rate}\index{fixation probability}\index{genetic drift}
+In a diploid population of $N$ individuals, a new mutation with no
+effect on fitness has probability $1/2N$ of eventually replacing all
+other alleles (\emph{fixation}) and $1 - 1/2N$ of being lost. If each
+of the $2N$ gene copies mutates at rate $\mu$ per generation, $2N\mu$
+new neutral mutations arise per generation and, in the long run, the
+rate at which substitutions accumulate is
+\[
+k = 2N\mu\times\frac{1}{2N} = \mu :
+\]
+the neutral \emph{\omterm{thm:b3:molecular-evolution:neutral}{substitution rate}} equals the mutation rate,
+independent of population size. A mutation destined to fix takes on
+average $4N$ generations to do so, so large populations hold more
+variation in transit but fix it no faster. For a mutation with
+selective advantage $s$, Kimura's formula gives the \omterm{thm:b3:molecular-evolution:neutral}{fixation
+probability}
+\[
+P(s) = \frac{1 - \mathrm{e}^{-2s}}{1 - \mathrm{e}^{-4Ns}} \approx 2s
+\quad (4Ns \gg 1),
+\]
+so an advantage of \qty{1}{\%} is fixed with probability about
+\qty{2}{\%} --- forty times a neutral mutation's chance in a
+population of two thousand, but still lost forty-nine times in fifty;
+and a disadvantage $s < 0$ with $4N|s| \gg 1$ is fixed essentially
+never, while one with $4N|s| \ll 1$ behaves as neutral: selection
+sees only what drift does not swamp, and the boundary is $|s| \sim
+1/4N$ --- \emph{effectively neutral}.
+\end{theorem}
+\begin{proof}
+Neutrality: some copy present today will be the ancestor of the whole
+population in the distant future, and by symmetry each of the $2N$
+copies is equally likely to be it; the new mutant is one copy, hence
+$1/2N$. Rate: substitutions per generation $=$ (mutations arising per
+generation) $\times$ (probability each fixes) $= 2N\mu/2N$. Kimura's
+formula follows from the diffusion approximation to the change of
+allele frequency under drift and selection, admitted here; its limits
+are checked directly: as $s \to 0$, $(2s)/(4Ns) = 1/2N$, the neutral
+value; for $4Ns \gg 1$ the denominator is $1$ and the numerator
+$\approx 2s$. Fixation time: the frequency of a neutral allele
+performs a random walk with variance $p(1-p)/2N$ per generation, and
+the expected time to reach $1$ from $1/2N$, conditional on doing so,
+is $4N$ generations (Kimura and Ohta, 1969), admitted.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+  width=0.62\linewidth, height=5.6cm,
+  axis x line=bottom, axis y line=left,
+  xmin=-4, xmax=8, ymin=0.00002, ymax=0.2,
+  xlabel={$4Ns$ (scaled selection coefficient)}, ylabel={fixation probability},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={-4,-2,0,2,4,6,8}, ytick={0.0001,0.001,0.01,0.1}, yticklabels={$10^{-4}$,$10^{-3}$,$10^{-2}$,$10^{-1}$},
+  clip=false,
+]
+\addplot[very thick, omDef, domain=-4:-0.05, samples=60] {(x/2000)/(1-exp(-x))};
+\addplot[very thick, omDef, domain=0.05:8, samples=80] {(x/2000)/(1-exp(-x))};
+\draw[dashed, gray] (axis cs:-4,0.0005) -- (axis cs:8,0.0005); \node[font=\scriptsize, gray, anchor=north west] at (axis cs:-3.9,0.00048) {neutral, $1/2N$};
+\addplot[thick, omThm, dashed, domain=1:8, samples=2] {2*x/(4*1000)};
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:5,0.0012) {$2s$ asymptote};
+\node[font=\scriptsize, omDef, anchor=south east, align=right] at (axis cs:-0.2,0.02) {effectively neutral\\when $|4Ns| \lesssim 1$};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:-3.9,0.0008) {deleterious: fixed almost never};
+\end{semilogyaxis}
+\end{tikzpicture}
+
+{\small Kimura's \omterm{thm:b3:molecular-evolution:neutral}{fixation probability} against the scaled selection
+coefficient, for $N = 1000$. Near zero the curve passes through the
+neutral value; to the right it rises toward $2s$; to the left it falls
+off a cliff. Selection acts only on what drift cannot hide.}
+\end{omfigure}
+
+\begin{proof}[Evidence]
+Kimura (1968) and King and Jukes (1969) made the argument from rates:
+the observed rate of amino-acid substitution across mammalian proteins
+implied more substitutions per generation than Haldane's cost of
+selection allowed, so most had to be neutral. The theory's predictions
+then held: rates are highest where function is least constrained ---
+synonymous sites, introns, \omterm{def:b3:molecular-evolution:duplication}{pseudogenes}, the third codon position ---
+and lowest in \omterm{def:b3:chromatin-epigenetics:nucleosome}{histones} and ubiquitin, which change one residue in a
+hundred million years; the level of variation within species tracks
+mutation and population size; and the rate of substitution per year is
+roughly constant across lineages with very different population sizes,
+as the formula $k = \mu$ requires and a selectionist account does not.
+The controversy that followed did not overturn it: it fixed the neutral
+rate as the null against which selection is measured.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.34\linewidth]{images/book5/kimura.jpg}\hspace{0.05\linewidth}
+\includegraphics[width=0.5\linewidth]{images/book5/ai/b5-25-icefish.jpg}
+
+{\small Left: Motoo Kimura (1924--1994), who showed that most molecular
+change is fixed by chance and at the mutation rate (photograph, 1986,
+CC BY 4.0). Right: an Antarctic icefish, whose blood is kept from
+freezing by an antifreeze glycoprotein assembled, some ten million years
+ago, from a duplicated digestive-enzyme gene and a run of repeats.}
+\end{omfigure}
+
+\section{The molecular clock}
+
+\begin{proposition}[The clock and its irregularities]\label{prop:b3:molecular-evolution:clock}
+\index{molecular clock}\index{calibration}\index{rate heterogeneity}\index{relaxed clock}\index{generation-time effect}
+If substitutions accumulate at a constant rate $k$ per site per year in
+two lineages that split $T$ years ago, the fraction of sites at which
+they differ is, for small values, $d \approx 2kT$: the divergence of
+two sequences is a \emph{\omterm{prop:b3:molecular-evolution:clock}{molecular clock}} (Zuckerkandl and Pauling,
+1965), which can be \emph{calibrated} by one fossil-dated split and then
+read for splits with no fossils. The clock is stochastic --- a Poisson
+process, so $d$ has variance about equal to its mean over a fixed
+number of sites --- and it is irregular in three known ways. Each
+protein has its own rate, set by the fraction of its sites that
+function permits to change: fibrinopeptides at \num{8}, haemoglobin
+\num{1}, cytochrome~$c$ \num{0.3}, \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone}~H4 \num{0.01} substitutions
+per site per billion years. Rates differ between lineages: since the
+neutral rate is $\mu$ per generation, animals with short generations
+(rodents) accumulate more change per year than those with long
+(primates, whales) --- the \emph{\omterm{prop:b3:molecular-evolution:clock}{generation-time effect}}, partly offset
+because per-generation mutation rates rise with generation length.
+And $d$ saturates: once many sites have changed, further changes hit
+sites already changed, so the raw difference must be corrected for
+multiple hits, as the \omterm{def:b3:bioinformatics:alignment}{alignment} chapter's distances do. Modern
+\emph{\omterm{prop:b3:molecular-evolution:clock}{relaxed clocks}} let the rate vary between branches within a
+statistical model and are calibrated by many fossils at once; they
+date the split of humans and chimpanzees at six to seven million
+years, of placental mammal orders near the end of the Cretaceous, and
+of animals and fungi in the Precambrian, with uncertainties of ten to
+twenty per cent that come mostly from the fossils.
+\end{proposition}
+\begin{proof}
+Two lineages each accumulate $kT$ substitutions per site, so the
+difference between them is $2kT$ where sites have not been hit twice;
+a fossil-dated pair gives $k = d/2T$. The Poisson variance and the
+per-protein rates are Zuckerkandl and Pauling's, Dickerson's (1971) and
+Kimura's fits to vertebrate protein sets; the saturation correction is
+the Jukes--Cantor formula of the \omterm{def:b3:bioinformatics:alignment}{alignment} chapter, $d_{\text{true}} =
+-\tfrac{3}{4}\ln(1 - \tfrac{4}{3}p)$. Rate variation between lineages
+was shown by relative-rate tests: with an outgroup $O$ and two species
+$A$, $B$, the distances $d_{AO} - d_{BO}$ should be zero under a strict
+clock, and are not for rodents against primates.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.68\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=600, ymin=0, ymax=110,
+  xlabel={time since divergence (million years)}, ylabel={substitutions per 100 sites (corrected)},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,100,200,300,400,500,600}, ytick={0,20,40,60,80,100},
+  clip=false,
+]
+\addplot[very thick, omThm, domain=0:130, samples=2] {2*0.4*x};
+\addplot[very thick, omDef, domain=0:600, samples=2] {2*0.09*x};
+\addplot[very thick, omMeth!70!black, domain=0:600, samples=2] {2*0.03*x};
+\addplot[very thick, omProp!80!black, domain=0:600, samples=2] {2*0.001*x};
+\addplot[only marks, mark=*, mark size=1.8pt, omDef] coordinates {(80,13) (100,20) (300,52) (400,75) (450,80)};
+\addplot[only marks, mark=*, mark size=1.8pt, omMeth!70!black] coordinates {(80,4) (300,17) (450,29) (550,33)};
+\addplot[only marks, mark=*, mark size=1.8pt, omThm] coordinates {(30,22) (80,68) (100,80)};
+\node[font=\scriptsize, omThm, anchor=west] at (axis cs:132,104) {fibrinopeptides};
+\node[font=\scriptsize, omDef, anchor=south east] at (axis cs:600,108) {haemoglobin};
+\node[font=\scriptsize, omMeth!70!black, anchor=north west] at (axis cs:530,35) {cytochrome $c$};
+\node[font=\scriptsize, omProp!80!black, anchor=south east] at (axis cs:600,1.5) {histone H4};
+\end{axis}
+\end{tikzpicture}
+
+{\small The \omterm{prop:b3:molecular-evolution:clock}{molecular clock}, protein by protein. Each runs at its own
+rate, set by how much of the molecule function leaves free to change:
+a fibrinopeptide, cut away and discarded when blood clots, changes
+hundreds of times faster than the \omterm{def:b3:chromatin-epigenetics:nucleosome}{histone} that packs DNA.}
+\end{omfigure}
+
+\section{Reading selection in sequences}
+
+\begin{definition}[dN/dS]\label{def:b3:molecular-evolution:dnds}
+\index{synonymous substitution}\index{nonsynonymous substitution}\index{dN/dS ratio}\index{purifying selection}\index{positive selection}
+In a protein-coding gene a substitution is \emph{synonymous} if it
+leaves the amino acid unchanged and \emph{nonsynonymous} if it
+changes it. Because the genetic code lets most third positions and
+some first positions change silently, about a quarter of the possible
+mutations in a typical gene are synonymous. Let $d_{S}$ be the number
+of synonymous substitutions per synonymous site and $d_{N}$ the
+nonsynonymous substitutions per nonsynonymous site, each corrected for
+multiple hits. Synonymous changes are close to neutral, so $d_{S}$
+estimates $2\mu T$ --- the clock; and the ratio
+\[
+\omega = \frac{d_{N}}{d_{S}}
+\]
+measures what selection has done to the protein: $\omega = 1$ if
+amino-acid changes are as free as silent ones (no constraint, as in a
+\omterm{def:b3:molecular-evolution:duplication}{pseudogene}); $\omega < 1$ under \emph{purifying selection}, most changes
+being removed --- the typical gene has $\omega \approx 0.1$ to $0.2$,
+\omterm{def:b3:chromatin-epigenetics:nucleosome}{histones} $0.001$; $\omega > 1$ under \emph{positive selection}, amino-acid
+changes being favoured faster than drift alone allows --- the
+antigen-binding groove of MHC molecules, the surface proteins of viruses
+in an arms race with antibodies, the sperm and egg proteins of
+fertilisation, and the lysozyme of ruminants, which was recruited to
+digest bacteria in the stomach. Computed along one branch of a tree or
+site by site, $\omega$ maps where and when a protein was changed by
+selection rather than by chance.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \begin{axis}[
+    width=0.52\linewidth, height=5.2cm,
+    xbar, bar width=7pt, y=0.45cm,
+    axis x line=bottom, axis y line=left,
+    xmin=0.0005, xmax=5, xmode=log,
+    xlabel={$\omega = d_{N}/d_{S}$},
+    xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+    symbolic y coords={histone H4, actin, insulin, typical gene, cytochrome $c$, pseudogene, ruminant lysozyme, MHC groove, HIV envelope},
+    ytick=data, tick label style={font=\scriptsize},
+    xtick={0.001,0.01,0.1,1}, xticklabels={0.001,0.01,0.1,1},
+    clip=false,
+  ]
+  \addplot[fill=omDef!50, draw=omDef] coordinates {(0.002,histone H4) (0.01,actin) (0.09,insulin) (0.15,typical gene) (0.05,cytochrome $c$) (1,pseudogene) (2.5,ruminant lysozyme) (3.5,MHC groove) (4,HIV envelope)};
+  \draw[dashed, thick, omThm] (axis cs:1,histone H4) -- (axis cs:1,HIV envelope);
+  \node[omThm, anchor=south, font=\tiny] at (axis cs:1,HIV envelope) {$\omega = 1$: neutral};
+  \node[anchor=east, font=\tiny, gray] at (axis cs:0.5,actin) {purifying};
+  \node[anchor=west, font=\tiny, gray] at (axis cs:1.6,insulin) {positive};
+  \end{axis}
+\end{tikzpicture}
+
+{\small Orders of magnitude of $\omega$. Almost every gene sits well
+below one, its amino acids guarded by \omterm{def:b3:molecular-evolution:dnds}{purifying selection}; a \omterm{def:b3:molecular-evolution:duplication}{pseudogene}
+drifts at one; the few above one are the proteins in arms races or
+newly recruited to a job.}
+\end{omfigure}
+
+\begin{method}[Estimating $d_{N}/d_{S}$]\label{met:b3:molecular-evolution:method}
+\index{codon alignment}
+(1) Align the two coding sequences codon by codon (align the proteins,
+then map back to the DNA, so that no gap breaks the reading frame).
+(2) For each codon count the synonymous and nonsynonymous \emph{sites}:
+each of its three positions is scored by the fraction of possible
+changes that are silent --- a fourfold-degenerate third position counts
+as one synonymous site, a position where every change alters the amino
+acid as one nonsynonymous site, a twofold position as a third of one and
+two thirds of the other. Sum over codons: $S$ synonymous and $N$
+nonsynonymous sites, with $S + N = 3 \times$ codons. (3) Count the
+synonymous and nonsynonymous \emph{differences} between the sequences,
+resolving codons that differ at two positions by averaging over the
+possible paths. (4) $p_{S} = $ differences$/S$, $p_{N} = $ differences$/N$;
+correct each for multiple hits with Jukes--Cantor. (5) $\omega =
+d_{N}/d_{S}$; test $\omega \ne 1$ against the sampling variance, which
+is large when $d_{S}$ is small --- two closely related sequences give
+an unreliable ratio, and two very distant ones have a saturated
+$d_{S}$. (6) For where and when: fit $\omega$ per branch of a tree, or
+per site with a mixture of site classes, and test whether a class with
+$\omega > 1$ improves the fit.
+\end{method}
+
+\section{New genes from old}
+
+\begin{definition}[Duplication, families and transfer]\label{def:b3:molecular-evolution:duplication}
+\index{gene duplication}\index{gene family}\index{paralogue}\index{orthologue}\index{neofunctionalisation}\index{subfunctionalisation}\index{pseudogene}\index{horizontal gene transfer}
+Most new genes are copies of old ones. A \emph{gene duplication} ---
+by unequal crossing-over, retrotransposition, or the doubling of a
+whole genome, as happened twice at the origin of vertebrates and again
+in the ancestor of teleost fish and in many plant lineages --- leaves
+two \emph{paralogues} where there was one; genes in different species
+descended from a single ancestral gene are \emph{orthologues}. The
+copy's usual fate is decay: freed from constraint ($\omega \to 1$) it
+accumulates a stop codon or a frameshift and becomes a
+\emph{pseudogene}, of which the human genome carries some twenty
+thousand. Sometimes both survive: by \emph{neofunctionalisation}, one
+copy acquiring a new function while the other keeps the old (the
+antifreeze glycoprotein of icefish, from a trypsinogen gene; the red
+and green opsins of primates, from a duplication forty million years
+ago that gave the trichromatic vision the Year~1 volume described; the
+lens crystallins, from metabolic enzymes); or by
+\emph{subfunctionalisation}, each copy keeping part of the ancestor's
+expression or activity so that both are needed. Repeated duplication
+builds \emph{gene families} --- the globins, the Hox clusters of the
+development chapter, the thousand \omterm{def:b3:sensory-systems:chemical}{olfactory receptor} genes of a mouse,
+a third of them pseudogenes in humans. The other source of new genes is
+\emph{horizontal transfer}: bacteria acquire genes from unrelated
+bacteria by \omterm{def:b3:genetic-engineering:tools}{plasmids}, phages and free DNA, which is how \omterm{def:b3:bacteriology:resistance}{antibiotic
+resistance} crosses species in a hospital and why a bacterium's
+``species'' is a core genome surrounded by a shifting cloud; in
+eukaryotes transfer is rarer but real --- the \omterm{def:b3:genetic-engineering:plants}{T-DNA} \emph{\omterm{def:b3:genetic-engineering:plants}{Agrobacterium}}
+inserts into plants, bacterial genes in bdelloid rotifers, and the
+ancient wholesale transfers that were the mitochondrion and the
+chloroplast. Where transfer is common the history of life is a network,
+and the tree drawn from any one gene is the tree of that gene.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, thick, rounded corners, fill=omDef!25, minimum width=1.8cm] (a) at (0,3) {ancestral gene};
+  \node[draw, thick, rounded corners, fill=omDef!25, minimum width=1.2cm] (c1) at (-1.2,1.6) {copy 1};
+  \node[draw, thick, rounded corners, fill=omDef!25, minimum width=1.2cm] (c2) at (1.2,1.6) {copy 2};
+  \draw[->, thick] (a) -- (c1); \draw[->, thick] (a) -- (c2); \node[right, font=\tiny] at (0.9,2.4) {duplication};
+  \node[draw, thick, rounded corners, fill=gray!20, align=center] (ps) at (-3.6,-0.2) {pseudogene\\$\omega \to 1$, then\\stop codons, decay};
+  \node[draw, thick, rounded corners, fill=omThm!20, align=center] (neo) at (0,-0.2) {neofunctionalisation\\one copy takes a new job\\(antifreeze, red/green opsin)};
+  \node[draw, thick, rounded corners, fill=omMeth!25, align=center] (sub) at (3.9,-0.2) {subfunctionalisation\\each copy keeps part\\of the old expression};
+  \draw[->, thick] (c1.south) -- (ps.north); \draw[->, thick] (c2.south) -- (neo.north); \draw[->, thick] (c2.south) -- (sub.north);
+  \node[right, align=left, font=\tiny] at (5.9,1.6) {most common fate: loss within\\a few million years ($\sim$\num{20000}\\pseudogenes in the human genome)};
+  \node[right, align=left, font=\tiny] at (5.9,0.4) {rarer: both kept, and a gene\\family grows (globins, Hox,\\\num{1000} olfactory receptors)};
+  \node[right, align=left, font=\tiny] at (5.9,-0.8) {horizontal transfer: a gene\\arrives from another species ---\\routine in bacteria};
+\end{tikzpicture}
+
+{\small The fates of a duplicated gene. Freed from constraint, the extra
+copy usually decays; occasionally it is caught by selection for a new
+function, or the two copies divide the old one between them.}
+\end{omfigure}
+
+\begin{proof}[Evidence]
+Ohno (1970) proposed duplication as the main source of new genes
+before a single family was sequenced; the globins confirmed it, their
+tree of $\alpha$, $\beta$, $\gamma$, $\delta$, myoglobin and the plant
+and bacterial globins matching duplication dates to the vertebrate
+radiation. Chen, DeVries and Cheng (1997) showed the icefish antifreeze
+gene shares its signal sequence and flanking sequences with trypsinogen
+and that the antifreeze repeats arose by expansion of a nine-nucleotide
+piece spanning an intron--exon junction: a new protein from a
+digestive enzyme's spare parts, dated by the clock to the freezing of
+the Southern Ocean. Thornton and colleagues (2006) reconstructed the
+ancestral sequence of the steroid receptors, synthesised the
+450-million-year-old protein, and found it responded to oestrogens
+only; two later substitutions, identified and tested, switched the
+duplicated copy's preference to cortisol --- a resurrected ancestor,
+and the path between it and its descendants walked in the laboratory.
+\end{proof}
+
+\section{Gene trees and species trees}
+
+\begin{proposition}[Incomplete lineage sorting]\label{prop:b3:molecular-evolution:ils}
+\index{gene tree}\index{species tree}\index{incomplete lineage sorting}\index{coalescent}\index{phylogenomics}
+The tree of a gene need not match the tree of the species that carry
+it. Consider three species with \omterm{prop:b3:molecular-evolution:ils}{species tree} $((A,B),C)$, the $A$--$B$
+split preceded by an ancestral population of size $N$ that persisted
+for $T$ generations before the split from $C$. Two gene copies, one from
+$A$ and one from $B$, traced backward, \emph{coalesce} in a common
+ancestor at a rate $1/2N$ per generation; the probability that they
+have not yet coalesced when they enter the population ancestral to all
+three is $\mathrm{e}^{-T/2N}$, and then the three lineages coalesce in
+random order, so two thirds of the time the \omterm{prop:b3:molecular-evolution:ils}{gene tree} groups $A$ or $B$
+with $C$. The probability that the \omterm{prop:b3:molecular-evolution:ils}{gene tree} disagrees with the \omterm{prop:b3:molecular-evolution:ils}{species
+tree} is therefore
+\[
+P_{\text{discord}} = \tfrac{2}{3}\,\mathrm{e}^{-T/2N} .
+\]
+For humans, chimpanzees and gorillas, with $T$ of a few hundred
+thousand generations and $N$ near \num{50000}, about a third of the
+genome supports a tree in which humans are closer to gorillas or
+chimpanzees to gorillas than the \omterm{prop:b3:molecular-evolution:ils}{species tree} --- observed. This
+\emph{\omterm{prop:b3:molecular-evolution:ils}{incomplete lineage sorting}}, together with duplication and loss
+and horizontal transfer, is why \emph{phylogenomics} infers the \omterm{prop:b3:molecular-evolution:ils}{species
+tree} from thousands of \omterm{prop:b3:molecular-evolution:ils}{gene trees} under a model of the coalescent,
+rather than concatenating them and drawing one; it also lets the
+ancestral population sizes themselves be estimated from the fraction of
+discordant trees, and ancient hybridisations (Neanderthal DNA in modern
+humans, the gene flow between bears, between butterflies) be read from
+trees that disagree in a direction drift alone would not produce.
+\end{proposition}
+\begin{proof}
+Two lineages in a diploid population of $N$ pick parents from $2N$
+copies each generation and share one with probability $1/2N$; over $T$
+generations the chance of never doing so is $(1 - 1/2N)^{T} \approx
+\mathrm{e}^{-T/2N}$. Three lineages entering the common ancestral
+population are exchangeable, so the first pair to coalesce is each of
+the three pairs with probability $1/3$; only the pair $(A,B)$ matches
+the \omterm{prop:b3:molecular-evolution:ils}{species tree}, hence $2/3$ of these cases are discordant. Neither
+the coalescent's rate nor the exchangeability depends on the gene, so
+the formula holds for every neutral locus independently, and the
+fraction of discordant trees across a genome estimates
+$\mathrm{e}^{-T/2N}$.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % species tree as thick grey tubes
+  \fill[gray!25] (0,0) -- (0.9,0) -- (2.8,4.2) -- (1.9,4.2) -- cycle;
+  \fill[gray!25] (1.6,0) -- (2.5,0) -- (2.8,4.2) -- (1.9,4.2) -- cycle;
+  \fill[gray!25] (2.35,2.6) -- (3.15,2.6) -- (3.15,0) -- (3.9,0) -- (3.9,3.4) -- (3.2,5.6) -- (2.3,5.6) -- (1.9,4.2) -- (2.8,4.2) -- cycle;
+  \node[below] at (0.45,0) {A}; \node[below] at (2.05,0) {B}; \node[below] at (3.5,0) {C};
+  \node[above left, font=\tiny, gray!70!black] at (1.0,4.2) {A--B split};
+  \node[above left, font=\tiny, gray!70!black] at (1.0,5.6) {split from C};
+  \draw[<->, gray!70!black] (-0.2,4.2) -- (-0.2,5.6) node[midway, left, font=\tiny, align=right] {$T$ generations,\\size $N$};
+  \draw[gray!50, dashed] (-0.2,4.2) -- (1.9,4.2); \draw[gray!50, dashed] (-0.2,5.6) -- (2.3,5.6);
+  % concordant gene lineages (blue)
+  \draw[very thick, omDef] (0.4,0) -- (2.1,3.8) -- (2.2,4.0); \draw[very thick, omDef] (2.0,0) -- (2.2,4.0); \draw[very thick, omDef] (2.2,4.0) -- (2.6,5.0); \draw[very thick, omDef] (3.5,0) -- (2.6,5.0);
+  \node[right, align=left, omDef] at (4.6,4.6) {blue: A and B coalesce before\\the split from C --- concordant};
+  % discordant lineages (red)
+  \draw[very thick, omThm, dashed] (0.55,0) -- (2.35,4.2) -- (2.7,5.9); \draw[very thick, omThm, dashed] (2.15,0) -- (2.55,4.2) -- (2.9,5.3) -- (3.0,5.5); \draw[very thick, omThm, dashed] (3.65,0) -- (3.0,5.5); \draw[very thick, omThm, dashed] (3.0,5.5) -- (2.7,5.9);
+  \node[right, align=left, omThm] at (4.6,3.2) {red: they fail to coalesce in the\\ancestral population (probability\\$\mathrm{e}^{-T/2N}$), and B then joins C first:\\the gene tree is $((B,C),A)$};
+  \node[right, align=left] at (4.6,1.4) {$P_{\text{discord}} = \tfrac{2}{3}\,\mathrm{e}^{-T/2N}$:\\with $T = 2N$, one in four genes\\disagrees with the species tree};
+\end{tikzpicture}
+
+{\small \omterm{prop:b3:molecular-evolution:ils}{Gene trees} inside a \omterm{prop:b3:molecular-evolution:ils}{species tree}. The grey tubes are
+populations; the lines are the ancestry of one gene. Lineages that fail
+to meet in the short ancestral population enter the deeper one together
+and pair off at random --- so a third of the genome of three closely
+spaced species tells a different story from the species themselves.}
+\end{omfigure}
+
+\begin{example}[Reading a genome's history]\label{ex:b3:molecular-evolution:cichlids}
+The five hundred cichlid species of Lake Victoria arose in the
+fifteen thousand years since the lake refilled --- too fast for
+mutation to supply the differences between them. Their genomes show
+how: the variants that distinguish a bottom-feeder from an
+algae-scraper were present as standing variation in the river fish
+that colonised the lake, sorted and recombined, and augmented by
+hybridisation between lineages; the opsin genes were tuned to clear or
+turbid water by substitutions that the $\omega$ of their branches shows
+to have been selected; and the \omterm{prop:b3:molecular-evolution:ils}{gene trees} disagree with one another
+across the genome in exactly the pattern \omterm{prop:b3:molecular-evolution:ils}{incomplete lineage sorting} and
+gene flow predict. A radiation is not the origin of new genes but the
+redistribution of old alleles among new combinations under new
+selection --- which the sequences record, allele by allele, if one
+knows how to read a tree that is really a forest.
+\end{example}
+
+\begin{omfigure}
+\includegraphics[width=0.6\linewidth]{images/book5/ai/b5-25-cichlids.jpg}
+
+{\small Cichlids of an African lake: hundreds of species in a few
+thousand years, their differences drawn largely from variation their
+common ancestors already carried.}
+\end{omfigure}
+
+\begin{remark}[Chance as the baseline]\label{rem:b3:molecular-evolution:remark}
+The \omterm{thm:b3:molecular-evolution:neutral}{neutral theory} is not a claim that selection is unimportant; it
+is a statement of what happens when selection is absent, precise enough
+to be tested against. Because the neutral rate is the mutation rate,
+divergence measures time; because neutral change fills the sites that
+selection leaves free, $\omega$ measures constraint; because neutral
+lineages coalesce at a known rate, the disagreement of \omterm{prop:b3:molecular-evolution:ils}{gene trees}
+measures the size of populations no one saw. Selection is then what
+remains when chance has been subtracted --- a gene with $\omega$ above
+one, a sweep that has emptied variation from a region, a tree that
+disagrees in a direction drift cannot explain. The Antarctic icefish's
+antifreeze, the ruminant's stomach lysozyme, the primate's third opsin
+are the exceptions found this way, and each is a story of a copied gene
+and a new job. The rest of the genome is a clock.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:molecular-evolution:1}
+State the neutral \omterm{thm:b3:molecular-evolution:neutral}{substitution rate} and explain in words why it does
+not depend on population size.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:molecular-evolution:2}
+Define \omterm{def:b3:molecular-evolution:duplication}{orthologue}, \omterm{def:b3:molecular-evolution:duplication}{paralogue} and \omterm{def:b3:molecular-evolution:duplication}{pseudogene}, with one example each from
+the globin family.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:molecular-evolution:3}
+What does $\omega = d_{N}/d_{S}$ measure? Interpret $\omega = 0.02$,
+$\omega = 1.0$ and $\omega = 2.5$, and name a gene of each kind.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:molecular-evolution:4}
+Why did Kimura conclude that most substitutions are neutral? Restate
+the argument with the numbers in the chapter's opening.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:molecular-evolution:5}
+$N = 5000$. Compute the \omterm{thm:b3:molecular-evolution:neutral}{fixation probability} of a new mutation with $s
+= 0$, $s = 0.001$, $s = 0.01$ and $s = -0.001$, using Kimura's formula,
+and comment on which are effectively neutral.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:molecular-evolution:6}
+Two species differ at \qty{12}{\%} of the sites of a gene whose neutral
+rate is \qty{2e-9}{} per site per year. Estimate their divergence time
+with and without the Jukes--Cantor correction. At what raw difference
+does the correction reach a factor of two?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:molecular-evolution:7}
+A gene of 300 codons has 700 nonsynonymous and 200 synonymous sites.
+Between two species it shows 7 nonsynonymous and 10 synonymous
+differences. Compute $p_{N}$, $p_{S}$ and $\omega$ (uncorrected). Which
+selection regime? What if the counts were 35 and 10?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:molecular-evolution:8}
+Human and chimpanzee neutral sequences differ at \qty{1.2}{\%}; the
+split was \qty{6.5}{Myr} ago, generation time \qty{25}{yr}. Estimate the
+mutation rate per site per generation, and the number of new mutations
+in a diploid genome of $6\times 10^{9}$ bases each generation.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:molecular-evolution:9}
+With $N = \num{50000}$ and $T = \num{100000}$ generations between the
+two splits, compute the fraction of \omterm{prop:b3:molecular-evolution:ils}{gene trees} discordant with the
+\omterm{prop:b3:molecular-evolution:ils}{species tree} for human, chimpanzee and gorilla. What $T$ would make it
+\qty{10}{\%}?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:molecular-evolution:10}
+Show that Kimura's formula reduces to $1/2N$ as $s \to 0$ and to $2s$
+for $4Ns \gg 1$, and that for $s < 0$ with $4N|s| \gg 1$ it behaves as
+$2|s|\,\mathrm{e}^{-4N|s|}$. Hence estimate how strongly deleterious a
+mutation must be, in a population of $10^{4}$, to have its \omterm{thm:b3:molecular-evolution:neutral}{fixation
+probability} reduced a hundredfold below neutral.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:molecular-evolution:11}
+A relative-rate test: an outgroup $O$ is at corrected distance $0.30$
+from mouse and $0.24$ from human, and mouse and human are $0.20$ apart. Compute the mouse and human branch
+lengths since their split (assume the split point is equidistant from
+$O$ on the two paths), and their ratio. With a mouse generation of
+\qty{0.5}{yr} and a human one of \qty{25}{yr}, what would a strict
+per-generation clock predict for the ratio, and what does the
+observation say about mutation rates per generation?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:molecular-evolution:12}
+A duplicated gene is released from constraint ($\omega = 1$) at
+neutral rate $k = \qty{2e-9}{}$ per site per year. In a 1000-base
+coding sequence, roughly how many years until the first stop codon or
+frameshift is expected (assume about \qty{4}{\%} of random point
+mutations in a coding sequence create a stop codon, and ignore indels)?
+Compare with the time selection has to find a new function, and explain
+why most duplicates die.
+\end{exercise}
+
+\section{Problem: The Rate of Change}
+
+\begin{problem}[{Weekend problem --- a genome's history in numbers: the
+mutation rate from the human--chimpanzee divergence, Kimura's
+substitution load, the fixation odds of selected mutations, a gene's
+$\omega$ from codon counts, the clock read for a duplication, and the
+discordance of gene trees among the great apes, ending on the mutation
+rate, the $\omega$ of the gene and the discordant fraction}]
+\label{pb:b3:molecular-evolution:1}
+Data: human--chimpanzee neutral divergence $d = 0.012$; split
+\qty{6.5}{Myr} ago; generation \qty{25}{yr}; diploid genome $6\times
+10^{9}$ bases, \qty{1.5}{\%} coding. Ancestral population $N =
+\num{50000}$. Gene: 400 codons, 920 nonsynonymous and 280 synonymous
+sites; human--mouse differences 46 nonsynonymous and 84 synonymous.
+Human--mouse split \qty{90}{Myr}. Globin: $\alpha$ and $\beta$ differ at
+\qty{55}{\%} of amino-acid sites (raw); haemoglobin rate \num{1e-9} per
+site per year. Apes: $T$ between the gorilla and chimpanzee splits
+\num{80000} generations. Haldane's limit: one selected substitution per
+300 generations.
+
+\medskip
+\noindent\textbf{Part I --- The rate.}
+\begin{enumerate}
+  \item From $d = 2kT$, compute $k$ per site per year, then $\mu$ per
+        site per generation.
+  \item New mutations per diploid genome per generation, and how many of
+        them fall in coding sequence.
+  \item Substitutions fixed per generation in the whole genome at the
+        neutral rate (the population fixes $\mu$ per site per
+        generation). Compare with Haldane's limit and draw Kimura's
+        conclusion.
+  \item In a population of $N = \num{50000}$, how many new neutral
+        mutations arise per site per generation in the whole population,
+        and what fraction of them will ever fix?
+  \item How long does a neutral mutation destined to fix take, in
+        generations and years? Compare with the time since the
+        human--chimpanzee split.
+  \item Explain why, despite question~5, the divergence between two
+        species measures the time since their split and not the time
+        since their alleles fixed.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Selection's odds.}
+\begin{enumerate}[resume]
+  \item \omterm{thm:b3:molecular-evolution:neutral}{Fixation probability} of a neutral mutation in $N = \num{50000}$,
+        and of one with $s = 0.001$, $s = 0.01$, $s = 0.1$.
+  \item For which $s$ is $4Ns = 1$? Interpret the boundary.
+  \item A deleterious mutation with $s = -0.001$: \omterm{thm:b3:molecular-evolution:neutral}{fixation probability}
+        relative to neutral. And $s = -10^{-5}$?
+  \item If a fraction $10^{-5}$ of new mutations in a gene are
+        beneficial with $s = 0.01$ and the rest neutral, what fraction of
+        the substitutions in that gene are adaptive? Comment on how
+        rarely selection shows in the sequence even when it acts.
+  \item Compute $p_{N}$ and $p_{S}$ for the human--mouse gene, correct
+        each with Jukes--Cantor, and give $\omega$.
+  \item Interpret $\omega$; and estimate the neutral rate the gene's
+        $d_{S}$ implies (per site per year) using the split time. Is it
+        consistent with question~1?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Clocks and copies.}
+\begin{enumerate}[resume]
+  \item Correct the $\alpha$--$\beta$ globin difference for multiple
+        hits (use $d = -\ln(1 - p)$, the protein version with many
+        states), and date the duplication with the haemoglobin rate.
+  \item The date falls near the origin of jawed vertebrates
+        (\qtyrange{450}{500}{Myr}). What does having separate $\alpha$
+        and $\beta$ chains allow that a single chain does not?
+  \item Fibrinopeptides change at $8\times 10^{-9}$ per site per year.
+        Two species split \qty{40}{Myr} ago: expected raw difference?
+        Why is this protein useless for dating splits of
+        \qty{500}{Myr}?
+  \item \omterm{def:b3:chromatin-epigenetics:nucleosome}{Histone} H4 changes at $10^{-11}$: how many substitutions in 100
+        sites over \qty{1000}{Myr}? Why is it useless for dating recent
+        splits?
+  \item A duplicate gene drifts with $\omega = 1$ from the moment of
+        duplication. If \qty{4}{\%} of substitutions in coding sequence
+        create stops, and the gene has 1200 sites at rate $2\times
+        10^{-9}$ per site per year, estimate the expected time to the
+        first stop codon.
+  \item Why does \omterm{def:b3:genomics:comparative}{whole-genome duplication} give duplicates a better
+        chance of survival than a single tandem duplication?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Trees within trees.}
+\begin{enumerate}[resume]
+  \item Probability that a human and a chimpanzee lineage fail to
+        coalesce in the \num{80000} generations before the gorilla split.
+  \item Fraction of \omterm{prop:b3:molecular-evolution:ils}{gene trees} discordant with the \omterm{prop:b3:molecular-evolution:ils}{species tree}.
+        Observed: about \qty{30}{\%}. Consistent?
+  \item Of the discordant trees, what fraction group human with
+        gorilla, and what fraction chimpanzee with gorilla? What would a
+        strong departure from equality indicate?
+  \item If the ancestral population had been $N = \num{10000}$, what
+        discordant fraction would you expect? What does the observed
+        fraction therefore say about our ancestors' numbers?
+  \item Why does concatenating a thousand genes into one \omterm{def:b3:bioinformatics:alignment}{alignment} give
+        a confident but possibly wrong tree, and what does a coalescent
+        method do instead?
+  \item Neanderthal DNA in non-African humans is about \qty{2}{\%} and
+        the trees carrying it group some Europeans with Neanderthals more
+        often than Africans. Why is this not \omterm{prop:b3:molecular-evolution:ils}{incomplete lineage sorting}?
+  \item Summarise: $\mu$ (question~1), $\omega$ of the gene
+        (question~11), and the discordant fraction (question~20).
+\end{enumerate}
+\end{problem}

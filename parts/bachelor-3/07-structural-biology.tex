@@ -1,6 +1,672 @@
 \chapter{Structural Biology of Proteins}\label{ch:b3:structural-biology}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+Max Perutz began work on the structure of haemoglobin in 1937 and
+published it in 1960: twenty-two years to see, at a \omterm{def:b3:structural-biology:methods}{resolution} of half
+a nanometre, how four chains of a hundred and fifty amino acids \omterm{def:b3:structural-biology:levels}{fold}
+around four haems. A haemoglobin molecule \omterm{def:b3:structural-biology:levels}{folds} itself in a few
+milliseconds. Between these two facts lies the subject of this
+chapter: what a protein's shape is, why a chain of amino acids has one
+shape rather than another, how it finds that shape so fast among an
+astronomical number of alternatives, what goes wrong when it does not,
+how the shapes are seen --- by X-rays, by magnetic resonance, by
+electrons, and now by computation --- and how a protein moves between
+shapes to do its work, with haemoglobin's switch between a tense and a
+relaxed form as the model for every allosteric protein since.
 
-\emph{This chapter has not been written yet.}
+\section{What a protein's structure is}
+
+\begin{definition}[Levels of structure]\label{def:b3:structural-biology:levels}
+\index{secondary structure}\index{alpha helix}\index{beta sheet}\index{tertiary structure}\index{domain}\index{fold}
+The \emph{primary structure} is the sequence of residues. The
+\emph{secondary structure} is the local regular conformation of the
+backbone, stabilised by hydrogen bonds between backbone carbonyls and
+amides: the \emph{$\alpha$-helix}, a right-handed spiral of $3.6$
+residues per turn, rising \qty{0.15}{nm} per residue (\qty{0.54}{nm}
+per turn), each carbonyl bonded to the amide four residues on; and the
+\emph{$\beta$-sheet}, in which extended strands lie side by side,
+parallel or antiparallel, bonded to their neighbours, the side chains
+alternating above and below the sheet. The \emph{tertiary structure} is
+the fold of a whole chain in three dimensions; a compact, independently
+folding unit of \numrange{50}{250} residues within it is a \emph{domain},
+and the arrangement of a domain's secondary elements is its \emph{fold}.
+The \emph{quaternary structure} is the assembly of several chains:
+haemoglobin's $\alpha_{2}\beta_{2}$. About \num{1300} folds account for
+all known domains, and a few dozen of them --- the Rossmann fold, the
+TIM barrel, the immunoglobulin fold --- for a large fraction of all
+proteins: nature reuses folds and varies their sequences.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=6.4cm, height=6.4cm,
+  xmin=-180, xmax=180, ymin=-180, ymax=180,
+  xlabel={$\phi$ (degrees)}, ylabel={$\psi$ (degrees)},
+  xlabel style={font=\small}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={-180,-90,0,90,180}, ytick={-180,-90,0,90,180},
+  axis lines=box, grid=major, grid style={gray!25},
+  clip=false,
+]
+% beta region
+\fill[omDef!30] (axis cs:-180,90) rectangle (axis cs:-45,180);
+\fill[omDef!30] (axis cs:-180,-180) rectangle (axis cs:-45,-150);
+\node[font=\scriptsize, omDef!60!black] at (axis cs:-112,165) {$\beta$ strands};
+% alpha R region
+\fill[omThm!30] (axis cs:-160,-70) rectangle (axis cs:-45,0);
+\node[font=\scriptsize, omThm!70!black] at (axis cs:-105,-58) {right-handed $\alpha$};
+% alpha L region
+\fill[omMeth!30] (axis cs:45,0) rectangle (axis cs:100,80);
+\node[font=\scriptsize, omMeth!60!black, align=center] at (axis cs:72,40) {left-\\handed};
+\addplot[only marks, mark=*, mark size=1pt, black] coordinates {(-57,-47)};
+\node[font=\scriptsize, anchor=south west] at (axis cs:-52,-44) {$\alpha$: $(-57,-47)$};
+\addplot[only marks, mark=*, mark size=1pt, black] coordinates {(-139,135)};
+\node[font=\scriptsize, anchor=west] at (axis cs:-134,135) {antiparallel $\beta$};
+\end{axis}
+\node[align=left, font=\scriptsize, anchor=west] at (7.0,3.0) {The two backbone torsion angles of each\\residue, $\phi$ (about N--C$_\alpha$) and $\psi$ (about\\C$_\alpha$--C), are restricted by steric clashes\\to the coloured regions. A helix puts every\\residue at one point; a strand, near another.\\Glycine, with no side chain, reaches farther;\\proline, with its ring, is fixed near $\phi = -60$.};
+\end{tikzpicture}
+
+{\small The Ramachandran plot. The shaded regions are the sterically
+allowed combinations of the backbone angles $\phi$ and $\psi$; the
+right-handed $\alpha$-helix and the $\beta$-strand each correspond to a
+small region, and most residues of a folded protein fall in one of
+them.}
+\end{omfigure}
+
+\begin{proposition}[What holds a fold together]\label{prop:b3:structural-biology:forces}
+\index{hydrophobic effect}\index{marginal stability}
+A folded protein is stabilised by the \emph{\omterm{prop:b3:structural-biology:forces}{hydrophobic effect}} ---
+burying non-polar side chains in a core away from water, which frees
+the water molecules that would otherwise be ordered around them --- by
+the hydrogen bonds of the \omterm{def:b3:structural-biology:levels}{secondary structure} and of buried polar
+groups, by van der Waals packing of a core as dense as a crystal, by
+occasional salt bridges, and, in secreted proteins, by disulfide
+bonds. The \omterm{prop:b3:structural-biology:forces}{hydrophobic effect} supplies most of the drive; the hydrogen
+bonds mostly pay for themselves (a backbone bonded to water in the
+unfolded state is bonded to itself in the folded one) and instead
+dictate \emph{which} \omterm{def:b3:structural-biology:levels}{fold}. The net free energy of folding is small,
+$\Delta G \approx -20$ to \qty{-60}{kJ/mol} --- the strength of a
+handful of hydrogen bonds for a molecule with hundreds --- because the
+loss of conformational entropy on folding nearly cancels the gain in
+enthalpy. Proteins are \emph{marginally stable}: a few degrees, a
+change of pH, a single mutation in the core can unfold them, and this
+marginality is what lets them move.
+\end{proposition}
+
+\begin{proof}[Evidence]
+Anfinsen (1961) unfolded ribonuclease~A with urea and a reducing agent,
+breaking its four disulfides and destroying its activity; on removing
+both, the enzyme refolded, re-formed the correct four of the $105$
+possible disulfide pairings, and recovered full activity. No template,
+no enzyme, no information beyond the sequence was present: the native
+structure is the thermodynamically most stable state accessible to the
+chain, and the sequence encodes it. Reoxidising the disulfides while
+the chain was still in urea gave a scrambled mixture with \qty{1}{\%}
+activity, which then unscrambled to the native form when allowed to
+\omterm{def:b3:structural-biology:levels}{fold}: the chain finds the minimum by itself.
+\end{proof}
+
+\section{How a chain finds its fold}
+
+\begin{theorem}[Levinthal's paradox]\label{thm:b3:structural-biology:levinthal}
+\index{Levinthal paradox}\index{folding funnel}
+If each of the $n$ residues of a protein could adopt $k$ backbone
+conformations independently, the chain would have $k^{n}$
+conformations. With $k = 3$ and $n = 100$ that is $3^{100} \approx
+5\times 10^{47}$; sampling them at one per picosecond ($10^{12}$ per
+second) would take $5\times 10^{35}$ seconds, about $10^{28}$ years.
+Proteins of this size \omterm{def:b3:structural-biology:levels}{fold} in milliseconds to seconds. Therefore
+folding is not a search through conformations at random: the energy
+surface is a \emph{funnel}, in which almost every partial conformation
+is biased toward the native state, and the chain descends by local
+moves that are each downhill on average.
+\end{theorem}
+\begin{proof}
+The count is the multiplication principle; the time is the count
+divided by the sampling rate, $5\times 10^{47}/10^{12} = 5\times
+10^{35}$ s, and a year is $3\times 10^{7}$ s. The conclusion is the
+contrapositive: a random search of that size is impossible in the
+observed time, so the search is not random. What makes it non-random
+is that an interaction formed in one part of the chain persists while
+others form (hydrophobic collapse and helix formation happen in
+microseconds and reduce the space to be searched), and that partially
+correct structures are on average lower in energy than wrong ones, so
+that the descent is guided --- a funnel rather than a golf course with a
+single hole.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % funnel outline
+  \draw[very thick, omDef] (-4,3) .. controls (-3.2,1.5) and (-1.2,0.2) .. (-0.35,-1.2) -- (-0.35,-1.6);
+  \draw[very thick, omDef] (4,3) .. controls (3.2,1.5) and (1.2,0.2) .. (0.35,-1.2) -- (0.35,-1.6);
+  \draw[very thick, omDef] (-0.35,-1.6) -- (0.35,-1.6);
+  % rugged inner lines
+  \draw[omDef!60, thick] (-3.3,2.6) .. controls (-2.9,2.2) and (-2.6,2.6) .. (-2.2,2.0) .. controls (-1.9,1.5) and (-1.7,1.9) .. (-1.4,1.2) .. controls (-1.1,0.7) and (-0.9,0.9) .. (-0.6,0.2);
+  \draw[omDef!60, thick] (3.3,2.6) .. controls (2.9,2.1) and (2.5,2.5) .. (2.1,1.8) .. controls (1.8,1.3) and (1.5,1.6) .. (1.2,1.0) .. controls (1.0,0.6) and (0.8,0.8) .. (0.6,0.2);
+  % axes
+  \draw[->] (-5.9,-1.8) -- (-5.9,3.2) node[above, align=center] {free\\energy};
+  \draw[<->] (-3.9,3.85) -- (3.9,3.85) node[midway, above] {conformational entropy (breadth of the ensemble)};
+  % labels
+  \node[above] at (0,3.05) {unfolded chain: many conformations, high energy};
+  \node[right, align=left] at (3.3,1.4) {local traps: partly\\misfolded intermediates};
+  \node[left, align=right] at (-3.3,1.4) {fast collapse and\\secondary structure};
+  \node[below] at (0,-1.7) {native state: one conformation, lowest energy};
+  \draw[->, thick, omThm] (-2.8,2.4) .. controls (-2.0,1.2) and (-0.8,0.5) .. (-0.15,-1.3);
+  \node[omThm, left] at (-1.5,-0.5) {a folding trajectory};
+\end{tikzpicture}
+
+{\small The \omterm{thm:b3:structural-biology:levinthal}{folding funnel}. Free energy falls and the number of
+available conformations shrinks as the chain approaches the native
+state; the walls are rugged, so a chain can be trapped in a partly
+misfolded intermediate, but the overall slope carries it down in
+milliseconds.}
+\end{omfigure}
+
+\begin{definition}[Chaperones]\label{def:b3:structural-biology:chaperones}
+\index{chaperone}\index{Hsp70}\index{chaperonin}\index{GroEL}
+A \emph{molecular chaperone} is a protein that assists the folding of
+others without becoming part of them or supplying information about
+the \omterm{def:b3:structural-biology:levels}{fold}: it prevents the aggregation that competes with folding in the
+crowded cytoplasm. \emph{Hsp70} binds exposed hydrophobic segments of
+nascent or unfolded chains, releasing them on ATP hydrolysis for
+another attempt; the \emph{chaperonin} GroEL (Hsp60 in mitochondria,
+TRiC in the eukaryotic cytosol) is a double barrel of fourteen subunits
+whose central cavity, capped by GroES, encloses a single chain of up to
+\qty{60}{kDa} in isolation for about ten seconds --- an Anfinsen cage
+--- and ejects it whether folded or not, to try again. About a tenth
+of newly made bacterial proteins pass through GroEL, and a cell whose
+chaperones are overwhelmed --- by heat, which is why most are
+\emph{heat-shock proteins} induced by a rise in temperature --- fills
+with aggregates.
+\end{definition}
+
+\begin{definition}[Amyloid]\label{def:b3:structural-biology:amyloid}
+\index{amyloid}\index{cross-beta}\index{prion}\index{misfolding disease}
+\emph{Amyloid} is an ordered aggregate of protein in which the chains
+stack into unbranched fibrils \qtyrange{5}{10}{nm} wide, the strands of
+each chain running perpendicular to the fibril axis and hydrogen-bonded
+to the strands of the next --- the \emph{cross-$\beta$} structure, the
+same whatever the protein. Almost any protein can form it under
+destabilising conditions; in the \emph{misfolding diseases} particular
+proteins do so in the body: amyloid-$\beta$ and tau in Alzheimer's
+disease, $\alpha$-synuclein in Parkinson's, huntingtin, transthyretin,
+islet amyloid in type~2 diabetes. A \emph{prion} is an amyloid that
+propagates: the misfolded form of the prion protein PrP converts the
+normal form on contact into more of itself, so that the ``infection''
+carries no nucleic acid, only a shape --- the mechanism of scrapie,
+of bovine spongiform encephalopathy and of Creutzfeldt--Jakob disease,
+established by Prusiner from 1982 against long resistance.
+\end{definition}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-07-amyloid-fibrils.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-07-haemoglobin-model.jpg}
+
+{\small Left: \omterm{def:b3:structural-biology:amyloid}{amyloid} fibrils in the electron microscope --- straight,
+unbranched, sometimes twisted, and structurally alike whatever protein
+they are made of. Right: the haemoglobin tetramer, two $\alpha$ and two
+$\beta$ chains, each cradling a haem.}
+\end{omfigure}
+
+\section{Seeing a protein}
+
+\begin{definition}[Structural methods]\label{def:b3:structural-biology:methods}
+\index{X-ray crystallography}\index{NMR spectroscopy}\index{cryo-electron microscopy}\index{resolution}
+\emph{X-ray crystallography} grows a crystal of the protein, exposes
+it to a beam of X-rays and records the diffraction pattern; the
+positions of the spots give the lattice and their intensities, once
+the phases of the waves are recovered, give the electron density of the
+unit cell, into which the chain is built. \emph{Nuclear magnetic
+resonance} (NMR) measures, in solution, the couplings between the
+nuclei of atoms close in space, from which distances and hence a
+structure are computed; it works for proteins under about \qty{40}{kDa}
+and reports their motions. \emph{Cryo-electron microscopy} images
+thousands to millions of single molecules frozen in a thin film of
+vitreous ice, each in a random orientation, and reconstructs the
+three-dimensional density by combining them; since direct electron
+detectors (2013) it reaches atomic resolution and needs no crystal, so
+that large complexes, membrane proteins and flexible assemblies that
+never crystallised are now solved routinely. The \emph{resolution} of a
+structure is the smallest spacing at which two features are separated:
+at \qty{0.35}{nm} the backbone and large side chains are placed, at
+\qty{0.2}{nm} every atom, at \qty{0.1}{nm} hydrogens.
+\end{definition}
+
+\begin{proof}[Evidence]
+Kendrew (1958) obtained the first structure of a protein, sperm-whale
+myoglobin, at \qty{0.6}{nm} --- a sausage of unexpected irregularity,
+``more complicated and less symmetrical than anyone had predicted''
+--- and at \qty{0.2}{nm} in 1960, when the $\alpha$-helices Pauling had
+proposed from model-building in 1951 were seen for the first time.
+Perutz (1960) solved haemoglobin at \qty{0.55}{nm} using the
+heavy-atom method he had devised to obtain the phases: mercury atoms
+attached to the protein change the intensities in a way that reveals
+the missing information. Comparing the oxygenated and deoxygenated
+forms (1970) he saw the subunits rotate against one another by
+\qty{15}{\degree} on binding oxygen, the first allosteric transition
+observed at atomic scale.
+\end{proof}
+
+\begin{omfigure}
+\includegraphics[width=0.30\linewidth]{images/book5/perutz.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.30\linewidth]{images/book5/ai/b5-07-protein-crystals.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.30\linewidth]{images/book5/ai/b5-07-cryo-em.jpg}
+
+{\small Max Perutz in 1962, the year of his Nobel prize for the
+structure of haemoglobin (Associated Press, public \omterm{def:b3:structural-biology:levels}{domain}). Centre:
+protein crystals in a hanging drop, the starting point of
+crystallography. Right: a cryo-electron microscope, the instrument
+that made crystals unnecessary.}
+\end{omfigure}
+
+\begin{method}[Solving a structure by crystallography]\label{met:b3:structural-biology:crystallography}
+\index{Bragg's law}\index{phase problem}
+(1) Purify milligrams of the protein and screen hundreds of conditions
+(precipitant, pH, salt) for crystals; (2) flash-freeze a crystal and
+collect diffraction images at a synchrotron as it rotates in the beam;
+(3) index the spots to obtain the unit cell and symmetry; the highest
+angle at which spots are seen sets the \omterm{def:b3:structural-biology:methods}{resolution} by \omterm{met:b3:structural-biology:crystallography}{Bragg's law}, $d =
+\lambda/(2\sin\theta)$; (4) solve the \emph{phase problem} --- the
+detector records intensities but not phases --- by heavy atoms, by the
+anomalous scattering of selenium in selenomethionine, or, for a protein
+similar to a known one, by molecular replacement, placing the known
+model in the cell; (5) compute the electron density, build the chain
+into it and refine the model against the data until the disagreement
+($R$-factor) is small; (6) validate: geometry, Ramachandran outliers,
+and the fit to data the model was not refined against.
+\end{method}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % crystal
+  \draw[thick, fill=omDef!20] (0,0) -- (1.4,0) -- (1.9,0.6) -- (0.5,0.6) -- cycle; \draw[thick, fill=omDef!30] (0,0) -- (0.5,0.6) -- (0.5,1.6) -- (0,1.0) -- cycle; \draw[thick, fill=omDef!25] (0.5,0.6) -- (1.9,0.6) -- (1.9,1.6) -- (0.5,1.6) -- cycle;
+  \node[below] at (0.95,-0.1) {crystal: $10^{12}$ molecules in register};
+  % beam
+  \draw[->, very thick, omThm] (-2.2,0.9) -- (-0.1,0.9); \node[above] at (-1.2,0.95) {X-rays, $\lambda \approx \qty{0.1}{nm}$};
+  % diffracted beams
+  \foreach \a in {-25,-12,5,18,30} \draw[->, omThm, thick] (1.9,0.9) -- ++(\a:3.2);
+  % detector
+  \draw[thick] (5.2,-1.2) rectangle (5.6,3.0); \node[right, align=left] at (5.7,2.6) {detector: spots at\\angles $\theta$, with\\intensities $I$};
+  \foreach \y in {-0.6,-0.1,0.6,1.2,1.9,2.4} \fill[black] (5.4,\y) circle (0.06);
+  % arrow to density
+  \draw[->, very thick] (7.4,0.9) -- (8.6,0.9) node[midway, above, align=center] {phases\\recovered};
+  \node[right, align=left] at (8.7,1.4) {electron density};
+  \draw[omDef, thick] (8.8,0.4) .. controls (9.1,1.1) and (9.5,0.2) .. (9.8,0.8) .. controls (10.1,1.3) and (10.4,0.3) .. (10.7,0.9);
+  \node[right, align=left] at (8.7,-0.4) {model built into it,\\refined, validated};
+  % Bragg
+  \node[anchor=north west, align=left] at (-2.2,-0.7) {Bragg: $2d\sin\theta = \lambda$ ---\\the largest $\theta$ observed fixes the resolution $d$};
+\end{tikzpicture}
+
+{\small From crystal to model. The regular lattice scatters X-rays into
+discrete spots; the spot at the largest angle sets the \omterm{def:b3:structural-biology:methods}{resolution};
+recovering the phases turns the intensities into an electron density
+map, into which the chain is built.}
+\end{omfigure}
+
+\begin{remark}[Prediction has joined the methods]\label{rem:b3:structural-biology:prediction}
+Since 2020 a protein's structure is predicted from its sequence with
+an accuracy that often rivals a \qty{0.3}{nm} experimental structure
+(\cref{ch:b3:bioinformatics}). The prediction is a hypothesis about a
+static native state; the experimental methods remain the arbiter, and
+the only source of information about ligands, conformational changes,
+complexes and the dynamics discussed below. Their roles have changed
+--- a predicted model solves the phase problem by molecular
+replacement, and directs which experiments are worth doing --- rather
+than one replacing the other.
+\end{remark}
+
+\section{Allostery: haemoglobin as the model}
+
+\begin{definition}[Allostery and cooperativity]\label{def:b3:structural-biology:allostery}
+\index{allostery}\index{cooperativity}\index{Hill coefficient}\index{T state}\index{R state}
+A protein is \emph{allosteric} when the binding of a ligand at one
+site changes the affinity of another site, through a change of
+conformation transmitted across the molecule. When the two sites bind
+the same ligand and the effect is positive, binding is
+\emph{cooperative}: the fractional saturation $Y$ rises with ligand
+concentration as a sigmoid rather than a hyperbola, described
+empirically by the \emph{Hill equation} $Y = [S]^{n_{H}}/(K^{n_{H}} +
+[S]^{n_{H}})$ with a \emph{Hill coefficient} $n_{H} > 1$ (haemoglobin:
+$n_{H} \approx 2.8$ for its four sites; myoglobin, one site: $n_{H} =
+1$). Haemoglobin exists in two quaternary conformations, the
+\emph{T state} (tense, low affinity, favoured when no oxygen is bound)
+and the \emph{R state} (relaxed, high affinity), and switches between
+them as a whole; protons, carbon dioxide and 2,3-bisphosphoglycerate
+stabilise T and so lower the affinity --- the \omterm{prop:b3:structural-biology:mechanism}{Bohr effect}, by which
+working tissue, acid and warm, takes more oxygen from the blood.
+\end{definition}
+
+\begin{theorem}[The Monod--Wyman--Changeux model]\label{thm:b3:structural-biology:mwc}
+\index{Monod--Wyman--Changeux model}\index{concerted model}
+Let a protein of $n$ identical sites exist in two conformations,
+$T$ and $R$, in equilibrium $L = [T_{0}]/[R_{0}]$ in the absence of
+ligand, every site of $R$ binding the ligand with dissociation constant
+$K_{R}$ and every site of $T$ with $K_{T}$, $c = K_{R}/K_{T} < 1$. All
+sites of a molecule switch together (the transition is
+\emph{concerted}). Then with $\alpha = [S]/K_{R}$ the fractional
+saturation is
+\[
+Y = \frac{\alpha(1+\alpha)^{n-1} + Lc\alpha(1+c\alpha)^{n-1}}
+{(1+\alpha)^{n} + L(1+c\alpha)^{n}},
+\]
+and the fraction of molecules in the $R$ state is $\bar R =
+(1+\alpha)^{n}/\bigl[(1+\alpha)^{n} + L(1+c\alpha)^{n}\bigr]$. For $L
+\gg 1$ and $c \ll 1$ the curve is sigmoid: the first ligands bind to the
+scarce, high-affinity $R$ molecules and tip the equilibrium, so that
+binding recruits more $R$ and the affinity of the remaining sites
+rises --- \omterm{def:b3:structural-biology:allostery}{cooperativity} without any direct interaction between sites.
+\end{theorem}
+\begin{proof}
+The species with $i$ ligands bound in the $R$ form has concentration
+$[R_{0}]\binom{n}{i}\alpha^{i}$ (each of the $\binom{n}{i}$ choices of
+occupied sites contributes $([S]/K_{R})^{i}$ by the law of mass
+action), and in the $T$ form $[T_{0}]\binom{n}{i}(c\alpha)^{i}$, since
+$[S]/K_{T} = c\alpha$. Summing over $i$ by the binomial theorem, the
+total protein is $[R_{0}]\bigl[(1+\alpha)^{n} + L(1+c\alpha)^{n}\bigr]$
+and the total ligand bound is $[R_{0}]\sum_{i} i\binom{n}{i}\bigl[
+\alpha^{i} + L(c\alpha)^{i}\bigr] = [R_{0}]\,n\bigl[\alpha(1+\alpha)^{n-1}
++ Lc\alpha(1+c\alpha)^{n-1}\bigr]$, using $\sum_{i} i\binom{n}{i}x^{i} =
+nx(1+x)^{n-1}$. Dividing bound ligand by $n$ times total protein gives
+$Y$; the $R$ fraction is the $R$ terms over the total. When $\alpha$ is
+small the $T$ terms dominate the denominator (because $L \gg 1$) and
+$Y \approx c\alpha$, the low $T$ affinity; when $\alpha$ is large enough
+that $(1+\alpha)^{n} > L(1+c\alpha)^{n}$ the $R$ terms take over and the
+affinity is $K_{R}$: the switch between the two regimes is the sigmoid.
+\end{proof}
+
+\begin{example}[Haemoglobin in numbers]\label{ex:b3:structural-biology:hb-numbers}
+Take $n = 4$, $K_{R} = \qty{1}{mmHg}$, $c = 0.01$ (so $K_{T} =
+\qty{100}{mmHg}$) and $L = 3\times 10^{5}$. At the partial pressure of
+oxygen in arterial blood, \qty{100}{mmHg}, $\alpha = 100$ and $Y =
+0.97$; at \qty{40}{mmHg}, the venous value at rest, $Y = 0.78$; at
+\qty{26}{mmHg}, $Y = 0.52$ --- the model reproduces the half-saturation
+pressure of \qty{26}{mmHg}; at \qty{20}{mmHg}, in an exercising
+muscle, $Y = 0.35$. A non-cooperative carrier of the same
+half-saturation pressure would give $100/126 = 0.79$ in the lungs and
+$20/46 = 0.43$ in the muscle, unloading $0.36$ of its capacity where
+haemoglobin unloads $0.62$. \omterm{def:b3:structural-biology:allostery}{Cooperativity} is what makes a carrier that
+loads fully at one pressure and unloads mostly at a pressure only five
+times lower.
+\end{example}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.7\linewidth, height=5.8cm,
+  axis x line=bottom, axis y line=left,
+  xmin=0, xmax=120, ymin=0, ymax=1.05,
+  xlabel={oxygen partial pressure (mmHg)}, ylabel={saturation $Y$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  ylabel style={font=\small},
+  tick label style={font=\small}, xtick={0,20,40,60,80,100,120}, ytick={0,0.5,1},
+  clip=false,
+]
+\addplot[very thick, omThm, domain=0.1:120, samples=120] {(x*(1+x)^3 + 300000*0.01*x*(1+0.01*x)^3)/((1+x)^4 + 300000*(1+0.01*x)^4)};
+\addplot[very thick, omDef, domain=0:120, samples=60] {x/(x+26)};
+\addplot[dashed, gray] coordinates {(26,0) (26,0.52)}; \addplot[dashed, gray] coordinates {(0,0.52) (26,0.52)};
+\draw[gray, dashed] (axis cs:20,0) -- (axis cs:20,0.35); \draw[gray, dashed] (axis cs:100,0) -- (axis cs:100,0.97);
+\node[font=\scriptsize, omThm, anchor=north west] at (axis cs:50,0.15) {haemoglobin (MWC, $n = 4$, $L = 3\times 10^{5}$, $c = 0.01$)};
+\node[font=\scriptsize, omDef, anchor=north east] at (axis cs:118,0.72) {one site, same $P_{50}$};
+\node[font=\scriptsize, anchor=south] at (axis cs:20,1.0) {muscle}; \node[font=\scriptsize, anchor=south] at (axis cs:100,1.0) {lung};
+\end{axis}
+\end{tikzpicture}
+
+{\small Oxygen saturation of haemoglobin computed from the
+Monod--Wyman--Changeux equation with the parameters of the example
+(red), against a single-site carrier of the same half-saturation
+pressure (blue). Between lung and working muscle the cooperative
+carrier unloads nearly twice as much.}
+\end{omfigure}
+
+\begin{proposition}[Mechanism of the switch]\label{prop:b3:structural-biology:mechanism}
+\index{Bohr effect}\index{2,3-bisphosphoglycerate}
+In deoxyhaemoglobin the iron sits slightly out of the haem plane,
+pulled toward the proximal histidine, and the haem is domed. Oxygen
+binding flattens the haem and draws the iron, and with it the
+histidine and the helix it belongs to, by about \qty{0.06}{nm} toward
+the haem; that shift is amplified at the interface between the
+$\alpha_{1}\beta_{1}$ and $\alpha_{2}\beta_{2}$ dimers, which rotate by
+\qty{15}{\degree} and break the salt bridges that hold the \omterm{def:b3:structural-biology:allostery}{T state}.
+The effectors act on those same bridges: protons bind histidines whose
+bridges exist only in T (the \omterm{prop:b3:structural-biology:mechanism}{Bohr effect}), carbon dioxide forms
+carbamates with the amino termini that stabilise T, and
+2,3-bisphosphoglycerate, a strongly negative small molecule, sits in
+the central cavity between the $\beta$ chains, which is wide enough
+only in T. Fetal haemoglobin, with $\gamma$ chains that bind it less
+well, has a higher affinity than the mother's and draws oxygen across
+the placenta.
+\end{proposition}
+
+\section{Proteins in motion}
+
+\begin{definition}[Disorder and dynamics]\label{def:b3:structural-biology:disorder}
+\index{intrinsically disordered protein}\index{conformational ensemble}\index{biomolecular condensate}
+An \emph{intrinsically disordered} region has no stable \omterm{def:b3:structural-biology:levels}{fold} on its own
+and exists as an ensemble of rapidly interconverting conformations,
+often folding only when it meets its partner; about a third of human
+proteins carry a disordered region of more than thirty residues, and
+they are enriched in signalling and regulation, where a flexible
+segment can be phosphorylated at many sites, bind several partners in
+turn, and act as a linker. Folded proteins move too: side chains
+rotate in picoseconds, loops open in nanoseconds to microseconds,
+\omterm{def:b3:structural-biology:levels}{domains} hinge in microseconds to milliseconds, and an enzyme's
+catalytic cycle is a choreography of such motions rather than a static
+lock-and-key. A crystal structure is one snapshot of a
+\emph{conformational ensemble}; NMR and molecular simulation see the
+rest. Multivalent disordered proteins and RNAs can also demix from the
+cytoplasm into liquid droplets --- \emph{biomolecular condensates} such
+as nucleoli, stress granules and P bodies --- that concentrate reactions
+without a membrane, and whose ageing into solid aggregates is one route
+to the \omterm{def:b3:structural-biology:amyloid}{amyloid} diseases.
+\end{definition}
+
+\begin{remark}[Structure and function]\label{rem:b3:structural-biology:sf}
+The lesson of sixty years of structures is double. A \omterm{def:b3:structural-biology:levels}{fold} is a
+solution to a physical problem --- bind this, catalyse that, transmit a
+signal over four nanometres --- and knowing the structure often makes
+the mechanism plain, as it did for the haem's iron and for the
+oxygen-driven rotation of haemoglobin's dimers. And a \omterm{def:b3:structural-biology:levels}{fold} is a
+historical object: the same few hundred architectures, tinkered with,
+duplicated and fused, serve for the whole diversity of protein
+function, so that the structure of a protein from a bacterium will tell
+one, often, how the human cousin works.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:structural-biology:1}
+Define the four levels of protein structure and give the example of
+each in haemoglobin.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:structural-biology:2}
+An $\alpha$-helix contains $36$ residues. How long is it, how many
+turns does it make, and how many backbone hydrogen bonds hold it
+(each residue's carbonyl bonds to the amide four residues on)?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:structural-biology:3}
+What did Anfinsen's refolding of ribonuclease show, and why was it
+important to do the experiment without any cellular component present?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:structural-biology:4}
+Rank crystallography, NMR and \omterm{def:b3:structural-biology:methods}{cryo-electron microscopy} by the size of
+protein each handles best, and say which gives information about
+motion.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:structural-biology:5}
+Redo Levinthal's count for a protein of $150$ residues with $k = 2$,
+and for a peptide of $20$ residues with $k = 3$. For which of the two
+is a random search conceivable within a second at $10^{12}$ trials per
+second?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:structural-biology:6}
+Using the MWC equation with $n = 2$, $L = 100$, $c = 0.01$, compute
+$Y$ at $\alpha = 1$, $10$ and $100$, and compare with a single site of
+dissociation constant $K_{R}$ ($Y = \alpha/(1+\alpha)$). Where does the
+\omterm{def:b3:structural-biology:allostery}{cooperativity} show?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:structural-biology:7}
+Explain, with the MWC model, why 2,3-bisphosphoglycerate lowers the
+oxygen affinity of haemoglobin, which parameter of the model it
+changes, and why stored blood, which loses the compound, delivers
+oxygen poorly when transfused.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:structural-biology:8}
+A crystal diffracts to a maximum angle $\theta = \qty{15}{\degree}$
+with X-rays of wavelength \qty{0.1}{nm}. What is the \omterm{def:b3:structural-biology:methods}{resolution}? What
+features of the protein will be visible? Which angle would be needed
+for \qty{0.12}{nm}?
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:structural-biology:9}
+A mutation replaces a buried leucine by a lysine. Predict its effect
+on stability, using \cref{prop:b3:structural-biology:forces}, and
+explain why the same substitution on the surface would be harmless.
+Then explain why a protein with $\Delta G_{\text{fold}} =
+\qty{-30}{kJ/mol}$ is not ``very stable'' although the number looks
+large.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:structural-biology:10}
+Derive the fraction of molecules in the $R$ state, $\bar R$, from the
+species counted in the proof of \cref{thm:b3:structural-biology:mwc},
+and show that for $c \to 0$ the ligand concentration at which half the
+molecules are in $R$ satisfies $(1+\alpha)^{n} = L$. Compute this
+$\alpha$ for haemoglobin's parameters and compare with $P_{50}$.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:structural-biology:11}
+\omterm{def:b3:structural-biology:amyloid}{Prions} transmit a shape. Explain why the ``protein-only'' hypothesis
+was resisted, what experiment would refute it, and what evidence
+(resistance of infectivity to nucleases and ultraviolet light,
+sensitivity to protein denaturants, synthetic \omterm{def:b3:structural-biology:amyloid}{prions}) supports it. Why
+does a \omterm{def:b3:structural-biology:amyloid}{prion} need a seed?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:structural-biology:12}
+A protein family has kept its \omterm{def:b3:structural-biology:levels}{fold} while its sequences have diverged
+to \qty{15}{\%} identity. Explain why structure is more conserved than
+sequence, what kind of residues are the ones conserved, and how this
+is exploited both by profile methods (\cref{ch:b3:bioinformatics}) and
+by the design of new proteins.
+\end{exercise}
+
+\section{Problem: The Fold of a Globin}
+
+\begin{problem}[{Weekend problem --- a globin's helices measured, its
+folding timed against Levinthal, its oxygen binding computed from the
+two-state model, and its structure solved from a crystal, ending on the
+saturation difference between lung and muscle, the Levinthal time and
+the resolution of the map}]
+\label{pb:b3:structural-biology:1}
+Data: a globin chain of $150$ residues, mean residue mass \qty{110}{Da},
+\qty{75}{\%} of residues in eight $\alpha$-helices; helix rise
+\qty{0.15}{nm} per residue, $3.6$ residues per turn. Partial specific
+volume of protein \qty{0.73}{cm^3/g}. MWC parameters for haemoglobin:
+$n = 4$, $K_{R} = \qty{1}{mmHg}$, $c = 0.01$, $L = 3\times 10^{5}$.
+X-ray wavelength \qty{0.1}{nm}; unit cell a cube of edge \qty{6}{nm};
+crystal a cube of edge \qty{100}{\micro m}.
+
+\medskip
+\noindent\textbf{Part I --- Anatomy of a chain.}
+\begin{enumerate}
+  \item How many residues are in helices? What total length of helix
+        is that, and how many turns?
+  \item How many backbone hydrogen bonds do the helices contain,
+        counting one per residue beyond the first four of each helix?
+  \item The chain's mass and its volume from the partial specific
+        volume; the radius of a sphere of that volume.
+  \item The extended chain would be \qty{0.36}{nm} per residue long.
+        Compare its length with the sphere's diameter: by what factor
+        does folding compact the chain?
+  \item The eight helices average $14$ residues. If the residues were
+        laid end to end, what fraction of the extended length is
+        helical, and how does the helix shorten it?
+  \item A globin buries about $40$ non-polar side chains in its core.
+        Taking \qty{4}{kJ/mol} of hydrophobic stabilisation per buried
+        side chain and a conformational entropy cost of
+        \qty{0.9}{kJ/mol} per residue on folding (all $150$), estimate
+        the net $\Delta G$ of folding and compare with the range in
+        \cref{prop:b3:structural-biology:forces}.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- Finding the \omterm{def:b3:structural-biology:levels}{fold}.}
+\begin{enumerate}[resume]
+  \item Compute the Levinthal count for $150$ residues with $k = 3$
+        and the time to sample it at $10^{12}$ per second.
+  \item The globin \omterm{def:b3:structural-biology:levels}{folds} in \qty{10}{ms}. How many conformations, at
+        most, can it have visited? What fraction of the count is that?
+  \item Suppose instead each helix forms independently in
+        \qty{1}{\micro s}, and the eight formed helices then find their
+        packing among $8!$ orderings sampled at $10^{6}$ per second.
+        Estimate the folding time. Is this a funnel?
+  \item A \omterm{def:b3:structural-biology:chaperones}{chaperonin} encloses a chain for \qty{10}{s} per cycle and
+        releases it folded with probability $0.3$ per cycle. What is
+        the expected number of cycles, and the expected time, to \omterm{def:b3:structural-biology:levels}{fold} a
+        difficult substrate? What fraction is still unfolded after a
+        minute?
+  \item A destabilising mutation raises the unfolded fraction at
+        \qty{37}{\celsius} from $10^{-4}$ to $10^{-2}$. With $\Delta G =
+        -RT\ln(K)$ and $K = [\text{folded}]/[\text{unfolded}]$, by how
+        much did $\Delta G_{\text{fold}}$ change?
+  \item Explain why a hundredfold more unfolded protein can be the
+        difference between health and \omterm{def:b3:structural-biology:amyloid}{amyloid} disease, using the
+        need for a seed.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Binding oxygen.}
+\begin{enumerate}[resume]
+  \item Compute $Y$ from the MWC equation at $\alpha = 100$ (lung) and
+        $\alpha = 20$ (working muscle).
+  \item Compute the fraction of molecules in the $R$ state at those two
+        pressures.
+  \item How much of the loaded oxygen is unloaded between lung and
+        muscle? Compare with a single-site carrier of half-saturation
+        pressure \qty{26}{mmHg}.
+  \item Blood carries \qty{150}{g} of haemoglobin per litre, each gram
+        binding \qty{1.34}{mL} of oxygen. How many millilitres of
+        oxygen per litre does haemoglobin deliver to the muscle, from
+        question 15? A resting body consumes \qty{250}{mL/min}: what
+        blood flow does that require at rest (unloading from $0.97$ to
+        $0.78$)?
+  \item Bisphosphoglycerate raises $L$ to $3\times 10^{6}$. Recompute
+        $Y$ at $\alpha = 40$ and say what this does to delivery at
+        rest.
+  \item Fetal haemoglobin has, in effect, $L = 3\times 10^{4}$. Compute
+        its $Y$ at the placental pressure of \qty{30}{mmHg}, compare
+        with the mother's, and explain the transfer.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Seeing it.}
+\begin{enumerate}[resume]
+  \item How many unit cells does the crystal contain? If each cell
+        holds four globin chains, how many molecules diffract together?
+  \item Spots are seen to $\theta = \qty{14.5}{\degree}$. What is the
+        \omterm{def:b3:structural-biology:methods}{resolution}, and will the side chains be placed?
+  \item What angle would give \qty{0.15}{nm}? Why does a poorly
+        ordered crystal diffract only to low angles?
+  \item In \omterm{def:b3:structural-biology:methods}{cryo-electron microscopy} the signal of the averaged image
+        grows as the square root of the number of particles. If
+        \num{10000} particles give \qty{0.6}{nm}, and \omterm{def:b3:structural-biology:methods}{resolution}
+        improves as the inverse of the signal, how many particles
+        give \qty{0.3}{nm}?
+  \item \omterm{def:b3:structural-biology:methods}{Cryo-electron microscopy} needs no crystal. Name two kinds of
+        protein or complex for which this decides whether a structure
+        can be obtained at all, and explain why.
+  \item A predicted model of the globin differs from the crystal
+        structure by \qty{0.1}{nm} on average over the backbone. Name
+        two things the prediction cannot supply that the crystal did.
+  \item Summarise: the unloading between lung and muscle (question~15),
+        the Levinthal time for $150$ residues (question~7), and the
+        \omterm{def:b3:structural-biology:methods}{resolution} of the map (question~20).
+\end{enumerate}
+\end{problem}

@@ -1,6 +1,640 @@
 \chapter{Cell Cycle Control and Programmed Cell Death}\label{ch:b3:cell-cycle-apoptosis}
 
-% TODO: course, examples, figures, and 8--12 graded exercises
-% (see CONTRIBUTING.md). Placeholder until written.
+About a hundred billion cells of your body will die today, on purpose,
+and a hundred billion will be born to replace them; the lining of your
+gut is renewed every five days, and your red cells every four months.
+A tadpole loses its tail without bleeding; the webbing between a human
+embryo's fingers vanishes in the eighth week; half the neurons ever
+made in a brain are killed before birth. Every one of these deaths is
+executed by the cell itself, on a programme, and every one of the
+births is licensed by a control system that decides, at two or three
+points in the cycle, whether the cell may proceed. The two programmes
+--- division and suicide --- are the subject of this chapter. They were
+worked out in yeast, frog eggs, sea urchins and a worm with exactly
+$1090$ somatic cells of which exactly $131$ die, and they turned out to
+be the same in humans, where their failures are cancer on one side and
+degeneration on the other.
 
-\emph{This chapter has not been written yet.}
+\section{The engine of the cycle}
+
+\begin{definition}[Cyclins and cyclin-dependent kinases]\label{def:b3:cell-cycle-apoptosis:cdk}
+\index{cyclin}\index{cyclin-dependent kinase}\index{anaphase-promoting complex}\index{cell cycle}
+The cell cycle --- G1, S (replication), G2, M (mitosis) --- is driven by
+a family of protein kinases, the \emph{cyclin-dependent kinases}
+(CDKs), whose catalytic subunits are present throughout the cycle but
+active only when bound to a \emph{cyclin}, a regulatory subunit whose
+concentration rises and falls in a fixed order: cyclin D with Cdk4/6 in
+G1 in response to growth factors, cyclin E with Cdk2 at the G1/S
+transition, cyclin A with Cdk2 through S, cyclin B with Cdk1 at the
+entry into mitosis. Each cyclin--CDK phosphorylates the proteins of its
+phase --- replication origins, lamins, condensins, the enzymes of
+spindle assembly --- and each is switched off by the destruction of
+its cyclin: ubiquitin ligases (SCF in G1/S, the \emph{anaphase-promoting
+complex}, APC/C, in mitosis) tag the cyclins for the proteasome. The
+activity of Cdk1 is further gated by an inhibitory phosphorylation put
+on by the kinase Wee1 and removed by the phosphatase Cdc25, and by
+small inhibitor proteins (p21, p27, p16) that bind the complexes. The
+cycle is thus an ordered sequence of kinase waves, each wave ending in
+the proteolysis of what produced it.
+\end{definition}
+
+\begin{proof}[Evidence]
+Three lines converged. Hartwell (1970s) isolated temperature-sensitive
+\emph{cdc} mutants of budding yeast, each arrested at one stage with a
+characteristic bud size, and defined \emph{Start}, the point in G1 after
+which a cell is committed to a cycle. Nurse (1980s) found in fission
+yeast that \emph{cdc2} controlled the timing of mitosis and that the
+human gene, put into the yeast, rescued the mutant: the kinase was
+Cdk1, conserved from yeast to man. Hunt (1983) found in sea urchin
+eggs a protein that accumulated through each cycle and was destroyed
+abruptly at every division, and called it \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin}. The frog egg had
+meanwhile yielded a ``maturation-promoting factor'' that drove any
+nucleus into mitosis; it was \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B bound to Cdk1. Rao and Johnson
+(1970) had shown by fusing cells that an S-phase cell drives a G1
+nucleus into replication, while a G2 nucleus waits --- the cytoplasm
+carries the signal, and a replicated nucleus cannot be made to
+replicate again.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % cycle circle with phases
+  \draw[very thick, omDef!50] (0,0) circle (2.2);
+  \foreach \a/\b/\col/\lab/\r in {90/200/omDef!25/G1/1.55, 200/270/omProp!30/S/1.55, 270/315/omMeth!30/G2/1.55, 315/450/omThm!30/M/1.55} {
+    \fill[\col] (0,0) -- (\a:2.2) arc[start angle=\a, end angle=\b, radius=2.2] -- cycle;
+    \node[font=\small\bfseries] at ({(\a+\b)/2}:\r) {\lab};
+  }
+  \fill[white] (0,0) circle (1.0);
+  \draw[very thick, omDef!50] (0,0) circle (2.2);
+  % cyclin-CDK labels around
+  \node[left, align=right] at (-2.4,1.2) {cyclin D--Cdk4/6\\growth factors, Rb off};
+  \node[left, align=right] at (-2.4,-1.0) {cyclin E--Cdk2\\origins fire};
+  \node[anchor=north east, align=right] at (-1.3,-2.2) {cyclin A--Cdk2\\replication};
+  \node[right, align=left] at (2.4,-1.0) {cyclin B--Cdk1\\entry into mitosis};
+  \node[right, align=left] at (2.4,1.3) {APC/C destroys cyclin B\\and securin: anaphase, exit};
+  % checkpoints as bars
+  \foreach \a in {160,270,20} \draw[very thick, omThm] (\a:1.95) -- (\a:2.45);
+  \node[align=center, anchor=south east] at (-1.2,2.35) {restriction point:\\growth factors?};
+  \node[align=left, anchor=west] at (2.55,0.35) {spindle checkpoint:\\all kinetochores attached?};
+  \node[align=center, anchor=north] at (1.5,-2.55) {G2/M checkpoint:\\DNA intact?};
+  \draw[->, thick] (0,0) ++(60:1.25) arc[start angle=60, end angle=30, radius=1.25];
+\end{tikzpicture}
+
+{\small The cycle as a sequence of cyclin--CDK waves, each ended by the
+destruction of its \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin}, with the three \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoints} (red bars) at
+which the cell asks whether to proceed.}
+\end{omfigure}
+
+\begin{theorem}[A switch and a delayed brake make an oscillator]\label{thm:b3:cell-cycle-apoptosis:oscillator}
+\index{relaxation oscillator}\index{bistability!cell cycle}\index{hysteresis}
+Let $A$ be the activity of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B--Cdk1 and $C$ the amount of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin}
+B. Suppose (i) for a fixed $C$, $A$ relaxes quickly to a steady state
+that depends on $C$ through a positive feedback (active Cdk1 activates
+its activator Cdc25 and inhibits its inhibitor Wee1), so that the
+steady-state curve $A^{*}(C)$ is S-shaped: for $C$ between two
+thresholds $C_{1} < C_{2}$ both a low and a high state exist, and the
+system stays on whichever branch it is on (\emph{hysteresis}); (ii) $C$
+changes slowly, synthesised at a constant rate $k_{s}$ and degraded at
+a rate $k_{d}A\,C$ through the APC/C, which active Cdk1 switches on
+after a delay. Then the system has no stable steady state and executes
+a \emph{relaxation oscillation}: $C$ accumulates on the low branch until
+it passes $C_{2}$, $A$ jumps to the high branch (mitotic entry),
+degradation outruns synthesis and $C$ falls until it passes $C_{1}$, $A$
+collapses to the low branch (mitotic exit), and the cycle repeats. The
+period is set mainly by the slow variable: about $C_{2}/k_{s}$ for the
+rise, plus the time to degrade from $C_{2}$ to $C_{1}$.
+\end{theorem}
+\begin{proof}[Partial proof]
+A steady state of the pair would need $\mathrm{d}C/\mathrm{d}t = 0$,
+that is $k_{s} = k_{d}A^{*}(C)\,C$, at a point on the S-shaped curve.
+On the low branch $A^{*}$ is small, so $k_{d}A^{*}C < k_{s}$ for $C$ up
+to $C_{2}$: \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} rises, and the system is carried off the branch's
+end. On the high branch $A^{*}$ is large, so $k_{d}A^{*}C > k_{s}$ for
+$C$ down to $C_{1}$: \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} falls, and the system is carried off that
+end. The only candidate steady state would lie on the middle,
+unstable branch, and a point there repels; hence there is no stable
+steady state, and the trajectory, confined to the two stable branches
+and the jumps between them, cycles. The time on the low branch is
+$\int \mathrm{d}C/(k_{s} - k_{d}A^{*}C) \approx C_{2}/k_{s}$ when
+$A^{*}$ is small, and the time on the high branch is the shorter time
+to degrade $C_{2} - C_{1}$ at rate $k_{d}A^{*}_{\text{high}}C$. The
+existence of the S-shaped curve from the Cdc25/Wee1 feedback is
+admitted here; it is the same bistability as the self-activating gene
+of the Year~2 volume, with the fast variable now a kinase and the slow
+one its \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin}.
+\end{proof}
+
+\begin{omfigure}
+\begin{tikzpicture}
+\begin{axis}[
+  width=6.6cm, height=5.6cm,
+  axis lines=left,
+  xmin=0, xmax=1.4, ymin=0, ymax=1.1,
+  xlabel={cyclin B, $C$}, ylabel={Cdk1 activity, $A$},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north}, ylabel style={font=\small},
+  tick label style={font=\scriptsize}, xtick={0.4,1.0}, xticklabels={$C_{1}$,$C_{2}$}, ytick=\empty,
+  clip=false,
+]
+% S-shaped nullcline: two stable branches and a dashed unstable one
+\addplot[very thick, omDef, smooth] coordinates {(0,0.02) (0.5,0.04) (0.9,0.07) (1.0,0.1)};
+\addplot[very thick, omDef, dashed, smooth] coordinates {(1.0,0.1) (0.85,0.3) (0.7,0.5) (0.55,0.7) (0.4,0.9)};
+\addplot[very thick, omDef, smooth] coordinates {(0.4,0.9) (0.6,0.94) (1.0,0.97) (1.4,0.98)};
+\draw[->, very thick, omThm] (axis cs:0.05,0.15) -- (axis cs:0.98,0.15);
+\draw[->, very thick, omThm] (axis cs:1.04,0.18) -- (axis cs:1.04,0.82);
+\draw[->, very thick, omThm] (axis cs:0.98,0.84) -- (axis cs:0.42,0.84);
+\draw[->, very thick, omThm] (axis cs:0.36,0.82) -- (axis cs:0.36,0.18);
+\node[font=\scriptsize, omThm, anchor=south west] at (axis cs:0.36,0.24) {cyclin accumulates};
+\node[font=\scriptsize, omThm, anchor=west] at (axis cs:1.07,0.5) {entry};
+\node[font=\scriptsize, omThm, anchor=south] at (axis cs:0.7,1.0) {APC/C degrades cyclin (mitosis)};
+\node[font=\scriptsize, omThm, anchor=east] at (axis cs:0.33,0.5) {exit};
+\node[font=\scriptsize, omDef, anchor=north east] at (axis cs:1.38,0.95) {$A^{*}(C)$};
+\end{axis}
+\begin{axis}[
+  at={(7.6cm,0)}, anchor=south west,
+  width=6.6cm, height=5.6cm,
+  axis lines=left,
+  xmin=0, xmax=3, ymin=0, ymax=1.2,
+  xlabel={time (cycles)}, ylabel={},
+  xlabel style={font=\small, at={(axis description cs:0.5,-0.12)}, anchor=north},
+  tick label style={font=\scriptsize}, xtick={0,1,2,3}, ytick=\empty,
+  clip=false,
+]
+\addplot[very thick, omDef] coordinates {(0,0.4) (0.8,1.0) (0.95,0.4) (1.75,1.0) (1.9,0.4) (2.7,1.0) (2.85,0.4) (3,0.5)};
+\addplot[very thick, omThm] coordinates {(0,0.05) (0.8,0.05) (0.8,0.95) (0.95,0.95) (0.95,0.05) (1.75,0.05) (1.75,0.95) (1.9,0.95) (1.9,0.05) (2.7,0.05) (2.7,0.95) (2.85,0.95) (2.85,0.05) (3,0.05)};
+\node[font=\scriptsize, omDef, anchor=south west] at (axis cs:1.0,0.1) {cyclin B};
+\node[font=\scriptsize, omThm, anchor=south west] at (axis cs:1.0,1.0) {Cdk1 activity};
+\end{axis}
+\end{tikzpicture}
+
+{\small Left: the phase plane of the oscillator. The S-shaped curve is
+the fast steady state of Cdk1 for each level of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin}; the red loop is
+the cycle --- slow accumulation along the low branch, a jump at
+$C_{2}$, fast degradation along the high branch, a jump back at
+$C_{1}$. Right: the resulting time course, a sawtooth of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} and a
+square wave of kinase.}
+\end{omfigure}
+
+\begin{example}[Why the frog egg is a clock]\label{ex:b3:cell-cycle-apoptosis:frog}
+A fertilised frog egg divides twelve times in six hours with no
+growth, no transcription and no \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoints}, at intervals of
+\qty{30}{min}: it is the oscillator of the theorem running bare, and an
+extract of its cytoplasm in a test tube goes on cycling, \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} rising
+and falling, with nothing to divide. Adding a non-degradable \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B
+locks the extract in mitosis, since $C$ can never fall below $C_{1}$;
+blocking \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} synthesis locks it in interphase. In a somatic cell the
+same engine is wrapped in the controls of the next section, which hold
+it at the thresholds until conditions are met, so that the period
+becomes a day rather than half an hour and can be indefinitely long.
+\end{example}
+
+\section{Checkpoints}
+
+\begin{definition}[Checkpoints]\label{def:b3:cell-cycle-apoptosis:checkpoints}
+\index{checkpoint}\index{restriction point}\index{spindle assembly checkpoint}\index{replication licensing}
+A \emph{checkpoint} is a control that halts the cycle at a transition
+until a condition is satisfied, by acting on the engine --- inhibiting
+a CDK or an ubiquitin ligase. Three matter most. The \emph{restriction
+point} in late G1 (Start in yeast): the cell proceeds only if growth
+factors, nutrients and size permit; beyond it the cycle completes
+without them. The \emph{G2/M checkpoint}: damaged or unreplicated DNA,
+signalled by the \omterm{def:b3:dna-repair:ddr}{ATM}/ATR kinases of \cref{ch:b3:dna-repair}, keeps
+Cdc25 inhibited and so keeps Cdk1 phosphorylated and inactive. The
+\emph{spindle assembly checkpoint}: a single kinetochore not attached
+to \omterm{def:b3:cytoskeleton-motility:filaments}{microtubules} produces a diffusible inhibitor (Mad2 bound to Cdc20)
+that keeps the APC/C off, so that anaphase waits for the last
+chromosome. A fourth control has no waiting step but is equally
+strict: \emph{replication licensing}. Origins are loaded with the MCM
+helicase only in G1, when CDK activity is low, and the loading factors
+are destroyed or inhibited once S phase begins, so that each origin
+fires once and only once per cycle --- the reason a G2 nucleus in Rao
+and Johnson's fusions could not be made to replicate.
+\end{definition}
+
+\begin{proposition}[The restriction point is a switch]\label{prop:b3:cell-cycle-apoptosis:rb}
+\index{retinoblastoma protein}\index{E2F}
+In early G1 the transcription factor \emph{E2F}, which drives the genes
+of S phase (\omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} E, \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} A, the replication enzymes), is held
+inactive by the \emph{\omterm{prop:b3:cell-cycle-apoptosis:rb}{retinoblastoma protein}} Rb. Growth factors induce
+\omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} D, and \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} D--Cdk4/6 begins to phosphorylate Rb, releasing a
+little E2F; E2F then induces \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} E, and \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} E--Cdk2 phosphorylates
+Rb much more --- a positive feedback that, once past a threshold,
+completes itself without further growth factor. The cell has crossed
+the \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{restriction point}; E2F also induces its own gene. Loss of Rb, or
+of the Cdk4/6 inhibitor p16, or amplification of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} D, removes
+the requirement for growth factor altogether, and each is common in
+cancer (\cref{ch:b3:cancer-biology}); drugs that inhibit Cdk4/6 are now
+used against breast cancers that depend on this switch.
+\end{proposition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  \node[draw, thick, rounded corners, fill=omProp!25, minimum width=2.2cm] (gf) at (0,2.2) {growth factors};
+  \node[draw, thick, rounded corners, fill=omDef!20, minimum width=2.4cm] (cd) at (0,1.0) {cyclin D--Cdk4/6};
+  \node[draw, thick, rounded corners, fill=omThm!20, minimum width=1.6cm] (rb) at (3.8,1.0) {Rb};
+  \node[draw, thick, rounded corners, fill=omMeth!25, minimum width=1.6cm] (e2f) at (7.2,1.0) {E2F};
+  \node[draw, thick, rounded corners, fill=omDef!20, minimum width=2.4cm] (ce) at (7.2,-0.6) {cyclin E--Cdk2};
+  \node[draw, thick, rounded corners, fill=gray!15, align=center, minimum width=2.6cm] (s) at (10.8,1.0) {S-phase genes:\\cyclin A, MCM, \dots};
+  \draw[->, thick] (gf) -- (cd);
+  \draw[-|, thick, omThm] (cd) -- (rb) node[midway, above, font=\tiny] {phosphorylates};
+  \draw[-|, thick, omThm] (rb) -- (e2f) node[midway, above, font=\tiny] {holds inactive};
+  \draw[->, thick] (e2f) -- (s);
+  \draw[->, thick] (e2f) -- (ce) node[midway, right] {induces};
+  \draw[-|, thick, omThm] (ce.west) -- ++(-2.2,0) |- (rb.south) node[pos=0.25, below] {phosphorylates Rb further};
+  \draw[->, thick, omMeth!70!black] (e2f.north) .. controls (6.0,2.2) and (6.8,2.2) .. (e2f.north east) node[pos=0.5, above] {induces its own gene};
+  \node[draw, thick, rounded corners, fill=omThm!10] (p16) at (0,-0.6) {p16}; \draw[-|, thick, omThm] (p16) -- (cd);
+\end{tikzpicture}
+
+{\small The \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{restriction point}. Growth factors start the phosphorylation
+of Rb, which frees a little E2F; E2F induces \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} E, whose kinase
+phosphorylates Rb further --- a positive feedback that completes the
+transition and makes it independent of the initial signal. Bars mark
+inhibition.}
+\end{omfigure}
+
+\begin{proposition}[Anaphase is a proteolytic decision]\label{prop:b3:cell-cycle-apoptosis:anaphase}
+\index{securin}\index{separase}\index{cohesin}
+Sister chromatids are held together from S phase by rings of
+\emph{cohesin}. At metaphase, when every kinetochore is attached and
+the spindle \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} is silenced, the APC/C with its activator Cdc20
+ubiquitinates two proteins: \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B, whose loss inactivates Cdk1 and
+allows the cell to exit mitosis, and \emph{securin}, whose loss frees the
+protease \emph{separase}, which cuts cohesin. All sister pairs separate
+within seconds of each other, pulled to the poles by the spindle, and
+the cell divides by a ring of actin and \omterm{def:b3:cytoskeleton-motility:motors}{myosin}~II assembled where the
+spindle midzone tells the cortex (through RhoA). The decision is
+irreversible because it is proteolytic: a cut cohesin cannot be
+reassembled, and the degraded \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} must be resynthesised. Errors
+here --- a chromosome pulled to the wrong pole, an anaphase begun
+before the last attachment --- produce aneuploid daughters, the
+commonest chromosomal abnormality of tumours and of miscarriages.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.36\linewidth]{images/book5/ai/b5-10-mitotic-spindle.jpg}\hspace{0.04\linewidth}
+\includegraphics[width=0.54\linewidth]{images/book5/ai/b5-10-yeast-cdc-mutants.jpg}
+
+{\small Left: a metaphase cell --- spindle \omterm{def:b3:cytoskeleton-motility:filaments}{microtubules} (green) from
+the two poles (red), chromosomes (blue) aligned at the plate, the
+moment at which the spindle \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} decides. Right: budding yeast,
+wild type with buds of every size (left) and a \emph{cdc} mutant in
+which every cell has arrested at the same stage, each with a bud of the
+same size (right).}
+\end{omfigure}
+
+\section{Apoptosis}
+
+\begin{definition}[Apoptosis]\label{def:b3:cell-cycle-apoptosis:apoptosis}
+\index{apoptosis}\index{necrosis}\index{caspase}\index{phosphatidylserine}
+\emph{Apoptosis} is programmed cell death by an intrinsic sequence: the
+cell shrinks and rounds up, its \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatin} condenses and its DNA is cut
+between \omterm{def:b3:chromatin-epigenetics:nucleosome}{nucleosomes} into a ladder of fragments, the nucleus breaks up,
+the membrane blebs into sealed vesicles, phosphatidylserine appears on
+the outer face of the membrane as an ``eat me'' signal, and the
+fragments are engulfed by neighbours or macrophages within an hour ---
+without leakage, and therefore without inflammation. It is executed by
+\emph{caspases}, cysteine proteases that cut after aspartate, made as
+inactive zymogens: \emph{initiator} caspases (8 and 9) are activated by
+being brought together on a platform, and they cleave and activate the
+\emph{executioner} caspases (3 and 7), which cut several hundred
+substrates --- the lamins, the cytoskeleton, the inhibitor of the
+DNA-cutting nuclease, the enzyme that keeps phosphatidylserine inside.
+\emph{Necrosis}, by contrast, is death by injury: the cell swells,
+bursts, spills its contents and provokes inflammation. Apoptosis was
+named and its morphology described by Kerr, Wyllie and Currie (1972);
+its genes were found in a worm.
+\end{definition}
+
+\begin{proof}[Evidence]
+Every \emph{Caenorhabditis elegans} hermaphrodite makes $1090$ somatic
+cells, of which the same $131$ die, each at a fixed time and place.
+Horvitz and colleagues (1980s) isolated mutants in which they survived:
+\emph{ced-3} and \emph{ced-4} were needed for every death, and in their
+absence the $131$ cells lived and differentiated; \emph{ced-9}
+protected --- its loss killed cells that should have lived, its
+over-activity saved cells that should have died; \emph{egl-1} was
+needed for particular deaths. CED-3 was a \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspase}, CED-4 its
+activating platform (Apaf-1 in humans), CED-9 a Bcl-2 protein, EGL-1 a
+BH3-only protein: the human pathway, gene for gene. The human
+\emph{BCL2} gene had itself been found at a chromosome translocation in
+follicular lymphoma, a cancer of cells that fail to die.
+\end{proof}
+
+\begin{definition}[The two pathways]\label{def:b3:cell-cycle-apoptosis:pathways}
+\index{intrinsic pathway}\index{extrinsic pathway}\index{Bcl-2 family}\index{cytochrome c}\index{apoptosome}\index{death receptor}
+The \emph{intrinsic} (mitochondrial) pathway integrates the cell's
+internal state. The \emph{Bcl-2 family} has three classes: guardians
+(Bcl-2, Bcl-xL, Mcl-1) that sit on the mitochondrial outer membrane and
+keep it sealed; effectors (Bax, Bak) that, when activated, oligomerise
+into pores in that membrane; and \emph{BH3-only} sensors (Bim, Bid,
+Puma, Noxa, Bad), each induced or activated by a particular insult ---
+DNA damage through p53 (Puma, Noxa), growth-factor withdrawal (Bim,
+Bad), detachment, unfolded proteins --- which bind the guardians and
+free or activate the effectors. When effectors win, the outer membrane
+is permeabilised, \emph{cytochrome~c} leaks into the cytosol, binds
+Apaf-1 and forms the \emph{apoptosome}, which activates \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspase}~9. The
+\emph{extrinsic} pathway starts outside: \emph{death receptors} (Fas,
+TNF receptor, TRAIL receptors) bound by their ligands on a killer
+lymphocyte or a neighbour cluster, recruit adaptors and activate
+\omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspase}~8, which cleaves \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspase}~3 directly and, through Bid, also
+opens the mitochondrial route. Both pathways converge on the
+executioner \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspases}, and inhibitor proteins (IAPs, FLIP) set the
+threshold along the way.
+\end{definition}
+
+\begin{omfigure}
+\begin{tikzpicture}[every node/.style={font=\scriptsize}, >=stealth]
+  % extrinsic
+  \node[draw, thick, rounded corners, fill=omProp!25, align=center] (lig) at (0,4.2) {death ligand on a killer cell\\(FasL, TNF, TRAIL)};
+  \node[draw, thick, rounded corners, fill=omProp!25, align=center] (rec) at (0,2.8) {death receptor clusters;\\adaptors recruit caspase-8};
+  \node[draw, thick, rounded corners, fill=omThm!20] (c8) at (0,1.5) {caspase-8 active};
+  % intrinsic
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (insult) at (7.2,4.2) {DNA damage (p53), growth-factor loss,\\detachment, unfolded proteins};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (bh3) at (7.2,3.0) {BH3-only sensors (Puma, Bim, Bid)\\neutralise Bcl-2, activate Bax/Bak};
+  \node[draw, thick, rounded corners, fill=omDef!20, align=center] (mito) at (7.2,1.7) {mitochondrial outer membrane opens:\\cytochrome $c$ out, apoptosome forms};
+  \node[draw, thick, rounded corners, fill=omThm!20] (c9) at (7.2,0.5) {caspase-9 active};
+  % convergence
+  \node[draw, thick, rounded corners, fill=omThm!35, align=center] (c3) at (3.6,-0.8) {executioner caspases 3 and 7:\\hundreds of substrates cut};
+  \node[draw, thick, rounded corners, fill=gray!15, align=center] (out) at (3.6,-2.3) {chromatin condensed, DNA laddered, blebbing,\\phosphatidylserine exposed, engulfed};
+  \draw[->, thick] (lig) -- (rec); \draw[->, thick] (rec) -- (c8); \draw[->, thick] (c8) -- (c3);
+  \draw[->, thick] (insult) -- (bh3); \draw[->, thick] (bh3) -- (mito); \draw[->, thick] (mito) -- (c9); \draw[->, thick] (c9) -- (c3);
+  \draw[->, thick] (c3) -- (out);
+  \draw[->, thick, dashed] (c8) -- (bh3) node[pos=0.55, below, sloped] {Bid cleaved: the two routes join};
+  \node[left, omThm, align=right] at (-2.3,1.5) {extrinsic\\pathway}; \node[right, omDef, align=left] at (10.4,1.7) {intrinsic\\pathway};
+  \node[right, font=\tiny, align=left] at (8.6,0.5) {IAPs inhibit here;\\Bcl-2 guards above};
+\end{tikzpicture}
+
+{\small The two routes to the executioner \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspases}. Outside-in, a \omterm{def:b3:cell-cycle-apoptosis:pathways}{death
+receptor} activates caspase-8; inside-out, the \omterm{def:b3:cell-cycle-apoptosis:pathways}{Bcl-2 family} weighs the
+cell's state and, when the effectors win, the mitochondrion releases
+cytochrome~$c$ and caspase-9 is activated. Both converge on caspase-3.}
+\end{omfigure}
+
+\begin{proposition}[The point of no return]\label{prop:b3:cell-cycle-apoptosis:mompt}
+\index{mitochondrial outer membrane permeabilisation}
+The permeabilisation of the mitochondrial outer membrane is sudden
+--- all the mitochondria of a cell open within about five minutes,
+after hours of deliberation --- and complete: once cytochrome~$c$ is
+in the cytosol, \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{caspase} activation follows in minutes and cannot be
+undone by removing the stimulus. Two features make it a switch. The
+Bax/Bak pore forms by oligomerisation, so its rate rises steeply with
+the amount of activated effector; and the guardians and sensors bind
+one another with high affinity, so that up to a threshold every sensor
+is neutralised and beyond it every extra sensor is free --- a titration,
+like a buffer being exhausted. The cell therefore does not die
+gradually; it accumulates BH3-only proteins until a threshold is
+crossed, and then dies all at once. Drugs that mimic BH3 proteins
+(venetoclax, which occupies Bcl-2) push cells that are ``primed'' ---
+already near the threshold, as many leukaemic cells are --- over it,
+while sparing cells that are not.
+\end{proposition}
+
+\begin{omfigure}
+\includegraphics[width=0.40\linewidth]{images/book5/ai/b5-10-apoptotic-cell.jpg}
+
+{\small An apoptotic cell beside a healthy one in the scanning electron
+microscope: shrunken, its surface broken into sealed blebs that will be
+engulfed without a trace of inflammation.}
+\end{omfigure}
+
+\begin{example}[Deaths that build a body]\label{ex:b3:cell-cycle-apoptosis:development}
+The fingers are carved from a paddle by the \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} of the cells
+between them; in the duck the same cells live and the webbing stays.
+The tadpole's tail is resorbed at metamorphosis on the signal of
+thyroid hormone. About half of the neurons produced in the vertebrate
+nervous system die before birth, those that fail to receive enough
+trophic factor from their targets --- a competition that matches the
+number of neurons to the size of the field they serve. Ninety-five per
+cent of the T~cells made in the thymus die there, selected away because
+they recognise nothing or recognise the self (\cref{ch:b3:adaptive-immunity}).
+And every day the intestinal epithelium sheds its oldest cells at the
+villus tips, the skin its keratinocytes, the blood its aged neutrophils
+after a life of a day: \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} is the routine, and the tissue's size
+is the difference between two large rates.
+\end{example}
+
+\section{Other exits, and the failure to exit}
+
+\begin{definition}[Regulated necrosis and senescence]\label{def:b3:cell-cycle-apoptosis:other}
+\index{necroptosis}\index{pyroptosis}\index{senescence}
+Cells have other programmed deaths, all inflammatory where \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis}
+is silent. \emph{Necroptosis}, triggered by \omterm{def:b3:cell-cycle-apoptosis:pathways}{death receptors} when
+caspase-8 is blocked (as some viruses block it), assembles the kinase
+RIPK3 with MLKL, which punctures the plasma membrane. \emph{Pyroptosis},
+in infected macrophages, is executed by caspase-1 of the inflammasome
+(\cref{ch:b3:innate-immunity}), which cleaves gasdermin into a
+pore-former and releases interleukin-1. \emph{Ferroptosis} is death by
+iron-dependent lipid peroxidation. A cell can also stop dividing
+without dying: \emph{senescence} is a permanent arrest, enforced by p16
+and p21 after telomere erosion (\cref{ch:b3:stem-cells}), persistent
+DNA damage or oncogene activation, in which the cell stays metabolically
+active and secretes inflammatory factors. Senescence removes damaged
+cells from the dividing pool --- a tumour suppressor --- and accumulates
+with age, where its secretions contribute to the degeneration of
+tissues; clearing senescent cells in mice extends healthy life.
+\end{definition}
+
+\begin{remark}[Too little and too much]\label{rem:b3:cell-cycle-apoptosis:disease}
+The diseases of these programmes are of dose. Too little death:
+cancer, in which the apoptotic threshold is raised by Bcl-2
+overexpression or p53 loss, so that cells with damaged genomes survive
+to accumulate more damage; autoimmunity, when lymphocytes that should
+have died in selection persist. Too much: the loss of T~cells in HIV
+infection, the neurons of a stroke's penumbra dying by \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} hours
+after the ischaemia (a window for treatment), the slow \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} of
+neurons in neurodegenerative disease, the cardiac cells lost after a
+heart attack. Cancer treatment is largely the deliberate induction of
+\omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} in cells whose thresholds are lower than their neighbours',
+and the drugs that target Bcl-2 and Cdk4/6 are the first designed
+from the maps of this chapter.
+\end{remark}
+
+\section{Exercises}
+
+\begin{exercise}[$\star$]\label{exo:b3:cell-cycle-apoptosis:1}
+List the four phases of the cycle, the cyclin--CDK pair that drives
+each transition, and the ubiquitin ligase that ends mitosis.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:cell-cycle-apoptosis:2}
+What did each of Hartwell, Nurse and Hunt contribute to the discovery
+of the engine, and in what organism?
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:cell-cycle-apoptosis:3}
+Name the three \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoints}, the condition each tests, and the
+molecular target each acts on.
+\end{exercise}
+
+\begin{exercise}[$\star$]\label{exo:b3:cell-cycle-apoptosis:4}
+Distinguish \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} from \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{necrosis} in five features, and name the
+class of enzyme that executes \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:cell-cycle-apoptosis:5}
+In a frog egg extract \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B is synthesised at $k_{s} = 1$ unit per
+minute; the mitotic threshold is $C_{2} = 30$ units, the exit threshold
+$C_{1} = 5$, and in mitosis \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} is degraded with a half-life of
+\qty{2}{min}. Estimate the period of the oscillation and the fraction
+of the cycle spent in mitosis.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:cell-cycle-apoptosis:6}
+Predict the behaviour of a cell (a) expressing a non-degradable
+\omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B, (b) lacking Wee1, (c) lacking Cdc25, (d) expressing a Cdk1
+that cannot be phosphorylated by Wee1, in terms of the oscillator of
+\cref{thm:b3:cell-cycle-apoptosis:oscillator}.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:cell-cycle-apoptosis:7}
+A Rao--Johnson fusion joins a G1 cell and an S-phase cell; another
+joins a G2 cell and an S-phase cell. Predict what each nucleus does and
+explain with licensing and CDK levels.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:cell-cycle-apoptosis:8}
+Explain why a single unattached kinetochore can hold up anaphase for
+the whole cell, and predict the fate of a cell in which Mad2 is
+deleted.
+\end{exercise}
+
+\begin{exercise}[$\star\star$]\label{exo:b3:cell-cycle-apoptosis:9}
+Predict the phenotype of a worm lacking \emph{ced-9}; lacking
+\emph{ced-3}; lacking both. Explain the epistasis in terms of the
+pathway.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:cell-cycle-apoptosis:10}
+Show that a single negative feedback loop without a bistable switch
+--- \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} synthesised at $k_{s}$, degraded at $k_{d}AC$ with $A$
+simply proportional to $C$ --- has a stable steady state and does not
+oscillate. What does the S-shaped curve add, and what would a delay
+add instead?
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:cell-cycle-apoptosis:11}
+A cell has $N$ molecules of the guardian Bcl-2 and receives BH3-only
+sensors at a rate $r$ per hour after a damaging stimulus, each sensor
+binding one guardian. Explain why the cell dies at about time $N/r$
+whatever the stimulus's intensity beyond that, why the death is sudden,
+and what venetoclax does to the time.
+\end{exercise}
+
+\begin{exercise}[$\star\star\star$]\label{exo:b3:cell-cycle-apoptosis:12}
+Follicular lymphoma carries a translocation that overexpresses
+\emph{BCL2}; the cells divide slowly. Retinoblastoma carries loss of
+\emph{RB}; the cells divide fast. Explain how each single lesion
+produces a tumour, why the first is indolent and the second aggressive,
+and what each says about the two programmes of this chapter.
+\end{exercise}
+
+\section{Problem: The Life and Death of an Epithelium}
+
+\begin{problem}[{Weekend problem --- the intestinal lining renewed cell
+by cell, the cycle timed from the cyclin oscillator, the errors of a
+checkpoint counted across a body, and the apoptotic disposal of a
+hundred billion cells a day weighed, ending on the cycle period, the
+aneuploid cells produced per day and the mass the body recycles by
+apoptosis}]
+\label{pb:b3:cell-cycle-apoptosis:1}
+Data: the small intestine has $10^{7}$ crypts, each renewing a villus
+of \num{3500} cells every $5$ days; each crypt holds about $22$ stem
+cells dividing once a day, whose progeny divide $5$ more times before
+differentiating. Oscillator: $k_{s} = 2$ units of \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} per hour,
+$C_{2} = 40$ units, $C_{1} = 8$, mitotic \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} half-life
+\qty{10}{min}. \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{Checkpoint}: without the spindle \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} one division
+in $50$ missegregates a chromosome; with it, one in \num{50000}. The
+body replaces $10^{11}$ cells a day of mass \qty{1}{ng} each, protein
+\qty{20}{\%} of the mass; a macrophage clears one apoptotic cell in
+\qty{1}{h}.
+
+\medskip
+\noindent\textbf{Part I --- Renewal.}
+\begin{enumerate}
+  \item How many cells does the small intestine shed per day, and per
+        second?
+  \item How many cells does one crypt produce per day? Check: $22$ stem
+        divisions a day, each committed daughter dividing $5$ more
+        times.
+  \item If a stem cell divides once a day for a lifetime of $80$ years,
+        how many divisions? With a mutation rate of $0.6$ per genome per
+        division (\cref{ch:b3:dna-repair}), how many mutations does it
+        accumulate?
+  \item The transit cells divide every \qty{12}{h}. Why can the tissue
+        afford fast, short-lived transit divisions but keeps the stem
+        cell slow?
+  \item A dose of radiation kills all the dividing transit cells but
+        spares the stem cells, which resume within a day. How long
+        before the villus, unreplenished, is bare, and how long to
+        rebuild it? Why is the gut an early casualty of radiation?
+  \item In the colon the shedding at the top is by \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} (anoikis,
+        death on detachment). Why is this the right mode of death for a
+        cell in contact with gut bacteria?
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part II --- The clock.}
+\begin{enumerate}[resume]
+  \item From the oscillator data, how long does \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} take to rise
+        from $C_{1}$ to $C_{2}$?
+  \item How long does mitotic degradation take to bring it from $C_{2}$
+        back to $C_{1}$?
+  \item Period of the bare oscillator, and fraction of the period spent
+        with Cdk1 active.
+  \item The crypt's transit cells cycle in \qty{12}{h}, the stem cells
+        in \qty{24}{h}, the frog egg in \qty{30}{min}. Which of the
+        parameters of the model differs, and what supplies the
+        difference in a somatic cell?
+  \item A cell arrested at the G2/M \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} by DNA damage keeps
+        making \omterm{def:b3:cell-cycle-apoptosis:cdk}{cyclin} B. Where is it on the phase plane, and what holds
+        it there? What happens when the damage is repaired?
+  \item A drug inhibits the APC/C. Describe the fate of a cell entering
+        mitosis in its presence.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part III --- Errors.}
+\begin{enumerate}[resume]
+  \item How many divisions per day does the body perform to replace
+        $10^{11}$ cells?
+  \item How many aneuploid daughters per day with the \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint}, and
+        without?
+  \item Most aneuploid cells die or arrest (p53 responds to
+        missegregation). If \qty{1}{\%} survive and divide, how many
+        aneuploid dividing cells does a checkpoint-competent body
+        produce per day, and over a lifetime?
+  \item A tumour of $10^{9}$ cells has lost the \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} and p53.
+        How many missegregations per day does it perform, and why does
+        this make it evolve fast?
+  \item Explain why complete loss of the spindle \omterm{def:b3:cell-cycle-apoptosis:checkpoints}{checkpoint} is
+        lethal to an embryo although partial loss promotes cancer.
+  \item Down syndrome arises from a missegregation in meiosis, not
+        mitosis. Explain why an error in one cell there affects every
+        cell of the child, while one mitotic error affects one lineage.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Part IV --- Disposal.}
+\begin{enumerate}[resume]
+  \item What mass of cells does the body dispose of by \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} per
+        day, and per year? Compare with body mass.
+  \item How much protein is that per day? Compare with a dietary
+        intake of \qty{70}{g}: what fraction of the body's protein
+        turnover is the recycling of dead cells?
+  \item How many macrophages, working continuously, are needed to
+        clear the daily dead? The body has about $10^{11}$
+        macrophages: what fraction of their time?
+  \item Why must the corpse be removed before it lyses, and what
+        signals ``eat me''?
+  \item A patient's Bcl-2 is overexpressed in B~cells. Which pathway is
+        blocked, does the \omterm{def:b3:cell-cycle-apoptosis:pathways}{extrinsic pathway} still work, and why is the
+        result a slowly growing lymphoma rather than a fast one?
+  \item Neurons in the penumbra of a stroke die by \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} six to
+        twenty-four hours after the insult, those in the core by
+        \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{necrosis} within minutes. Why does the first offer a window for
+        treatment and the second none?
+  \item Summarise: the period of the bare oscillator (question~9), the
+        aneuploid dividing cells per day in a normal body
+        (question~15), and the mass recycled by \omterm{def:b3:cell-cycle-apoptosis:apoptosis}{apoptosis} per day
+        (question~19).
+\end{enumerate}
+\end{problem}
