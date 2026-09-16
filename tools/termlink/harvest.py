@@ -34,7 +34,7 @@ INDEX = r'\\index\{(' + G + r'*)\}'
 # Cantor set, the Rayleigh quotient). Without it their \index entries were
 # attributed to the last statement before the problem -- an unrelated remark
 # pages away, which is a wrong link, not a missing one.
-STMT_LABEL = r'\\label\{((?:thm|prop|lem|cor|ex|met|rem|pb):[^}]*)\}'
+STMT_LABEL = r'\\label\{((?:thm|prop|lem|cor|ex|meth|met|rem|pb):[^}]*)\}'
 ANY_LABEL = r'\\label\{([a-z]+:[^}]*)\}'
 
 

@@ -754,6 +754,39 @@ ATTRIBUTION_EXTRA = re.compile(
 # Added by the Arabic Biology Book 2 agent, 2026-09-05.
 ALLOWED_WORDS |= {"sry"}
 
+# Biology Book 4's own Latin binomials, higher taxa and gene/strain symbols,
+# grepped from parts/bachelor-2/*.tex as the ALLOWED_WORDS comment at the top
+# of this file instructs ("grep the English bodies again if a later book adds
+# species"). A Linnaean name is Latin in every script -- an Arabic biology
+# textbook italicises \emph{Volvox carteri} exactly as an English one does --
+# and a gene symbol or a strain designation is an international identifier,
+# not an English word. Listed word by word, because the gate tokenises. No
+# ordinary English word is added here: a definition headword such as
+# "Adaptation" or "Budding" is translated by this edition and must keep
+# firing the gate.
+# Added by the Arabic Biology Book 4 agent, 2026-09-16.
+ALLOWED_WORDS |= {
+    # genera and species epithets
+    "acetabularia", "aegilops", "tauschii", "urartu", "amoeba", "proteus",
+    "anabaena", "arabidopsis", "archaeopteryx", "azotobacter", "bacillus",
+    "beggiatoa", "chlamydomonas", "clostridium", "daphnia", "desulfovibrio",
+    "drosophila", "melanogaster", "eudorina", "frankia", "fucus", "gonium",
+    "kalanchoe", "neurospora", "nitrobacter", "nitrosomonas", "ophioglossum",
+    "reticulatum", "pandorina", "paracoccus", "phytophthora", "infestans",
+    "plasmodium", "pleodorina", "posidonia", "pseudomonas", "sordaria",
+    "thiobacillus", "thiomargarita", "namibiensis", "tiktaalik",
+    "trichoderma", "vibrio", "fischeri", "volvox", "carteri",
+    # gene, locus, hormone and strain symbols printed in Latin by every edition
+    "myod", "wuschel", "constans", "hox", "mads", "pax3", "pax6", "pax7",
+    "shh", "sox9", "tbx4", "tbx5", "wnt", "lac", "gal", "thr", "ndm", "hfr",
+    "hcg", "igg", "iga", "fsh", "gnrh",
+    "sonic", "hedgehog", "tbx", "hoxa", "hoxd", "wnt", "fgf", "fgfs",
+    "bmp", "aer", "zpa", "gremlin", "kisspeptin",
+    "pax", "sox", "myf", "myod", "mrf", "cdna", "dystrophin",
+    "clavata", "clv", "wus", "pin", "expansin", "expansins",
+    "pfr", "flc", "constans", "florigen",
+}
+
 
 def check_file(path: pathlib.Path, findings: list) -> None:
     raw = path.read_text(encoding="utf-8")

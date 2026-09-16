@@ -127,6 +127,44 @@ ALLOWED_WORDS |= {
     "omnis", "cellula", "micrographia",
 }
 
+
+# --- appended 2026-09-16 by the Biology Book 4 `hi` agent ---------------------
+# REASON: the first ALLOWED_WORDS block says outright to grep the English bodies
+# again when a later book adds species, and Book 4 (university year 2) adds the
+# list below. DATA ONLY -- no rule, no reduction helper and no regex is touched,
+# so tools/check_indonesian_prose.py, which imports the LaTeX reduction from
+# this file, is bit-for-bit unaffected (verified on both of its controls).
+#
+# (a) Genus, species and strain names the canon prints in italic Latin. A
+#     Devanagari biology text keeps international nomenclature in Latin exactly
+#     as the Latin-script editions do. Enumerated from parts/bachelor-2, word by
+#     word (the gate tokenises), and only the ones the canon actually uses.
+ALLOWED_WORDS |= {
+    "acetabularia", "aegilops", "tauschii", "urartu", "amoeba", "proteus",
+    "anabaena", "arabidopsis", "archaeopteryx", "azotobacter", "bacillus",
+    "beggiatoa", "chlamydomonas", "clostridium", "daphnia", "desulfovibrio",
+    "drosophila", "melanogaster", "eudorina", "frankia", "fucus", "gonium",
+    "kalanchoe", "neurospora", "nitrobacter", "nitrosomonas", "ophioglossum",
+    "reticulatum", "pandorina", "paracoccus", "phytophthora", "infestans",
+    "plasmodium", "pleodorina", "posidonia", "pseudomonas", "sordaria",
+    "thiobacillus", "thiomargarita", "namibiensis", "tiktaalik", "trichoderma",
+    "vibrio", "fischeri", "volvox", "carteri",
+}
+# (b) Gene, allele and protein SYMBOLS. Printed in Latin script in every
+#     edition of every language, exactly the case `sry`, `lac` and `trp` were
+#     whitelisted for by the Book 2 and Book 3 `hi` agents. Their mixed case
+#     (MyoD, Shh, Hox) or their length (WUSCHEL, CLAVATA) defeats both the
+#     <= 4-letter uppercase acronym escape and CHEM_FORMULA.
+#     `flowering` and `locus` are here ONLY because the two florigen genes are
+#     named FLOWERING LOCUS T / FLOWERING LOCUS C in full; they are the one
+#     concession in this block that costs coverage, and chapter 14 and its
+#     solutions were re-read by eye for those two words as ordinary English.
+ALLOWED_WORDS |= {
+    "myod", "myf", "myogenin", "shh", "hox", "hoxa", "hoxd", "tbx", "wnt",
+    "sox", "pax", "wus", "wuschel", "clavata", "flowering", "locus", "flc",
+    "hfr", "hcg", "gal", "thr", "sonic", "hedgehog", "cdna", "clv", "myf", "pin", "pfr",
+}
+
 # Unit and symbol strings that may appear bare in a table cell or node.
 ALLOWED_UNITS = {
     "m", "s", "kg", "g", "mg", "km", "cm", "mm", "nm", "um",
@@ -135,6 +173,21 @@ ALLOWED_UNITS = {
     "wb", "f", "ev", "min", "h", "l", "ml", "rad", "sr", "bq", "gy", "sv",
     "kwh", "kj", "mj", "gpa", "mpa", "kpa", "khz", "mhz", "ghz",
 }
+# (c) Unit symbols Book 4 prints bare, outside \qty{}/\unit{}, exactly as the
+#     English canon does (a TikZ node "net $+10$ mmHg", a parenthesis
+#     "($95 - 5$ mmHg, ...)"). mmHg is a unit SYMBOL, not English: it stays
+#     Latin in Devanagari as it does in every other script, so the fix belongs
+#     here and not in the prose. DATA ONLY, and ALLOWED_UNITS is not among the
+#     four names tools/check_indonesian_prose.py imports.
+ALLOWED_UNITS |= {"mmhg", "torr", "atm",
+                  "mmol", "nmol", "pmol", "umol", "kmol",
+                  "ppm", "ppb"}
+# (d) Two second-messenger SYMBOLS whose lower-case first letter defeats both
+#     the <= 4-letter uppercase acronym escape and CHEM_FORMULA. They are
+#     printed cAMP / cGMP in every language. "camp" is an ordinary English
+#     word, so this entry does cost coverage: parts/bachelor-2 was grepped
+#     for camp/camps/camped as English and has none.
+ALLOWED_WORDS |= {"camp", "cgmp"}
 
 LATIN_WORD = re.compile(r"[A-Za-z][A-Za-z'\-]{1,}")
 

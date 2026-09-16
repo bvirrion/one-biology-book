@@ -182,6 +182,11 @@ ALLOWED_IDENTICAL = {
     # genus, monomer) stay per-language, because French says domaine, genre
     # and monomere.
     "japonica", "aurelia", "robur", "catus", "lupus",
+    # Book 4 (University Year 2): the wheat ancestors Triticum urartu and
+    # Aegilops tauschii, named in the polyploidy figure of ch. 3 in every
+    # edition. Reconstructed after the wave-1 entries were lost; see the
+    # incident note in the Indonesian Book 4 report.
+    "urartu", "tauschii",
 }
 
 # A fragment of a single word is reported in a SEPARATE, lower-confidence
@@ -192,7 +197,27 @@ ALLOWED_IDENTICAL = {
 # the high-confidence defect: no two languages agree on a whole phrase by
 # accident. Both tiers are reported; only the multi-word tier is worth
 # blocking on.
+def _strip_nonprose(s):
+    """Markup that is never prose in any language.
+
+    A COLOUR NAME and an ENVIRONMENT NAME with its column spec are
+    identifiers from the style file and from LaTeX, not words: left in,
+    \\textcolor{omDef}{A\\,B} and \\begin{tabular}{c|ccc} supply the "words"
+    omDef, tabular and ccc, which both make a correct fragment a finding at
+    all and push it into the BLOCKING multi-word tier. Reported by the wave-1
+    Book 4 agents (fr/nl/es/pt) 2026-09-16; reconstructed after the original
+    fix was lost, so the wording of the original may have differed.
+    """
+    # tabular's column spec nests one level: {l@{\ }ccccc}. A plain
+    # {[^{}]*} stops at the inner brace and leaves "ccccc" standing.
+    s = re.sub(r"\\begin\s*\{tabular\*?\}\s*\{(?:[^{}]|\{[^{}]*\})*\}", " ", s)
+    s = re.sub(r"\\(?:begin|end)\s*\{[^{}]*\}(?:\s*\{[^{}]*\})?", " ", s)
+    s = re.sub(r"\\(?:textcolor|color|cellcolor|rowcolor|columncolor)\s*\{[^{}]*\}", " ", s)
+    return s
+
+
 def _word_count(s):
+    s = _strip_nonprose(s)
     s = re.sub(r"\$[^$]*\$", " ", s)
     # A graphics path is never prose, in any language. The overlay-label
     # figures put \includegraphics INSIDE a tikz node, so the node-text
@@ -220,6 +245,13 @@ def _word_count(s):
     return len(re.findall(r"[A-Za-z]{2,}(?:[-'\u2019][A-Za-z]{2,})*", s))
 
 
+FOREACH_RE = re.compile(
+    r"\\foreach\s+[^{]*?\bin\s*(\{(?:[^{}]|\{[^{}]*\})*\})", re.S)
+AXIS_STR_RE = re.compile(
+    r"(?:xticklabels|yticklabels|symbolic\s+[xy]\s+coords|legend\s+entries"
+    r"|nodes\s+near\s+coords)\s*=\s*(\{(?:[^{}]|\{[^{}]*\})*\})")
+
+
 def _fragments(text):
     """[(class, string, char-offset)] for every comparable fragment."""
     out = []
@@ -235,6 +267,37 @@ def _fragments(text):
                     m.start()))
     for m in LEGEND_RE.finditer(text):
         out.append(("legend", m.group(1), m.start()))
+    # A \foreach LABEL LIST and a pgfplots string-valued KEY are visible text
+    # that NO gate in this project could see, and the applier cannot cover them
+    # either: id_apply compares \foreach lists BYTE-FOR-BYTE on purpose (a list
+    # mixes labels with style names and coordinates, which must never change),
+    # so an UNTRANSLATED list is the only form that passes it. Reported by the
+    # Arabic Book 4 agent, 2026-09-16, which found four live cases in its own
+    # tree -- English shipping behind two green gates. The census over the
+    # other editions then found one in French and, in the ALREADY SHIPPED
+    # books, four Indonesian ones.
+    #
+    # The twin comparison is the right owner precisely because it needs no
+    # per-language knowledge: node NAMES ({kale,cab,spr}) and unit lists
+    # ({10 s, 1 min}) are identical in every edition by design and land in the
+    # one-word/cognate tier, while a real label ({0/prophase, 1/metaphase})
+    # carries several words and blocks.
+    for m in FOREACH_RE.finditer(text):
+        body = m.group(1)
+        # A \foreach list of BARE IDENTIFIERS is not text: it is node names,
+        # consumed as (\t.west) and never printed. `{kale,cab,spr,kohl,broc,
+        # cauli}` in the artificial-selection figure is byte-identical in all
+        # eight editions BY DESIGN, and blocked the shipped grade-12 Indonesian
+        # edition the moment this class was added. A list that CARRIES a label
+        # always shows it: as a `\x/\lab` slash field ({0/prophase, 1/metaphase}),
+        # as a brace group ({0/{1. a charged tRNA enters the A site}}), or as a
+        # multi-word item ({10 s, 1 min}). Requiring one of those keeps every
+        # real defect this class was written for and drops the identifier lists.
+        if "/" not in body and "{" not in body[1:] and " " not in body:
+            continue
+        out.append(("foreach", body, m.start()))
+    for m in AXIS_STR_RE.finditer(text):
+        out.append(("axisstr", m.group(1), m.start()))
     return out
 
 
@@ -272,13 +335,26 @@ ALLOWED_BY_LANG = {
         "galactose", "deoxyribose", "hexokinase", "carrier",
         # "per" is an ordinary Dutch preposition (4 H+ per ATP).
         "per",
+        # Book 4 developmental vocabulary, identical in Dutch (reconstructed).
+        "parental", "proximal", "distal", "posterior", "anterior", "somite",
+        "dermomyotome", "induction", "recombinant", "megasporangium",
+        "nucellus", "zygote", "embryo", "sensing",
     },
     # French keeps the same -ine forms; accented ones (sérine) differ and are
     # deliberately absent, because there the identical spelling WOULD be a
     # defect.
     "fr": {"muscularis", "mucosae", "propria", "lamina", "alanine", "glycine",
            "valine", "leucine", "proline", "lysine", "arginine", "glutamine",
-           "asparagine", "gyrase", "fructose", "glucose", "lactose", "ribose"},
+           "asparagine", "gyrase", "fructose", "glucose", "lactose", "ribose",
+           # Book 4 developmental vocabulary (reconstructed).
+           "parental", "proximal", "distal", "posterior", "anterior",
+           "somite", "dermomyotome", "induction", "recombinant", "nucellus",
+           "embryo", "sensing", "parental"},
+    # Spanish and Portuguese keep the Latin positional adjectives unchanged.
+    "es": {"proximal", "distal", "posterior", "anterior", "somite",
+           "dermomyotome", "nucellus"},
+    "pt": {"proximal", "distal", "posterior", "anterior", "somite",
+           "dermomyotome", "nucellus"},
     # Indonesian absorbs Latin anatomical nomenclature verbatim.
     "id": {"muscularis", "mucosae", "propria", "lamina", "serosa", "submucosa",
            # Reported by the Indonesian Book 3 agent, 2026-09-06: three
@@ -290,6 +366,11 @@ ALLOWED_BY_LANG = {
            # defect and was translated to "kerajaan Animalia" instead of being
            # exempted here.
            "domain", "genus", "monomer",
+           # Book 4: Indonesian anatomy keeps the Latin positional adjectives
+           # ("posterior", "anterior") and the developmental loanwords
+           # unchanged, so the limb-bud axis label is correct as it stands.
+           # Reported by the Indonesian Book 4 agent, 2026-09-16.
+           "posterior", "anterior", "proximal", "distal", "nucellus",
            },
 }
 
@@ -306,6 +387,7 @@ def _lang_of(path):
 
 def _has_lowercase_word(s, lang=None):
     """A lowercase word that is not an allowed internationalism."""
+    s = _strip_nonprose(s)
     # Strip math and macros first: [$\arcsin$] and [Gram--Schmidt] must not fire.
     s = re.sub(r"\$[^$]*\$", " ", s)
     # A graphics path is not prose, and it is byte-identical to English BY
@@ -346,6 +428,7 @@ def _capitalised_only(s):
     s = re.sub(r"\$[^$]*\$", " ", s)
     s = re.sub(r"\\includegraphics\s*(?:\[[^\]]*\])?\s*\{[^{}]*\}", " ", s)
     s = re.sub(r"\\omimg\s*\{[^{}]*\}", " ", s)
+    s = _strip_nonprose(s)
     s = re.sub(r"\\[A-Za-z@]+", " ", s)
     return bool(CAP_WORD.search(s)) and not LOWER_WORD.search(s)
 
@@ -415,6 +498,16 @@ def check_file(path, findings):
                 continue
             if _has_lowercase_word(s, lang):
                 tier = cls if _word_count(s) >= 2 else cls + "-1word"
+            elif _word_count(s) >= 2 and LOWER_WORD.search(
+                    _strip_nonprose(re.sub(r"\$[^$]*\$", " ", s))):
+                # Every lowercase word is on an allow-list, so the fragment was
+                # reported in NEITHER tier -- and genuinely untranslated text
+                # can be built entirely from allowed words. The Portuguese
+                # Book 4 agent found `$\mathrm{N_2}$ in air` shipped unseen
+                # ("in" and "air" are both allowed), plus "cm to m" and two
+                # `10\% at $K_d/10$` labels. Advisory, never blocking: the
+                # allow-lists exist because these words are usually correct.
+                tier = cls + "-1word"
             elif _capitalised_only(s):
                 # No lowercase word: always the low-confidence tier. See
                 # _capitalised_only() -- without this branch the fragment was

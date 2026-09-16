@@ -129,7 +129,19 @@ DROP = {
 
 EXTRA_PROTECT = [
     # magnification everywhere else; these five are the ordinary "increase"
-    r"aumento(?= de turgor)",
+    #
+    # NOTE the `\omterm` escape hatch in the first pattern, and never write a
+    # lookaround anchored on a bare word that is ITSELF a linked term. The
+    # linker runs over text that already carries links, so by the time this
+    # pattern is tried the source reads "aumento de \omterm{...}{turgor}" and a
+    # plain `(?= de turgor)` no longer matches: the protection lapses silently
+    # and a second --apply mints a WRONG-SENSE link (ordinary "increase" ->
+    # the microscope-magnification definition). Found 2026-09-16: this shipped
+    # book reported "links to insert: 1" on a dry run for ten days while
+    # --check stayed green, because --check regenerates from UNWRAPPED text and
+    # cannot see it. The es/pt Book 4 agents hit the same class with
+    # lookbehinds; direction is not the issue, the anchor being a term is.
+    r"aumento(?= de (?:\\omterm\{[^{}]*\}\{)?turgor)",
     r"aumento(?= de onze)",
     r"aumento(?=\s+das\s+presas)",
     r"aumento(?= de lebres)",

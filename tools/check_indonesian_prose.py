@@ -467,6 +467,13 @@ NOT_GATED = {
 
 # Brand, markup names and unit symbols that legitimately stay Latin.
 ALLOWED = {
+    # "ons" is the Indonesian hectogram (100 g), an ordinary noun -- but it is
+    # not caught by this set alone: the PLURAL-STEM rule strips the "s", finds
+    # "on" in ENGLISH_WORDS and fires. Reported by the Indonesian Book 4 agent,
+    # 2026-09-16. Note the gate was right to be suspicious: "ons" is 100 g and
+    # NOT the imperial ounce, so rendering Harvey's "2 ounces" as "2 ons" would
+    # have falsified the arithmetic (that edition uses "auns").
+    "ons",
     # A PROPER NAME that ends in an English suffix. "Lawrence Berkeley
     # Laboratory" is the institution credited for the Melvin Calvin
     # photograph, kept verbatim by all four wave-1 editions because a credit

@@ -20,8 +20,8 @@ of old and current programmes), Book 5 the rest of a licence de biologie
 
 **Current state: all five books written in English (Books 1–4 on
 2026-08-28, 2026-09-02, 2026-09-04 and 2026-09-10; Book 5 on
-2026-09-11); Books 1, 2 and 3 all ship in the seven target languages
-(2026-09-04, 2026-09-05 and 2026-09-06); Books 4 and 5 are English
+2026-09-11); Books 1, 2, 3 and 4 all ship in the seven target languages
+(2026-09-04, 2026-09-05, 2026-09-06 and 2026-09-16); Book 5 is English
 only.**
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
@@ -110,6 +110,8 @@ only.**
   statistics beyond a mean, chi-square only as a recipe with the critical
   value given. Chemistry is plain math (`$\mathrm{CO_2}$`,
   `\ensuremath{\mathrm{NH_4^{+}}}` inside math): mhchem is not loaded.
+  **Translated into all seven target languages on 2026-09-16**, in two
+  waves, each edition self-scored 96/100.
   Gotchas met: a `\\` inside a TikZ node needs `align=`; pgfplots fills
   must be drawn before the curves they would hide; a legend inside the
   axis covers the curves (put it below with `at={(0.5,-0.28)},
@@ -202,10 +204,11 @@ grep -c 'Overfull' $L           # overfull boxes — keep at 0
 
 ## Language editions
 
-**Books 1, 2 and 3 ship in eight languages** — English plus `fr`, `nl`, `es`,
-`pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04, Book 2 on 2026-09-05
-and Book 3 on 2026-09-06, one agent per edition, **every one self-scored
-96/100** under the native-academic bar. Books 4–5 are English only.
+**Books 1, 2, 3 and 4 ship in eight languages** — English plus `fr`, `nl`,
+`es`, `pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04, Book 2 on
+2026-09-05, Book 3 on 2026-09-06 and Book 4 on 2026-09-16, one agent per
+edition, **every one self-scored 96/100** under the native-academic bar.
+Book 5 is English only.
 
 Book 3 went out in **two waves** (`fr`/`nl`/`es`/`pt`, then `hi`/`ar`/`id`),
 which is now the standing rule: wave 1's findings reached wave 2, and wave 2
@@ -255,6 +258,23 @@ eight):
 
 Every Book 3 edition reaches **every English target**; `fr` matches English's
 target count exactly. All seven pass `check_translation.sh` gates **1–11**.
+
+**Book 4** (54 files, `nullfont` **0**, `\index` 621 in all eight):
+
+| | pages | `\omterm` links | distinct targets |
+|---|------:|-----:|-----:|
+| `en` | 321 | 3,093 | 155 |
+| `fr` | 348 | 3,204 | 162 |
+| `es` | 344 | 3,163 | 157 |
+| `pt` | 338 | 3,245 | 158 |
+| `nl` | 339 | 2,666 | 157 |
+| `hi` | 307 | 3,014 | 157 |
+| `ar` | 294 | 2,459 | 169 |
+| `id` | 350 | 3,572 | 164 |
+
+`fr`, `hi` and `id` reach every English target; `nl` 154, `pt` 153, `es` and
+`ar` 151, each gap being a target English itself links once or twice. All
+seven pass gates **1–11**, build 0/0/0, and are linker-idempotent.
 
 Every edition of all three books: 0 errors, 0 undefined, 0 overfull, the file count
 in the `.fls` equal to the files on disk, and `check_translation.sh` green for
@@ -330,6 +350,56 @@ so a change to one silently changes the other — re-run both sets of controls.*
 `book3_en.py` STOPs `substrate`, and the fall-through is exactly what makes its
 48 links correct, all in the enzymes chapter where that sense is the only one.
 `DROP` would delete them. See the comment in that file.
+
+**Book 4's run found 29 canon defects, two shared-tool bugs, and one class no
+gate in the project could see** (2026-09-16). The canon defects are the same
+shape as Book 3's — three found only by an agent reading an answer against its
+question (a cardiac-output increment given as the output itself, a resistance
+sum that does not add up, a cascade product off by fifty-fold) — plus a pine
+seed shed in the wrong autumn, a fern problem asking about "a moss sperm", a
+class-C flower answer contradicting its own chapter, an alignment site called
+uninformative when it groups two taxa, and "Hutchinson Forest at Hubbard Brook"
+for the Hubbard Brook Experimental Forest.
+
+The tool bugs: `harvest.py`'s `STMT_LABEL` matched `met` but not `meth`, and
+chapter 24 holds the only two `meth:` labels in the series, so its method
+statements' terms were attributed to the PRECEDING example — a wrong target in
+English and in every edition; and `check_latin_prose.py` counted a colour name
+and a `tabular` column spec as words, blocking correct prose in all four
+Latin-script editions at once.
+
+**The new class is `\foreach` label lists and pgfplots string keys**
+(`xticklabels=`, `symbolic x coords=`), reported by the Arabic agent. No prose
+gate could see them — the visible text is `\lab`, a macro — and `id_apply`
+compares `\foreach` lists BYTE-FOR-BYTE on purpose, so an *untranslated* list
+is the only form that passes the applier. English was shipping behind two green
+gates. `check_latin_prose.py` now owns both as fragment classes; a list of bare
+identifiers (`{kale,cab,spr}`, which are node names) is skipped, and the class
+was tested by re-planting a real defect, not assumed. The census over the
+shipped books then found four more: three in Book 3 `id` (the Krebs
+intermediates, the mitosis phases, three ribosome steps in English sentences)
+and one in Book 2 `id` (the ocular-dominance axis), all now fixed.
+
+**Line-broken `\index{}` keys were swept out of the whole repo on 2026-09-16**:
+59 across the shipped Books 1 and 2 translations (gate 5 postdates those runs,
+so ~42 year+language combinations were failing `check_translation.sh`) plus 5
+in the ENGLISH canon of Book 1. `bash tools/check_translation.sh` with no
+arguments is now green for **every year x every language**. Fix these by
+JOINING the key onto one line and NOT re-breaking afterwards — breaking after
+the closing brace puts the next clause's comma at the start of a line, which
+prints `` ,``; the first attempt created 32 of those. Verify any such rewrite
+by diffing the whitespace-normalised key multiset against `HEAD`, and confirm
+the page counts do not move (they did not: all sixteen Book 1/2 PDFs rebuilt to
+exactly their documented lengths).
+
+**`EXTRA_PROTECT` lookarounds must not be anchored on a word that is itself a
+linked term.** `book3_pt.py` had `aumento(?= de turgor)`; once *turgor* is
+wrapped in `\omterm{...}{turgor}` the lookahead stops matching, so the
+protection lapsed and a further `--apply` would have linked *aumento*
+("increase") to the microscope-magnification definition. **`--check` cannot see
+this** — it regenerates from unwrapped text — so the test is a plain dry run
+over the wrapped tree: `link_defined_terms.py --book N --lang L | grep 'links
+to insert'` must print 0. One site in eight books x seven languages.
 
 **The capitalised-harvest class has now appeared four times** — `Sorting`
 (Book 1), `Fermentation` and `Testosterone` (Book 2 English), `Xilem`/`Floem`
