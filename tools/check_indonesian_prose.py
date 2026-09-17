@@ -500,6 +500,29 @@ ALLOWED = {
     # "he". A genuine English sentence containing "he" still fires on its
     # other words and on the sentence-density rule.
     "he",
+    # A DROSOPHILA GENE NAME that is spelled like an English common noun.
+    # parts/bachelor-3/02-rna-regulation.tex:326,330 print the gene
+    # \emph{transformer} (tra) of the fly sex-determination cascade; it is a
+    # proper name and cannot be translated in any edition. Only the SINGULAR
+    # is exempted, deliberately: the ordinary English noun occurs in this
+    # repository exactly once, as the PLURAL \emph{transformers}
+    # (parts/grade-6/05-matter-from-food.tex:21), and the -s stem rule runs
+    # after this test, so that use stays gated. Appended by the Indonesian
+    # Biology Book 5 agent, 2026-09-17.
+    "transformer",
+    # "SOS" -- the bacterial SOS response (parts/bachelor-3/03-dna-repair.tex).
+    # It is an international distress signal used as the name of a regulon and
+    # is identical in every edition, but .lower() gives "sos", whose -s stem
+    # "so" is in ENGLISH_FUNCTION, so the PLURAL rule fires on it. Appended by
+    # the Indonesian Biology Book 5 agent, 2026-09-17.
+    "sos",
+    # "Ames" (the Ames mutagenicity test). The -es PLURAL-STEM rule strips it
+    # to "am", which is in ENGLISH_FUNCTION, so a correct Indonesian
+    # "\begin{method}[Uji Ames]" fires whenever the preceding word is
+    # capitalised and the EPONYM exemption cannot apply. "ames" is not an
+    # English word, so listing it costs no coverage. Appended by the
+    # Indonesian Biology Book 5 agent, 2026-09-17.
+    "ames",
 }
 
 # A curated list cannot be complete, and the words it misses are exactly the
@@ -601,6 +624,16 @@ DECADE_SUFFIX = re.compile(r"(?<=\d)-(?:an|nya|ke)\b")
 # parts/grade-12/14-brain-and-movement.tex.
 WORK_TITLE = re.compile(r"Anatomy\s+and\s+Physiology")
 
+# A CANONICAL GENE OR PROTEIN SYMBOL whose ALPHABETIC part is an English word.
+# LATIN_WORD drops the digits, so "HER2" (the receptor amplified in breast
+# cancer, parts/bachelor-3/11-cancer-biology.tex) reduces to "HER" and fires on
+# ENGLISH_FUNCTION's "her". The symbol is nomenclature: it is identical in every
+# edition and in the ENGLISH canon, which this gate would flag too -- a gate
+# that fires on the untranslated source is describing the source. Blanked here
+# the way ATTRIBUTION is, so the surrounding prose stays fully gated. Appended
+# by the Indonesian Biology Book 5 agent, 2026-09-17.
+GENE_SYMBOL = re.compile(r"\bHER2\b")
+
 # ---------------------------------------------------------------------------
 # 2. Untranslated sentences.
 # ---------------------------------------------------------------------------
@@ -610,6 +643,11 @@ WORK_TITLE = re.compile(r"Anatomy\s+and\s+Physiology")
 ID_MARKERS = {
     "yang", "dan", "di", "ke", "dari", "untuk", "dengan", "adalah", "ialah",
     "itu", "ini", "pada", "atau", "tidak", "bukan", "jika", "maka", "kita",
+    # "bila" (Book 5, 2026-09-17): the formal-register conditional, at least as
+    # common in academic Indonesian as "jika", which was already listed. Its
+    # absence produced an "untranslated" hit on correct prose and the Book 5
+    # agent reworded around it -- which is a gate bug report, not a workaround.
+    "bila",
     "setiap", "sebuah", "suatu", "akan", "sudah", "telah", "juga", "dapat",
     "bisa", "harus", "karena", "sehingga", "yaitu", "yakni", "oleh", "agar",
     "lalu", "kemudian", "hanya", "masih", "sama", "lebih", "kurang",
@@ -809,7 +847,7 @@ def check_file(path: pathlib.Path, findings: list) -> None:
 
     # --- 1. residual English -------------------------------------------
     for pat in (NUMBER_ABBREV, ATTRIBUTION, DECADE_SUFFIX, AMINO_ACID,
-                WORK_TITLE):
+                WORK_TITLE, GENE_SYMBOL):
         for m in pat.finditer(seen):
             seen = seen[:m.start()] + " " * (m.end() - m.start()) + seen[m.end():]
     # An EPONYM is a capitalised proper noun sitting in native prose: "sindrom
@@ -894,8 +932,19 @@ def main() -> int:
     files = 0
     for d in args.dirs:
         p = pathlib.Path(d)
-        if not p.is_dir():
+        # A PATH THAT IS NOT A DIRECTORY USED TO BE SKIPPED IN SILENCE, so the
+        # gate handed a single .tex file printed "OK (0 files)" and exited 0 --
+        # a clean pass that had checked nothing. That is how 561 residual-English
+        # hits survived per-file checking during the Biology Book 5 run. Accept a
+        # file, and refuse a path that is neither. Found by the Arabic Book 5
+        # agent, 2026-09-17; fixed in all three script gates at once.
+        if p.is_file():
+            files += 1
+            check_file(p, findings)
             continue
+        if not p.is_dir():
+            sys.stderr.write("  ERROR: not a file or directory: %s\n" % d)
+            return 2
         for f in sorted(p.glob("*.tex")):
             files += 1
             check_file(f, findings)

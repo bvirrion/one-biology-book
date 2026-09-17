@@ -1,0 +1,221 @@
+\section*{Capítulo \ref{ch:b3:bioinformatics} --- Bioinformática y análisis de secuencias}
+
+\begin{solution}{exo:b3:bioinformatics:1}
+Global: las dos secuencias alineadas de extremo a extremo, con todo
+residuo en una columna --- para dos proteínas que se creen homólogas en
+toda su longitud, como los \omterm{def:b3:genomics:comparative}{ortólogos} de una enzima constitutiva. Local:
+el par de subcadenas de mejor puntuación, ignorando el resto --- para
+encontrar un dominio compartido (un dominio SH2 en dos proteínas de
+señalización por lo demás no emparentadas), o un gen en una secuencia
+genómica larga.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:2}
+Bordes $0,-1,-2,-3$ en ambos sentidos. Fila A: $1, 0, -1$.
+Fila G: $0, 0, -1$. Fila C: $-1, -1, 1$. Óptimo $F(3,3) = 1$: AGC sobre
+AAC sin huecos (coincidencia, discrepancia, coincidencia:
+$1 - 1 + 1 = 1$).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:3}
+$s(a,a) = \lambda^{-1}\log\bigl(q_{aa}/p_{a}^{2}\bigr)$. El triptófano es
+raro ($p_{W} \approx 0.013$), de modo que la probabilidad de que dos
+triptófanos se alineen al azar, $p_{W}^{2}$, es minúscula, y un par de
+triptófanos conservado es un indicio de homología mucho más fuerte que un
+par de leucinas conservado ($p_{L}
+\approx 0.1$); la razón de log-verosimilitudes es proporcionalmente
+mayor.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:4}
+El \omterm{thm:b3:bioinformatics:evalue}{valor E} es el número de \omterm{def:b3:bioinformatics:alignment}{alineamientos} con una puntuación al menos tan
+alta que cabría esperar por azar en una búsqueda de esta consulta contra
+una base de datos de este tamaño. $E = 3$ significa que se esperan tres
+puntuaciones así por azar: el acierto no es prueba de homología (puede
+serlo de todos modos, pero la búsqueda no lo puede decir).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:5}
+$mn = 400\times 2\times 10^{11} = 8\times 10^{13} = 2^{46.2}$. $E(45) =
+2^{1.2} \approx 2.3$; $E(55) = 2^{-8.8} \approx 2\times 10^{-3}$;
+$E(65) = 2^{-18.8} \approx 2\times 10^{-6}$. $E = 10^{-3}$ exige $S' =
+46.2 + 10.0 = 56$ bits. Una consulta de \num{40} residuos tiene un $mn$
+diez veces menor, $2^{42.9}$: bastan $53$ bits --- pero una consulta
+corta rara vez llega siquiera a eso.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:6}
+\omterm{def:b3:bioinformatics:motif}{Contenidos de información}: $2$, $1$, $0$, y $2 - H$ con $H = -(0.7\log_{2}
+0.7 + 3\times 0.1\log_{2} 0.1) = 0.36 + 1.00 = 1.36$, o sea $0.64$. Total
+$R = 3.64$ bits. Coincidencias por azar: $9.2\times 10^{6}$ posiciones en
+dos hebras $\times 2^{-3.64} \approx 7\times 10^{5}$ --- el \omterm{def:b3:bioinformatics:motif}{motivo} es
+casi inútil por sí solo.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:7}
+Una inserción de varios residuos es un solo suceso mutacional, de modo
+que su coste no debería crecer linealmente con su longitud: un coste de
+apertura más un pequeño coste de extensión lo modela. Una penalización de
+apertura demasiado alta fuerza discrepancias donde corresponde un hueco y
+desalinea todo lo que sigue a una inserción real; una demasiado baja
+esparce huecos por todas partes, empareja residuos por azar e infla la
+identidad.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:8}
+No necesariamente: el \omterm{def:b3:bioinformatics:alignment}{alineamiento} cubre un segmento de \num{130}
+residuos, que es la firma de un dominio compartido más que la de un
+\omterm{def:b3:genomics:comparative}{ortólogo} alineado en toda su longitud. Prueba: búsquese la proteína de la
+mosca contra el proteoma humano (¿es la consulta su mejor acierto, en
+toda la longitud?), identifíquese el dominio con un HMM de \omterm{def:b3:bioinformatics:msa}{perfil} y
+constrúyase un árbol génico de la familia en varias especies.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:9}
+Un \omterm{def:b3:bioinformatics:msa}{perfil} registra, columna a columna, lo que la familia tolera: una
+posición que es siempre hidrófoba pero nunca el mismo residuo, un residuo
+catalítico invariante, una posición que es siempre un hueco en la mitad
+de la familia. Un \omterm{def:b3:bioinformatics:alignment}{alineamiento} por pares puntúa cada residuo contra otro
+único residuo y no puede saber que una valina en la posición 40 es ``tan
+buena como'' la isoleucina que hay ahí en la consulta. El \omterm{def:b3:bioinformatics:msa}{perfil} además
+pondera las columnas conservadas, de modo que una similitud débil
+concentrada allí donde la familia está conservada se vuelve significativa.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:10}
+Con una \omterm{prop:b3:bioinformatics:logodds}{puntuación esperada} positiva $\mu > 0$ por columna, la puntuación
+acumulada a lo largo de la diagonal de dos secuencias aleatorias es un
+paseo aleatorio con deriva positiva: tras $n$ columnas vale unos $\mu n$,
+de modo que el mejor \omterm{def:b3:bioinformatics:alignment}{alineamiento local} es esencialmente el todo y su
+puntuación crece como $\mu n$ y no como $\log n$. La teoría de
+Karlin--Altschul, que exige una deriva negativa para que las
+puntuaciones altas sean excursiones raras, no se aplica y no existe
+ningún $\lambda$. Para ADN al \qty{60}{\%} de GC la probabilidad de una
+coincidencia es $2(0.3^{2}) + 2(0.2^{2}) = 0.26$, de modo que la
+\omterm{prop:b3:bioinformatics:logodds}{puntuación esperada} es $0.26 - 0.74 = -0.48$: sigue siendo negativa y la
+estadística vale; pero un esquema como coincidencia $+1$ y discrepancia
+$-0.3$ tendría esperanza $+0.04$ y daría todo el genoma como un solo
+\omterm{def:b3:bioinformatics:alignment}{alineamiento}.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:11}
+\omterm{def:b3:bioinformatics:blast}{Semillas} y encadenamiento: se buscan coincidencias exactas o casi exactas
+de $k$-meros entre las dos secuencias con una tabla de dispersión, se
+conservan las que se alinean en diagonales coherentes, se encadenan y se
+aplica \omterm{thm:b3:bioinformatics:nw}{programación dinámica} solo en los huecos entre \omterm{def:b3:bioinformatics:blast}{semillas}
+encadenadas; se renuncia a los \omterm{def:b3:bioinformatics:alignment}{alineamientos} en regiones sin \omterm{def:b3:bioinformatics:blast}{semilla}
+(tramos muy divergentes). Bandas: si se sabe que las dos secuencias son
+casi colineales, se calculan solo las celdas de una banda de anchura $w$
+alrededor de la diagonal, a un coste $wn$ en lugar de $mn$; se renuncia a
+cualquier \omterm{def:b3:bioinformatics:alignment}{alineamiento} con una inserción mayor que la banda.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:12}
+La secuencia codificante tiene un período de tres: las tres posiciones
+del codón tienen composiciones de bases distintas (la tercera es la más
+sesgada), y el uso de codones es desigual en cada especie. Un modelo con
+tres estados codificantes en serie, cada uno emitiendo bases con la
+composición de esa posición del codón, asigna al ADN codificante una
+probabilidad mayor que el estado no codificante, a lo largo de una
+ventana de unas pocas decenas de codones, incluso sin paradas. En un
+genoma humano los exones son cortos (\qty{150}{bp}) y están separados por
+intrones de kilobases, de modo que la señal codificante es breve e
+interrumpida; el modelo debe reconocer además los sitios de corte, que
+son señales débiles, y la enorme cantidad de secuencia no codificante
+produce muchos segmentos codificantes falsos.
+\end{solution}
+
+\begin{solution}{pb:b3:bioinformatics:1}
+\textbf{1.} Filas K, Q, T; columnas K, A, Q, T; bordes $0,-1,-2,-3,-4$ y
+$0,-1,-2,-3$. Fila K: $1, 0, -1, -2$; fila Q: $0, 0, 1, 0$; fila T:
+$-1, -1, 0, 2$. Óptimo $2$: \texttt{K-QT} sobre \texttt{KAQT}.
+\textbf{2.} Mejor puntuación local $3$: \texttt{CAT} contra \texttt{CAT}
+(residuos 4--6 de GATCAT con 2--4 de ACAT); \texttt{ATCAT} contra
+\texttt{A-CAT} también puntúa $4 - 1 = 3$.
+\textbf{3.} $300\times 450 = 1.35\times 10^{5}$ actualizaciones; contra
+la base de datos, $300\times 1.2\times 10^{11} = 3.6\times 10^{13}$.
+\textbf{4.} $3.6\times 10^{4}$ s, diez horas por consulta; las \omterm{def:b3:bioinformatics:blast}{semillas}
+de \omterm{def:b3:bioinformatics:blast}{BLAST} se saltan casi toda la tabla y responden en segundos.
+\textbf{5.} $q_{ab} = p_{a}p_{b}e^{\lambda s}$. Alanina: $e^{1.39} = 4.0$,
+$q_{AA} = 0.074^{2}\times 4.0 = 0.022$, razón $4$. Triptófano:
+$e^{3.82} = 45$, $q_{WW} = 0.013^{2}\times 45 = 0.0077$, razón $45$. Un
+par de triptófanos alineado es $45$ veces más frecuente en homólogos que
+por azar, y un par de alaninas solo cuatro veces; aun así los pares de
+alaninas son más frecuentes en términos absolutos porque la alanina es
+frecuente.
+\textbf{6.} El \qty{24}{\%} cae en la zona crepuscular, donde los
+\omterm{def:b3:bioinformatics:alignment}{alineamientos} aleatorios alcanzan el \qtyrange{15}{20}{\%}; lo zanjarían
+el \omterm{thm:b3:bioinformatics:evalue}{valor E} del \omterm{def:b3:bioinformatics:alignment}{alineamiento}, unos \omterm{def:b3:bioinformatics:motif}{motivos} conservados en las posiciones
+correctas, una coincidencia con un HMM de \omterm{def:b3:bioinformatics:msa}{perfil} de una familia conocida
+o un plegamiento compartido.
+\textbf{7.} $mn = 300\times 1.2\times 10^{11} = 3.6\times 10^{13}$;
+$\log_{2}(mn) = 45.0$.
+\textbf{8.} $E(92) = 2^{45 - 92} = 2^{-47} \approx 7\times 10^{-15}$;
+$E(38) = 2^{7} = 128$.
+\textbf{9.} $E = 10^{-3}$ con $S' = 45 + 10 = 55$ bits; $E = 1$ con $45$
+bits.
+\textbf{10.} Diez veces $mn$: $E \approx 7\times 10^{-14}$, aún
+abrumador.
+\textbf{11.} Con $E = 128$, el décimo acierto es lo que produce el azar;
+un \qty{40}{\%} de identidad a lo largo de $60$ residuos no es prueba.
+Una búsqueda por \omterm{def:b3:bioinformatics:msa}{perfil} de los residuos 200--260 contra la base de datos
+de dominios podría mostrar si ese segmento es un dominio conocido, con
+una estadística de la que carece la comparación por pares.
+\textbf{12.} Los mejores aciertos recíprocos en toda la longitud son
+compatibles con una ortología uno a uno; no la demuestran --- una
+duplicación en un linaje posterior a la separación da dos coortólogos, y
+la pérdida del \omterm{def:b3:genomics:comparative}{ortólogo} verdadero puede dejar un \omterm{def:b3:genomics:comparative}{parálogo} como mejor
+acierto. La prueba es un árbol génico con varias especies.
+\textbf{13.} $R = 2 + 2 + 1.6 + 2 + 0.8 + 1.2 + 0.4 + 0.3 = 10.3$ bits.
+\textbf{14.} $3.2\times 10^{9}\times 2^{-10.3} \approx 2.5\times 10^{6}$
+coincidencias por azar.
+\textbf{15.} $\log_{2}(3.2\times 10^{9}/200) = \log_{2}(1.6\times 10^{7})
+\approx 24$ bits.
+\textbf{16.} La coaparición con un espaciado fijo suma los bits: $10.3 + 8 =
+18.3$, lo que aporta $8$ de los $13.7$ que faltan; unos $5.7$ bits (un
+factor de $50$ en las coincidencias por azar) han de venir de otro sitio
+--- la accesibilidad de la \omterm{def:b3:chromatin-epigenetics:nucleosome}{cromatina}, más compañeros.
+\textbf{17.} $H = -(0.5\log_{2}0.5 + 0.5\log_{2}0.5) = 1$ bit; $R = 2 -
+1 = 1$ bit.
+\textbf{18.} Un factor bacteriano ha de encontrar sus pocos sitios en un
+genoma de \qty{4.6}{Mb} sin ayuda de la \omterm{def:b3:chromatin-epigenetics:nucleosome}{cromatina}: necesita unos $19$
+bits, y sus sitios son largos y conservados. Un genoma eucariota es mil
+veces mayor y exige diez bits más, y sin embargo sus factores tienen
+sitios cortos; consiguen la especificidad por combinación y por la
+restricción a la \omterm{def:b3:chromatin-epigenetics:nucleosome}{cromatina} accesible, lo que además hace la regulación
+más evolucionable, ya que un sitio corto se gana o se pierde con
+facilidad.
+\textbf{19.} $3/64 = 0.047$; el número esperado de codones antes de una
+parada es $64/3 \approx 21$.
+\textbf{20.} $p_{A} = p_{T} = 0.31$, $p_{G} = p_{C} = 0.19$: $P(\text{TAA})
+= 0.31^{3} = 0.030$, $P(\text{TAG}) = P(\text{TGA}) = 0.31^{2}\times 0.19
+= 0.018$; total $0.066$, longitud esperada del marco, $15$ codones. El
+ADN rico en AT está lleno de paradas, de modo que los marcos abiertos al
+azar son más cortos y los largos destacan más.
+\textbf{21.} $(61/64)^{100} = e^{-4.80} = 0.008$; $(61/64)^{300} =
+e^{-14.4} = 5.6\times 10^{-7}$.
+\textbf{22.} Cada marco abierto maximal termina en una parada, y $3.2\times
+10^{9}$ inicios de codón contienen $3.2\times 10^{9}\times 3/64 = 1.5\times
+10^{8}$ paradas: unos $1.5\times 10^{8}\times 0.008 = 1.2\times 10^{6}$
+marcos al azar de al menos $100$ codones, y $1.5\times 10^{8}\times
+5.6\times 10^{-7} \approx 80$ de al menos $300$.
+\textbf{23.} Una bacteria de \qty{4.6}{Mb} tiene unas $4\times 10^{5}$
+paradas y por tanto unos \num{3500} marcos por azar de $100$ codones pero
+casi ninguno de $300$; sus genes promedian $300$ codones y el
+\qty{88}{\%} del ADN es codificante, de modo que un marco abierto largo
+es casi siempre un gen. En el gusano codifica el \qty{1.5}{\%} del ADN,
+los exones promedian $50$ codones --- menos que el umbral del azar --- y
+un millón de marcos al azar de $100$ codones los sepultan. Los buscadores
+de genes eucariotas usan señales de sitios de corte, el sesgo de codones
+en un modelo oculto de Markov, la homología con proteínas conocidas y,
+sobre todo, los transcritos secuenciados.
+\textbf{24.} Una lectura de un mensajero cortado y empalmado se alinea
+con el genoma en dos trozos separados por un intrón: la partición marca
+los dos sitios de corte hasta la base; la cobertura de lecturas delimita
+los exones y las lecturas emparejadas enlazan exones sucesivos en un solo
+transcrito, lo que resuelve cuál de varios sitios de corte candidatos se
+usa.
+\textbf{25.} $E \approx 7\times 10^{-15}$ para el mejor acierto; unos
+$24$ bits para especificar $200$ sitios en el genoma; y unos $80$ marcos
+de lectura por azar de $300$ codones en todo el genoma.
+\end{solution}

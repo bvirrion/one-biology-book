@@ -1,0 +1,229 @@
+\section*{Chapitre \ref{ch:b3:bioinformatics} --- Bio-informatique et analyse des séquences}
+
+\begin{solution}{exo:b3:bioinformatics:1}
+Global~: les deux séquences alignées d'un bout à l'autre, chaque résidu
+dans une colonne --- pour deux protéines que l'on croit homologues sur
+toute leur longueur, par exemple des \omterm{def:b3:genomics:comparative}{orthologues} d'une enzyme de
+ménage. Local~: la paire de sous-chaînes de meilleur score, le reste
+étant négligé --- pour trouver un domaine commun (un domaine SH2 dans
+deux protéines de signalisation par ailleurs sans lien), ou un gène dans
+une longue séquence génomique.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:2}
+Bords $0,-1,-2,-3$ des deux côtés. Ligne A~: $1, 0, -1$. Ligne G~:
+$0, 0, -1$. Ligne C~: $-1, -1, 1$. Optimum $F(3,3) = 1$~: AGC sur AAC
+sans brèche (correspondance, mésappariement, correspondance~:
+$1 - 1 + 1 = 1$).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:3}
+$s(a,a) = \lambda^{-1}\log\bigl(q_{aa}/p_{a}^{2}\bigr)$. Le tryptophane
+est rare ($p_{W} \approx 0.013$), de sorte que la chance de voir deux
+tryptophanes alignés au hasard, $p_{W}^{2}$, est minuscule, et qu'une
+paire de tryptophanes conservée est un signe d'homologie bien plus fort
+qu'une paire de leucines conservée ($p_{L}
+\approx 0.1$)~; le rapport de log-cote est d'autant plus grand.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:4}
+La \omterm{thm:b3:bioinformatics:evalue}{valeur E} est le nombre d'\omterm{def:b3:bioinformatics:alignment}{alignements} de score au moins aussi élevé
+que l'on attendrait par hasard dans une recherche de cette requête
+contre une base de cette taille. $E = 3$ signifie que trois scores de
+ce niveau sont attendus par hasard~: la correspondance n'est pas une
+preuve d'homologie (elle peut en être une, mais la recherche ne peut
+pas le dire).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:5}
+$mn = 400\times 2\times 10^{11} = 8\times 10^{13} = 2^{46.2}$. $E(45) =
+2^{1.2} \approx 2.3$~; $E(55) = 2^{-8.8} \approx 2\times 10^{-3}$~;
+$E(65) = 2^{-18.8} \approx 2\times 10^{-6}$. $E = 10^{-3}$ demande $S' =
+46.2 + 10.0 = 56$ bits. Une requête de \num{40} résidus a un $mn$ dix
+fois plus petit, $2^{42.9}$~: $53$ bits suffisent --- mais une requête
+courte atteint rarement même cela.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:6}
+\omterm{def:b3:bioinformatics:motif}{Contenus en information}~: $2$, $1$, $0$, et $2 - H$ avec $H = -(0.7\log_{2}
+0.7 + 3\times 0.1\log_{2} 0.1) = 0.36 + 1.00 = 1.36$, donc $0.64$.
+Total $R = 3.64$ bits. Correspondances fortuites~: $9.2\times 10^{6}$
+positions sur deux brins $\times 2^{-3.64} \approx 7\times 10^{5}$ ---
+le \omterm{def:b3:bioinformatics:motif}{motif} est presque inutile à lui seul.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:7}
+Une insertion de plusieurs résidus est un seul événement mutationnel,
+de sorte que son coût ne devrait pas croître linéairement avec sa
+longueur~: un coût d'ouverture plus un petit coût d'extension modélise
+cela. Une pénalité d'ouverture trop forte impose des mésappariements là
+où il faudrait une brèche et désaligne tout ce qui suit une vraie
+insertion~; une pénalité trop faible sème des brèches partout, apparie
+des résidus par hasard et gonfle l'identité.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:8}
+Pas forcément~: l'\omterm{def:b3:bioinformatics:alignment}{alignement} couvre un segment de \num{130} résidus, ce
+qui est la signature d'un domaine commun plutôt que d'un \omterm{def:b3:genomics:comparative}{orthologue}
+aligné sur toute sa longueur. Test~: chercher la protéine de mouche en
+retour dans le protéome humain (la requête en est-elle la meilleure
+correspondance, sur toute la longueur~?), identifier le domaine par un
+HMM de \omterm{def:b3:bioinformatics:msa}{profil}, et construire un arbre de gènes de la famille dans
+plusieurs espèces.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:9}
+Un \omterm{def:b3:bioinformatics:msa}{profil} enregistre, colonne par colonne, ce que la famille tolère~:
+une position toujours hydrophobe sans jamais être le même résidu, un
+résidu catalytique invariant, une position qui est toujours une brèche
+dans la moitié de la famille. Un \omterm{def:b3:bioinformatics:alignment}{alignement} par paires score chaque
+résidu contre un seul autre résidu et ne peut pas savoir qu'une valine
+en position 40 vaut «~aussi bien~» que l'isoleucine qui s'y trouve dans
+la requête. Le \omterm{def:b3:bioinformatics:msa}{profil} pondère en outre les colonnes conservées, de sorte
+qu'une faible similitude concentrée là où la famille est conservée
+devient significative.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:10}
+Avec un \omterm{prop:b3:bioinformatics:logodds}{score espéré} $\mu > 0$ par colonne, le score cumulé le long de
+la diagonale de deux séquences aléatoires est une marche aléatoire à
+dérive positive~: après $n$ colonnes il vaut environ $\mu n$, de sorte
+que le meilleur \omterm{def:b3:bioinformatics:alignment}{alignement local} est pour l'essentiel la totalité, et
+que son score croît comme $\mu n$ et non comme $\log n$. La théorie de
+Karlin--Altschul, qui exige une dérive négative pour que les scores
+élevés soient de rares excursions, ne s'applique pas et aucun $\lambda$
+n'existe. Pour de l'ADN à \qty{60}{\%} de GC la chance d'une
+correspondance vaut $2(0.3^{2}) + 2(0.2^{2}) = 0.26$, de sorte que le
+\omterm{prop:b3:bioinformatics:logodds}{score espéré} vaut $0.26 - 0.74 = -0.48$~: encore négatif, et la
+statistique tient~; mais un système tel que correspondance $+1$,
+mésappariement $-0.3$ aurait une espérance de $+0.04$ et rendrait le
+génome entier comme un seul \omterm{def:b3:bioinformatics:alignment}{alignement}.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:11}
+Amorces et chaînage~: trouver par table de hachage les correspondances
+exactes ou presque exactes de $k$-mers entre les deux séquences, garder
+celles qui s'alignent sur des diagonales cohérentes, les chaîner, et ne
+faire de \omterm{thm:b3:bioinformatics:nw}{programmation dynamique} que dans les intervalles entre amorces
+chaînées~; on abandonne les \omterm{def:b3:bioinformatics:alignment}{alignements} des régions sans amorce (les
+tronçons très divergents). Bande~: si l'on sait les deux séquences
+presque colinéaires, ne calculer que les cases d'une bande de largeur
+$w$ autour de la diagonale, au coût $wn$ au lieu de $mn$~; on abandonne
+tout \omterm{def:b3:bioinformatics:alignment}{alignement} comportant une insertion plus large que la bande.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:12}
+Une séquence codante a une période de trois~: les trois positions du
+codon ont des compositions en bases différentes (la troisième est la
+plus biaisée) et l'usage des codons est inégal dans chaque espèce. Un
+modèle à trois états codants en série, chacun émettant des bases avec la
+composition de cette position du codon, attribue à l'ADN codant une
+probabilité plus élevée que ne le fait l'état non codant, sur une
+fenêtre de quelques dizaines de codons, même sans les stops. Dans un
+génome humain les exons sont courts (\qty{150}{bp}), séparés par des
+introns de kilobases, de sorte que le signal codant est bref et
+interrompu~; le modèle doit en outre reconnaître les sites d'épissage,
+signaux faibles, et l'énorme quantité de séquence non codante produit
+beaucoup de faux segments codants.
+\end{solution}
+
+\begin{solution}{pb:b3:bioinformatics:1}
+\textbf{1.} Lignes K, Q, T~; colonnes K, A, Q, T~; bords
+$0,-1,-2,-3,-4$ et $0,-1,-2,-3$. Ligne K~: $1, 0, -1, -2$~; ligne Q~:
+$0, 0, 1, 0$~; ligne T~: $-1, -1, 0, 2$. Optimum $2$~:
+\texttt{K-QT} sur \texttt{KAQT}.
+\textbf{2.} Meilleur score local $3$~: \texttt{CAT} contre \texttt{CAT}
+(résidus 4--6 de GATCAT avec 2--4 d'ACAT)~; \texttt{ATCAT} contre
+\texttt{A-CAT} vaut aussi $4 - 1 = 3$.
+\textbf{3.} $300\times 450 = 1.35\times 10^{5}$ mises à jour~; contre
+la base $300\times 1.2\times 10^{11} = 3.6\times 10^{13}$.
+\textbf{4.} $3.6\times 10^{4}$ s, dix heures par requête~; les amorces
+de \omterm{def:b3:bioinformatics:blast}{BLAST} sautent presque tout le tableau et répondent en quelques
+secondes.
+\textbf{5.} $q_{ab} = p_{a}p_{b}e^{\lambda s}$. Alanine~: $e^{1.39} = 4.0$,
+$q_{AA} = 0.074^{2}\times 4.0 = 0.022$, rapport $4$. Tryptophane~:
+$e^{3.82} = 45$, $q_{WW} = 0.013^{2}\times 45 = 0.0077$, rapport $45$.
+Une paire de tryptophanes alignée est $45$ fois plus fréquente chez les
+homologues que par hasard, une paire d'alanines quatre fois seulement~;
+les paires d'alanines sont néanmoins plus nombreuses en valeur absolue,
+parce que l'alanine est fréquente.
+\textbf{6.} \qty{24}{\%} tombe dans la zone crépusculaire, où les
+\omterm{def:b3:bioinformatics:alignment}{alignements} aléatoires atteignent \qtyrange{15}{20}{\%}~; la \omterm{thm:b3:bioinformatics:evalue}{valeur E}
+de l'\omterm{def:b3:bioinformatics:alignment}{alignement}, des \omterm{def:b3:bioinformatics:motif}{motifs} conservés aux bonnes positions, une
+correspondance avec un HMM de \omterm{def:b3:bioinformatics:msa}{profil} d'une famille connue, ou un
+repliement partagé trancheraient.
+\textbf{7.} $mn = 300\times 1.2\times 10^{11} = 3.6\times 10^{13}$~;
+$\log_{2}(mn) = 45.0$.
+\textbf{8.} $E(92) = 2^{45 - 92} = 2^{-47} \approx 7\times 10^{-15}$~;
+$E(38) = 2^{7} = 128$.
+\textbf{9.} $E = 10^{-3}$ à $S' = 45 + 10 = 55$ bits~; $E = 1$ à $45$
+bits.
+\textbf{10.} Dix fois $mn$~: $E \approx 7\times 10^{-14}$, toujours
+écrasant.
+\textbf{11.} Avec $E = 128$, la dixième correspondance est ce que
+produit le hasard~; \qty{40}{\%} d'identité sur $60$ résidus n'est pas
+une preuve. Une recherche par \omterm{def:b3:bioinformatics:msa}{profil} des résidus 200--260 dans la base
+de domaines pourrait montrer si ce segment est un domaine connu, avec
+une statistique dont la comparaison par paires est dépourvue.
+\textbf{12.} Des meilleures correspondances réciproques sur toute la
+longueur sont compatibles avec une orthologie un pour un~; elles ne la
+prouvent pas --- une duplication dans une lignée après la séparation
+donne deux \omterm{def:b3:genomics:comparative}{co-orthologues}, et la perte du véritable \omterm{def:b3:genomics:comparative}{orthologue} peut
+laisser un \omterm{def:b3:genomics:comparative}{paralogue} comme meilleure correspondance. Le test est un
+arbre de gènes portant sur plusieurs espèces.
+\textbf{13.} $R = 2 + 2 + 1.6 + 2 + 0.8 + 1.2 + 0.4 + 0.3 = 10.3$ bits.
+\textbf{14.} $3.2\times 10^{9}\times 2^{-10.3} \approx 2.5\times 10^{6}$
+correspondances fortuites.
+\textbf{15.} $\log_{2}(3.2\times 10^{9}/200) = \log_{2}(1.6\times 10^{7})
+\approx 24$ bits.
+\textbf{16.} Une cooccurrence à espacement fixé ajoute les bits~: $10.3 + 8 =
+18.3$, ce qui fournit $8$ des $13.7$ manquants~; environ $5.7$ bits (un
+facteur $50$ sur les correspondances fortuites) doivent venir d'ailleurs
+--- accessibilité de la \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}, autres partenaires.
+\textbf{17.} $H = -(0.5\log_{2}0.5 + 0.5\log_{2}0.5) = 1$ bit~; $R = 2 -
+1 = 1$ bit.
+\textbf{18.} Un facteur bactérien doit trouver ses quelques sites dans
+un génome de \qty{4.6}{Mb} sans l'aide de la \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}~: il lui faut
+quelque $19$ bits, et ses sites sont longs et conservés. Un génome
+eucaryote est mille fois plus grand, ce qui demande dix bits de plus, et
+pourtant ses facteurs ont des sites courts~; ils obtiennent leur
+spécificité par la combinaison et par la restriction de la \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}
+accessible, ce qui rend aussi la régulation plus évolutive, puisqu'un
+site court se gagne et se perd aisément.
+\textbf{19.} $3/64 = 0.047$~; le nombre espéré de codons avant un stop
+vaut $64/3 \approx 21$.
+\textbf{20.} $p_{A} = p_{T} = 0.31$, $p_{G} = p_{C} = 0.19$~: $P(\text{TAA})
+= 0.31^{3} = 0.030$, $P(\text{TAG}) = P(\text{TGA}) = 0.31^{2}\times 0.19
+= 0.018$~; total $0.066$, longueur espérée du cadre $15$ codons. Un ADN
+riche en AT est plein de stops, de sorte que les cadres ouverts
+aléatoires sont plus courts et que les longs ressortent davantage.
+\textbf{21.} $(61/64)^{100} = e^{-4.80} = 0.008$~; $(61/64)^{300} =
+e^{-14.4} = 5.6\times 10^{-7}$.
+\textbf{22.} Chaque cadre ouvert maximal se termine sur un stop, et
+$3.2\times
+10^{9}$ départs de codons contiennent $3.2\times 10^{9}\times 3/64 = 1.5\times
+10^{8}$ stops~: environ $1.5\times 10^{8}\times 0.008 = 1.2\times 10^{6}$
+cadres aléatoires d'au moins $100$ codons, et $1.5\times 10^{8}\times
+5.6\times 10^{-7} \approx 80$ d'au moins $300$.
+\textbf{23.} Une bactérie de \qty{4.6}{Mb} compte quelque $4\times 10^{5}$
+stops et donc environ \num{3500} cadres fortuits de $100$ codons, mais
+presque aucun de $300$~; ses gènes font $300$ codons en moyenne et
+\qty{88}{\%} de l'ADN est codant, de sorte qu'un long cadre ouvert est
+presque toujours un gène. Chez le ver, \qty{1.5}{\%} de l'ADN code, les
+exons font $50$ codons en moyenne --- moins que le seuil fortuit --- et
+un million de cadres aléatoires de $100$ codons les submergent. Les
+chercheurs de gènes eucaryotes emploient les signaux de sites
+d'épissage, le biais d'usage des codons dans un modèle de Markov caché,
+l'homologie avec des protéines connues et, surtout, des transcrits
+séquencés.
+\textbf{24.} Une lecture issue d'un messager épissé s'aligne sur le
+génome en deux morceaux séparés par un intron~: la coupure marque les
+deux sites d'épissage à la base près~; la couverture en lectures
+délimite les exons et les lectures appariées relient les exons
+successifs en un seul transcrit, ce qui résout lequel de plusieurs sites
+d'épissage candidats est employé.
+\textbf{25.} $E \approx 7\times 10^{-15}$ pour la meilleure
+correspondance~; environ $24$ bits pour spécifier $200$ sites dans le
+génome~; quelque $80$ cadres de lecture fortuits de $300$ codons dans
+le génome entier.
+\end{solution}

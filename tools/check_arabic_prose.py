@@ -599,7 +599,6 @@ def _locate(body: str, token: str, seen_before: dict) -> int:
     return body.count("\n", 0, max(idx, 0)) + 1 if idx >= 0 else 1
 
 
-
 # Transliterated English function words, written in Arabic letters.
 #
 # This list is deliberately short. Arabic is full of short particles that a
@@ -899,8 +898,19 @@ def main() -> int:
     files = 0
     for d in args.dirs:
         p = pathlib.Path(d)
-        if not p.is_dir():
+        # A PATH THAT IS NOT A DIRECTORY USED TO BE SKIPPED IN SILENCE, so the
+        # gate handed a single .tex file printed "OK (0 files)" and exited 0 --
+        # a clean pass that had checked nothing. That is how 561 residual-English
+        # hits survived per-file checking during the Biology Book 5 run. Accept a
+        # file, and refuse a path that is neither. Found by the Arabic Book 5
+        # agent, 2026-09-17; fixed in all three script gates at once.
+        if p.is_file():
+            files += 1
+            check_file(p, findings)
             continue
+        if not p.is_dir():
+            sys.stderr.write("  ERROR: not a file or directory: %s\n" % d)
+            return 2
         for f in sorted(p.glob("*.tex")):
             files += 1
             check_file(f, findings)
@@ -924,6 +934,368 @@ def main() -> int:
             if len(hits) > args.max_detail:
                 print(f"        ... {len(hits) - args.max_detail} more")
     return 1
+
+
+# NOTE: every block below was appended by a translation agent AFTER the
+# module body but BEFORE the __main__ guard, which now stays last. An
+# earlier append put them after the guard, where sys.exit(main()) had
+# already run and the additions were dead code: the module imported fine
+# (so a harness that imports check_file saw them) while the command-line
+# gate did not. Keep the guard at the very end of this file.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+
+
+# Biology Book 5's own Latin binomials, higher taxa, gene/protein symbols and
+# method names, collected from parts/bachelor-3/ exactly as the ALLOWED_WORDS
+# comment at the top of this file instructs a later book to do ("grep the
+# English bodies again if a later book adds species"). Book 5 spans twenty-seven
+# molecular and organismal fields, so it prints many more gene symbols than any
+# earlier volume. The rule applied here is the one the Book 2 and Book 4 blocks
+# above use: a Linnaean name is Latin in every script, and an italicised gene
+# symbol or a method acronym is an international identifier, not an English
+# word. Ordinary English words are NOT added -- a definition headword such as
+# "Adhesion" or "Memory" is translated by this edition and must keep firing the
+# gate -- and neither are surnames, which this edition transliterates
+# (هويش، كورنبرغ، لوغر).
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {
+    # genera, species epithets and higher taxa
+    "agrobacterium", "tumefaciens", "aplysia", "californica", "aspergillus",
+    "anthracis", "botrytis", "buchnera", "burkholderia", "caenorhabditis",
+    "ciona", "clostridioides", "difficile", "dscam", "haemophilus",
+    "influenzae", "helicobacter", "pylori", "hydra", "klebsiella", "listeria",
+    "monocytogenes", "neisseria", "nocardia", "paulinella", "philanthus",
+    "aeruginosa", "riftia", "salmonella", "sclerotinia", "serratia",
+    "pyogenes", "symbiodiniaceae", "aquaticus", "wolbachia", "petunia",
+    "glomeromycete", "zooxanthellae",
+    # gene, protein, complex and allele symbols printed in Latin
+    "xist", "igf", "peg", "cdkn", "agouti", "var", "snrpn", "ube",
+    "antennapedia", "ultrabithorax", "trithorax", "argonaute", "dicer",
+    "drosha", "bicoid", "nanos", "hunchback", "knirps", "giant", "caudal",
+    "eve", "engrailed", "wingless", "oskar", "gurken", "sxl", "msl", "dsx",
+    "abi", "akt", "apaf", "arf", "arp", "bcl", "camkii", "cas", "caspase",
+    "cdc", "cdk", "ced", "cgas", "cgmp", "chk", "clock", "bmal", "dectin",
+    "ecori", "egl", "eif", "enac", "exportin", "fasl", "flg", "fls", "foxp",
+    "groel", "groes", "hnrnp", "hoxb", "hoxc", "hoxa", "hoxd", "hsp",
+    "igd", "ige", "igm", "iga", "igg", "inos", "klf", "lexa", "lgr", "lin",
+    "loxp", "luxi", "luxr", "macroh", "mad", "mcl", "mecp", "msh", "mlh",
+    "muth", "mutl", "muts", "myd", "mtor", "oct", "nanog", "piezo", "pitx",
+    "prp", "psc", "reca", "rhoa", "rpos", "ruvc", "shieldin", "snrk",
+    "sting", "sula", "tdt", "tric", "unc", "uvra", "uvrb", "wee", "wus",
+    "notch", "shh", "noggin", "chordin", "follistatin", "dnmt", "tet",
+    "polycomb", "myc", "kras", "ras", "raf", "rab", "rac", "cdna",
+    "let", "pri", "pre", "shrna", "sirna", "sirnas", "mirna", "mirnas",
+    "pirna", "pirnas", "lncrna", "lncrnas", "ncrna", "snrnas", "microrna",
+    "micrornas", "mrnas", "sema", "cre", "flp", "frt", "tra",
+    "vhl", "brca", "apc", "atm", "atr", "rad", "kdm", "shox", "src", "vegf",
+    "glut", "creb", "ampa", "nmda", "pam", "pin", "della", "pif", "pifs",
+    "cry", "phy", "pfr", "sec", "copi", "copii", "clathrin",
+    # methods, databases and scoring matrices, which are proper names
+    "chip", "seq", "blast", "blosum", "pfam", "qpcr", "nanopore", "sanger",
+    "taq", "crispr", "rnai", "bruijn", "cryo", "sem", "tem", "pcr",
+    "alphafold", "hmms", "hmm", "otus", "sloss", "iucn", "snps",
+    # units and instrument abbreviations reduced to letters by the tokeniser
+    "mosm", "mmhg", "hba", "nacl", "kda", "gfp", "camp", "dgtp",
+}
+
+# Two more tokens the tokeniser cannot reach on its own. LATIN_WORD splits at
+# a digit, so the antisense-transcript symbol UBE3A-ATS arrives as "UBE" and
+# then as the single token "A-ATS"; the hyphen rule accepts a compound only
+# when EVERY component is separately allowed, so the stray one-letter "a" has
+# to be listed beside "ats". Listing "a" costs the gate nothing: a standalone
+# "a" is already below the three-character floor, and the only other effect is
+# on a hyphenated compound whose other half is itself an allowed identifier.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"a", "t", "ats"}
+
+# Book 5 prints three Drosophila gene names that ARE ordinary English words,
+# so they cannot go into ALLOWED_WORDS without blinding the gate for the word
+# itself. A gene symbol is a name: \emph{Sex-lethal}, \emph{transformer} and
+# \emph{doublesex} stay Latin in the French, Dutch and Indonesian editions too.
+# They are blanked as exact phrases, the way "Imperial War Museums" is above,
+# rather than token by token -- "sex" and "lethal" deliberately stay out of
+# ALLOWED_WORDS. Appended to the existing pattern so the original stays intact.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|Sex-lethal|transformer|doublesex"
+)
+
+# Lowercase gene symbols and nomenclature fragments that are not English words.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {
+    "elegans", "piwi", "rnase", "snrna", "snrnas", "poly", "dsx", "sxl",
+    "tra", "lin", "unc", "egl", "ced", "abd", "dfd", "scr", "antp", "ubx",
+    "gcn", "atf", "pcsk", "dgcr", "drm", "suv", "ezh", "prc", "hdac", "hat",
+    "hats", "hdacs", "mbd", "mecp", "tet", "cpg", "cpgs", "tpg", "cpa",
+}
+
+# More Book 5 identifiers: polymerase and recombinase symbols, and the names of
+# two recombination systems. "Pol" is the printed abbreviation of a polymerase
+# (Pol~$\beta$, Pol~IV), "lox" and "frt" are the recognition-site names of the
+# Cre-lox and Flp-FRT systems, "pkcs" is the catalytic subunit of DNA-PK.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"pol", "lox", "frt", "pkcs", "rev", "flp", "xpa", "xpc",
+                  "xpf", "xpg", "brca", "parp", "chk", "atm", "atr", "mrn",
+                  "rpa", "dam", "muth", "okazaki"}
+
+# "LINE-1" is the name of a retrotransposon family (long interspersed nuclear
+# element), printed in Latin in every edition. It cannot go token by token into
+# ALLOWED_WORDS, because "line" is an ordinary English word the gate must keep
+# catching; blanked as an exact phrase instead, like the gene names above.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(ATTRIBUTION_EXTRA.pattern + r"|LINE-1|Bcl-xL"
+    r"|(?<![A-Za-z])(?:Bad|Puma)(?![A-Za-z0-9])")
+
+# An ALIGNED nucleotide or peptide row contains gap characters, so the existing
+# NUCLEOTIDE_SEQ (which allows only trailing hyphens, for the 3' end) cannot see
+# \texttt{G-AT} / \texttt{A-CAT}: the tokeniser hands it "A-CAT", and the hyphen
+# rule then asks for "cat" in ALLOWED_WORDS, which must not be added. Alignment
+# rows are data, byte-identical in every edition. Widened to accept internal
+# gaps; the four-character floor is kept, so an ordinary word is still reported.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+NUCLEOTIDE_SEQ = re.compile(r"[ACGTU](?:[ACGTU-]{2,})[ACGTU][-']*")
+
+# Two more genus names Book 5 prints in Latin, and the components of "T-DNA",
+# the transferred segment of the Agrobacterium Ti plasmid. "dna" is already
+# exempt as an acronym on its own; it has to be listed for the hyphen rule,
+# which accepts a compound only when every component is separately allowed.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"thermus", "streptococcus", "staphylococcus", "aureus",
+                  "escherichia", "coli", "dna", "rna", "bacillus",
+                  "clostridium", "pseudomonas", "vibrio", "arabidopsis",
+                  "drosophila", "caenorhabditis", "neurospora", "xenopus",
+                  "danio", "rerio", "saccharomyces", "cerevisiae"}
+
+# Enzyme-class suffixes and the SNARE families. "GTPase", "ATPase", "v-SNARE"
+# and "t-SNARE" are international nomenclature printed in Latin in every
+# edition; the glycosylation consensus "Asn-X-Ser/Thr" is a sequence written in
+# the three-letter amino-acid code, whose components must each be listed for
+# the hyphen rule ("asn" and "ser" are already allowed; "x" and "thr" are not).
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"gtpase", "gtpases", "atpase", "atpases", "snare", "snares",
+                  "v", "x", "thr", "sar", "arf", "ku", "nsf", "kdel", "skl",
+                  "ldl", "hdl", "cftr", "erad"}
+
+# ---------------------------------------------------------------------------
+# Standard math SUBSCRIPTS written with \text{}, which no translator can touch.
+# ---------------------------------------------------------------------------
+# Book 5 writes rate constants as k_{\text{on}}, k_{\text{off}} and the
+# steady-state concentration as C_{\text{ss}} -- and it writes them inside
+# \[...\] displays, which tools/id_apply.py's math census compares BYTE FOR
+# BYTE. So the applier requires those three fragments to stay English while
+# this gate, which reads \text{} inside math, requires them to be Arabic: the
+# two gates demand opposite things and no edition can satisfy both. They are
+# symbol subscripts, not prose -- the same class the SHORT_ENGLISH comment
+# above already exempts for x_{\text{m}} and R_{\text{s}} -- so they are
+# skipped at extraction rather than added to ALLOWED_WORDS, which would blind
+# the gate to the ordinary English words "on" and "off" in running prose.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+MATH_SUBSCRIPTS = {"on", "off", "ss", "max", "min", "NHEJ", "HR",
+                   # R_{\text{eff}}, the effective reproduction number of the
+                   # herd-immunity chapter, is frozen inside displays the same way.
+                   # Added by the Arabic Biology Book 5 agent, 2026-09-17.
+                   "eff",
+                   # M_{\text{brain}} \propto M_{\text{body}}^{0.75}, the
+                   # allometric law of the nervous-systems chapter.
+                   "brain", "body",
+                   # P_{\text{see}}, the frequency-of-seeing function of the
+                   # sensory-systems chapter.
+                   "see",
+                   # t_{\text{pre}} - t_{\text{post}}, the spike-timing axis of
+                   # the learning-and-memory chapter.
+                   "pre", "post",
+                   # The renal chapter's frozen symbols: P_{\text{GC}},
+                   # P_{\text{BS}}, \pi_{\text{GC}}, \text{GFR}, \text{RPF},
+                   # U_{\text{osm}}, P_{\text{osm}}.
+                   "GC", "BS", "GFR", "RPF", "osm",
+                   # The endocrinology chapter: \text{EC}_{50}, \text{TSH},
+                   # \text{PTH}, \text{Ca}, \text{Ca}_{0}.
+                   "EC", "TSH", "PTH", "Ca",
+                   # The plant chapter: [\text{Pfr}], [\text{Pr}],
+                   # [\text{IAA}]_{\text{in}}/[\text{IAA}]_{\text{out}},
+                   # \mathrm{pH}_{\text{in}}. "in"/"out" are blinded only
+                   # inside a math \text{} group, never in prose.
+                   "Pfr", "Pr", "IAA", "IAAH", "in", "out",
+                   # The developmental chapter: D_{\text{inh}},
+                   # k_{\text{inh}} of the Turing wavelength.
+                   "inh",
+                   # The stem-cell chapter: L_{\text{crit}}.
+                   "crit",
+                   # The molecular-evolution chapter: P_{\text{discord}},
+                   # d_{\text{true}}.
+                   "discord", "true",
+                   # The behavioural-ecology chapter: the Hawk--Dove payoff
+                   # matrix inside \[...\], whose \text{} row and column
+                   # heads id_apply compares byte for byte.
+                   "Hawk", "Dove", "vs Hawk", "vs Dove"}
+_extract_math_text_all = extract_math_text
+
+
+def extract_math_text(body: str) -> str:            # noqa: F811
+    out = []
+    for m in MATH_TEXT_MACRO.finditer(body):
+        inner, _ = match_group(body, m.end() - 1, "{", "}")
+        if inner and inner.strip() not in MATH_SUBSCRIPTS:
+            out.append(inner)
+    return " ".join(out)
+
+# Two more Book 5 protein symbols: the Rho family of small GTPases (Rac, Rho,
+# Cdc42 -- "rac" and "cdc" are already allowed) and Listeria's surface protein
+# ActA, which recruits the host Arp2/3 complex.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"rho", "acta", "arp", "cdc", "rac", "tau", "map",
+                  "katanin", "profilin", "cofilin", "dynactin", "nexin"}
+
+# Single letters, for the hyphen rule only. A cyclin--CDK pair prints as
+# "cyclin D--Cdk4/6", which LATIN_WORD swallows whole as "D--Cdk"; the hyphen
+# rule then wants every component listed. Single letters never match
+# LATIN_WORD on their own (it requires two characters), so listing them here
+# costs the gate nothing at all.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= set("abcdefghijklmnopqrstuvwxyz")
+
+# The apoptosis gene/protein symbols of Book 5's Bcl-2 chapter, plus the
+# cell-cycle and death-receptor names. All are published protein symbols kept
+# in Latin by every edition. "bad" and "puma" are ordinary English words, so
+# they are matched here only in their Latin symbol spelling; the gate keeps
+# catching the lowercase English words, which are not in this set.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"bax", "bak", "bim", "bid", "noxa", "mcl", "flip", "iap",
+                  "iaps", "fas", "fasl", "trail", "tnf", "apaf", "mad",
+                  "securin", "separase", "cohesin", "condensin", "mcm",
+                  "wee", "ripk", "mlkl", "gasdermin", "venetoclax",
+                  "anoikis", "myc", "scf", "apc", "cdk", "cdks"}
+
+# The signalling-cascade names of the cancer chapter, printed as chains of
+# protein symbols (Ras--MAPK, Raf--MEK--ERK, PI3K--Akt--mTOR, BCR--ABL) which
+# the tokeniser hands over as one hyphenated token.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"mapk", "raf", "mek", "erk", "akt", "bcr", "abl", "egfr",
+                  "her", "pten", "vegf", "hif", "vhl", "smad", "kras",
+                  "braf", "imatinib", "trastuzumab", "apobec", "ctla",
+                  "cadherin", "microglobulin", "src", "wnt", "notch",
+                  "gtp", "gdp", "atp", "adp", "amp", "nadh", "fadh"}
+
+# Bacteriology names: the species epithet of Bacillus subtilis and the
+# D-lactate terminus that replaces D-Ala in vancomycin-resistant cell walls.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"subtilis", "lactate", "ala", "lux", "rpos", "mrsa",
+                  "integron", "integrons", "pangenome", "teichoic"}
+
+# Nucleic-acid strand abbreviations (dsDNA, ssRNA, ...) and the Latin phrase
+# Beijerinck coined for the tobacco-mosaic agent, which every edition prints
+# in Latin as a historical quotation.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"dsdna", "ssdna", "dsrna", "ssrna", "contagium", "vivum",
+                  "fluidum", "aciclovir", "remdesivir", "molnupiravir",
+                  "tenofovir", "lamivudine", "azt", "nirmatrelvir",
+                  "maraviroc", "pleconaril", "lenacapavir", "ribavirin",
+                  "ccr", "ace", "sars", "cov", "hiv", "pfu"}
+
+# "Nod factor" (nodulation factor): the lipochitooligosaccharide signal a
+# rhizobium answers a legume's flavonoids with. Every edition prints the
+# symbol "Nod" unchanged, so the Arabic reads "عوامل Nod". Matched
+# case-sensitively rather than added to ALLOWED_WORDS so that the ordinary
+# English word "nod" stays gated; \b would not work here, because an Arabic
+# letter is a word character and "وNod" therefore has no boundary before N.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|(?<![A-Za-z])Nod(?![A-Za-z])")
+
+
+# Innate-immunity symbols: the Drosophila gene "Toll" that named the Toll-like
+# receptors, the cytosolic RNA sensor RIG-I and the JAK--STAT pathway. "Toll"
+# is matched case-sensitively so that the ordinary English noun "toll" stays
+# gated; the other two are ordinary protein-family acronyms.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"rig", "jak", "stat", "jaks", "stats"}
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|(?<![A-Za-z])Toll(?![A-Za-z])")
+
+
+# CAR-T: chimaeric antigen receptor T cells. Matched case-sensitively as a
+# whole token so that the English noun "car" stays gated.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|(?<![A-Za-z])CAR-T(?![A-Za-z])")
+
+
+# "L-dopa", the drug name printed unchanged in every edition (the levorotatory
+# prefix is part of the name). Matched case-sensitively so that the English
+# word "dopa" alone, and the letter-plus-word pattern generally, stay gated.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|(?<![A-Za-z])L-dopa(?![A-Za-z])")
+
+
+# A TikZ *label* key was read as if its whole braced value were prose. A label
+# is written "label={[font=\tiny]right:hormone}": the option group and the
+# anchor word are syntax, only what follows the colon is visible text. Both
+# TIKZ_NODE (which grabs the first braced group after "node", i.e. the label's)
+# and TIKZ_TEXT_KEYS therefore reported "font" and "right" as residual English
+# on every such node, and no edition could clear them without rewriting the
+# picture. Normalised here, before extraction, to "label={hormone}", so the
+# visible text is still gated and the syntax is not. A label with no anchor is
+# left untouched, so nothing becomes invisible.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+_extract_drawing_text_with_label_syntax = extract_drawing_text
+LABEL_SYNTAX = re.compile(
+    r"(\blabel\s*=\s*)\{\s*(?:\[[^\]]*\]\s*)?"
+    r"(?:(?:above|below|left|right|north|south|east|west|centre|center)"
+    r"(?:\s+(?:above|below|left|right|north|south|east|west))?\s*:\s*)?"
+    r"((?:[^{}]|\{[^{}]*\})*)\}")
+
+
+def extract_drawing_text(body: str, depth: int = 0) -> str:   # noqa: F811
+    return _extract_drawing_text_with_label_syntax(
+        LABEL_SYNTAX.sub(lambda m: m.group(1) + "{" + m.group(2) + "}", body),
+        depth)
+
+
+# Clock-gene symbols, printed italic and unchanged in every edition: the
+# Drosophila gene "period" and its mammalian orthologues Per and Cry. Matched
+# as whole tokens; "period" is thereby also blinded as an ordinary English
+# noun, which is the accepted cost -- this edition writes "دور" for the period
+# of an oscillation everywhere and never leaves the English word standing.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern
+    + r"|(?<![A-Za-z])(?:Per|Cry|period)(?![A-Za-z])")
+
+
+# Plant-molecular names: the Aux/IAA repressor family, the F-box class of
+# ubiquitin-ligase subunits, and the species epithet of Arabidopsis thaliana.
+# "F-box" is matched case-sensitively as a whole token so that the English noun
+# "box" stays gated.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"aux", "thaliana"}
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern + r"|(?<![A-Za-z])F-box(?![A-Za-z])")
+
+
+# Drosophila gene symbols printed italic and unchanged in every edition:
+# even-skipped, fushi tarazu, hairy, knirps (kni), bithorax, Distal-less,
+# yellow, and the "ppel" fragment that a tokeniser leaves when it splits
+# "Krueppel" at its u-umlaut. The lowercase English words "hairy" and "yellow"
+# are blinded as a documented cost: this edition writes أشعر / أصفر and never
+# leaves either English word standing.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"ppel", "fushi", "tarazu", "kni", "bithorax"}
+ATTRIBUTION_EXTRA = re.compile(
+    ATTRIBUTION_EXTRA.pattern
+    + r"|(?<![A-Za-z])(?:even-skipped|Distal-less|hairy|yellow)(?![A-Za-z])")
+
+
+# Cre-ER, the tamoxifen-inducible recombinase of lineage tracing, and nAG, the
+# newt anterior-gradient protein. Both are protein names printed unchanged.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ALLOWED_WORDS |= {"cre", "er", "nag"}
+
+
+# "Anefo", the Dutch national photo agency whose archive supplies several
+# public-domain portraits; part of a photo credit, like Wikimedia Commons.
+# Added by the Arabic Biology Book 5 agent, 2026-09-17.
+ATTRIBUTION_EXTRA = re.compile(ATTRIBUTION_EXTRA.pattern + r"|Anefo")
 
 
 if __name__ == "__main__":

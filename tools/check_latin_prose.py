@@ -339,6 +339,35 @@ ALLOWED_BY_LANG = {
         "parental", "proximal", "distal", "posterior", "anterior", "somite",
         "dermomyotome", "induction", "recombinant", "megasporangium",
         "nucellus", "zygote", "embryo", "sensing",
+        # Book 5 (nl agent, 2026-09-16). Latin disease nomenclature, unchanged
+        # in Dutch ("xeroderma pigmentosum"); and the genomics loanwords Dutch
+        # actually uses -- a Dutch bioinformatics text writes "contigs per
+        # read", "seed" and "scaffold" exactly as English does. Adding them
+        # cleared the blocking tier with NO change to correct Dutch prose.
+        "xeroderma", "pigmentosum", "contigs", "contig", "read", "reads",
+        "scaffold", "seed", "seeds",
+        # "via" is an ordinary Dutch preposition, like "per" above.
+        "via",
+        # Reported by the Dutch Book 5 agent, 2026-09-17: the combinatorial-
+        # code figure of the sensory-systems chapter carries a \foreach whose
+        # label field is the row legend {1/receptor A, ... 5/receptor E}. The
+        # list has slash fields, so it lands in the BLOCKING foreach tier, but
+        # "receptor" is spelt exactly so in Dutch -- the label is already
+        # correct Dutch and was NOT reworded. Same shape as the Spanish "lab,
+        # pb, abd" entry below.
+        "receptor",
+        # Same shape again (Dutch Book 5 agent, 2026-09-17): the endocrine-axis
+        # figure labels its top tier "hypothalamus\\CRH, TRH, GnRH, GHRH".
+        # "hypothalamus" is spelt identically in Dutch (like "muscularis"
+        # above) and the four releasing-hormone abbreviations are capitalised,
+        # so the whole label is correct Dutch as it stands.
+        "hypothalamus",
+        # The Hox-cluster \foreach of the developmental-genetics chapter,
+        # exactly the case the Spanish Book 5 agent reported below: the label
+        # field is the list of Drosophila Hox gene SYMBOLS, canonical and
+        # identical in every edition. Only the lowercase ones need listing.
+        # (Dutch Book 5 agent, 2026-09-17.)
+        "lab", "pb", "abd",
     },
     # French keeps the same -ine forms; accented ones (sérine) differ and are
     # deliberately absent, because there the identical spelling WOULD be a
@@ -349,12 +378,64 @@ ALLOWED_BY_LANG = {
            # Book 4 developmental vocabulary (reconstructed).
            "parental", "proximal", "distal", "posterior", "anterior",
            "somite", "dermomyotome", "induction", "recombinant", "nucellus",
-           "embryo", "sensing", "parental"},
+           "embryo", "sensing", "parental",
+           # Book 5: the Latin disease name is unchanged in French medical
+           # usage ("le xeroderma pigmentosum"), so the two-word TikZ node
+           # label is correct prose, not residual English. Appended by the
+           # French Biology Book 5 agent, 2026-09-16, together with three
+           # ordinary French words that happen to spell like their English
+           # twins inside short figure labels: "position (nm)" is a correct
+           # French axis label and "caspase-8 active" is correct French for
+           # the active form of the enzyme (the adjective follows the noun).
+           "xeroderma", "pigmentosum", "position", "caspase", "active",
+           # Book 5, second round, appended by the French Biology Book 5
+           # agent, 2026-09-17. Five more fragments blocked although every
+           # one is already correct French and none could be reworded
+           # without falsifying it:
+           #  * the Hox-cluster \foreach of the developmental-genetics
+           #    chapter carries the Drosophila gene SYMBOLS in its label
+           #    field (lab, pb, Dfd, Scr, Antp, Ubx, abd-A, Abd-B) --
+           #    canonical nomenclature, identical in every edition by
+           #    design; the Spanish and Portuguese Book 5 agents listed the
+           #    same three lowercase symbols;
+           #  * "distance (mm)" is a correct French axis label, like the
+           #    "position (nm)" already listed above;
+           #  * "interstitium" and "hypothalamus" are the French words
+           #    themselves (the nephron and pituitary figures);
+           #  * "Pr (inactive)" is correct French for the inactive form of
+           #    phytochrome -- the adjective is spelt the same.
+           "lab", "pb", "abd", "distance", "interstitium", "hypothalamus",
+           "inactive"},
     # Spanish and Portuguese keep the Latin positional adjectives unchanged.
     "es": {"proximal", "distal", "posterior", "anterior", "somite",
-           "dermomyotome", "nucellus"},
+           "dermomyotome", "nucellus",
+           # Reported by the Spanish Book 5 agent, 2026-09-17: the Hox-cluster
+           # figure of the developmental-genetics chapter carries a \foreach
+           # whose label field is the list of Drosophila Hox gene SYMBOLS
+           # (lab, pb, Dfd, Scr, Antp, Ubx, abd-A, Abd-B). Gene symbols are
+           # canonical and identical in every edition by design, but the list
+           # has slash fields, so it lands in the BLOCKING foreach tier. Only
+           # the lowercase symbols need listing; the capitalised ones are
+           # already invisible to the word scan.
+           "lab", "pb", "abd"},
     "pt": {"proximal", "distal", "posterior", "anterior", "somite",
-           "dermomyotome", "nucellus"},
+           "dermomyotome", "nucellus",
+           # Appended by the Portuguese Biology Book 5 agent, 2026-09-17.
+           # Three fragments blocked although every one is correct Portuguese
+           # and none could be reworded without falsifying it:
+           #  * the Hox-cluster \foreach of the developmental-genetics
+           #    chapter carries the Drosophila gene SYMBOLS (lab, pb, Dfd,
+           #    Scr, Antp, Ubx, abd-A, Abd-B) in its label field -- canonical
+           #    nomenclature, identical in every edition by design (the
+           #    Spanish Book 5 agent listed the same three symbols);
+           #  * the combinatorial-code \foreach of the sensory-systems
+           #    chapter reads {1/receptor A, ... 5/receptor E}, and
+           #    "receptor" is spelt exactly so in Portuguese (the Dutch
+           #    Book 5 agent listed it for the same figure);
+           #  * the limb-bud figure labels its posterior signal
+           #    "ZPA: sonic hedgehog", the gene's own name, which no
+           #    edition translates.
+           "lab", "pb", "abd", "receptor", "sonic", "hedgehog"},
     # Indonesian absorbs Latin anatomical nomenclature verbatim.
     "id": {"muscularis", "mucosae", "propria", "lamina", "serosa", "submucosa",
            # Reported by the Indonesian Book 3 agent, 2026-09-06: three
@@ -371,6 +452,21 @@ ALLOWED_BY_LANG = {
            # unchanged, so the limb-bud axis label is correct as it stands.
            # Reported by the Indonesian Book 4 agent, 2026-09-16.
            "posterior", "anterior", "proximal", "distal", "nucellus",
+           # Book 5, appended by the Indonesian Biology Book 5 agent,
+           # 2026-09-17. The Latin disease name is unchanged in Indonesian
+           # medical usage ("xeroderma pigmentosum"), exactly as the Dutch and
+           # French Book 5 agents reported for their editions, so the
+           # two-word TikZ node label is correct prose, not residual English.
+           "xeroderma", "pigmentosum",
+           # Same round, same agent: the Hox-cluster \foreach of the
+           # developmental-genetics chapter carries the Drosophila Hox gene
+           # SYMBOLS in its label field (lab, pb, Dfd, Scr, Antp, Ubx, abd-A,
+           # Abd-B). Gene symbols are canonical and identical in every
+           # edition by design, but the list has slash fields, so it lands in
+           # the BLOCKING foreach tier. Only the lowercase symbols need
+           # listing; the Spanish, Portuguese, French and Dutch Book 5 agents
+           # listed exactly the same three for the same figure.
+           "lab", "pb", "abd",
            },
 }
 

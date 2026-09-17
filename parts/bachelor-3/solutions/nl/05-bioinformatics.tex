@@ -1,0 +1,220 @@
+\section*{Hoofdstuk \ref{ch:b3:bioinformatics} --- Bio-informatica en sequentieanalyse}
+
+\begin{solution}{exo:b3:bioinformatics:1}
+Globaal: beide sequenties van begin tot eind uitgelijnd, elk residu in
+een kolom --- voor twee eiwitten die over hun hele lengte homoloog
+worden geacht, zoals \omterm{def:b3:genomics:comparative}{orthologen} van een huishoudenzym. Lokaal: het
+hoogst scorende paar deelreeksen, de rest genegeerd --- om een gedeeld
+domein te vinden (een SH2-domein in twee verder ongerelateerde
+signaaleiwitten), of een gen in een lange genoomsequentie.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:2}
+Randen $0,-1,-2,-3$ beide kanten op. Rij A: $1, 0, -1$. Rij G: $0, 0, -1$.
+Rij C: $-1, -1, 1$. Optimum $F(3,3) = 1$: AGC boven AAC zonder hiaten
+(overeenkomst, verschil, overeenkomst: $1 - 1 + 1 = 1$).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:3}
+$s(a,a) = \lambda^{-1}\log\bigl(q_{aa}/p_{a}^{2}\bigr)$. Tryptofaan is
+zeldzaam ($p_{W} \approx 0.013$), dus de kans dat twee tryptofanen
+toevallig worden uitgelijnd, $p_{W}^{2}$, is uiterst klein, en een
+geconserveerd tryptofaanpaar is een veel sterker teken van homologie
+dan een geconserveerd leucinepaar ($p_{L}
+\approx 0.1$); de log-oddsverhouding is navenant groter.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:4}
+De E-waarde is het aantal \omterm{def:b3:bioinformatics:alignment}{uitlijningen} met een score van minstens die
+hoogte dat door toeval te verwachten is bij een zoekactie van deze
+zoekvraag tegen een databank van deze omvang. $E = 3$ betekent dat drie
+zulke scores door toeval worden verwacht: de treffer is geen bewijs van
+homologie (zij kan het nog steeds zijn, maar de zoekactie kan het niet
+zeggen).
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:5}
+$mn = 400\times 2\times 10^{11} = 8\times 10^{13} = 2^{46.2}$. $E(45) =
+2^{1.2} \approx 2.3$; $E(55) = 2^{-8.8} \approx 2\times 10^{-3}$;
+$E(65) = 2^{-18.8} \approx 2\times 10^{-6}$. Voor $E = 10^{-3}$ is $S' =
+46.2 + 10.0 = 56$ bits nodig. Een zoekvraag van \num{40} residuen heeft
+een tien keer kleinere $mn$, $2^{42.9}$: $53$ bits volstaan --- maar een
+korte zoekvraag haalt zelfs dat zelden.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:6}
+\omterm{def:b3:bioinformatics:motif}{Informatie-inhouden}: $2$, $1$, $0$, en $2 - H$ met $H = -(0.7\log_{2}
+0.7 + 3\times 0.1\log_{2} 0.1) = 0.36 + 1.00 = 1.36$, dus $0.64$. Totaal
+$R = 3.64$ bits. Toevallige treffers: $9.2\times 10^{6}$ posities op
+twee strengen $\times 2^{-3.64} \approx 7\times 10^{5}$ --- het \omterm{def:b3:bioinformatics:motif}{motief}
+is alleen vrijwel nutteloos.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:7}
+Een insertie van verscheidene residuen is één mutatiegebeurtenis, dus
+zouden haar kosten niet lineair met haar lengte moeten groeien: een
+openingskost plus een kleine verlengingskost bootst dat na. Een te hoge
+openingsstraf dwingt verschillen af waar een hiaat hoort en lijnt alles
+na een echte insertie verkeerd uit; een te lage straf strooit overal
+hiaten, laat residuen toevallig overeenkomen en blaast de identiteit op.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:8}
+Niet noodzakelijk: de \omterm{def:b3:bioinformatics:alignment}{uitlijning} beslaat een segment van \num{130}
+residuen, en dat is de handtekening van een gedeeld domein en niet van
+een \omterm{def:b3:genomics:comparative}{ortholoog} die over zijn hele lengte is uitgelijnd. Toets: doorzoek
+met het vliegeneiwit het menselijk eiwitbestand terug (is de zoekvraag
+zijn beste treffer, over de hele lengte?), bepaal het domein met een
+\omterm{def:b3:bioinformatics:msa}{profiel-HMM}, en bouw een genboom van de familie in verscheidene soorten.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:9}
+Een \omterm{def:b3:bioinformatics:msa}{profiel} legt kolom voor kolom vast wat de familie duldt: een
+positie die altijd hydrofoob is maar nooit hetzelfde residu, een
+onveranderlijk katalytisch residu, een positie die bij de helft van de
+familie altijd een hiaat is. Een paarsgewijze \omterm{def:b3:bioinformatics:alignment}{uitlijning} scoort elk
+residu tegen één ander residu en kan niet weten dat een valine op
+positie 40 ``even goed is als'' het isoleucine dat de zoekvraag daar
+heeft. Het \omterm{def:b3:bioinformatics:msa}{profiel} weegt bovendien de geconserveerde kolommen, zodat
+zwakke gelijkenis die zich juist daar samenbalt significant wordt.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:10}
+Bij een positieve \omterm{prop:b3:bioinformatics:logodds}{verwachte score} $\mu > 0$ per kolom is de cumulatieve
+score langs de diagonaal van twee willekeurige sequenties een
+toevalswandeling met positieve drift: na $n$ kolommen is zij ongeveer
+$\mu n$, zodat de beste \omterm{def:b3:bioinformatics:alignment}{lokale uitlijning} in wezen het geheel is en
+haar score als $\mu n$ groeit in plaats van als $\log n$. De theorie
+van Karlin--Altschul, die een negatieve drift vergt zodat hoge scores
+zeldzame uitstapjes zijn, geldt dan niet en er bestaat geen $\lambda$.
+Voor DNA bij \qty{60}{\%} GC is de kans op een overeenkomst
+$2(0.3^{2}) + 2(0.2^{2}) = 0.26$, zodat de \omterm{prop:b3:bioinformatics:logodds}{verwachte score}
+$0.26 - 0.74 = -0.48$ is: nog steeds negatief, en de statistiek houdt
+stand; maar een schema met overeenkomst $+1$ en verschil $-0.3$ zou
+verwachting $+0.04$ hebben en zou het hele genoom als één \omterm{def:b3:bioinformatics:alignment}{uitlijning}
+melden.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:11}
+\omterm{def:b3:bioinformatics:blast}{Seeds} en ketenen: zoek met een hashtabel exacte of bijna exacte
+treffers van $k$-meren tussen de twee sequenties, houd die welke op
+samenhangende diagonalen liggen, keten ze aaneen, en voer \omterm{thm:b3:bioinformatics:nw}{dynamisch
+programmeren} alleen uit in de gaten tussen geketende \omterm{def:b3:bioinformatics:blast}{seeds}; dat geeft
+\omterm{def:b3:bioinformatics:alignment}{uitlijningen} op in gebieden zonder \omterm{def:b3:bioinformatics:blast}{seed} (sterk uiteenlopende stukken).
+Banden: zijn de twee sequenties bekend als vrijwel collineair, bereken
+dan alleen de cellen binnen een band van breedte $w$ rond de diagonaal,
+tegen kosten $wn$ in plaats van $mn$; dat geeft elke \omterm{def:b3:bioinformatics:alignment}{uitlijning} op met
+een insertie die groter is dan de band.
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:12}
+Coderende sequentie heeft een periode van drie: de drie codonposities
+hebben verschillende basensamenstellingen (de derde is het meest
+scheef), en het codongebruik is per soort ongelijk. Een model met drie
+coderende toestanden achter elkaar, die elk basen uitzenden met de
+samenstelling van die codonpositie, geeft coderend DNA over een venster
+van enkele tientallen codons een hogere kans dan de niet-coderende
+toestand doet, zelfs zonder stopcodons. In een menselijk genoom zijn de
+exons kort (\qty{150}{bp}) en gescheiden door introns van kilobasen,
+zodat het coderende signaal kort en onderbroken is; het model moet
+bovendien splitsplaatsen herkennen, die zwakke signalen zijn, en de
+enorme hoeveelheid niet-coderende sequentie levert vele valse coderende
+segmenten op.
+\end{solution}
+
+\begin{solution}{pb:b3:bioinformatics:1}
+\textbf{1.} Rijen K, Q, T; kolommen K, A, Q, T; randen $0,-1,-2,-3,-4$
+en $0,-1,-2,-3$. Rij K: $1, 0, -1, -2$; rij Q: $0, 0, 1, 0$; rij T:
+$-1, -1, 0, 2$. Optimum $2$: \texttt{K-QT} boven \texttt{KAQT}.
+\textbf{2.} Beste lokale score $3$: \texttt{CAT} tegen \texttt{CAT}
+(residuen 4--6 van GATCAT met 2--4 van ACAT); \texttt{ATCAT} tegen
+\texttt{A-CAT} scoort eveneens $4 - 1 = 3$.
+\textbf{3.} $300\times 450 = 1.35\times 10^{5}$ bewerkingen; tegen de
+databank $300\times 1.2\times 10^{11} = 3.6\times 10^{13}$.
+\textbf{4.} $3.6\times 10^{4}$ s, tien uur per zoekvraag; de \omterm{def:b3:bioinformatics:blast}{seeds} van
+\omterm{def:b3:bioinformatics:blast}{BLAST} slaan vrijwel de hele tabel over en antwoorden in seconden.
+\textbf{5.} $q_{ab} = p_{a}p_{b}e^{\lambda s}$. Alanine: $e^{1.39} = 4.0$,
+$q_{AA} = 0.074^{2}\times 4.0 = 0.022$, verhouding $4$. Tryptofaan:
+$e^{3.82} = 45$, $q_{WW} = 0.013^{2}\times 45 = 0.0077$, verhouding
+$45$. Een uitgelijnd tryptofaanpaar komt $45$ keer vaker voor in
+homologen dan door toeval, een alaninepaar maar vier keer;
+alanineparen zijn in absolute zin niettemin talrijker omdat alanine
+veel voorkomt.
+\textbf{6.} \qty{24}{\%} ligt in de schemerzone, waar toevallige
+\omterm{def:b3:bioinformatics:alignment}{uitlijningen} \qtyrange{15}{20}{\%} halen; de E-waarde van de \omterm{def:b3:bioinformatics:alignment}{uitlijning},
+geconserveerde motieven op de juiste posities, een treffer van een
+\omterm{def:b3:bioinformatics:msa}{profiel-HMM} op een bekende familie, of een gedeelde vouwing zouden het
+beslechten.
+\textbf{7.} $mn = 300\times 1.2\times 10^{11} = 3.6\times 10^{13}$;
+$\log_{2}(mn) = 45.0$.
+\textbf{8.} $E(92) = 2^{45 - 92} = 2^{-47} \approx 7\times 10^{-15}$;
+$E(38) = 2^{7} = 128$.
+\textbf{9.} $E = 10^{-3}$ bij $S' = 45 + 10 = 55$ bits; $E = 1$ bij $45$
+bits.
+\textbf{10.} Tien keer $mn$: $E \approx 7\times 10^{-14}$, nog altijd
+overweldigend.
+\textbf{11.} Met $E = 128$ is de tiende treffer wat het toeval
+oplevert; \qty{40}{\%} identiteit over $60$ residuen is geen bewijs. Een
+profielzoekactie van de residuen 200--260 tegen de domeindatabank zou
+kunnen laten zien of dat segment een bekend domein is, met een
+statistiek die de paarsgewijze vergelijking niet heeft.
+\textbf{12.} Wederzijds beste treffers over de volle lengte zijn
+verenigbaar met een-op-een-orthologie; zij bewijzen haar niet --- een
+duplicatie in één lijn na de splitsing geeft twee \omterm{def:b3:genomics:comparative}{co-orthologen}, en het
+verlies van de echte \omterm{def:b3:genomics:comparative}{ortholoog} kan een \omterm{def:b3:genomics:comparative}{paraloog} als beste treffer
+achterlaten. Een genboom met verscheidene soorten is de toets.
+\textbf{13.} $R = 2 + 2 + 1.6 + 2 + 0.8 + 1.2 + 0.4 + 0.3 = 10.3$ bits.
+\textbf{14.} $3.2\times 10^{9}\times 2^{-10.3} \approx 2.5\times 10^{6}$
+toevallige treffers.
+\textbf{15.} $\log_{2}(3.2\times 10^{9}/200) = \log_{2}(1.6\times 10^{7})
+\approx 24$ bits.
+\textbf{16.} Samen voorkomen op een vaste tussenafstand telt de bits op:
+$10.3 + 8 =
+18.3$, wat $8$ van de $13.7$ ontbrekende levert; ongeveer $5.7$ bits
+(een factor $50$ in toevallige treffers) moet van elders komen ---
+toegankelijkheid van het \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}, verdere partners.
+\textbf{17.} $H = -(0.5\log_{2}0.5 + 0.5\log_{2}0.5) = 1$ bit; $R = 2 -
+1 = 1$ bit.
+\textbf{18.} Een bacteriële factor moet haar enkele plaatsen vinden in
+een genoom van \qty{4.6}{Mb} zonder hulp van het \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}: zij heeft
+zo'n $19$ bits nodig, en haar plaatsen zijn lang en geconserveerd. Een
+eukaryoot genoom is duizend keer groter en vraagt tien bits meer, en
+toch hebben de factoren korte plaatsen; zij bereiken specificiteit door
+combinatie en door de beperking tot toegankelijk \omterm{def:b3:chromatin-epigenetics:nucleosome}{chromatine}, wat de
+regulatie ook beter evolueerbaar maakt, omdat een korte plaats
+gemakkelijk wordt gewonnen of verloren.
+\textbf{19.} $3/64 = 0.047$; het verwachte aantal codons vóór een
+stopcodon is $64/3 \approx 21$.
+\textbf{20.} $p_{A} = p_{T} = 0.31$, $p_{G} = p_{C} = 0.19$: $P(\text{TAA})
+= 0.31^{3} = 0.030$, $P(\text{TAG}) = P(\text{TGA}) = 0.31^{2}\times 0.19
+= 0.018$; samen $0.066$, verwachte leesraamlengte $15$ codons. AT-rijk
+DNA zit vol stopcodons, dus zijn willekeurige open leesramen korter en
+springen lange er sterker uit.
+\textbf{21.} $(61/64)^{100} = e^{-4.80} = 0.008$; $(61/64)^{300} =
+e^{-14.4} = 5.6\times 10^{-7}$.
+\textbf{22.} Elk maximaal open leesraam eindigt op een stopcodon, en
+$3.2\times
+10^{9}$ codonbeginpunten bevatten $3.2\times 10^{9}\times 3/64 = 1.5\times
+10^{8}$ stopcodons: ongeveer $1.5\times 10^{8}\times 0.008 = 1.2\times 10^{6}$
+willekeurige leesramen van minstens $100$ codons, en $1.5\times 10^{8}\times
+5.6\times 10^{-7} \approx 80$ van minstens $300$.
+\textbf{23.} Een bacterie van \qty{4.6}{Mb} heeft zo'n $4\times 10^{5}$
+stopcodons en dus ongeveer \num{3500} toevallige leesramen van $100$
+codons maar vrijwel geen van $300$; haar genen tellen gemiddeld $300$
+codons en \qty{88}{\%} van het DNA is coderend, zodat een lang open
+leesraam vrijwel altijd een gen is. Bij de worm codeert \qty{1.5}{\%}
+van het DNA, tellen de exons gemiddeld $50$ codons --- korter dan de
+toevalsdrempel --- en overspoelen een miljoen toevallige leesramen van
+$100$ codons hen. Eukaryote genzoekers gebruiken signalen van
+splitsplaatsen, codonvoorkeur in een verborgen markovmodel, homologie
+met bekende eiwitten en, vooral, gesequencede transcripten.
+\textbf{24.} Een \omterm{def:b3:genomics:ngs}{read} uit een gesplitste boodschapper lijnt in twee
+stukken op het genoom uit, gescheiden door een intron: de splitsing
+markeert beide splitsplaatsen tot op de base; de readdekking bakent de
+exons af en gepaarde \omterm{def:b3:genomics:ngs}{reads} verbinden opeenvolgende exons tot één
+transcript, wat uitwijst welke van verscheidene kandidaat-splitsplaatsen
+wordt gebruikt.
+\textbf{25.} $E \approx 7\times 10^{-15}$ voor de beste treffer;
+ongeveer $24$ bits om $200$ plaatsen in het genoom aan te wijzen; zo'n
+$80$ toevallige leesramen van $300$ codons in het hele genoom.
+\end{solution}

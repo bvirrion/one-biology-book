@@ -20,9 +20,9 @@ of old and current programmes), Book 5 the rest of a licence de biologie
 
 **Current state: all five books written in English (Books 1–4 on
 2026-08-28, 2026-09-02, 2026-09-04 and 2026-09-10; Book 5 on
-2026-09-11); Books 1, 2, 3 and 4 all ship in the seven target languages
-(2026-09-04, 2026-09-05, 2026-09-06 and 2026-09-16); Book 5 is English
-only.**
+2026-09-11), and ALL FIVE now ship in the seven target languages
+(2026-09-04, 2026-09-05, 2026-09-06, 2026-09-16 and 2026-09-17).
+The series is complete: five books x eight languages, forty editions.**
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -204,11 +204,11 @@ grep -c 'Overfull' $L           # overfull boxes — keep at 0
 
 ## Language editions
 
-**Books 1, 2, 3 and 4 ship in eight languages** — English plus `fr`, `nl`,
+**All five books ship in eight languages** — English plus `fr`, `nl`,
 `es`, `pt`, `hi`, `ar` and `id`; Book 1 translated 2026-09-04, Book 2 on
-2026-09-05, Book 3 on 2026-09-06 and Book 4 on 2026-09-16, one agent per
-edition, **every one self-scored 96/100** under the native-academic bar.
-Book 5 is English only.
+2026-09-05, Book 3 on 2026-09-06, Book 4 on 2026-09-16 and Book 5 on
+2026-09-17, one agent per edition, **every one self-scored 96/100** under
+the native-academic bar.
 
 Book 3 went out in **two waves** (`fr`/`nl`/`es`/`pt`, then `hi`/`ar`/`id`),
 which is now the standing rule: wave 1's findings reached wave 2, and wave 2
@@ -276,9 +276,28 @@ target count exactly. All seven pass `check_translation.sh` gates **1–11**.
 `ar` 151, each gap being a target English itself links once or twice. All
 seven pass gates **1–11**, build 0/0/0, and are linker-idempotent.
 
-Every edition of all three books: 0 errors, 0 undefined, 0 overfull, the file count
+**Book 5** (54 files, `nullfont` **0**, `\index` 911 and `\emph` 1,328 in all
+eight):
+
+| | pages | `\omterm` links | distinct targets |
+|---|------:|-----:|-----:|
+| `en` | 365 | 2,672 | 188 |
+| `fr` | 389 | 2,845 | 194 |
+| `es` | 387 | 2,746 | 196 |
+| `pt` | 382 | 2,797 | 195 |
+| `nl` | 384 | 2,511 | 191 |
+| `hi` | 349 | 2,672 | 192 |
+| `ar` | 321 | 2,155 | 199 |
+| `id` | 400 | 2,934 | 197 |
+
+`nl`, `hi`, `ar`, `pt` and `id` reach **every** English target; `fr` misses 2
+and `es` 1, each a target English itself links once or twice. All seven pass
+gates **1–11**, build 0/0/0, and are linker-idempotent (a plain dry run over
+the wrapped tree reports `links to insert: 0`).
+
+Every edition of all five books: 0 errors, 0 undefined, 0 overfull, the file count
 in the `.fls` equal to the files on disk, and `check_translation.sh` green for
-every year.
+every year — **105 year x language combinations, all green, 2026-09-17.**
 
 **Translation found three defects in the ENGLISH canon**, which is the most
 useful thing about running seven editions at once — nothing compares English
@@ -379,6 +398,78 @@ was tested by re-planting a real defect, not assumed. The census over the
 shipped books then found four more: three in Book 3 `id` (the Krebs
 intermediates, the mitosis phases, three ribosome steps in English sentences)
 and one in Book 2 `id` (the ocular-dominance axis), all now fixed.
+
+**Book 5's run found SIX canon defects and five tooling bugs** (2026-09-17),
+and the two most valuable were invisible from English by construction:
+
+- **`orthologue`/`paralogue` were DEFINED TWICE** — ch. 4 as `\emph{orthologs}`
+  (American), ch. 25 as `\emph{orthologues}` (British), the same two notions 21
+  chapters apart, each with its own `\index` key. `harvest.py` drops a term
+  defined twice as ambiguous, so English kept both targets ONLY because the two
+  spellings differed, while every language with one word for the concept lost
+  the links (Spanish measured 9). Fixed: British spelling throughout (the book
+  is British everywhere else — `haemoglobin` 37/0, `tumour` 127/0, `fibre`
+  25/0), and ch. 4 now owns the definition with ch. 25's markers demoted to
+  plain prose.
+- **`solutions/27` answer 20 said "the exponential 124"**, which is
+  arithmetically impossible: question 19 *fits* $r$ from the two observed points
+  ($31 \to 100$ over 8 years), so the exponential prediction at 8 years is
+  $31\,\mathrm{e}^{1.17} = 99.9$ — the observed 100 itself, by construction.
+  Found by the Indonesian agent and independently confirmed by the Arabic and
+  Hindi ones; it would have shipped in eight books.
+- Also fixed: a weekend problem asking "why the result of **question 12**" where
+  item 12 *is* that question (the book names 11 three other times); 27
+  `\qty{}`/`\unit{}` arguments spelling out `day`/`days` where Books 3–4 write
+  `d` and carry zero; two `\numrange` calls given THREE arguments, printing
+  "20--80nm" with the unit in text font; and 11 TeX accent escapes in proper
+  names, which every edition would have inherited byte-identically and failed
+  gate 6 on.
+
+**One reported defect was REJECTED after checking** — ch. 17 gives the per-spike
+ATP cost three ways, but each is a stated datum of its own question, the
+proposition hedges "of the order of", the exercise says "**if** a spike costs",
+and all three land on the same conclusion. Verify against the book's own model
+before editing, and say so when you do not edit.
+
+**`def:b3:rna-regulation:pirna` is reachable in English ONLY through a plural.**
+The singular `piRNA` harvests to the ncRNA definition, so the target survives on
+`piRNAs` and `piRNA clusters` alone — its reachability is an accident of English
+morphology, and `id`, `ar`, `hi`, `fr`, `es` and `pt` all lost it until each was
+given an `EXTRA` on its own *piRNA cluster* phrase.
+
+**`morphology.pattern` cannot build an English `-y` -> `-ies` plural**
+(`WORD_TAIL = (?:e?s)?`, and *antibodyes* is why). Book 5's English canon has 31
+occurrences of "antibodies" and links **none** of them, against 28 for the
+singular; 36 links in total are unreachable from this class. This silently
+depresses the ENGLISH baseline every edition is measured against, in this book
+and across the series. Left unfixed on purpose: the cure re-links all five
+books, and `assembly` is deliberately `STOP`ped, so a blanket rule would mint
+wrong-sense links.
+
+**`harvest.py` cannot harvest a display from a statement environment in a
+NON-LATIN script at all.** The emph<->label match reduces the term with
+`re.sub(r'[^a-z]', '', ...)`, which is the empty string for Arabic or
+Devanagari, so the match can never succeed and such a term survives only if it
+also carries an adjacent `\index{}`. Seven Arabic targets were unreachable for
+that reason alone. A non-Latin fallback — accept the `\emph` when the
+environment has exactly one, as the ordinal path already does — would remove the
+class for every non-Latin edition of every book.
+
+**The three script prose gates silently checked NOTHING when handed a file.**
+`check_{hindi,arabic,indonesian}_prose.py` skipped any argument that was not a
+directory, printing "OK (0 files)" and exiting 0 — a clean pass over nothing,
+which is how 561 residual-English hits survived per-file checking during this
+run. All three now accept a file and exit 2 on a path that is neither. Found by
+the Arabic agent. Its sibling: earlier agents' appends to `check_arabic_prose.py`
+sat AFTER the `if __name__ == "__main__"` guard and had never executed.
+
+**Two gate bugs were fixed rather than worked around**, which is the rule:
+`check_indonesian_prose.py`'s `ID_MARKERS` was missing `bila` (the formal
+conditional, as common in academic Indonesian as `jika`, which was listed), and
+`check_hindi_prose.py`'s transliterated-article scan read **`आर-पार`** — an
+ordinary Hindi word — as English *are* 18 times, because a hyphen is outside the
+Devanagari range. An agent reporting that it reworded correct prose to satisfy a
+gate is filing a gate bug report.
 
 **Line-broken `\index{}` keys were swept out of the whole repo on 2026-09-16**:
 59 across the shipped Books 1 and 2 translations (gate 5 postdates those runs,

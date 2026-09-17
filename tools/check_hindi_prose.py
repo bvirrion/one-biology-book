@@ -189,6 +189,75 @@ ALLOWED_UNITS |= {"mmhg", "torr", "atm",
 #     for camp/camps/camped as English and has none.
 ALLOWED_WORDS |= {"camp", "cgmp"}
 
+
+# ---------------------------------------------------------------------------
+# Biology Book 5 (`hi`, 2026-09-17). DATA ONLY -- appended, nothing above is
+# touched, and `check_indonesian_prose.py` imports only the LaTeX reduction
+# (LATIN_WORD, _locate, strip_comments, visible_text), never ALLOWED_WORDS, so
+# this block cannot move the Indonesian gate.
+#
+# Year-3 biology names every molecule it discusses by its INTERNATIONAL symbol,
+# and a Devanagari textbook prints those in Latin exactly as every other
+# edition does -- transliterating Cdk1 or Su(var) would destroy the reference.
+# Four families, each read off the flagged list one by one against the English
+# twin:
+#   * gene and protein symbols, including the italic Drosophila and C. elegans
+#     gene names the canon sets in \emph{} (bicoid, hunchback, even-skipped,
+#     fushi tarazu, knirps, engrailed, wingless, doublesex, transformer,
+#     Sex-lethal, Distal-less, Ultrabithorax, yellow, giant, hairy, let, lin,
+#     unc, ced, egl, dsx, tra, abi, msl, src, var, sulA, recA, uvrA/uvrB) --
+#     these READ as ordinary English words and are not;
+#   * enzyme, complex and pathway names (GTPase, ATPase, RNase, EcoRI, Taq,
+#     Cre-lox, loxP, CRISPR--Cas, JAK--STAT, Raf--MEK--ERK, cGAS--STING);
+#   * RNA and nucleic-acid classes (siRNA, piRNA, miRNA, lncRNA, shRNA, snRNA,
+#     ncRNA, dsRNA, dsDNA, ssDNA, pri-miRNA, pre-miRNA) and the sequence
+#     strings an answer quotes (A-CAT, A-ATS, b--C, D-Ala-D-Ala, Asn-X-Ser);
+#   * genus and species epithets of the binomials the canon uses -- the same
+#     policy as the first ALLOWED_WORDS block; these are Book 5's additions.
+# Plus osm/mosm, the international osmole symbol of U_osm, P_osm and mOsm/L,
+# which Hindi clinical writing keeps in Latin like any unit.
+#
+# GATE BUG, reported rather than worked around: font, right, log and sin are
+# NOT prose. They are TikZ/pgfplots OPTION keys and pgf math that
+# visible_text() lets through -- node[right, font=\tiny],
+# label={[font=\tiny]right:...} and at ({2.4*sin(40)},...). The reduction is
+# the part shared with the Indonesian gate, so it is not touched here; the four
+# tokens are parked in this data block instead, and the reduction should learn
+# to drop a node's option list the way it already drops a macro's.
+ALLOWED_WORDS |= {
+    "a--cdk", "a-ats", "a-cat", "abi", "acta", "aeruginosa", "agrobacterium",
+    "akt", "antennapedia", "anthracis", "apaf", "aplysia", "aquaticus", "arf",
+    "arp", "asn-x-ser", "aspergillus", "atpase", "aux", "b--c", "b--cdk",
+    "bacteroidetes", "bad", "bak", "bax", "bcl", "bcl-xl", "bcr--abl",
+    "bicoid", "bid", "bim", "bithorax", "botrytis", "buchnera",
+    "burkholderia", "c-myc", "caenorhabditis", "californica", "car-t", "cas",
+    "caudal", "cdc", "cdk", "cdkn", "ced", "cgas", "cgas--sting", "chip-seq",
+    "chk", "ciona", "clock--bmal", "clostridioides", "contagium", "cre",
+    "cre-er", "cre-lox", "crispr--cas", "cry", "d--cdk", "d-ala",
+    "d-ala-d-ala", "dgtp", "difficile", "distal-less", "dna-pkcs",
+    "doublesex", "dscam", "dsdna", "dsrna", "dsx", "e--cdk", "ecori", "egl",
+    "eif", "elegans", "engrailed", "eve", "even-skipped", "fas", "fasl",
+    "firmicutes", "flg", "flp", "fls", "fluidum", "font", "foxp", "fushi",
+    "giant", "groel", "groes", "gtpase", "haemophilus", "hairy",
+    "helicobacter", "hnrnp", "hoxb", "hoxc", "hsp", "hunchback", "hydra",
+    "igf", "influenzae", "inos", "jak--stat", "k--akt--mtor", "klebsiella",
+    "klf", "kni", "knirps", "let", "lexa", "lgr", "lin", "listeria", "lncrna",
+    "log", "loxp", "luxi", "luxr", "macroh", "mad", "mcl", "mirna",
+    "monocytogenes", "mosm", "msl", "mtor", "muth", "mutl", "muts", "myc",
+    "nag", "nanog", "nanos", "ncrna", "neisseria", "nocardia", "notch",
+    "noxa", "oct", "oskar", "osm", "paulinella", "peg", "per", "period",
+    "pfam", "philanthus", "pirna", "pitx", "piwi", "pol", "ppel", "pre-mirna",
+    "pri-mirna", "psc", "puma", "pylori", "pyogenes", "qpcr", "rab", "rac",
+    "raf", "raf--mek--erk", "ras", "ras--gtp", "ras--mapk", "reca", "rev",
+    "rho", "rhoa", "riftia", "rig-i", "right", "rnase", "rpos", "ruvc",
+    "salmonella", "sar", "sars-cov", "sclerotinia", "sec", "serratia",
+    "sex-lethal", "shrna", "sin", "sirna", "snrna", "src", "ssdna", "start",
+    "streptococcus", "subtilis", "sula", "sxl", "symbiodiniaceae", "t-dna",
+    "t-snare", "taq", "tarazu", "thaliana", "thermus", "tra", "transformer",
+    "tumefaciens", "ubx", "ultrabithorax", "unc", "uvra", "uvrb", "v-snare",
+    "var", "vivum", "wee", "wingless", "wolbachia", "xist", "yellow",
+}
+
 LATIN_WORD = re.compile(r"[A-Za-z][A-Za-z'\-]{1,}")
 
 # Short English that the >=3-letter rule below cannot see. A blanket lower
@@ -765,7 +834,13 @@ def check_file(path: pathlib.Path, findings: list) -> None:
 
     # 2. transliterated English function words
     for token, gloss in TRANSLITERATED_ARTICLES.items():
-        for m in re.finditer(rf"(?<![{DEVANAGARI}]){token}(?![{DEVANAGARI}])", seen):
+        # A Devanagari compound joined by a HYPHEN is one word, and the
+        # hyphen is not in the DEVANAGARI range, so the bare lookarounds cut
+        # it: "आर-पार" (across, an ordinary Hindi word, 18 uses in biology
+        # Book 5 hi) was reported 18 times as transliterated *are*. Excluding
+        # "-" on either side is the same boundary rule the English scan above
+        # already applies when it strips outer hyphens. 2026-09-17.
+        for m in re.finditer(rf"(?<![{DEVANAGARI}-]){token}(?![{DEVANAGARI}-])", seen):
             findings.append((rel, _locate(body, token, _occ),
                              "translit",
                              f"transliterated English {gloss!r}: {token!r}"))
@@ -796,8 +871,19 @@ def main() -> int:
     files = 0
     for d in args.dirs:
         p = pathlib.Path(d)
-        if not p.is_dir():
+        # A PATH THAT IS NOT A DIRECTORY USED TO BE SKIPPED IN SILENCE, so the
+        # gate handed a single .tex file printed "OK (0 files)" and exited 0 --
+        # a clean pass that had checked nothing. That is how 561 residual-English
+        # hits survived per-file checking during the Biology Book 5 run. Accept a
+        # file, and refuse a path that is neither. Found by the Arabic Book 5
+        # agent, 2026-09-17; fixed in all three script gates at once.
+        if p.is_file():
+            files += 1
+            check_file(p, findings)
             continue
+        if not p.is_dir():
+            sys.stderr.write("  ERROR: not a file or directory: %s\n" % d)
+            return 2
         for f in sorted(p.glob("*.tex")):
             files += 1
             check_file(f, findings)
