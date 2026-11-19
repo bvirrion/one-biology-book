@@ -23,6 +23,8 @@ of old and current programmes), Book 5 the rest of a licence de biologie
 2026-09-11), and ALL FIVE now ship in the seven target languages
 (2026-09-04, 2026-09-05, 2026-09-06, 2026-09-16 and 2026-09-17).
 The series is complete: five books x eight languages, forty editions.**
+**All five also ship in Simplified Chinese (`zh`) since 2026-11-18/19, by the
+pilot method, at pilot tier 88** (see "Simplified Chinese" below).
 
 - **Book 1** (Primary & Middle School, grades 1–9): 71 chapters + 71
   solutions files. Grades 1–5 carry 10–11 exercises (★-heavy, ★★/★★★
@@ -569,6 +571,34 @@ grep -aci undefined $L  # 0      so a plain grep prints NOTHING instead of 0
 grep -ac Overfull $L    # 0
 grep -ac nullfont $L    # 20  -- a RISE above this is an accent inside \qty{}
 ```
+
+## Simplified Chinese, Books 1–5 (pilot method, 2026-11-18/19)
+
+**All five books ship in `zh` at pilot tier 88**, made in one run with the Earth series' five: one `claude-haiku-5-5`
+call per section (effort medium), the main session (`claude-opus-5-5`) as the only coordinator, no subagents
+(`../pilot_translation_instruction.md`). Run file `sources/TRANSLATION_BOOKS_1-5_ZH.md` (with the usage table for both
+series); score files `translation_scores/book_<N>/zh/`; glossaries `sources/GLOSSARY_BOOK_<N>_ZH.md` and
+`sources/GLOSSARY_OVERRIDES_ZH.md`; the run's helper scripts in `draft/zh/` (gitignored). Uncommitted, not in the HTML reader.
+
+| Book | pages | links / targets | Haiku calls | list price |
+|---|---:|---:|---:|---:|
+| 1 | 396 | 8,161 / 150 | 448 | $2.3 |
+| 2 | 345 | 6,699 / 102 | 374 | $2.7 |
+| 3 | 303 | 6,605 / 173 | 374 | $3.2 |
+| 4 | 290 | 4,502 / 180 | 439 | $4.2 |
+| 5 | 325 | 3,847 / 208 | 557 | $5.3 |
+
+Every book builds with TeX Live 2026 (XeLaTeX + xeCJK, Fandol, pinyin index by upmendex) at 0 errors / 0 undefined /
+0 overfull, missing character 0, and `check_translation.sh <year> zh` passes for every year. A few targets English
+reaches are not linked; each score file lists them with the reason.
+
+- **Port.** `styles/lang/zh.tex`, the zh block of `styles/onebiology.sty`, `styles/zh-pinyin.ist`, `latexmkrc` and
+  `release.yml` entries, the CJK term-linker mode and `book<N>_zh.py`, `tools/check_chinese_prose.py`, `draft/` in
+  `.gitignore`, and a new `sources/` directory.
+- **Latin binomials and gene names stay Latin and italic**; the prose gate allows them.
+- **Fandol lacks** 鵟 腘 葇 鼩 鼱 鲀 鹟 貒 鸮 獴: the edition writes the common name another way (see the series card
+  `../pilot_translation/langs/series/one-biology-book.zh.md`).
+- **A bare `%` after a number** dropped the rest of a line in two books, silently; `zh_sweeps.py` now catches it.
 
 ## Invariants (once content is written)
 

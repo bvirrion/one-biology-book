@@ -1,0 +1,207 @@
+\section*{第 \ref{ch:b3:bioinformatics} 章——生物信息学与序列分析}
+
+\begin{solution}{exo:b3:bioinformatics:1}
+\omterm{def:b3:bioinformatics:alignment}{全局比对}：两条序列首尾对齐，每个残基都位于同一列中——
+适用于两条被认为在全长上同源的蛋白质，例如某个管家酶的直系同源物。
+\omterm{def:b3:bioinformatics:alignment}{局部比对}：只取得分最高的一对子串，其余部分忽略——
+用于寻找共享的结构域（例如两个其他方面无关的
+信号蛋白中都有的 SH2 结构域），或在长基因组序列中
+寻找某个基因。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:2}
+两个方向的边界均为 $0,-1,-2,-3$。A 行：$1, 0, -1$。G 行：$0, 0, -1$。
+C 行：$-1, -1, 1$。最优值 $F(3,3) = 1$：AGC 对 AAC，无空位
+（匹配、错配、匹配：$1 - 1 + 1 = 1$）。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:3}
+$s(a,a) = \lambda^{-1}\log\bigl(q_{aa}/p_{a}^{2}\bigr)$。色氨酸
+较为稀少（$p_{W} \approx 0.013$），因此两个色氨酸随机对齐的
+概率 $p_{W}^{2}$ 极小，而保守的色氨酸对
+远比保守的亮氨酸对（$p_{L}
+\approx 0.1$）更有力地说明同源性；相应地，对数几率比也更大。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:4}
+E 值是在该查询对该规模数据库的检索中，得分不低于该值的
+\omterm{def:b3:bioinformatics:alignment}{比对}数目，按随机情况计算时所期望的数目。
+$E = 3$ 表示按随机情况预期会有三个这样的得分：
+该命中并不能作为同源的证据（它也许确实同源，但
+检索无法分辨）。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:5}
+$mn = 400\times 2\times 10^{11} = 8\times 10^{13} = 2^{46.2}$。$E(45) =
+2^{1.2} \approx 2.3$；$E(55) = 2^{-8.8} \approx 2\times 10^{-3}$；
+$E(65) = 2^{-18.8} \approx 2\times 10^{-6}$。$E = 10^{-3}$ 需要 $S' =
+46.2 + 10.0 = 56$ 比特。长度为 \num{40} 个残基的查询，其 $mn$ 仅为原值的十分之一，
+即 $2^{42.9}$：$53$ 比特即可满足，但很短的查询很少能
+达到这一数值。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:6}
+信息含量：$2$、$1$、$0$，以及 $2 - H$，其中 $H = -(0.7\log_{2}
+0.7 + 3\times 0.1\log_{2} 0.1) = 0.36 + 1.00 = 1.36$，故为 $0.64$。总计
+$R = 3.64$ 比特。随机匹配数：两条链上共 $9.2\times 10^{6}$ 个位置
+$\times 2^{-3.64} \approx 7\times 10^{5}$——该\omterm{def:b3:bioinformatics:motif}{基序}
+单独使用几乎毫无用处。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:7}
+一段含若干残基的插入是一次突变事件，因此其代价
+不应随长度线性增长：采用一个开放代价加上一个较小的
+延伸代价即可对此建模。开放罚分过高，会迫使
+本应为空位处出现错配，并使真实插入之后的全部\omterm{def:b3:bioinformatics:alignment}{比对}发生错误；
+罚分过低则会使空位处处出现，
+随机匹配残基，从而虚高同一性。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:8}
+未必：该\omterm{def:b3:bioinformatics:alignment}{比对}覆盖的是一段 \num{130} 个残基的片段，
+这是共享结构域的特征，而非
+在全长上\omterm{def:b3:bioinformatics:alignment}{比对}的直系同源物的特征。检验方法：将果蝇蛋白质反向检索人类
+蛋白质组（查询序列在全长上是否为其最佳命中？），
+用\omterm{def:b3:bioinformatics:msa}{谱隐马尔可夫模型}鉴定结构域，并
+构建该家族在多个物种中的基因树。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:9}
+谱逐列记录该家族能容忍的内容：某一位置总是疏水、
+却从不是同一残基；某个不变的催化残基；
+某一位置在家族中一半的成员中总是空位。
+两两\omterm{def:b3:bioinformatics:alignment}{比对}将每个残基与另一个残基打分，
+无法得知第 40 位的缬氨酸是否与查询中该处的
+异亮氨酸“同样合适”。谱还会对保守列加权，
+使在家族保守处集中的微弱相似性
+也变得显著。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:10}
+当每列的\omterm{prop:b3:bioinformatics:logodds}{期望得分} $\mu > 0$ 为正时，两条随机序列
+沿对角线的累积得分是一个带正漂移的随机游走：
+经过 $n$ 列后约为 $\mu n$，因此最佳\omterm{def:b3:bioinformatics:alignment}{局部比对}
+本质上就是整段序列，其得分按 $\mu n$ 增长，
+而非按 $\log n$ 增长。\omterm{thm:b3:bioinformatics:evalue}{Karlin--Altschul} 理论
+要求负漂移，使高得分成为稀有的偏离，
+此时该理论不再适用，也不存在 $\lambda$。对于 GC 含量为 \qty{60}{\%} 的 DNA，
+匹配的概率为 $2(0.3^{2}) + 2(0.2^{2}) = 0.26$，因此\omterm{prop:b3:bioinformatics:logodds}{期望
+得分}为 $0.26 - 0.74 = -0.48$：仍为负，统计理论
+依然成立；但若采用匹配 $+1$、错配 $-0.3$ 之类的方案，则
+期望为 $+0.04$，便会把整个基因组报告为一个\omterm{def:b3:bioinformatics:alignment}{比对}。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:11}
+\omterm{def:b3:bioinformatics:blast}{种子}与链接：用哈希表在两条序列之间找出 $k$-mer 的精确或近似精确匹配，
+保留那些落在一致对角线上的匹配，
+将其链接起来，并仅在链接的\omterm{def:b3:bioinformatics:blast}{种子}之间的间隙中运行\omterm{thm:b3:bioinformatics:nw}{动态规划}；
+它会放弃没有\omterm{def:b3:bioinformatics:blast}{种子}的区域中的\omterm{def:b3:bioinformatics:alignment}{比对}，
+即高度分化的片段。带状\omterm{def:b3:bioinformatics:alignment}{比对}：若已知两条序列近似共线，
+则只计算对角线两侧宽度为 $w$ 的带内单元，
+代价为 $wn$ 而非 $mn$；它会放弃
+任何插入长度超过带宽的\omterm{def:b3:bioinformatics:alignment}{比对}。
+\end{solution}
+
+\begin{solution}{exo:b3:bioinformatics:12}
+编码序列具有周期为三的规律：三个密码子位置的
+碱基组成各不相同（第三位偏差最大），且
+各物种的密码子使用都不均匀。采用一个依次包含三个编码状态的模型，
+每个状态按该密码子位置的组成发射碱基，
+在数十个密码子的窗口内，它会赋予编码 DNA 比非编码状态
+更高的概率，即使没有终止密码子。
+在人类基因组中，外显子较短（\qty{150}{bp}），被内含子隔开，
+内含子长达千碱基量级，因此编码信号短暂且被打断；该模型
+还必须识别剪接位点（它们是较弱的信号），而
+大量非编码序列会产生许多虚假的编码
+片段。
+\end{solution}
+
+\begin{solution}{pb:b3:bioinformatics:1}
+\textbf{1.} 行为 K、Q、T；列为 K、A、Q、T；边界分别为 $0,-1,-2,-3,-4$
+和 $0,-1,-2,-3$。行 K：$1, 0, -1, -2$；行 Q：$0, 0, 1, 0$；行 T：
+$-1, -1, 0, 2$。最优值为 $2$：\texttt{K-QT} 对 \texttt{KAQT}。
+\textbf{2.} 最佳局部得分为 $3$：\texttt{CAT} 与 \texttt{CAT}
+（取 GATCAT 的第 4--6 位残基与 ACAT 的第 2--4 位残基）；\texttt{ATCAT} 与
+\texttt{A-CAT} 的得分同样为 $4 - 1 = 3$。
+\textbf{3.} 共 $300\times 450 = 1.35\times 10^{5}$ 次更新；若对
+整个数据库，则为 $300\times 1.2\times 10^{11} = 3.6\times 10^{13}$。
+\textbf{4.} $3.6\times 10^{4}$ 秒，即每次查询需十小时；\omterm{def:b3:bioinformatics:blast}{BLAST} 的\omterm{def:b3:bioinformatics:blast}{种子}
+几乎跳过整张表，几秒内即可给出结果。
+\textbf{5.} $q_{ab} = p_{a}p_{b}e^{\lambda s}$。丙氨酸：$e^{1.39} = 4.0$，
+$q_{AA} = 0.074^{2}\times 4.0 = 0.022$，比值为 $4$。色氨酸：
+$e^{3.82} = 45$，$q_{WW} = 0.013^{2}\times 45 = 0.0077$，比值为 $45$。一对
+\omterm{def:b3:bioinformatics:alignment}{比对}上的色氨酸对在同源序列中的出现频率，是随机情况的
+$45$ 倍；丙氨酸对则只有 4 倍；
+但丙氨酸对在绝对数量上仍然更多，因为丙氨酸本身很常见。
+\textbf{6.} \qty{24}{\%} 位于“暮光区”，在此区域随机\omterm{def:b3:bioinformatics:alignment}{比对}
+可达 \qtyrange{15}{20}{\%} 的一致性；要判定该\omterm{def:b3:bioinformatics:alignment}{比对}，
+需要\omterm{def:b3:bioinformatics:alignment}{比对}的 E 值、位于正确位置的保守\omterm{def:b3:bioinformatics:motif}{基序}、与已知家族的\omterm{def:b3:bioinformatics:msa}{谱隐马尔可夫模型}匹配，
+或共有的折叠类型，均可定论。
+\textbf{7.} $mn = 300\times 1.2\times 10^{11} = 3.6\times 10^{13}$;
+$\log_{2}(mn) = 45.0$.
+\textbf{8.} $E(92) = 2^{45 - 92} = 2^{-47} \approx 7\times 10^{-15}$;
+$E(38) = 2^{7} = 128$.
+\textbf{9.} 当 $E = 10^{-3}$ 时，$S' = 45 + 10 = 55$ 比特；当 $E = 1$ 时，$45$
+比特。
+\textbf{10.} $mn$ 增至十倍时，$E \approx 7\times 10^{-14}$，
+依然极为显著。
+\textbf{11.} 当 $E = 128$ 时，第十个命中恰是随机产生的结果；
+一致性为 \qty{40}{\%}、跨越 $60$ 个残基的一段\omterm{def:b3:bioinformatics:alignment}{比对}不足为证。
+对残基 200--260 与结构域数据库做谱搜索，可判断
+该片段是否为已知结构域，并提供两两
+比较所缺乏的统计信息。
+\textbf{12.} 全长范围内互为最佳匹配，与一对一的直系同源关系相符；
+但并不能证明之——分化后某一谱系中的复制会产生两个共同\omterm{def:b3:genomics:comparative}{直系同源基因}，
+而真正\omterm{def:b3:genomics:comparative}{直系同源基因}的丢失，
+可能使\omterm{def:b3:genomics:comparative}{旁系同源基因}成为最佳匹配。含若干物种的
+基因树才是检验手段。
+\textbf{13.} $R = 2 + 2 + 1.6 + 2 + 0.8 + 1.2 + 0.4 + 0.3 = 10.3$ 比特。
+\textbf{14.} $3.2\times 10^{9}\times 2^{-10.3} \approx 2.5\times 10^{6}$
+即随机匹配的数量。
+\textbf{15.} $\log_{2}(3.2\times 10^{9}/200) = \log_{2}(1.6\times 10^{7})
+\approx 24$ 比特。
+\textbf{16.} 固定间距下的共现会累加比特数：$10.3 + 8 =
+18.3$，以 $8$ 补上所缺的 $13.7$；余下约 $5.7$ 比特
+（相当于随机匹配数的 $50$ 倍）须来自他处——如\omterm{def:b3:chromatin-epigenetics:nucleosome}{染色质}
+可及性、更多的结合伙伴。
+\textbf{17.} $H = -(0.5\log_{2}0.5 + 0.5\log_{2}0.5) = 1$ 比特；$R = 2 -
+1 = 1$ 比特。
+\textbf{18.} 细菌的转录因子必须在
+无\omterm{def:b3:chromatin-epigenetics:nucleosome}{染色质}帮助的 \qty{4.6}{Mb} 基因组中找到其少数位点，需要约 $19$
+比特，且其位点长而保守。真核基因组约大一千倍，
+需多出十比特，但其转录因子的位点较短；它们
+借组合以及对可及\omterm{def:b3:chromatin-epigenetics:nucleosome}{染色质}的限制来获得专一性，
+这同时也使调控更易演化，
+因为短位点很容易获得或丢失。
+\textbf{19.} $3/64 = 0.047$；出现终止密码子之前的
+期望密码子数为 $64/3 \approx 21$。
+\textbf{20.} $p_{A} = p_{T} = 0.31$, $p_{G} = p_{C} = 0.19$: $P(\text{TAA})
+= 0.31^{3} = 0.030$, $P(\text{TAG}) = P(\text{TGA}) = 0.31^{2}\times 0.19
+= 0.018$；合计 $0.066$，期望阅读框长度为 $15$ 个密码子。
+富含 AT 的 DNA 中终止密码子众多，故随机开放阅读框较短，而长的开放阅读框
+更为突出。
+\textbf{21.} $(61/64)^{100} = e^{-4.80} = 0.008$; $(61/64)^{300} =
+e^{-14.4} = 5.6\times 10^{-7}$.
+\textbf{22.} 每个极大开放阅读框都止于终止密码子，而 $3.2\times
+10^{9}$ 个密码子起始位点中含有 $3.2\times 10^{9}\times 3/64 = 1.5\times
+10^{8}$ 个终止密码子：约 $1.5\times 10^{8}\times 0.008 = 1.2\times 10^{6}$ 个
+长度至少为 $100$ 个密码子的随机阅读框，以及 $1.5\times 10^{8}\times
+5.6\times 10^{-7} \approx 80$ 个长度至少为 $300$ 个密码子的。
+\textbf{23.} 一个 \qty{4.6}{Mb} 的细菌约有 $4\times 10^{5}$ 个终止密码子，
+因此约有 \num{3500} 个长度为 $100$ 个密码子的随机阅读框，但
+长度为 $300$ 个密码子的几乎没有；其基因平均长 $300$ 个密码子，并且 \qty{88}{\%} 的 DNA 属于
+编码序列，因此长开放阅读框几乎总是基因。在线虫中，
+仅 \qty{1.5}{\%} 的 DNA 编码，外显子平均为 $50$ 个密码子——短于
+随机阈值——而一百万个长度为 $100$ 个密码子的随机阅读框
+会淹没它们。真核基因预测软件利用剪接位点信号、
+隐马尔可夫模型中的密码子偏倚、与已知蛋白质的同源性，以及
+尤其是测序所得的转录本。
+\textbf{24.} 来自剪接后信使的读段\omterm{def:b3:bioinformatics:alignment}{比对}到基因组时分为
+被一个内含子隔开的两段，断点即精确到碱基地标出两个剪接位点；
+读段覆盖度界定外显子，成对读段将
+相邻外显子连成一个转录本，并确定若干
+候选剪接位点中实际使用的是哪一个。
+\textbf{25.} 最佳命中的 $E \approx 7\times 10^{-15}$；约 $24$
+比特即可指定基因组中的 $200$ 个位点；全基因组中约有 $80$ 个
+长度为 $300$ 个密码子的随机阅读框。
+\end{solution}
